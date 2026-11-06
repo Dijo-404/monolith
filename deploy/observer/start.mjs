@@ -1,8 +1,46 @@
 import { spawn } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { readFile, realpath, rename, writeFile } from 'node:fs/promises';
+import { lstat, readFile, realpath, rename, writeFile } from 'node:fs/promises';
 import { isAbsolute, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+
+/** Select one literal server credential; never load/export the surrounding environment. */
+export async function readServerAccessKey(path) {
+  try {
+    if (typeof path !== 'string' || !isAbsolute(path)) throw new Error();
+    const info = await lstat(path);
+    if (!info.isFile() || info.size > 64 * 1024 || (info.mode & 0o077) !== 0) throw new Error();
+    const contents = await readFile(path, 'utf8');
+    const declarations = contents.split(/\r?\n/).filter((line) => /^\s*(?:export\s+)?ARKIV_ACCESS_KEY\s*=/.test(line));
+    if (declarations.length !== 1) throw new Error();
+    let value = declarations[0].replace(/^\s*(?:export\s+)?ARKIV_ACCESS_KEY\s*=\s*/, '').trim();
+    if (value.startsWith('"') || value.startsWith("'")) {
+      const quoted = /^(["'])([^\r\n]*?)\1\s*(?:#.*)?$/.exec(value);
+      if (!quoted) throw new Error(); value = quoted[2];
+    } else value = value.split(/\s+#/, 1)[0];
+    if (!/^[\x21-\x7e]{1,512}$/.test(value)) throw new Error();
+    return value;
+  } catch { throw new Error('Server access key file is missing or invalid.'); }
+}
+
+/** Inspect only selected identity metadata; OpenSSH alone reads the private key. */
+async function sshAuthentication(options) {
+  if (options.sshIdentity === undefined && options.sshUser === undefined) {
+    return { mode: 'anonymous', user: 'nokey', args: ['-o', 'IdentityFile=/dev/null'] };
+  }
+  try {
+    if (typeof options.sshIdentity !== 'string' || !isAbsolute(options.sshIdentity)
+      || options.sshIdentity.length > 4096 || /[\p{Cc}%$]/u.test(options.sshIdentity)
+      || typeof options.sshUser !== 'string' || !/^[a-z][a-z0-9_-]{0,31}$/.test(options.sshUser)
+      || options.sshUser === 'nokey') throw new Error();
+    const info = await lstat(options.sshIdentity);
+    if (!info.isFile() || info.size < 1 || info.size > 64 * 1024 || (info.mode & 0o077) !== 0
+      || (info.mode & 0o400) === 0 || typeof process.getuid !== 'function' || info.uid !== process.getuid()) throw new Error();
+    const identity = await realpath(options.sshIdentity);
+    if (/[\p{Cc}%$]/u.test(identity)) throw new Error();
+    return { mode: 'dedicated-key', user: options.sshUser, args: ['-i', identity, '-o', 'IdentityAgent=none'] };
+  } catch { throw new Error('SSH identity configuration is missing or invalid.'); }
+}
 
 /** Provider output can contain administrative URLs. Only accepted public registration is projected. */
 export function tunnelOutput(onOrigin) {
@@ -51,18 +89,21 @@ export async function startPublicTunnel(options) {
   const ssh = await realpath(options.ssh); const knownHosts = await realpath(options.knownHosts);
   if (!isAbsolute(options.status) || !isAbsolute(options.ssh) || !isAbsolute(options.knownHosts)) throw new Error('Use explicit absolute operator paths.');
   const statusPath = resolve(options.status);
+  const authentication = await sshAuthentication(options);
+  const accessKey = options.arkivEnvFile === undefined ? undefined : await readServerAccessKey(options.arkivEnvFile);
   const startedAt = new Date().toISOString();
   const hashes = {};
   for (const [name, path] of Object.entries({ ssh, knownHosts, launcher: fileURLToPath(import.meta.url) })) hashes[name] = createHash('sha256').update(await readFile(path)).digest('hex');
   // Reserve a new operator status path without following or overwriting an old file.
   await writeFile(statusPath, '{}\n', { flag: 'wx', mode: 0o600 });
   const createDemo = options.createDemo ?? (await import('../../apps/observer/dist/composition/public-demo.js')).createPublicDemo;
-  const demo = await createDemo();
+  const demo = await createDemo(accessKey === undefined ? {} : { accessKey });
   const shutdown = new AbortController(); let child; let origin; let closed = false; let closePromise;
   let statusQueue = Promise.resolve();
   const writeStatus = (state) => { statusQueue = statusQueue.then(async () => {
     const temporary = `${statusPath}.${process.pid}.tmp`;
     await writeFile(temporary, `${JSON.stringify({ schemaVersion: 1, state: closed ? 'CLOSED' : state, startedAt,
+    serverAccessKeyConfigured: accessKey !== undefined, sshAuthenticationMode: authentication.mode,
     observedAt: new Date().toISOString(), ...(origin ? { origin } : {}), hashes, counters: demo.counters(),
     limits: ['TRUSTED_PROVIDER', 'SINGLE_USER_LOCALHOST', 'INITIAL_SSH_TOFU', 'WORKSTATION_UPTIME', 'ROTATING_HOSTNAME', 'PROVIDER_RETENTION_UNVERIFIED'] }, null, 2)}\n`, { flag: 'wx', mode: 0o600 });
     await rename(temporary, statusPath);
@@ -85,9 +126,9 @@ export async function startPublicTunnel(options) {
     const registered = new Promise((accept, reject) => {
       const timer = setTimeout(() => reject(new Error('Public tunnel registration failed.')), 25_000);
       child = spawn(ssh, ['-F', '/dev/null', '-T', '-p', '22', '-o', 'BatchMode=yes', '-o', 'IdentitiesOnly=yes',
-        '-o', 'IdentityFile=/dev/null', '-o', `UserKnownHostsFile=${knownHosts}`, '-o', 'GlobalKnownHostsFile=/dev/null',
+        ...authentication.args, '-o', `UserKnownHostsFile=${knownHosts}`, '-o', 'GlobalKnownHostsFile=/dev/null',
         '-o', 'StrictHostKeyChecking=yes', '-o', 'ExitOnForwardFailure=yes', '-o', 'ServerAliveInterval=15', '-o', 'ServerAliveCountMax=3',
-        '-R', `80:127.0.0.1:${demo.edgePort}`, 'nokey@localhost.run', '--', '--output', 'json', '--proxy-protocol-v2'],
+        '-R', `80:127.0.0.1:${demo.edgePort}`, `${authentication.user}@localhost.run`, '--', '--output', 'json', '--proxy-protocol-v2'],
       { stdio: ['ignore', 'pipe', 'pipe'], env: { PATH: '/usr/bin:/bin', LANG: 'C.UTF-8' } });
       child.stdout.on('data', tunnelOutput((value) => { origin = value; clearTimeout(timer); accept(value); }));
       child.stderr.on('data', () => {});
@@ -106,8 +147,9 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
   const args = process.argv.slice(2);
   const values = {};
   for (let index = 0; index < args.length; index += 2) {
-    const key = { '--ssh': 'ssh', '--known-hosts': 'knownHosts', '--status': 'status' }[args[index]];
-    if (!key || values[key] || !args[index + 1]) throw new Error('Use --ssh, --known-hosts and --status exactly once.');
+    const key = { '--ssh': 'ssh', '--known-hosts': 'knownHosts', '--status': 'status', '--arkiv-env-file': 'arkivEnvFile',
+      '--ssh-identity': 'sshIdentity', '--ssh-user': 'sshUser' }[args[index]];
+    if (!key || values[key] || !args[index + 1]) throw new Error('Use each documented public demo option exactly once.');
     values[key] = args[index + 1];
   }
   let runtime;

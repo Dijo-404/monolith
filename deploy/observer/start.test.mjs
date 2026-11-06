@@ -1,9 +1,9 @@
 // SIMULATED provider subprocesses; no SSH, external HTTP, chain or worker contact.
-import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
+import { chmod, mkdir, mkdtemp, readFile, rm, symlink, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { expect, test, onTestFinished, vi } from 'vitest';
-import { startPublicTunnel, tunnelOutput, waitUntilReady } from './start.mjs';
+import { readServerAccessKey, startPublicTunnel, tunnelOutput, waitUntilReady } from './start.mjs';
 
 const origin = 'https://123456abcdef.lhr.life';
 const registered = JSON.stringify({ type: 'v1.tcpip_forward.register.accepted', id: 'localhost/123456abcdef.lhr.life' });
@@ -51,12 +51,17 @@ test('launcher pins the sole SSH identity path and shuts child/backend down idem
   onTestFinished(runtime.close);
   expect(runtime.origin).toBe(origin);
   const args = JSON.parse(await readFile(argv, 'utf8'));
+  expect(args).toEqual(['-F', '/dev/null', '-T', '-p', '22', '-o', 'BatchMode=yes', '-o', 'IdentitiesOnly=yes',
+    '-o', 'IdentityFile=/dev/null', '-o', `UserKnownHostsFile=${f.knownHosts}`, '-o', 'GlobalKnownHostsFile=/dev/null',
+    '-o', 'StrictHostKeyChecking=yes', '-o', 'ExitOnForwardFailure=yes', '-o', 'ServerAliveInterval=15',
+    '-o', 'ServerAliveCountMax=3', '-R', '80:127.0.0.1:12345', 'nokey@localhost.run', '--', '--output', 'json', '--proxy-protocol-v2']);
   for (const flag of ['StrictHostKeyChecking=yes', 'GlobalKnownHostsFile=/dev/null', `UserKnownHostsFile=${f.knownHosts}`,
     'IdentityFile=/dev/null', 'IdentitiesOnly=yes', 'BatchMode=yes', 'ExitOnForwardFailure=yes', '--proxy-protocol-v2']) expect(args).toContain(flag);
   expect(args.slice(0, 2)).toEqual(['-F', '/dev/null']);
   expect(args[args.indexOf('-p') + 1]).toBe('22');
   expect(args).toContain('80:127.0.0.1:12345');
   expect(JSON.parse(await readFile(f.status, 'utf8')).state).toBe('READY');
+  expect(JSON.parse(await readFile(f.status, 'utf8')).sshAuthenticationMode).toBe('anonymous');
   await Promise.all([runtime.close(), runtime.close()]);
   const status = await readFile(f.status, 'utf8');
   expect(JSON.parse(status).state).toBe('CLOSED'); expect(status).not.toContain('private-sentinel');
@@ -88,4 +93,150 @@ test('cancellation during the final asynchronous READY write cannot resolve a cl
   await expect(startPublicTunnel({ ...f, createDemo, signal: controller.signal, fetchHealth: health })).rejects.toThrow('could not start');
   expect(f.close).toHaveBeenCalledTimes(1);
   expect(JSON.parse(await readFile(f.status, 'utf8')).state).toBe('CLOSED');
+});
+
+test('only the selected literal key is loaded; unrelated environment values are never exported', async () => {
+  const f = await fixture(); const file = join(f.directory, 'server.env');
+  const key = 'SIMULATED_FILE_ONLY_KEY_12345';
+  await writeFile(file, `OTHER_SECRET=SIMULATED_UNRELATED_SECRET\nexport ARKIV_ACCESS_KEY="${key}" # selected only\n`, { mode: 0o600 });
+  expect(await readServerAccessKey(file)).toBe(key);
+  const createDemo = vi.fn(async (options) => { expect(options).toEqual({ accessKey: key });
+    return { edgePort: 12345, counters: () => ({ activeConnections: 0 }), close: f.close }; });
+  const runtime = await startPublicTunnel({ ...f, arkivEnvFile: file, createDemo, fetchHealth: health });
+  onTestFinished(runtime.close);
+  const status = await readFile(f.status, 'utf8');
+  expect(JSON.parse(status).serverAccessKeyConfigured).toBe(true);
+  expect(Object.keys(JSON.parse(status).hashes).sort()).toEqual(['knownHosts', 'launcher', 'ssh']);
+  expect(status).not.toContain(key); expect(status).not.toContain('SIMULATED_UNRELATED_SECRET'); expect(status).not.toContain(file);
+  await runtime.close();
+});
+
+test('explicit absent, malformed, duplicate, unsafe-mode or linked key files fail before creating a backend or status', async () => {
+  const f = await fixture(); const file = join(f.directory, 'server.env');
+  const createDemo = vi.fn(f.createDemo);
+  for (const contents of ['', 'OTHER_KEY=SIMULATED_IGNORED', 'ARKIV_ACCESS_KEY=',
+    'ARKIV_ACCESS_KEY=one\nARKIV_ACCESS_KEY=two', 'ARKIV_ACCESS_KEY="line break"', 'ARKIV_ACCESS_KEY="unterminated']) {
+    await writeFile(file, contents, { mode: 0o600 });
+    await expect(startPublicTunnel({ ...f, arkivEnvFile: file, createDemo, fetchHealth: health })).rejects.toThrow('missing or invalid');
+  }
+  await writeFile(file, 'ARKIV_ACCESS_KEY=SIMULATED_VALID_KEY', { mode: 0o600 });
+  await chmod(file, 0o644); await expect(readServerAccessKey(file)).rejects.toThrow('missing or invalid');
+  await chmod(file, 0o600); const linked = join(f.directory, 'linked.env'); await symlink(file, linked);
+  for (const path of [linked, join(f.directory, 'absent.env'), 'relative.env', f.directory]) await expect(readServerAccessKey(path)).rejects.toThrow('missing or invalid');
+  expect(createDemo).not.toHaveBeenCalled(); await expect(readFile(f.status)).rejects.toThrow();
+});
+
+test('ambient credentials are ignored unless a file is explicitly selected', async () => {
+  const f = await fixture(); vi.stubEnv('ARKIV_ACCESS_KEY', 'SIMULATED_AMBIENT_KEY');
+  onTestFinished(() => vi.unstubAllEnvs());
+  const createDemo = vi.fn(async (options) => { expect(options).toEqual({}); return f.createDemo(); });
+  const runtime = await startPublicTunnel({ ...f, createDemo, fetchHealth: health }); onTestFinished(runtime.close);
+  expect(JSON.parse(await readFile(f.status, 'utf8')).serverAccessKeyConfigured).toBe(false);
+  await runtime.close();
+});
+
+test('explicit dedicated identity reaches only SSH argv; mode status and child environment exclude private material', async () => {
+  const f = await fixture(); const identity = join(f.directory, 'synthetic dedicated identity');
+  const contents = 'SIMULATED_PRIVATE_IDENTITY_CONTENT_NOT_FOR_STATUS';
+  await writeFile(identity, contents, { mode: 0o600 });
+  const captured = join(f.directory, 'child.json');
+  await writeFile(f.ssh, `#!${process.execPath}\nimport{writeFileSync}from'node:fs';\n` +
+    `writeFileSync(${JSON.stringify(captured)},JSON.stringify({args:process.argv.slice(2),environment:Object.keys(process.env).sort()}));\n` +
+    `process.stderr.write('SIMULATED_SENSITIVE_AUTH_DIAGNOSTIC');process.stdout.write(${JSON.stringify(registered + '\n')});setInterval(()=>{},1000);\n`, { mode: 0o700 });
+  vi.stubEnv('SSH_AUTH_SOCK', 'SIMULATED_AMBIENT_AGENT'); onTestFinished(() => vi.unstubAllEnvs());
+  const runtime = await startPublicTunnel({ ...f, sshIdentity: identity, sshUser: 'monolith-demo', fetchHealth: health });
+  onTestFinished(runtime.close);
+  const child = JSON.parse(await readFile(captured, 'utf8'));
+  expect(child.environment).toEqual(['LANG', 'PATH']);
+  expect(child.args[child.args.indexOf('-i') + 1]).toBe(identity);
+  expect(child.args.filter((value) => value === '-i')).toHaveLength(1);
+  expect(child.args).toContain('monolith-demo@localhost.run');
+  expect(child.args).toContain('IdentityAgent=none'); expect(child.args).not.toContain('IdentityFile=/dev/null');
+  for (const value of ['BatchMode=yes', 'IdentitiesOnly=yes', 'StrictHostKeyChecking=yes',
+    'GlobalKnownHostsFile=/dev/null', `UserKnownHostsFile=${f.knownHosts}`]) expect(child.args).toContain(value);
+  expect(child.args[child.args.indexOf('-p') + 1]).toBe('22');
+  await runtime.close();
+  const status = await readFile(f.status, 'utf8'); const parsed = JSON.parse(status);
+  expect(parsed.sshAuthenticationMode).toBe('dedicated-key'); expect(parsed.state).toBe('CLOSED');
+  expect(Object.keys(parsed.hashes).sort()).toEqual(['knownHosts', 'launcher', 'ssh']);
+  for (const value of [identity, contents, 'SIMULATED_AMBIENT_AGENT', 'SIMULATED_SENSITIVE_AUTH_DIAGNOSTIC']) expect(status).not.toContain(value);
+  expect(f.close).toHaveBeenCalledTimes(1);
+});
+
+test.each(['identity-only', 'user-only', 'null-identity', 'relative', 'absent', 'linked', 'directory', 'empty',
+  'oversized', 'unsafe-mode', 'unreadable-mode', 'foreign-owner', 'nokey-user', 'host-in-user', 'option-in-user', 'control-in-path'])(
+  'invalid dedicated identity %s fails before backend/status/process', async (fault) => {
+    const f = await fixture(); const identity = join(f.directory, 'synthetic-key');
+    await writeFile(identity, 'SIMULATED_IDENTITY', { mode: 0o600 });
+    const createDemo = vi.fn(f.createDemo); const options = { ...f, createDemo, fetchHealth: health, sshIdentity: identity, sshUser: 'monolith-demo' };
+    let uidSpy;
+    if (fault === 'identity-only') delete options.sshUser;
+    if (fault === 'user-only') delete options.sshIdentity;
+    if (fault === 'null-identity') options.sshIdentity = null;
+    if (fault === 'relative') options.sshIdentity = 'relative-key';
+    if (fault === 'absent') options.sshIdentity = join(f.directory, 'absent-key');
+    if (fault === 'linked') { const link = join(f.directory, 'linked'); await symlink(identity, link); options.sshIdentity = link; }
+    if (fault === 'directory') options.sshIdentity = f.directory;
+    if (fault === 'empty') await writeFile(identity, '');
+    if (fault === 'oversized') await writeFile(identity, 'x'.repeat(64 * 1024 + 1));
+    if (fault === 'unsafe-mode') await chmod(identity, 0o644);
+    if (fault === 'unreadable-mode') await chmod(identity, 0o200);
+    if (fault === 'foreign-owner') uidSpy = vi.spyOn(process, 'getuid').mockReturnValue(process.getuid() + 1);
+    if (fault === 'nokey-user') options.sshUser = 'nokey';
+    if (fault === 'host-in-user') options.sshUser = 'name@foreign.invalid';
+    if (fault === 'option-in-user') options.sshUser = '-oProxyCommand=invalid';
+    if (fault === 'control-in-path') options.sshIdentity += '\ninvalid';
+    try { await expect(startPublicTunnel(options)).rejects.toThrow('SSH identity configuration is missing or invalid.'); }
+    finally { uidSpy?.mockRestore(); }
+    expect(createDemo).not.toHaveBeenCalled(); await expect(readFile(f.status)).rejects.toThrow();
+  },
+);
+
+test('dedicated authentication rejection closes once without anonymous fallback or raw diagnostics', async () => {
+  const f = await fixture(); const identity = join(f.directory, 'synthetic-key'); const attempts = join(f.directory, 'attempts.jsonl');
+  await writeFile(identity, 'SIMULATED_IDENTITY', { mode: 0o600 });
+  await writeFile(f.ssh, `#!${process.execPath}\nimport{appendFileSync}from'node:fs';\n` +
+    `appendFileSync(${JSON.stringify(attempts)},JSON.stringify(process.argv.slice(2))+'\\n');\n` +
+    `process.stderr.write('SIMULATED_PRIVATE_AUTH_FAILURE');process.exit(255);\n`, { mode: 0o700 });
+  await expect(startPublicTunnel({ ...f, sshIdentity: identity, sshUser: 'monolith-demo', fetchHealth: health })).rejects.toThrow('could not start');
+  const rows = (await readFile(attempts, 'utf8')).trim().split('\n').map((line) => JSON.parse(line));
+  expect(rows).toHaveLength(1); expect(rows[0]).toContain('monolith-demo@localhost.run'); expect(rows[0]).not.toContain('nokey@localhost.run');
+  const status = await readFile(f.status, 'utf8');
+  expect(JSON.parse(status)).toMatchObject({ state: 'CLOSED', sshAuthenticationMode: 'dedicated-key' });
+  expect(status).not.toContain(identity); expect(status).not.toContain('SIMULATED_PRIVATE_AUTH_FAILURE');
+  expect(f.close).toHaveBeenCalledTimes(1);
+});
+
+test.each([
+  ['literal-percent', '%h', false], ['literal-environment', '${LANG}', false],
+  ['resolved-percent', '%h', true], ['resolved-environment', '${LANG}', true],
+])('identity expansion syntax %s fails before startup', async (_name, token, parentAlias) => {
+  const f = await fixture(); let identity;
+  if (parentAlias) {
+    const actualParent = join(f.directory, `selected-${token}`);
+    await mkdir(actualParent, { mode: 0o700 });
+    await writeFile(join(actualParent, 'identity'), 'SIMULATED_IDENTITY', { mode: 0o600 });
+    const alias = join(f.directory, 'selected-parent'); await symlink(actualParent, alias);
+    identity = join(alias, 'identity');
+  } else {
+    identity = join(f.directory, `selected-${token}`);
+    await writeFile(identity, 'SIMULATED_IDENTITY', { mode: 0o600 });
+  }
+  const createDemo = vi.fn(f.createDemo);
+  const outcome = await startPublicTunnel({ ...f, createDemo, fetchHealth: health, sshIdentity: identity, sshUser: 'monolith-demo' })
+    .then((runtime) => ({ runtime }), (error) => ({ error }));
+  onTestFinished(() => outcome.runtime?.close());
+  expect(outcome.error?.message).toBe('SSH identity configuration is missing or invalid.');
+  expect(createDemo).not.toHaveBeenCalled(); await expect(readFile(f.status)).rejects.toThrow();
+});
+
+test('pre-cancelled dedicated mode does not spawn SSH and closes its backend', async () => {
+  const f = await fixture(); const identity = join(f.directory, 'synthetic-key'); const spawned = join(f.directory, 'spawned');
+  await writeFile(identity, 'SIMULATED_IDENTITY', { mode: 0o600 });
+  await writeFile(f.ssh, `#!${process.execPath}\nimport{writeFileSync}from'node:fs';writeFileSync(${JSON.stringify(spawned)},'SIMULATED');\n`, { mode: 0o700 });
+  const abort = new AbortController(); abort.abort();
+  await expect(startPublicTunnel({ ...f, sshIdentity: identity, sshUser: 'monolith-demo', signal: abort.signal, fetchHealth: health })).rejects.toThrow('could not start');
+  await expect(readFile(spawned)).rejects.toThrow();
+  expect(JSON.parse(await readFile(f.status, 'utf8'))).toMatchObject({ state: 'CLOSED', sshAuthenticationMode: 'dedicated-key' });
+  expect(f.close).toHaveBeenCalledTimes(1);
 });

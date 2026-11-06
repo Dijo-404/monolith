@@ -1,0 +1,54 @@
+{
+  "schemaVersion": 1,
+  "sourceTask": "MN-025",
+  "scope": "operator-controlled prior-runtime shutdown; status snapshot alone is not liveness evidence",
+  "observedAt": "2026-11-06T19:02:54.252994+00:00",
+  "runtime5CodeCommit": "bf4fd3286c7cc7b2736c0a70393e63e1079eedda",
+  "runtime5LastSnapshotState": "READY",
+  "runtime5LastSnapshotCounters": {
+    "requests": 1,
+    "denied": 0,
+    "forwarded": 1,
+    "missingContentTypeFilled": 0,
+    "missingRunHeaderFilled": 0,
+    "conflictsDenied": 0,
+    "concurrent": 0,
+    "pendingUpstreams": 0,
+    "connections": 1,
+    "acceptedProxy": 1,
+    "rejectedProxy": 0,
+    "droppedConnections": 0,
+    "activeConnections": 0
+  },
+  "priorOwnedUnits": [
+    {
+      "unit": "monolith-public-observer-mn025-20261106-2.service",
+      "activeState": "inactive",
+      "subState": "dead",
+      "mainPid": 0,
+      "cgroupProcessCount": 0
+    },
+    {
+      "unit": "monolith-public-observer-mn025-20261106-3.service",
+      "activeState": "inactive",
+      "subState": "dead",
+      "mainPid": 0,
+      "cgroupProcessCount": 0
+    },
+    {
+      "unit": "monolith-public-observer-mn025-20261106-4.service",
+      "activeState": "inactive",
+      "subState": "dead",
+      "mainPid": 0,
+      "cgroupProcessCount": 0
+    },
+    {
+      "unit": "monolith-public-observer-mn025-20261107-5.service",
+      "activeState": "inactive",
+      "subState": "dead",
+      "mainPid": 0,
+      "cgroupProcessCount": 0
+    }
+  ],
+  "allPriorOwnedRuntimeProcessesStopped": true
+}
