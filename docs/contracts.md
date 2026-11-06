@@ -126,7 +126,7 @@ type ReadRequest = {
   endpointId: string;
   chainId: ChainId;
   method: ReadMethod;
-  params: unknown[];
+  params: JsonValue[];
   callsite: string;          // static app/module label; no payload interpolation
 };
 type RpcTrace = {
@@ -181,10 +181,10 @@ type JsonRpcRequest = {
   jsonrpc: '2.0';
   id: string;
   method: ReadMethod;
-  params: unknown[];
+  params: JsonValue[];
 };
 type JsonRpcResponse =
-  | { jsonrpc: '2.0'; id: string; result: unknown }
+  | { jsonrpc: '2.0'; id: string; result: JsonValue }
   | { jsonrpc: '2.0'; id: string | null; error: { code: number; message: string; data?: JsonValue } };
 ```
 
