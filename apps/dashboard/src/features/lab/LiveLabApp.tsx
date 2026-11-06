@@ -204,7 +204,7 @@ export function LiveLabApp({ observerUrl }: { observerUrl: string }) {
   };
   return <>
     <Header section="demo" dataMode="live" />
-    <main data-live-phase={state.phase} data-live-run={state.allocation?.runId}>
+    <main className="live-lab" data-live-phase={state.phase} data-live-run={state.allocation?.runId}>
       <h1 className="visually-hidden">Monolith live privacy lab</h1>
       <section id="demo" className="hero" aria-label="Live privacy lab">
         <LiveGuide state={state} active={active} onSelect={setActive} onRun={(mode) => void controller.run(mode)} />

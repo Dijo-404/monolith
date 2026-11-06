@@ -9,3 +9,9 @@
 .details__head > .btn { flex-shrink: 0; }
 .card .facts dd { min-width: 0; }
 @media (max-width: 640px) { .live-error { padding: 18px; margin-inline: 0; } .details__head { flex-wrap: wrap; gap: 16px; } .live-footer { padding-inline: 16px; } }
+@media (max-width: 640px) {
+  .live-lab .activity__row { grid-template-columns: minmax(0, 1fr) auto; gap: 8px 10px; padding-block: 10px; }
+  .live-lab .activity__row > .tag { grid-column: 1; grid-row: 1; justify-self: start; }
+  .live-lab .activity__method { grid-column: 1; grid-row: 2; }
+  .live-lab .activity__outcome { grid-column: 2; grid-row: 2; }
+}

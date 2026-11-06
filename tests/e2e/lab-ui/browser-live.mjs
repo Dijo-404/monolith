@@ -1,5 +1,5 @@
 // Actual production UI only. No fake driver, SDK patch, mocked RPC or altered response.
-/* global document */
+/* global document, innerWidth */
 import assert from 'node:assert/strict';
 import { createHash, randomUUID } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
@@ -68,7 +68,7 @@ const artifact = { schemaVersion: 1, sourceTask: 'MN-014', evidence: 'BLOCKED', 
   startedAt: new Date().toISOString(), generatedAt: null, node: process.version, playwright: '1.65.0', browser: null,
   observerOrigin: observer.origin, sourceWorkingTreeClean: true,
   gitHead: execFileSync('git', ['rev-parse', 'HEAD'], { cwd: repository, encoding: 'utf8' }).trim(),
-  source, sourceUnchangedAfterRun: false, cases: [], resolverResponses: [], bootstrapRequests: [], metadata: [],
+  source, sourceUnchangedAfterRun: false, cases: [], layouts: [], resolverResponses: [], bootstrapRequests: [], metadata: [],
   controls: { ordinaryProtectedTargetRequests: 0, directDetectionSelfCheck: false, pageErrors: 0 },
   shutdown: { browserContextDestroyed: false, iframeRemovedOnNavigation: false }, failure: null,
   limitations: ['One observed synthetic workflow through the configured trusted observer/forwarder; no universal anonymity claim.',
@@ -211,6 +211,13 @@ try {
   assert.equal(artifact.controls.ordinaryProtectedTargetRequests, 0);
   assert.equal(artifact.controls.pageErrors, 0); assert.equal(artifact.bootstrapRequests.length, 2);
   assert.equal(new Set(artifact.cases.map((row) => row.allocation.runId)).size, 4);
+  for (const width of [390, 320]) {
+    await page.setViewportSize({ width, height: 844 });
+    assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
+    const path = `repair-${width}.png`;
+    await page.screenshot({ path: join(output, path), fullPage: true });
+    artifact.layouts.push({ width, passed: true, path, sha256: sha(await readFile(join(output, path))) });
+  }
   // Navigation destroys the live document; the clearly marked secondary view owns no live driver.
   await page.goto(new URL('/?mode=simulated', preview).href);
   await page.getByText('Simulated data', { exact: true }).waitFor();
@@ -222,6 +229,14 @@ try {
   artifact.sourceUnchangedAfterRun = true; artifact.evidence = 'OBSERVED_LIVE'; artifact.passed = true;
 } catch (error) {
   artifact.failure ??= error?.message === 'UI_RUN_BLOCKED' ? 'UI_RUN_BLOCKED' : 'LIVE_UI_ACCEPTANCE_FAILED';
+  const code = await page?.locator('.live-error .mono').textContent({ timeout: 1000 }).catch(() => null);
+  artifact.failedAttempt = { mode, allocation: activeAllocation, diagnostics: latestDiagnostics,
+    uiErrorCode: typeof code === 'string' && /^[A-Z_]{1,64}$/.test(code) ? code : null };
+  try {
+    await page?.screenshot({ path: join(output, 'blocked.png'), fullPage: true, timeout: 5000 });
+    artifact.failedAttempt.screenshot = 'blocked.png';
+    artifact.failedAttempt.screenshotSha256 = sha(await readFile(join(output, 'blocked.png')));
+  } catch { /* Failure evidence is retained even if the rendering context has gone away. */ }
   process.exitCode = 1;
 } finally {
   clearInterval(heartbeat);
