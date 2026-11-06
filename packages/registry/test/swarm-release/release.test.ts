@@ -1,4 +1,5 @@
 import { createHash } from 'node:crypto';
+import { bytes } from '@arkiv-network/sdk/schema';
 import { describe, expect, it } from 'vitest';
 import {
   canonicalSwarmInventory, createSwarmRelease, validateSwarmRelease, swarmManifestCid, swarmReleaseOrigin,
@@ -31,7 +32,7 @@ function row(release = descriptor()): Record<string, unknown> {
     $creationFlags: { readonly: true, permissionlessExtension: false, raw: 1 },
     release_id: str(release.releaseId), source_commit: str(release.sourceCommit), swarm_reference: str(release.swarmReference),
     published_at: str(release.publishedAt), content_expires_at: str(release.expiresAt), inventory_sha256: str(release.inventorySha256),
-    inventory_json: { type: 'bytes', value: new TextEncoder().encode(canonicalSwarmInventory(release.files)) } };
+    inventory_json: bytes(new TextEncoder().encode(canonicalSwarmInventory(release.files))) };
 }
 function harness() {
   let block = 100n; let chainId = 7794095; let current = row(); let createCount = 0; let fileCount = 0;
@@ -94,6 +95,33 @@ function releaseInput(release: SwarmRelease) {
 }
 
 describe('trusted Arkiv discovery and useful content reads (SIMULATED)', () => {
+  it('reads the Hex BytesValue produced by the public Arkiv SDK bytes helper', async () => {
+    expect(bytes(new Uint8Array([0xde, 0xad])).value).toBe('0xdead');
+    const h = harness();
+    const result = await readSwarmRelease({ entityKey, publisher }, h);
+    expect(result.descriptor).toEqual(descriptor());
+    expect(h.counts()).toEqual({ createCount: 0, fileCount: 5 });
+  });
+  it('rejects malformed, oversized, invalid UTF-8 and noncanonical SDK byte payloads before downloads', async () => {
+    const inventory = canonicalSwarmInventory(descriptor().files);
+    const invalidPayloads: unknown[] = [
+      { type: 'bytes', value: new TextEncoder().encode(inventory) },
+      { type: 'bytes', value: [0xde, 0xad] }, { type: 'bytes', value: 1 },
+      { type: 'str', value: bytes(new TextEncoder().encode(inventory)).value },
+      { type: 'bytes', value: 'dead' }, { type: 'bytes', value: '0Xdead' },
+      { type: 'bytes', value: '0x0' }, { type: 'bytes', value: '0xgg' },
+      { type: 'bytes', value: `0x${'00'.repeat(16 * 1024 + 1)}` },
+      bytes(new Uint8Array([0xff])), bytes(new Uint8Array([0xc0, 0xaf])),
+      bytes(new TextEncoder().encode(` ${inventory}`)),
+      bytes(new TextEncoder().encode(`${inventory}\n`)),
+      bytes(new Uint8Array([0xef, 0xbb, 0xbf, ...new TextEncoder().encode(inventory)])),
+    ];
+    for (const payload of invalidPayloads) {
+      const h = harness(); const record = row(); record['inventory_json'] = payload; h.setRow(record);
+      await expect(readSwarmRelease({ entityKey, publisher }, h)).rejects.toThrow('SWARM_RELEASE_READ_FAILED');
+      expect(h.counts()).toEqual({ createCount: 0, fileCount: 0 });
+    }
+  });
   it('resolves a trusted entity into exact content and notices without a signing interface', async () => {
     const h = harness(); delete h.client.createEntity; delete h.client.getBalance; delete h.client.getReceipt;
     const result = await readSwarmRelease({ entityKey, publisher, expectedReleaseId: descriptor().releaseId }, h);
@@ -106,7 +134,7 @@ describe('trusted Arkiv discovery and useful content reads (SIMULATED)', () => {
       (r) => { r['$creator'] = `0x${'44'.repeat(20)}`; }, (r) => { r['$owner'] = `0x${'44'.repeat(20)}`; },
       (r) => { r['$key'] = transactionHash; }, (r) => { r['$creationFlags'] = { readonly: false, permissionlessExtension: false, raw: 0 }; },
       (r) => { r['inventory_sha256'] = { type: 'str', value: '0'.repeat(64) }; },
-      (r) => { r['inventory_json'] = { type: 'bytes', value: new Uint8Array([255]) }; },
+      (r) => { r['inventory_json'] = bytes(new Uint8Array([255])); },
       (r) => { r['swarm_reference'] = { type: 'str', value: 'a'.repeat(128) }; },
     ];
     for (const mutation of mutate) {

@@ -104,16 +104,22 @@ function trusted(row: unknown, entityKey: string, publisher: string, block: bigi
     fail('SWARM_RELEASE_UNTRUSTED');
   }
   const payload = row['inventory_json'];
-  if (!plain(payload) || payload['type'] !== 'bytes' || !(payload['value'] instanceof Uint8Array)
-    || payload['value'].byteLength > 16 * 1024) fail('SWARM_RELEASE_UNTRUSTED');
-  let files: unknown;
-  try { files = JSON.parse(new TextDecoder('utf-8', { fatal: true }).decode(payload['value'])); }
+  // The SDK's BytesValue stores Hex, including when its public bytes() helper takes Uint8Array.
+  if (!plain(payload) || payload['type'] !== 'bytes' || typeof payload['value'] !== 'string'
+    || payload['value'].length > 2 + 16 * 1024 * 2
+    || !/^0x(?:[0-9a-fA-F]{2})*$/.test(payload['value'])) fail('SWARM_RELEASE_UNTRUSTED');
+  let files: unknown; let inventoryJson: string;
+  try {
+    inventoryJson = new TextDecoder('utf-8', { fatal: true, ignoreBOM: true })
+      .decode(Buffer.from(payload['value'].slice(2), 'hex'));
+    files = JSON.parse(inventoryJson);
+  }
   catch { return fail('SWARM_RELEASE_UNTRUSTED'); }
   const descriptor = validateSwarmRelease({ schemaVersion: 1, releaseId: column(row, 'release_id'),
     sourceCommit: column(row, 'source_commit'), swarmReference: column(row, 'swarm_reference'),
     inventorySha256: column(row, 'inventory_sha256'), publishedAt: column(row, 'published_at'),
     expiresAt: column(row, 'content_expires_at'), files });
-  if (canonicalSwarmInventory(descriptor.files) !== new TextDecoder().decode(payload['value'])) fail('SWARM_RELEASE_UNTRUSTED');
+  if (canonicalSwarmInventory(descriptor.files) !== inventoryJson) fail('SWARM_RELEASE_UNTRUSTED');
   assertSwarmReleaseFresh(descriptor, now);
   return descriptor;
 }
