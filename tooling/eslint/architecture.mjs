@@ -5,6 +5,7 @@ import { fileURLToPath } from 'node:url';
 
 const root = fileURLToPath(new URL('../../', import.meta.url));
 const allowed = {
+  cli: ['shared', 'privacy-analyzer'],
   dashboard: ['shared', 'transport', 'privacy-analyzer', 'registry'],
   observer: ['shared', 'registry'],
   relayer: ['shared'],
