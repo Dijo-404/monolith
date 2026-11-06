@@ -1,0 +1,133 @@
+name: Swarm frontend candidate
+
+on:
+  workflow_dispatch:
+    inputs:
+      source_sha:
+        description: Full accepted main commit whose required checks passed
+        type: string
+        required: true
+      observer_origin:
+        description: Current qualified public HTTPS observer origin
+        type: string
+        required: true
+      upload_candidate:
+        description: Upload one compiled candidate using the public gateway's provided postage
+        type: boolean
+        required: false
+        default: false
+
+permissions:
+  contents: read
+  actions: read
+  checks: read
+
+concurrency:
+  group: swarm-frontend-candidate
+  cancel-in-progress: false
+
+jobs:
+  candidate:
+    name: Prepare explicit Swarm candidate
+    if: ${{ github.repository == 'Dijo-404/monolith' && github.ref == 'refs/heads/main' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      SOURCE_SHA: ${{ inputs.source_sha }}
+      OBSERVER_ORIGIN: ${{ inputs.observer_origin }}
+      UPLOAD_ENABLED: ${{ inputs.upload_candidate }}
+    steps:
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24.22.2
+      - name: Validate explicit public inputs
+        run: |
+          node --input-type=module <<'JS'
+          import assert from 'node:assert/strict';
+          assert.match(process.env.SOURCE_SHA, /^[a-f0-9]{40}$/);
+          const value = process.env.OBSERVER_ORIGIN;
+          const url = new URL(value);
+          assert.equal(value, url.origin);
+          assert.equal(url.protocol, 'https:');
+          assert.equal(url.username + url.password + url.search + url.hash + url.port, '');
+          assert.match(url.hostname, /^[a-z0-9](?:[a-z0-9.-]*[a-z0-9])?$/);
+          assert(url.hostname.includes('.') && !/^[0-9.]+$/.test(url.hostname));
+          assert(!/(?:^|\.)(?:localhost|local|internal|invalid|test|example)$/.test(url.hostname));
+          JS
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          path: control
+          persist-credentials: false
+      - name: Require accepted-main ancestry and successful checks for that SHA
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git -C control merge-base --is-ancestor "$SOURCE_SHA" refs/remotes/origin/main
+          gh api --paginate --slurp "repos/Dijo-404/monolith/commits/$SOURCE_SHA/check-runs?per_page=100" \
+            > "$RUNNER_TEMP/swarm-source-checks.json"
+          node --input-type=module <<'JS'
+          import assert from 'node:assert/strict';
+          import { readFileSync } from 'node:fs';
+          const pages = JSON.parse(readFileSync(process.env.RUNNER_TEMP + '/swarm-source-checks.json', 'utf8'));
+          const checks = pages.flatMap(page => page.check_runs);
+          for (const name of ['Workspace checks', 'Offline browser privacy regressions']) {
+            const entries = checks.filter(check => check.name === name && check.head_sha === process.env.SOURCE_SHA)
+              .sort((a, b) => b.id - a.id);
+            assert(entries.length > 0 && entries[0].status === 'completed' && entries[0].conclusion === 'success');
+            assert.equal(entries[0].app.slug, 'github-actions');
+          }
+          JS
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ inputs.source_sha }}
+          path: source
+          persist-credentials: false
+      - uses: pnpm/action-setup@73e46992e05b19abd31f2f3c20e0e7370d762115 # v6.1.1
+        with:
+          version: 12.18.0
+          run_install: false
+      - name: Prepare an exact clean-commit static snapshot
+        run: |
+          node control/scripts/deploy/prepare-static.mjs \
+            --repo "$GITHUB_WORKSPACE/source" --commit "$SOURCE_SHA" \
+            --out "$RUNNER_TEMP/swarm-snapshot" --pnpm "$(command -v pnpm)" \
+            --observer-url "$OBSERVER_ORIGIN"
+      - name: Preview or explicitly stage one bounded candidate
+        run: |
+          if [ "$UPLOAD_ENABLED" = 'true' ]; then
+            node control/deploy/swarm/upload.mjs --snapshot "$RUNNER_TEMP/swarm-snapshot" \
+              --out "$RUNNER_TEMP/swarm-candidate" --upload
+          else
+            node control/deploy/swarm/upload.mjs --snapshot "$RUNNER_TEMP/swarm-snapshot" \
+              --out "$RUNNER_TEMP/swarm-candidate"
+          fi
+      - name: Verify uploaded authored bytes and executable MIME
+        if: ${{ inputs.upload_candidate == true }}
+        run: |
+          node --input-type=module <<'JS'
+          import assert from 'node:assert/strict';
+          import { readFileSync } from 'node:fs';
+          import { spawnSync } from 'node:child_process';
+          const temporary = process.env.RUNNER_TEMP;
+          const receipt = JSON.parse(readFileSync(temporary + '/swarm-candidate/upload-receipt.json', 'utf8'));
+          assert.equal(receipt.status, 'UPLOADED_NOT_VERIFIED');
+          assert.match(receipt.reference, /^[a-f0-9]{64}$/);
+          const origin = receipt.candidateOrigins.find(value => /^https:\/\/b[a-z2-7]+\.bzz\.limo$/.test(value));
+          assert(origin);
+          const result = spawnSync(process.execPath, ['control/scripts/deploy/verify-static.mjs', origin,
+            temporary + '/swarm-snapshot', temporary + '/swarm-static-verification.json'], { stdio: 'inherit' });
+          assert.equal(result.status, 0);
+          JS
+      - name: Retain compiled artifacts and receipts
+        if: ${{ always() }}
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: swarm-candidate-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/swarm-snapshot
+            ${{ runner.temp }}/swarm-candidate
+            ${{ runner.temp }}/swarm-static-verification.json
+          if-no-files-found: warn
+          retention-days: 7

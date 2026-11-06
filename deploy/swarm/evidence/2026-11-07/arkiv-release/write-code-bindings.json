@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "codeCommit": "c4469171763853fc9d21058572a09665ef211846",
+  "sourceWorkingTreeClean": true,
+  "descriptorFileSha256": "8432deade00d02588f6338de0f9119bcb201b59e0f7f50993e4bf177ee193d4d",
+  "maximumFeeWei": "2000000000000000",
+  "publisher": "0x93D1A42655F2B0BCFa126e3D2a33e4ab60a74CA4",
+  "bindings": [
+    {
+      "path": "scripts/deploy/arkiv-release.ts",
+      "sha256": "79b94025778351752feea417bc498da387366fca17fda6bd92130ceb06bcf2d8"
+    },
+    {
+      "path": "scripts/importer-key-file.ts",
+      "sha256": "3034cdd2f672999b3ebaab51bffbfa12c9e82874e75b4552de6e786818f20616"
+    },
+    {
+      "path": "packages/registry/package.json",
+      "sha256": "ac67756d013a4a2028605318e939c0e74f95e5718135abda8818ba3662886fdc"
+    },
+    {
+      "path": "packages/registry/src/domain/swarm-release.ts",
+      "sha256": "0f64f2f4b8f3f28403b405f7e75c896eae4eec53d8eed82f1b2ca695be5a1899"
+    },
+    {
+      "path": "packages/registry/src/adapters/arkiv/swarm-release.ts",
+      "sha256": "3e337fa5e6d0d9cc2a2d57682a0376855ba26eca3d180b67e4c72fc56f5f534f"
+    },
+    {
+      "path": "packages/registry/src/swarm-release.ts",
+      "sha256": "55bf829c761d6c3f5791face0afd71edd70eca6b85074d69345ece3e857f75bc"
+    },
+    {
+      "path": "packages/registry/dist/domain/swarm-release.js",
+      "sha256": "f13145a90f27dfe0720cf9c7f0da3b9b8cd6279bc742aa16f63811a443e69c96"
+    },
+    {
+      "path": "packages/registry/dist/adapters/arkiv/swarm-release.js",
+      "sha256": "4e95e51ddb0352fc0ff4a31f343e64c147fc3a6ec6abfdae9f953e120e64d54f"
+    },
+    {
+      "path": "packages/registry/dist/swarm-release.js",
+      "sha256": "98eb606317729e7ba213b46cdfc422e524b9a1b4393d6f5359d668c2ad2f0b8a"
+    },
+    {
+      "path": "pnpm-lock.yaml",
+      "sha256": "dd52d17efe95f178c5de765f06d4dfdd3f73545ed11d7491602c6fc17da489f5"
+    }
+  ]
+}

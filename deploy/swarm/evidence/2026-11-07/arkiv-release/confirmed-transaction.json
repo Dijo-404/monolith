@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "purpose": "KNOWN_RELEASE_TRANSACTION_RECEIPT",
+  "startedAt": "2026-11-06T23:21:14.545Z",
+  "transactionHash": "0x5f22569bf2158e00f1be1b3b7f3cdf6c0bbcf06b9023a2bdd0f39e37df36ba28",
+  "entityKey": "0xfc1627a9bf52005565d74111403477cc08c89d584a954da02371ffe73018179d",
+  "signingKeyRead": false,
+  "transactionSubmitted": false,
+  "evidence": "OBSERVED_LIVE",
+  "status": "RELEASE_TRANSACTION_CONFIRMED_SUCCESS",
+  "blockNumber": "310566",
+  "gasUsed": "174479",
+  "effectiveGasPriceWei": "1000000000",
+  "actualFeeWei": "174479000000000",
+  "withinFixedFeeCeiling": true,
+  "expectedEntityKeyPresentInContractLog": true,
+  "completedAt": "2026-11-06T23:21:15.118Z"
+}

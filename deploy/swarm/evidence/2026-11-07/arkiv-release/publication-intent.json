@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "purpose": "ONE_BOUNDED_ARKIV_RELEASE_PUBLICATION",
+  "startedAt": "2026-11-06T23:14:57.958Z",
+  "status": "INTENT_RESERVED",
+  "sourceIssue": 99,
+  "releaseId": "088cc81e88de8f5c1a723dcbc50ea776c6bf927458d93535b4a00cbb9698ede9",
+  "publisher": "0x93D1A42655F2B0BCFa126e3D2a33e4ab60a74CA4",
+  "maximumFeeWei": "2000000000000000",
+  "maximumCreates": 1,
+  "automaticRetryAllowed": false,
+  "actualPostageBatchId": null,
+  "keyMaterialRetained": false,
+  "credentialPathsRetained": false,
+  "codeCommit": "c4469171763853fc9d21058572a09665ef211846",
+  "descriptorSha256": "8432deade00d02588f6338de0f9119bcb201b59e0f7f50993e4bf177ee193d4d",
+  "codeBindingsSha256": "566440c5c682701267d2cd8358f89a869bc25fd6eb65a91df686f6ee0592e76e"
+}

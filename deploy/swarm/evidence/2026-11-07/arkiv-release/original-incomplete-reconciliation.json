@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "purpose": "READ_ONLY_UNCERTAIN_RELEASE_RECONCILIATION",
+  "startedAt": "2026-11-06T23:18:20.244Z",
+  "status": "UNRESOLVED",
+  "publisher": "0x93D1A42655F2B0BCFa126e3D2a33e4ab60a74CA4",
+  "releaseId": "088cc81e88de8f5c1a723dcbc50ea776c6bf927458d93535b4a00cbb9698ede9",
+  "signingKeyRead": false,
+  "signingPerformed": false,
+  "transactionSubmitted": false,
+  "credentialValuesOrPathsRetained": false,
+  "queriedEntityKeys": [
+    "0xfc1627a9bf52005565d74111403477cc08c89d584a954da02371ffe73018179d"
+  ],
+  "matchingTransactions": [],
+  "blocksScanned": 0,
+  "currentBlock": "310665",
+  "currentBalanceWei": "9881159380000000000",
+  "balanceDeltaSincePrewriteWei": "174479000000000",
+  "failure": "READ_ONLY_RECONCILIATION_INCOMPLETE",
+  "completedAt": "2026-11-06T23:18:21.821Z"
+}

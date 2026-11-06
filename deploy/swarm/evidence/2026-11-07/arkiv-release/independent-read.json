@@ -1,0 +1,152 @@
+{
+  "schemaVersion": 1,
+  "evidence": "OBSERVED_LIVE",
+  "status": "TRUSTED_RELEASE_CONTENT_VERIFIED",
+  "result": {
+    "entityKey": "0xfc1627a9bf52005565d74111403477cc08c89d584a954da02371ffe73018179d",
+    "publisher": "0x93D1A42655F2B0BCFa126e3D2a33e4ab60a74CA4",
+    "expiresAtBlock": "353315",
+    "observedAt": "2026-11-06T23:21:25.158Z",
+    "descriptor": {
+      "schemaVersion": 1,
+      "sourceCommit": "bd43ff315aa1d98552a7f117f91b4afb56adefd4",
+      "swarmReference": "8a2a3e73a09b68306cd4a6ff1935a2492017f7a2c918ede926822d37aa132db1",
+      "publishedAt": "2026-11-06T23:05:21.502Z",
+      "expiresAt": "2026-11-07T23:00:00.000Z",
+      "inventorySha256": "a932f30c7a6113d3a66896d046254b54728f719d71fea6bb5ed3924d979df70b",
+      "releaseId": "088cc81e88de8f5c1a723dcbc50ea776c6bf927458d93535b4a00cbb9698ede9",
+      "files": [
+        {
+          "path": "assets/THIRD-PARTY-NOTICES.txt",
+          "bytes": 40959,
+          "sha256": "008926aaaa3737dec8c4aba25faa0a3143626c6e96f59bf7b17c92ef0b5d6ddf"
+        },
+        {
+          "path": "assets/app-CICXmcEX.css",
+          "bytes": 19812,
+          "sha256": "af3d0e4077e657fea1f01f9175e391b7ecee7b072935e6090403425031d26be8"
+        },
+        {
+          "path": "assets/app-Cr7RE_ZT.js",
+          "bytes": 373547,
+          "sha256": "aa6571bbd87e669d89f016b0555abaf9cbd99441e04eed422ec4eecab0e1fde9"
+        },
+        {
+          "path": "assets/browser-BV4R2-sQ.js",
+          "bytes": 172301,
+          "sha256": "71eb5d7ba875e25ad922eab59d944b3fe0d4cd0756395512f303158f52f5dca1"
+        },
+        {
+          "path": "assets/fragment-mono-latin-yxdJ5AmL.woff2",
+          "bytes": 25224,
+          "sha256": "44c4e39bff5e76652a24a872cbebabccbcfb20f62c4633b27c1f2745cba86b56"
+        },
+        {
+          "path": "assets/wix-madefor-display-latin-Blzrepd3.woff2",
+          "bytes": 20168,
+          "sha256": "19bf2f2f1eaa10b2a047a8a1e624a1e12008ab5e3c50ad199ac968f8324f5f4d"
+        },
+        {
+          "path": "assets/wix-madefor-text-latin-M4ts_BV7.woff2",
+          "bytes": 20244,
+          "sha256": "cbd90a79e04d153fd521d90b08e9962628e3139313af330bd898001fe5b36e1a"
+        },
+        {
+          "path": "assets/worker-host.html",
+          "bytes": 297,
+          "sha256": "844c700df979d2bdb16ff70650c1b68b6f51512602dfadeaee94433a3ea6cebe"
+        },
+        {
+          "path": "assets/workerHost-BKrclfgn.js",
+          "bytes": 46,
+          "sha256": "be79dfb1b101571e15515125b2769d96b1d5d13a2001ca51e0b4684afdcaa35d"
+        },
+        {
+          "path": "index.html",
+          "bytes": 884,
+          "sha256": "e518d5ce35a9f9d4a8a29acb465bae8ede43cde9b40e3f30d2f90df54c373752"
+        }
+      ]
+    },
+    "origin": "https://bah5acgzarivd445atnuda3guu37rsnncjeqbp55czemo32jgqiwtpkqtfwyq.bzz.limo",
+    "files": [
+      {
+        "path": "assets/THIRD-PARTY-NOTICES.txt",
+        "bytes": 40959,
+        "sha256": "008926aaaa3737dec8c4aba25faa0a3143626c6e96f59bf7b17c92ef0b5d6ddf",
+        "mime": "text/plain",
+        "mimeVerified": true
+      },
+      {
+        "path": "assets/app-CICXmcEX.css",
+        "bytes": 19812,
+        "sha256": "af3d0e4077e657fea1f01f9175e391b7ecee7b072935e6090403425031d26be8",
+        "mime": "text/css",
+        "mimeVerified": true
+      },
+      {
+        "path": "assets/app-Cr7RE_ZT.js",
+        "bytes": 373547,
+        "sha256": "aa6571bbd87e669d89f016b0555abaf9cbd99441e04eed422ec4eecab0e1fde9",
+        "mime": "text/javascript",
+        "mimeVerified": true
+      },
+      {
+        "path": "assets/browser-BV4R2-sQ.js",
+        "bytes": 172301,
+        "sha256": "71eb5d7ba875e25ad922eab59d944b3fe0d4cd0756395512f303158f52f5dca1",
+        "mime": "text/javascript",
+        "mimeVerified": true
+      },
+      {
+        "path": "assets/fragment-mono-latin-yxdJ5AmL.woff2",
+        "bytes": 25224,
+        "sha256": "44c4e39bff5e76652a24a872cbebabccbcfb20f62c4633b27c1f2745cba86b56",
+        "mime": "false",
+        "mimeVerified": false,
+        "warning": "GATEWAY_FONT_MIME_NONSTANDARD"
+      },
+      {
+        "path": "assets/wix-madefor-display-latin-Blzrepd3.woff2",
+        "bytes": 20168,
+        "sha256": "19bf2f2f1eaa10b2a047a8a1e624a1e12008ab5e3c50ad199ac968f8324f5f4d",
+        "mime": "false",
+        "mimeVerified": false,
+        "warning": "GATEWAY_FONT_MIME_NONSTANDARD"
+      },
+      {
+        "path": "assets/wix-madefor-text-latin-M4ts_BV7.woff2",
+        "bytes": 20244,
+        "sha256": "cbd90a79e04d153fd521d90b08e9962628e3139313af330bd898001fe5b36e1a",
+        "mime": "false",
+        "mimeVerified": false,
+        "warning": "GATEWAY_FONT_MIME_NONSTANDARD"
+      },
+      {
+        "path": "assets/worker-host.html",
+        "bytes": 297,
+        "sha256": "844c700df979d2bdb16ff70650c1b68b6f51512602dfadeaee94433a3ea6cebe",
+        "mime": "text/html",
+        "mimeVerified": true
+      },
+      {
+        "path": "assets/workerHost-BKrclfgn.js",
+        "bytes": 46,
+        "sha256": "be79dfb1b101571e15515125b2769d96b1d5d13a2001ca51e0b4684afdcaa35d",
+        "mime": "text/javascript",
+        "mimeVerified": true
+      },
+      {
+        "path": "index.html",
+        "bytes": 884,
+        "sha256": "e518d5ce35a9f9d4a8a29acb465bae8ede43cde9b40e3f30d2f90df54c373752",
+        "mime": "text/html",
+        "mimeVerified": true
+      }
+    ],
+    "evidence": "OBSERVED_LIVE",
+    "limits": "Release discovery and public-file identity only; no worker, RPC routing, storage-retention or sponsor-eligibility claim."
+  },
+  "signingKeyLoaded": false,
+  "postageProvenance": "UNKNOWN"
+}

@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "purpose": "ONE_BOUNDED_ARKIV_RELEASE_PUBLICATION",
+  "startedAt": "2026-11-06T23:14:57.958Z",
+  "status": "RECONCILE_RESERVED_SUBMISSION",
+  "sourceIssue": 99,
+  "releaseId": "088cc81e88de8f5c1a723dcbc50ea776c6bf927458d93535b4a00cbb9698ede9",
+  "publisher": "0x93D1A42655F2B0BCFa126e3D2a33e4ab60a74CA4",
+  "maximumFeeWei": "2000000000000000",
+  "maximumCreates": 1,
+  "automaticRetryAllowed": false,
+  "actualPostageBatchId": null,
+  "keyMaterialRetained": false,
+  "credentialPathsRetained": false,
+  "failure": "PUBLICATION_OR_READ_BACK_NOT_CONFIRMED",
+  "completedAt": "2026-11-06T23:15:05.192Z"
+}
