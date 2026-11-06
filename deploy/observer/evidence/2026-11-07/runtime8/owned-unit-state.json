@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "sourceTask": "MN-025",
+  "scope": "CURRENT_OWNED_UNIT_STATE_NOT_A_SHUTDOWN_CAUSE_OR_PROVIDER_LIFETIME_PROOF",
+  "observedAt": "2026-11-06T20:43:28.209Z",
+  "predecessor": {
+    "LoadState": "not-found",
+    "ActiveState": "inactive",
+    "SubState": "dead",
+    "MainPID": "0",
+    "ControlGroup": ""
+  },
+  "current": {
+    "LoadState": "loaded",
+    "ActiveState": "active",
+    "SubState": "running",
+    "RuntimeMaxUSec": "12h",
+    "MainPID": "63956",
+    "ControlGroup": "/user.slice/user-1000.slice/user@1000.service/app.slice/monolith-public-observer-mn025-20261107-8.service"
+  }
+}

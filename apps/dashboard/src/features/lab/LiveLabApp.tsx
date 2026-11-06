@@ -5,7 +5,7 @@ import { Icon } from '../../components/Icon.js';
 import { Tag } from '../../components/Tag.js';
 import { Stage } from '../../components/stage/Stage.js';
 import type { StageScene } from '../../components/stage/renderer.js';
-import { useCoarseNow, usePrefersReducedMotion } from '../../app/use-lab.js';
+import { usePrefersReducedMotion } from '../../app/use-lab.js';
 import type { LiveMode, LiveSnapshot, LiveWireRead } from './live-types.js';
 import './live.css';
 
@@ -154,11 +154,10 @@ function Activity({ state }: { state: LiveSnapshot }) {
   </section>;
 }
 
-function RegistryCard({ state, now }: { state: LiveSnapshot; now: number }) {
+function RegistryCard({ state }: { state: LiveSnapshot }) {
   const endpoint = state.selection?.endpoint ?? state.manifest?.endpoints[0];
   const manifest = state.selection?.manifest ?? state.manifest;
-  const fresh = manifest && Date.parse(manifest.expiresAt) > now;
-  return <section className="card" aria-labelledby="registry-title"><header className="card__head"><h3 id="registry-title">Arkiv endpoint registry</h3><Tag>{manifest ? fresh ? 'Fresh snapshot' : 'Recorded snapshot' : 'Not queried'}</Tag></header>
+  return <section className="card" aria-labelledby="registry-title"><header className="card__head"><h3 id="registry-title">Arkiv endpoint registry</h3><Tag>{manifest ? state.busy ? 'Validated snapshot' : 'Recorded snapshot' : 'Not queried'}</Tag></header>
     <p className="card__lead">{endpoint ? endpoint.chainName : 'No endpoint selected'}</p>
     <p className="card__sub">{endpoint ? `${endpoint.rpcUrl} · chain ${endpoint.chainId}` : 'Metadata is read from the real Arkiv-backed service after the worker starts.'}</p>
     {endpoint && <dl className="facts">
@@ -167,7 +166,7 @@ function RegistryCard({ state, now }: { state: LiveSnapshot; now: number }) {
       <div><dt>Trusted publisher</dt><dd className="mono live-wrap" title={endpoint.publisher.creator}>{short(endpoint.publisher.creator, 18)}</dd></div>
       <div><dt>Source revision</dt><dd className="mono live-wrap">{endpoint.source.revision}</dd></div>
       <div><dt>Source SHA-256</dt><dd className="mono live-wrap">{endpoint.source.snapshotSha256}</dd></div>
-      <div><dt>Manifest expires</dt><dd>{manifest?.expiresAt}{!fresh && ' · start a fresh run before reading again'}</dd></div>
+      <div><dt>Manifest expires</dt><dd>{manifest?.expiresAt}{!state.busy && ' · every new run revalidates metadata'}</dd></div>
     </dl>}
     <p className="card__note">Arkiv supplies the candidate. Publisher, provenance and expiry checks plus a protected chain probe authorize its use. The observer forwards only this pinned URL.</p>
   </section>;
@@ -184,13 +183,13 @@ function WorkerCard({ state }: { state: LiveSnapshot }) {
       <div><dt>Worker observed</dt><dd>{state.worker.observedAt}</dd></div>
     </dl>}
     <p className="card__note card__note--exposed"><strong>Bootstrap is not anonymous.</strong> Two allowlisted specifier lookups happen before the worker exists. They are disclosed separately and excluded from application-read coverage.</p>
+    <p className="card__note">The hosted page and any Cloudflare security bootstrap are ordinary, non-anonymous contacts. They are outside protected RPC coverage.</p>
   </section>;
 }
 
 export function LiveLabApp({ observerUrl }: { observerUrl: string }) {
   const { controller, snapshot: state } = useLiveLab(observerUrl);
   const reducedMotion = usePrefersReducedMotion();
-  const now = useCoarseNow();
   const [active, setActive] = useState(0);
   const scene = useMemo<StageScene>(() => ({ workerState: state.workerState, hopsReady: state.worker ? 3 : 0,
     passthrough: false, privateMode: true, leakInjected: state.mode === 'leak' && state.reads.some((read) => read.role === 'leak'),
@@ -233,7 +232,7 @@ export function LiveLabApp({ observerUrl }: { observerUrl: string }) {
         <p>Measured receipts, useful reads and explicit limits. Every action starts a fresh bounded run.</p></div>
         <button className="btn btn--secondary btn--small" disabled={!report || state.busy} onClick={exportReport}>Export measured report</button>
       </div><div className="details__grid">
-        <LiveChecks state={state} /><Activity state={state} /><WorkerCard state={state} /><RegistryCard state={state} now={now} />
+        <LiveChecks state={state} /><Activity state={state} /><WorkerCard state={state} /><RegistryCard state={state} />
         <section className="card" aria-labelledby="coverage-title"><header className="card__head"><h3 id="coverage-title">Protected coverage</h3><EvidenceTag state={state} /></header>
           <p className="card__lead" data-testid="live-coverage">{measured ? `${report.protectedReads}/${report.eligibleReads}` : 'Source comparison not measured'}</p>
           <p className="card__sub">{measured ? `${Math.round((report.protectedCoverage ?? 0) * 100)}% of this run's reads earned protected credit. Explicit direct controls are counted and earn none.`

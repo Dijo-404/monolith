@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "sourceTask": "MN-025",
+  "evidence": "OBSERVED_LIVE",
+  "scope": "REGISTERED_FREE_RUNTIME_STARTUP_AND_PUBLIC_METADATA_ONLY",
+  "generatedAt": "2026-11-06T20:53:43.049Z",
+  "observedMetadataAt": "2026-11-06T20:40:46.173Z",
+  "codeCommit": "469f49d27ba9e2c40578b6bb18fc9e23cd71c4a4",
+  "origin": "https://e964181cf62d29.lhr.life",
+  "sshAuthenticationMode": "dedicated-key",
+  "serverAccessKeyConfigured": true,
+  "unit": "monolith-public-observer-mn025-20261107-8.service",
+  "artifacts": {
+    "source-bindings.json": "c1a9b68f8fe1400f9c2bb33ee39537152c47d129b76c9ea293299c0a35011524",
+    "public-metadata.json": "ae20cfdc279e17d88da5bcfbba0edfc32cc6a755f57fdeed28145c54d3802b0a",
+    "startup-status.json": "fc05a2c4a7abad472c685d648d4b1f85e8a245a7ce2736045d5aeca7178aaf72",
+    "continuity-health-1.json": "fe8dbb8c1ed4279979df3db9aa87082653c6e6bb295b12bb05d6fe5702ce2059",
+    "owned-unit-state.json": "a3c02cbe8ae63dadf1afe6749ecf42cf9800460f1e9ef366485355711c7dbb9a",
+    "continuity-health-2.json": "37e834c88cabc73373aec809b2c03d4c492a826483af7f57a07be53700b1da1c"
+  },
+  "checks": {
+    "health": 200,
+    "trustedRegistry": 200,
+    "runAllocation": 201,
+    "emptyDiagnostics": 200,
+    "generationTtlMs": 120000,
+    "all161RuntimeInputsMatch": true,
+    "ordinaryObserverTargetRpcCalls": 0
+  },
+  "privacyProof": "PENDING_SEPARATE_GENUINE_BROWSER_CAPTURE",
+  "limits": [
+    "TEMPORARY_FREE_HOSTING",
+    "WORKSTATION_AND_USER_MANAGER_UPTIME",
+    "INITIAL_HOST_KEY_TOFU_AND_PINNED_PROVIDER_TRUST",
+    "TRUSTED_SINGLE_USER_LOOPBACK",
+    "UNKNOWN_PROVIDER_HOSTNAME_RETENTION",
+    "NO_PAID_CUSTOM_DOMAIN_OR_BILLING_ACTIVATION",
+    "STARTUP_STATUS_IS_HISTORICAL_NOT_CURRENT_LIVENESS"
+  ],
+  "redactionReview": {
+    "structuralPublicFieldsOnly": true,
+    "recognizableCredentialOrPrivateIdentityPatternsFound": false,
+    "actualCredentialByteScanPerformedByThisGenerator": false,
+    "privateIdentityContentReadOrHashIncluded": false
+  },
+  "notes": [
+    "Historical runtime6 full workflow and all BLOCKED attempts remain unchanged; this metadata capture is not new worker, source or privacy proof.",
+    "Root independently reviewed the optional identity and path-expansion candidate, with 32 synthetic tests. Full 1453-test, 46-file checks, lint, types and builds passed before activation.",
+    "Only OpenSSH reads the user-confirmed selected private identity; the evidence generator does not read private key or Arkiv credential contents.",
+    "Runtime7 was absent at fresh resumption; no shutdown cause is inferred from its stale READY snapshot.",
+    "A separate evidence worktree integrated accepted main through 873c4f5 and passed full 1464-test, 46-file checks, lint, types and builds plus all 32 synthetic launcher cases. A later merge through f5bb205 changed only the task register and task JSON."
+  ]
+}

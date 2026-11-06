@@ -34,7 +34,7 @@ function fixture(faults = {}) {
     const run = allocations.get(runId);
     if (!run) throw Error('Unknown synthetic run');
     calls.push({ url, rpc: structuredClone(rpc), route });
-    time += 200;
+    time += route === 'nym' && rpc.method === 'eth_getBalance' ? faults.balanceDurationMs ?? 200 : 200;
     if (rpc.id === run.baselineRpcId) baselines.add(runId);
     const sourceClass = !baselines.has(runId) ? 'unknown' : route === 'direct' ? 'baseline' : 'different-from-baseline';
     receipts.get(runId).push({ rpcId: rpc.id, method: rpc.method, addressPresent: rpc.method === 'eth_getBalance',
@@ -70,10 +70,10 @@ function fixture(faults = {}) {
   });
   const registry = { load: vi.fn(async () => ok({
     schemaVersion: 1, revision: 'simulated_registry_revision', evidence: 'OBSERVED_LIVE', origin: 'arkiv-query',
-    generatedAt: now(), expiresAt: new Date(time + (faults.expiredRegistry ? -1 : 30_000)).toISOString(),
+    generatedAt: now(), expiresAt: new Date(time + (faults.expiredRegistry ? -1 : faults.manifestTtlMs ?? 120_000)).toISOString(),
     endpoints: [{ endpointId: 'rpc_simulated_endpoint', chainId: '10', chainName: 'SIMULATED OP Mainnet', rpcUrl: LIVE_RPC_URL,
       publisher: LIVE_REGISTRY_POLICY.trustedPublishers[0], entityKey: `0x${'c'.repeat(64)}`,
-      expiresAt: new Date(time + 600_000).toISOString(), source: {
+      expiresAt: new Date(time + (faults.endpointTtlMs ?? 600_000)).toISOString(), source: {
         url: `${LIVE_REGISTRY_POLICY.source.urlPrefix}10.json`, revision: LIVE_REGISTRY_POLICY.source.revision,
         licenseUrl: LIVE_REGISTRY_POLICY.source.licenseUrl, snapshotSha256: LIVE_REGISTRY_POLICY.source.snapshotSha256,
       } }],
@@ -185,6 +185,39 @@ describe('live controller lifecycle and independent accounting', () => {
     expect(f.registry.load).toHaveBeenCalledTimes(1);
     expect(f.controller.getSnapshot()).toMatchObject({ phase: 'CLOSED', reads: [] });
     expect(f.calls).toEqual([]); expect(vi.getTimerCount()).toBe(0);
+  });
+  it.each([59_999, 60_000, 60_001])('enforces the actual protected-probe validity boundary at balance duration %i ms', async (duration) => {
+    const f = fixture({ balanceDurationMs: duration });
+    await f.controller.run('private');
+    expect(f.controller.getSnapshot().phase).toBe(duration < 60_000 ? 'READY' : 'BLOCKED');
+    if (duration >= 60_000) expect(f.controller.getSnapshot().error).toBe('ENDPOINT_REJECTED');
+    expect(f.calls).toHaveLength(2); expect(f.directFetch).not.toHaveBeenCalled();
+    await f.controller.close();
+  });
+  it.each([120_001, 300_000])('rejects a manifest beyond the independent lab maximum: %i ms', async (duration) => {
+    const f = fixture({ manifestTtlMs: duration });
+    await f.controller.run('compare');
+    expect(f.controller.getSnapshot()).toMatchObject({ phase: 'BLOCKED', error: 'REGISTRY_EXPIRED' });
+    expect(f.calls).toEqual([]); expect(f.directFetch).not.toHaveBeenCalled();
+    expect(f.registry.load).toHaveBeenCalledTimes(1);
+    await f.controller.close();
+  });
+  it('does not extend the actual entity deadline when a shorter capability expires in flight', async () => {
+    const f = fixture({ manifestTtlMs: 20_000, endpointTtlMs: 20_000, balanceDurationMs: 20_000 });
+    await f.controller.run('private');
+    expect(f.controller.getSnapshot()).toMatchObject({ phase: 'BLOCKED', error: 'REGISTRY_EXPIRED' });
+    expect(f.calls).toHaveLength(2); expect(f.directFetch).not.toHaveBeenCalled();
+    await f.controller.close();
+  });
+  it('never retries or probes a returned manifest whose source hash is untrusted', async () => {
+    const f = fixture(); const load = f.registry.load.getMockImplementation();
+    f.registry.load.mockImplementation(async () => {
+      const result = await load(); result.value.endpoints[0].source.snapshotSha256 = 'f'.repeat(64); return result;
+    });
+    await f.controller.run('compare');
+    expect(f.controller.getSnapshot()).toMatchObject({ phase: 'BLOCKED', error: 'REGISTRY_UNTRUSTED' });
+    expect(f.registry.load).toHaveBeenCalledTimes(1); expect(f.calls).toEqual([]);
+    expect(f.directFetch).not.toHaveBeenCalled(); await f.controller.close();
   });
   it('retains one synthetic intent and a route-only fixture patch across distinct leak/repair allocations', async () => {
     const f = fixture();

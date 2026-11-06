@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "sourceTask": "MN-025",
+  "scope": "ONE_BOUNDED_PUBLIC_HEALTH_ONLY_CONTINUITY_CHECK_NO_TARGET_RPC",
+  "observedAt": "2026-11-06T20:45:51.249Z",
+  "origin": "https://e964181cf62d29.lhr.life",
+  "sshAuthenticationMode": "dedicated-key",
+  "elapsedSinceRuntimeStartMs": 410233,
+  "unit": {
+    "ActiveState": "active",
+    "SubState": "running",
+    "RuntimeMaxUSec": "12h",
+    "MainPID": "63956"
+  },
+  "status": 200,
+  "configured": true,
+  "passed": true
+}

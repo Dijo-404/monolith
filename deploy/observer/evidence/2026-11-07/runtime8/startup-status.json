@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "state": "READY",
+  "startedAt": "2026-11-06T20:39:01.016Z",
+  "serverAccessKeyConfigured": true,
+  "sshAuthenticationMode": "dedicated-key",
+  "observedAt": "2026-11-06T20:39:06.831Z",
+  "origin": "https://e964181cf62d29.lhr.life",
+  "hashes": {
+    "ssh": "0d82109d60d32e5ca4007bd39b4abf213ff037fca99491bc2669a6b52051b74c",
+    "knownHosts": "f18ad2187f181de3052fb073724990d41e13ed4732f6c209e34bb98aa7ed4324",
+    "launcher": "e1a47bdea22dc1e969595a7505f52c4251f1a719f428a0ce9db2235dddccbe71"
+  },
+  "counters": {
+    "requests": 1,
+    "denied": 0,
+    "forwarded": 1,
+    "missingContentTypeFilled": 0,
+    "missingRunHeaderFilled": 0,
+    "conflictsDenied": 0,
+    "concurrent": 0,
+    "pendingUpstreams": 0,
+    "connections": 1,
+    "acceptedProxy": 1,
+    "rejectedProxy": 0,
+    "droppedConnections": 0,
+    "activeConnections": 0
+  },
+  "limits": [
+    "TRUSTED_PROVIDER",
+    "SINGLE_USER_LOCALHOST",
+    "INITIAL_SSH_TOFU",
+    "WORKSTATION_UPTIME",
+    "ROTATING_HOSTNAME",
+    "PROVIDER_RETENTION_UNVERIFIED"
+  ]
+}
