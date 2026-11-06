@@ -167,6 +167,87 @@ describe('SIMULATED transport lifecycle and fixed route', () => {
   });
 });
 
+describe('SIMULATED state inspection reentrancy', () => {
+  it.each(['valid time', 'invalid time', 'throwing clock'] as const)(
+    'preserves CLOSED when a freshness clock closes and returns %s', async (kind) => {
+      let onNow: (() => void) | undefined;
+      let closing: Promise<void> | undefined;
+      let afterClose = false;
+      const f = fixture({ clock: { now: () => {
+        const action = onNow; onNow = undefined; action?.();
+        if (afterClose && kind === 'throwing clock') throw new Error('synthetic closed clock');
+        return afterClose && kind === 'invalid time' ? 'not-a-time' : new Date(baseTime).toISOString();
+      } } });
+      await f.ready();
+      onNow = () => { closing = f.transport.close(); afterClose = true; };
+
+      expect(f.transport.getState()).toBe('CLOSED');
+      await closing;
+      expect(await f.transport.initialize()).toEqual(failed('WORKER_UNAVAILABLE'));
+      expect(f.driver.initialized).toBe(1);
+      expect(await f.transport.read(request())).toEqual(failed('ENDPOINT_REJECTED'));
+      expect((await f.transport.validateEndpoint(candidate())).ok).toBe(false);
+      await f.transport.close(); await f.transport.close();
+      expect(f.transport.getState()).toBe('CLOSED');
+      expect(f.transport.getState()).toBe('CLOSED');
+      expect(f.driver.closed).toBe(1);
+      expect(f.driver.calls).toHaveLength(1);
+    },
+  );
+
+  it('keeps READY, cached validation and useful reads intact during ordinary inspection', async () => {
+    const f = fixture(); await f.ready();
+    expect(f.transport.getState()).toBe('READY');
+    expect(f.transport.getState()).toBe('READY');
+    expect(await f.transport.validateEndpoint(candidate())).toEqual(ok(candidate()));
+    expect(f.driver.calls).toHaveLength(1);
+    expect(await f.transport.read(request())).toEqual(ok('0x1'));
+    expect(f.transport.getState()).toBe('READY');
+    expect(f.driver.calls).toHaveLength(2);
+    await f.transport.close();
+  });
+
+  it('keeps READY when an expired first endpoint has a valid alternative', async () => {
+    const f = fixture(); await f.transport.initialize();
+    const expiring = candidate(); expiring.expiresAt = '2030-01-01T00:00:01Z';
+    const other = { ...candidate(), endpointId: 'endpoint_0002', rpcUrl: 'https://rpc.example.com/other' };
+    expect(await f.transport.validateEndpoint(expiring)).toEqual(ok(expiring));
+    expect(await f.transport.validateEndpoint(other)).toEqual(ok(other));
+    f.advance(1_000);
+
+    expect(f.transport.getState()).toBe('READY');
+    expect(await f.transport.validateEndpoint(other)).toEqual(ok(other));
+    expect(f.driver.calls).toHaveLength(2);
+    expect(await f.transport.read(request({ endpointId: other.endpointId }))).toEqual(ok('0x1'));
+    expect(f.driver.calls).toHaveLength(3);
+    await f.transport.close();
+  });
+
+  it('degrades after a freshness clock revokes its endpoint and permits fresh validation to recover', async () => {
+    let onNow: (() => void) | undefined;
+    let rejection: Promise<Result<EndpointCandidate>> | undefined;
+    const f = fixture({ clock: { now: () => {
+      const action = onNow; onNow = undefined; action?.();
+      return new Date(baseTime).toISOString();
+    } } });
+    await f.ready();
+    onNow = () => {
+      const rejected = candidate(); rejected.publisher.owner = target;
+      rejection = f.transport.validateEndpoint(rejected);
+    };
+
+    expect(f.transport.getState()).toBe('DEGRADED');
+    expect(await rejection).toEqual(failed('REGISTRY_UNTRUSTED'));
+    expect(await f.transport.read(request())).toEqual(failed('ENDPOINT_REJECTED'));
+    expect(f.driver.calls).toHaveLength(1);
+    expect(await f.transport.validateEndpoint(candidate())).toEqual(ok(candidate()));
+    expect(f.transport.getState()).toBe('READY');
+    expect(await f.transport.read(request())).toEqual(ok('0x1'));
+    expect(f.driver.calls).toHaveLength(3);
+    await f.transport.close();
+  });
+});
+
 describe('SIMULATED trust and endpoint validation', () => {
   it.each([
     ['unapproved origin', (value: EndpointCandidate) => { value.rpcUrl = 'https://evil.example.com'; }, 'TARGET_DENIED'],

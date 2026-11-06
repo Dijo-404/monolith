@@ -277,7 +277,11 @@ export function createMonolithTransport(options: TransportOptions): MonolithTran
 
   return { initialize, validateEndpoint, read, getState: () => {
     if (state !== 'CLOSED' && initialized && !sameDriver()) state = 'BLOCKED';
-    if (state === 'READY' && ![...validations.values()].some((value) => !currentValidation(value))) state = 'DEGRADED';
+    if (state === 'READY') {
+      const hasCurrentValidation = [...validations.values()].some((value) => !currentValidation(value));
+      // The freshness clock may close the transport while inspecting readiness.
+      if (state === 'READY' && !hasCurrentValidation) state = 'DEGRADED';
+    }
     return state;
   }, close };
 }
