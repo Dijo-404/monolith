@@ -158,7 +158,7 @@ Actual observations, all recorded on 6 November 2026:
 | Artifact | Observed result |
 | --- | --- |
 | [Attempt 1](../../tests/privacy/live-observer/observed-blocked-attempt1-2026-11-06.json) | Real worker warmup and matching bundle bytes; first direct baseline failed. No control/protected dispatch. This historical attempt predates the instance-bound SDK-header correction. |
-| [Attempt 2](../../tests/privacy/live-observer/observed-blocked-attempt2-2026-11-06.json) | Real worker warmup; native tunnel DNS returned `ENOTFOUND` before public health completed. No paired dispatch. |
+| [Attempt 2](../../tests/privacy/live-observer/observed-blocked-attempt2-2026-11-06.json) | Real worker warmup; public health failed before paired dispatch. Its artifact records `LIVE_RUN_FAILED`; a separate native lookup/fetch diagnostic confirmed `ENOTFOUND`. |
 | [Attempt 3](../../tests/privacy/live-observer/observed-blocked-attempt3-2026-11-06.json) | Native DNS became ready after 60,556 ms; public health and direct baseline returned 403. Edge forwarded zero requests. Real bundle response contained 18,283,862 bytes and matched hash `0xf13a448a8721b9d0b20da3d5b80ffe00bf4c5bb3aae812a38d3d1e3bc81fceb8`. No protected dispatch. |
 | [Edge-only diagnosis](../../tests/privacy/live-observer/observed-blocked-edge-2026-11-06.json) | Actual public HTTP/private-hop authentication succeeded; source guard rejected `CF-Worker` plus `CF-EW-Via`. Fixed marker counters were 1/1, no sentinel/Worker-loop match, zero forwarding. The local health target was SIMULATED; this was not an RPC/worker test. |
 
@@ -188,6 +188,15 @@ Worker ambiguity, URL/method/resource limits, exact wire-ID restoration,
 instance-bound SDK delegation, issued-ID/trace/diagnostic correlation, expiry,
 inconclusive topology and redaction. These tests use **SIMULATED** fixtures and
 cannot earn live acceptance.
+
+Final combined validation after integrating accepted `main` at `0d03288`:
+Node 24.22.2/pnpm 12.18.0 frozen install and `pnpm check` passed **862 tests in
+22 files**, lint, package/public-consumer typechecks and builds. The additional
+`pnpm exec tsc -p tests/privacy/live-observer/tsconfig.json` passed. This task adds
+139 simulated cases: 40 edge, 70 proof-validation and 29 browser-binding tests.
+Markdown links/fences/whitespace, JSON syntax, forbidden-field checks and exact
+historical artifact byte comparisons passed. Independent review accepted this
+as a **draft handoff only**, with the deployment/live gate still unpassed.
 
 The actual bundle response hash must match the public worker hash. Source and
 compiled observer/transport digests plus the lockfile bind the recorded run to
