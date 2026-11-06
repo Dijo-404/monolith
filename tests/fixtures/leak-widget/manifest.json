@@ -1,0 +1,13 @@
+{
+  "evidence": "SIMULATED",
+  "seed": "mn012-regression-001",
+  "rpcUrl": "https://rpc.monolith.example/read",
+  "bootstrapUrl": "https://bootstrap.monolith.example/read",
+  "bootstrapContract": "0x1111111111111111111111111111111111111111",
+  "bootstrapSelector": "0xaaaaaaaa",
+  "requiredUsefulReads": [
+    { "readId": "fixture_balance_001", "method": "eth_getBalance" },
+    { "readId": "fixture_receipt_001", "method": "eth_getTransactionReceipt" }
+  ],
+  "limitations": "Controlled fixture driver, authored RPC results and intercepted browser HTTP only. No actual anonymity worker or network result."
+}

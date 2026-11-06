@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "reviewedBase": "dbb1d7e923da69c72be57fcec0413c67a858e6a1",
+  "files": {
+    "apps/dashboard/src/composition/registry.ts": {
+      "sha256": "e41ea93e5ee598898f59200b0b97d0e528b22c333b029bff3b9edb77bf1dd96f",
+      "purpose": "Bounded public chain metadata; no wallet-specific lookup or direct chain probe."
+    },
+    "packages/transport/src/adapters/browser/io.ts": {
+      "sha256": "e08e8f01c6c0ff03d6c1afc232e709b315c7f4cf719affdae73c3c2f18788eb8",
+      "purpose": "Exact enumerated non-anonymous specifier bootstrap only."
+    },
+    "packages/transport/src/adapters/browser/direct-debug.ts": {
+      "sha256": "ccab431652d18ff2f235ebc9668ccc5cb56ef2219c454e1b6c60d9875d5d8c0b",
+      "purpose": "Explicit separately consented negative-control adapter; never private fallback."
+    },
+    "packages/transport/src/adapters/browser/host.ts": {
+      "sha256": "becfc9ebc5113e6586c86423bf6b52d6426ff7c0134ee3c419bf2ffe6d66f677",
+      "purpose": "Verified SDK worker instance fetch inside the reviewed host boundary."
+    }
+  }
+}
