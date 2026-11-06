@@ -82,3 +82,42 @@ This is temporary no-cost hosting, without permanent availability or a guarantee
 07:00 lifetime. Static dashboard publication and final release acceptance remain
 separate tasks. This result does not establish universal anonymity, unrelated
 application coverage, payments or sponsor eligibility.
+
+## Registered free runtime8
+
+After later anonymous tunnel failures, the owner confirmed registering the
+dedicated public SSH key in a free account. Runtime8 started from independently
+reviewed source `469f49d27ba9e2c40578b6bb18fc9e23cd71c4a4` on
+6 November at 20:39 UTC (7 November, 02:09 IST), using the existing provider host pin and free assigned
+origin `https://e964181cf62d29.lhr.life`. The optional launcher now selects the
+explicit identity and safe SSH user; it disables the agent and refuses failed
+authentication without anonymous fallback. Its metadata checks reject unsafe
+permissions, ownership, symlinks, and OpenSSH expansion syntax in both the
+selected and resolved paths. Only OpenSSH reads the private identity. No identity
+path, contents or hash is retained in public status or evidence.
+
+The [runtime8 record](../deploy/observer/evidence/2026-11-07/runtime8/deployment-record.json)
+links the original new [161-file binding](../deploy/observer/evidence/2026-11-07/runtime8/source-bindings.json),
+[startup status](../deploy/observer/evidence/2026-11-07/runtime8/startup-status.json)
+and [public metadata capture](../deploy/observer/evidence/2026-11-07/runtime8/public-metadata.json).
+That capture passed health 200, trusted actual Arkiv registry 200 with a 120-second
+generation, fresh allocation 201 and empty diagnostics 200. It made no observer
+target RPC and is not a new worker or privacy proof. All 160 other runtime source
+and compiled inputs remain unchanged; only the reviewed launcher differs from
+the earlier runtime. A separate genuine browser capture must bind this origin.
+
+The [three-minute health check](../deploy/observer/evidence/2026-11-07/runtime8/continuity-health-1.json)
+and [owned-unit inspection](../deploy/observer/evidence/2026-11-07/runtime8/owned-unit-state.json)
+record a detached, active user service with the 12-hour cap and sleep/idle
+inhibitor. It was launched without `--scope`, `--wait` or a controlling TTY.
+The predecessor was absent at resumption; its stale READY snapshot does not
+establish an exit cause. These are timestamped observations, not a future
+availability guarantee. Keep this workstation and its user manager available,
+and check current health before the demonstration.
+
+The explicit-key launcher suite passed 32 synthetic cases after four new token
+path regressions failed against the preceding source. Full pinned `pnpm check`
+passed 1,453 tests in 46 files plus lint, types and builds. The implementation and
+the 32-case suite received separate root review before activation. The existing
+full runtime6 workflow and every blocked attempt remain unchanged historical
+records. Billing remains inactive; no paid plan or custom domain is used.

@@ -139,3 +139,11 @@ copies remain byte-identical. This describes the capture-time runtime and is
 not current availability proof. Follow the [latest operational updates](https://github.com/Dijo-404/monolith/issues/40)
 and verify the current backend origin before final dashboard QA. The 12-hour cap
 and unprivileged sleep/idle inhibitor do not guarantee provider or hostname lifetime.
+
+The later [registered runtime8 record](evidence/2026-11-07/runtime8/deployment-record.json)
+retains separate startup, exact source/tool bindings, public metadata and a
+three-minute health observation. Its actual authentication mode is dedicated-key;
+the public metadata succeeded without an observer-target RPC. A new genuine
+browser/source workflow remains required for that origin. Billing stays inactive
+and only the free assigned hostname is used. Follow the timestamped record and
+current health rather than treating the older capture as current liveness.
