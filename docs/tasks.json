@@ -655,7 +655,9 @@
       "docs/release-core.md",
       "docs/evidence-policy.md",
       "README.md",
-      "evidence/**"
+      "evidence/**",
+      "scripts/export-evidence.test.ts",
+      "scripts/tsconfig.evidence.json"
     ],
     "scope": [
       "Export only real redacted run evidence with a verification manifest, retaining synthetic reports under a separate clearly marked fixture location.",

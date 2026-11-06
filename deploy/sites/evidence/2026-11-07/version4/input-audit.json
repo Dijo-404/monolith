@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "scope": "STATIC_PUBLICATION_INPUT_AUDIT",
+  "passed": true,
+  "generatedAt": "2026-11-06T20:52:35.182Z",
+  "sourceCommit": "5cf16137d60bd2d274a4eb3b2fe078765d0ecc70",
+  "observerOrigin": "https://e964181cf62d29.lhr.life",
+  "staticFiles": 10,
+  "uiDistEqualFiles": 9,
+  "retainedNotices": 26,
+  "totalRegularFilesScanned": 39,
+  "actualServerCredentialConfigured": true,
+  "credentialBytesExposed": false,
+  "privateSourceArchivePresent": false,
+  "provenanceSha256": "32cf0f5f5987aad76e97973490bb8d0f9e89f4ab0c7576a09a30e8574b5eb7b1",
+  "limitations": [
+    "Input audit only; deployment and actual public runtime acceptance are separate."
+  ]
+}
