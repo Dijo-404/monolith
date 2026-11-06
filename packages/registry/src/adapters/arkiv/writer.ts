@@ -101,8 +101,10 @@ function assessRow(row: unknown, record: RegistryRecord, publisher: string, bloc
   const deadline = row['content_expires_at'];
   if (!object(deadline) || deadline['type'] !== 'str' || typeof deadline['value'] !== 'string' ||
     !timestampSchema.safeParse(deadline['value']).success) fail('UNTRUSTED_IMPORT_ENTITY');
-  // Publisher validity and actual engine block expiry are distinct, jointly enforced clocks.
-  if (row['$expiresAt'] <= block || Date.parse(deadline['value']) <= Date.parse(nowISO)) return null;
+  // Only engine expiry establishes absence. A known live row with an expired ISO
+  // deadline must block lookup, even without a journal, to prevent an active duplicate.
+  if (row['$expiresAt'] <= block) return null;
+  if (Date.parse(deadline['value']) <= Date.parse(nowISO)) fail('IMPORT_CONTENT_EXPIRED');
   return {
     recordId: record.record_id,
     entityKey: row['$key'],

@@ -46,7 +46,10 @@ deterministic source order, up to the configured limit. It is explicitly a subse
 eligible metadata. The first command published ten networks; the extension published 90 more
 and reused those ten. No retries or uncertain writes occurred.
 
-Generated files below were copied unchanged from their command outputs:
+The original generated files below were copied unchanged from their command outputs.
+They predate the two guard fixes described under review follow-up below; PR review baseline
+`907b72b43cd639a79e4962c80177b602b6334af2` retained these original observations. They do not
+claim that the original write or zero-write rerun executed the subsequently corrected code.
 
 - [First ten: actual import manifest](observed-live-2026-11-06/import-first10.json)
 - [Extension to 100: actual import manifest](observed-live-2026-11-06/import-full100.json)
@@ -165,8 +168,9 @@ is active; the pending journal still governs recovery. Do not replace the state 
 bypass an uncertain outcome. Separate state stores are not distributed locking.
 
 Known confirmed block-expired rows require explicit `--refresh-expired`. If the content's ISO
-deadline expired while the old engine row is still live, refresh fails closed until engine
-expiry, preventing duplicate active IDs. Two active matches, changed content, foreign ownership,
+deadline expired while the old engine row is still live, lookup fails closed until engine
+expiry, including with a fresh empty journal and either refresh flag, preventing duplicate
+active IDs. Two active matches, changed content, foreign ownership,
 incomplete/skipped query results or unstable query counts also block reuse. The ten-minute
 CLI deadline leaves reservations intact; it never authorizes another write.
 
@@ -182,6 +186,45 @@ These deterministic tests do not establish live endpoint trust.
 After incorporating accepted main `4c14927` (MN-007 and MN-011), the frozen install and full
 `pnpm check` passed again: **703 tests in 18 files**, lint, package/consumer typechecks and
 production builds. The lockfile merge retained both transport and registry dependency pins.
+
+### Review follow-up: guard fixes and a fresh public read
+
+The review follow-up corrects two branches: signing-file containment now checks canonical
+path segments, rejecting in-checkout names such as `..publisher.key` and `..keys/publisher.key`;
+and lookup blocks a matching ISO-expired row whose engine block lifetime is still live, even
+when no journal exists. A genuinely block-expired row still permits the existing explicit
+refresh flow. The CLI-local helper preserves DEBUG, owner, permissions, size, regular-file,
+no-follow and hex-format checks; it adds no package export or dependency.
+
+Before the fixes, the added regressions had **nine expected failures and 56 passes**.
+Afterward, all **65 targeted tests** pass: 15 use temporary files and ephemeral synthetic
+bytes, and 50 cover the SDK adapter, including four combined adapter/application cases with
+an empty journal, exact/past ISO deadlines, live blocks, both refresh flags and zero submissions
+on repeated attempts. The simulated tests perform no signing or network requests. A single
+documented lint exception lets the owned package test exercise the root CLI-local helper;
+production package import boundaries are unchanged.
+
+Node 24.22.2 / pnpm 12.18.0 follow-up validation passed `pnpm install --frozen-lockfile` and
+`pnpm check`: **723 tests in 19 files**, including **136 importer tests**, plus lint,
+package/public-consumer typechecks and builds. The following strict check includes the CLI,
+its helper and both changed tests:
+
+```sh
+pnpm exec tsc --noEmit --strict --module NodeNext --moduleResolution NodeNext \
+  --target ES2023 --types node --skipLibCheck scripts/import-evm-registry.ts \
+  packages/registry/test/importer/key-file.test.ts packages/registry/test/importer/writer.test.ts
+```
+
+With the corrected reader, a **new key-free `verify`** at **2026-11-06T14:12:19.316Z** recovered
+the same **100/100 entities** at block **294286**. It used the pinned source/publisher and
+the verification command above with fresh output `/tmp/monolith-pr31-fixes-verify100`;
+DEBUG and both signing-key variables were removed. The
+[follow-up public query](post-review-query-2026-11-06.json) is copied byte-for-byte from that
+command and remains separate from all original artifacts. Its SHA-256 is
+`564627f57a6cc9411a0fe2a60bb434e1dcc4c9a7294f36cece947d5ac81e1402`.
+This observation validates ordinary fresh-row lookup after the fixes. It performs no writes,
+accesses no signing file and does not exercise live expiry/refresh or endpoint trust; those
+corrected error paths are covered by the simulated regressions.
 
 The actual import, zero-write rerun and independent query are separate live observations.
 The source catalog, license, manifests and JSON were checked for hashes, structure and safe

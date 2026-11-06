@@ -288,6 +288,7 @@
       "packages/registry/src/ports/source-snapshot.ts",
       "packages/registry/src/ports/entity-writer.ts",
       "scripts/import-evm-registry.ts",
+      "scripts/importer-key-file.ts",
       "packages/registry/test/importer/**",
       "packages/registry/src/index.ts",
       "packages/registry/package.json",

@@ -2,6 +2,8 @@ import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import { describe, expect, it, vi } from 'vitest';
 import { normalizeSourceSnapshot, SOURCE_REPOSITORY } from '../../src/domain/source-policy.js';
+import { importRegistry } from '../../src/application/import-registry.js';
+import type { ImportJournal, JournalStore } from '../../src/ports/entity-writer.js';
 import type { RegistryRecord, SourceSnapshot } from '../../src/ports/source-snapshot.js';
 import {
   ARKIV_CHAIN_ID, createArkivEntityWriter, createRabdiEntityWriter,
@@ -62,7 +64,8 @@ function setup(records = [candidate()]) {
     queryRecordIds: vi.fn(async () => ({ entities: rows, count: BigInt(rows.length), skipped: 0 })),
     readEntity: vi.fn(async (key: string) => rows.find((entry) => entry['$key'] === key)),
     getReceipt: vi.fn(async () => ({ status: 'success', from: publisher, to: '0x4400000000000000000000000000000000000044' })),
-    executeBatch: vi.fn(async () => ({ txHash, createdEntities: rows.map((entry) => entry['$key'] as string) })),
+    executeBatch: vi.fn(async (_records: readonly RegistryRecord[], _hours: number, _deadline: string) =>
+      ({ txHash, createdEntities: rows.map((entry) => entry['$key'] as string) })),
   } satisfies ArkivWriterClient;
   const writer = createArkivEntityWriter({ publisher, client, now: () => nowISO });
   return { client, writer, rows };
@@ -126,12 +129,52 @@ describe('Arkiv importer adapter — SIMULATED SDK boundary', () => {
     expect(await writer.lookup([candidate()])).toEqual([]);
   });
 
-  it('also enforces the separate publisher ISO deadline without converting blocks to time', async () => {
+  it('fails closed for a block-live match at its separate ISO deadline', async () => {
     const { writer, rows } = setup();
     rows[0]!['content_expires_at'] = { type: 'str', value: nowISO };
-    expect(await writer.lookup([candidate()])).toEqual([]);
+    await expect(writer.lookup([candidate()])).rejects.toThrow('ARKIV_LOOKUP_FAILED');
     rows[0]!['content_expires_at'] = { type: 'str', value: '500' };
     await expect(writer.lookup([candidate()])).rejects.toThrow('ARKIV_LOOKUP_FAILED');
+  });
+
+  it('still permits absence after actual block expiry with an expired ISO deadline', async () => {
+    const { writer, rows, client } = setup();
+    rows[0]!['content_expires_at'] = { type: 'str', value: nowISO };
+    client.getBlockNumber.mockResolvedValue(500n);
+    expect(await writer.lookup([candidate()])).toEqual([]);
+  });
+
+  it.each([
+    [nowISO, false], [nowISO, true],
+    ['2029-12-31T23:59:59.000Z', false], ['2029-12-31T23:59:59.000Z', true],
+  ])('blocks a fresh-journal duplicate at deadline %s with refresh=%s', async (deadline, refreshExpired) => {
+    const normalized = normalizeSourceSnapshot(sourceSnapshot(), (text) => createHash('sha256').update(text, 'utf8').digest('hex'));
+    if (!normalized.ok) throw new Error('SIMULATED_SOURCE_FIXTURE_REJECTED');
+    const plan = normalized.value;
+    const { writer, rows, client } = setup(plan.records);
+    rows[0]!['content_expires_at'] = { type: 'str', value: deadline };
+    let saved: ImportJournal | null = null;
+    const journal: JournalStore = {
+      load: async () => saved,
+      save: vi.fn(async (value) => { saved = structuredClone(value); }),
+    };
+    const options = { maxNetworks: 1, batchSize: 1, lifetimeHours: 24, refreshExpired };
+    // If a duplicate is attempted, simulate a successful fresh creation/readback.
+    client.executeBatch.mockImplementation(async (_records, _hours, newDeadline) => {
+      rows[0]!['content_expires_at'] = { type: 'str', value: newDeadline };
+      return { txHash, createdEntities: rows.map((entry) => entry['$key'] as string) };
+    });
+    for (let attempt = 0; attempt < 2; attempt++) {
+      const result = await importRegistry(plan, writer, journal, options, nowISO);
+      expect(result).toMatchObject({
+        status: 'BLOCKED', reason: 'LOOKUP_FAILED',
+        counts: { written: 0, reused: 0, transactions: 0, uncertain: 0 },
+      });
+    }
+    expect(client.executeBatch).not.toHaveBeenCalled();
+    expect(client.getReceipt).not.toHaveBeenCalled();
+    expect(journal.save).not.toHaveBeenCalled();
+    expect(saved).toBeNull();
   });
 
   it('rejects ambiguous duplicate IDs even when total count fits the requested batch', async () => {

@@ -1,7 +1,6 @@
-import { constants } from 'node:fs';
-import { open, mkdir, readFile, rename, rm, lstat, realpath } from 'node:fs/promises';
+import { open, mkdir, readFile, rename, rm, lstat } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
-import { join, resolve, relative, isAbsolute } from 'node:path';
+import { join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {
   importRegistry, normalizeSourceSnapshot,
@@ -9,6 +8,7 @@ import {
 } from '@monolith/registry';
 import { loadGitSourceSnapshot, sha256Text } from '@monolith/registry/source';
 import { createRabdiEntityWriter } from '@monolith/registry/arkiv';
+import { loadImporterSigningKey } from './importer-key-file.js';
 
 const root = resolve(fileURLToPath(new URL('../', import.meta.url)));
 const usage = 'registry:import preview|write|verify --source DIR --revision COMMIT --out DIR [--publisher ADDRESS --state DIR --max-networks 100 --batch-size 10 --lifetime-hours 24 --refresh-expired]';
@@ -60,23 +60,6 @@ function filesystemJournal(path: string): JournalStore {
     },
     save: (value) => durableJson(path, value),
   };
-}
-
-async function signingKey(): Promise<string> {
-  const file = process.env['ARKIV_PUBLISHER_KEY_FILE'];
-  if (!file || process.env['DEBUG']) throw new Error('SIGNER_CONFIGURATION_INVALID');
-  const path = await realpath(resolve(file));
-  const within = relative(await realpath(root), path);
-  if (within === '' || !within.startsWith('..') && !isAbsolute(within)) throw new Error('KEY_MUST_BE_OUTSIDE_CHECKOUT');
-  const handle = await open(path, constants.O_RDONLY | constants.O_NOFOLLOW);
-  try {
-    const metadata = await handle.stat();
-    if (!metadata.isFile() || metadata.size > 128 || metadata.mode & 0o077
-      || typeof process.getuid === 'function' && metadata.uid !== process.getuid()) throw new Error('KEY_PERMISSIONS_INVALID');
-    const key = (await handle.readFile('utf8')).trim();
-    if (!/^0x[0-9a-fA-F]{64}$/.test(key)) throw new Error('SIGNER_CONFIGURATION_INVALID');
-    return key;
-  } finally { await handle.close(); }
 }
 
 async function main(): Promise<void> {
@@ -165,7 +148,7 @@ async function main(): Promise<void> {
       return;
     }
     if (!journal) throw new Error('JOURNAL_REQUIRED');
-    const writer = createRabdiEntityWriter({ publisher: publisher!, privateKey: await signingKey() });
+    const writer = createRabdiEntityWriter({ publisher: publisher!, privateKey: await loadImporterSigningKey(root) });
     const manifest: ImportManifest = await importRegistry(plan, writer, journal, options, new Date().toISOString());
     await freshArtifact(out, 'import-manifest.json', manifest);
     await freshArtifact(out, 'selected-records.json', selected);
