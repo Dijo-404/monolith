@@ -155,15 +155,20 @@ pnpm exec tsx scripts/check-rpc-egress.ts
 
 For the reproducible leaking and repaired browser cases, follow the [egress guide](tests/privacy/egress/README.md). The leak command exits **1** and the fixed command exits **0** when their documented expectations hold. These checks use a synthetic driver and establish software behavior, with `SIMULATED` evidence.
 
+<a id="query-the-accepted-registry-import-independently"></a>
+
 **Query the accepted registry import independently**
 
 ```sh
 pnpm --filter @monolith/shared build
 pnpm --filter @monolith/registry build
-pnpm exec tsx scripts/registry-query-example.ts --help
+env -u DEBUG -u ARKIV_PUBLISHER_KEY_FILE -u ARKIV_PUBLISHER_PRIVATE_KEY \
+  pnpm exec tsx scripts/registry-query-example.ts --chain-id 10
 ```
 
-The [registry setup guide](docs/registry-setup.md) provides the live `--chain-id 10` command, trust pins, publisher references and failure behavior. That query contacts Arkiv directly for public metadata; expired or unavailable records fail without a saved-result fallback. It does not establish endpoint health or anonymity.
+The recorded production writer/owner is **`0x93D1A42655F2B0BCFa126e3D2a33e4ab60a74CA4`** on Arkiv Rabdi (chain **7794095**). The imported dataset is [ethereum-lists/chains at e174742](https://github.com/ethereum-lists/chains/tree/e17474286275730fb6b0490b1d7ea1c64a36ed9e), under its [immutable MIT license](https://github.com/ethereum-lists/chains/blob/e17474286275730fb6b0490b1d7ea1c64a36ed9e/LICENSE); the [notice is retained](packages/registry/src/adapters/source/LICENSE.ethereum-lists-chains). The [importer and recorded receipts](packages/registry/test/importer/README.md) document rerunning the import with a separately configured publisher.
+
+The [registry setup guide](docs/registry-setup.md) provides trust pins, historical output and failure behavior. The query needs no signing key and contacts Arkiv directly for public metadata; expired or unavailable records fail without a saved-result fallback. Historical import success does not guarantee current availability, endpoint health or anonymity.
 
 ### Deployment
 
@@ -298,6 +303,21 @@ The default environment enables no upstream targets or registry trust configurat
 - Timestamped live evidence records a past run. Worker availability, endpoint freshness and network behavior must be checked again for a new run.
 - Whitechain checkout remains conditional and disabled. No payment settlement or sponsor eligibility is claimed.
 
+## CROPS
+
+Privacy is the lead property. These are the implementation's guarantees and trade-offs; the [submission audit](docs/prize-compliance.md) records unresolved qualification gates.
+
+- **C — Censorship resistance:** The hosted domain, observer, Arkiv service and configured RPCs are dependencies; losing them blocks live reads. Users can run the source with their own compatible infrastructure; no automatic provider failover is promised.
+- **O — Open source:** Code is MIT-licensed and builds locally with the pinned tools. Live use additionally needs the documented public-network configuration; public repository visibility still requires owner publication.
+- **P — Privacy:** The observer sees direct-control sources transiently; RPCs see methods and payloads; Arkiv/indexers see public metadata queries and their caller. Worker bootstrap and hosting contacts expose network metadata separately; authored client code adds no analytics, and deployed host-injected scripts need separate review.
+- **S — Security:** Browser read mode handles no signing keys; the Arkiv publisher key stays with the operator and outside Git. Trusted publishers, fresh data, approved origins, worker integrity and protected chain probes gate reads; trust still includes the worker/network, host, observer topology and RPC responses.
+
+## Hackathon submission and AI use
+
+The owner confirmed **Classic / new project** registration. Candidate tracks are EF Anon-RPC/CROPS and Arkiv Mirror/Build from scratch; eligibility and final release acceptance remain pending. Uniswap is tracked in [MN-027](https://github.com/Dijo-404/monolith/issues/55), and Whitechain payments remain disabled. See the [complete prize audit](docs/prize-compliance.md) for requirements, evidence and outstanding actions.
+
+AI coding assistants contributed planning, implementation, tests, documentation and review across this repository. [AI usage and prompt inventory](docs/ai-usage.md) identifies assisted files and reused assets, retains the available audit prompts, and explicitly records missing historical prompts and owner-supplied human-contribution details. This is an incomplete submission disclosure until those details are verified.
+
 ## Roadmap
 
 - [x] Guided Leak Lab with explicit simulation labels
@@ -318,11 +338,13 @@ The default environment enables no upstream targets or registry trust configurat
 | Guide | What's in it |
 | :--- | :--- |
 | [Project idea](docs/idea.md) | Product design, threat model and evidence gates |
+| [Prize compliance](docs/prize-compliance.md) · [AI usage](docs/ai-usage.md) | Classic track requirements, source-linked evidence and unresolved submission gates |
 | [Delivery plan](docs/plan.md) · [Task register](docs/task-register.md) | Dependencies, path ownership and GitHub issue links |
 | [Architecture](docs/architecture.md) · [Integration contracts](docs/contracts.md) | Module boundaries, shared interfaces and trust rules |
 | [Observer](docs/observer.md) | Read API, operator configuration, source topology and retention |
 | [Registry setup](docs/registry-setup.md) · [Arkiv schema](arkiv/schema.md) | Independent queries, provenance, publisher policy and expiry |
 | [Arkiv data quality](arkiv/data-quality.md) · [Independent consumer](arkiv/reach.md) | Recorded import counts, actual storage/query evidence and remaining endpoint limits |
+| [How Arkiv is used](arkiv/how-you-use-arkiv.md) | Query fields, entity permissions, expiry and visible product behavior |
 | [CLI and TUI](docs/cli.md) | Local build/tarball install, analysis input, JSON output and exit codes |
 | [Live lab](tests/e2e/lab-ui/README.md) | Nym/observer/registry wiring, bounded metadata retries and actual public-workflow acceptance |
 | [Anon-RPC preflight](docs/preflight/anon.md) · [Observer preflight](docs/preflight/observer.md) | Reproduction steps, recorded observations and limits |
