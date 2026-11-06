@@ -56,6 +56,9 @@ Generated files below were copied unchanged from their command outputs:
 - [Exact source catalog](observed-live-2026-11-06/source-catalog.json)
 - [Source-only preview and its limits](observed-live-2026-11-06/source-preview.json)
 - [License copied with the generated artifacts](observed-live-2026-11-06/LICENSE.ethereum-lists-chains)
+- [Independent public receipts and actual fees](observed-live-2026-11-06/receipt-evidence.json)
+- [Independent SDK read of one selected entity](observed-live-2026-11-06/sample-entity-evidence.json)
+- [Independent artifact consistency and original input hashes](observed-live-2026-11-06/artifact-consistency.json)
 
 The dedicated public test publisher is `0x93D1A42655F2B0BCFa126e3D2a33e4ab60a74CA4`.
 The first real [batch transaction](https://rabdi.explorer.arkiv.network/tx/0x90b084611bc5850c066e1101938b4fe76e350f658d543cb0fa64cf66ca4e69ca)
@@ -63,6 +66,12 @@ created, among others, entity
 `0x77eb7c1e22c6552d7f085f8a1c2313121dfbff3a4abb682608ca5ff2c8cd7b43`.
 All 100 entity references and declared deadlines are in the manifests. Evidence is recorded
 at the files' observed timestamps and will become historical when the entities expire.
+An independent public-client reviewer read all ten receipts and one selected entity without
+importing the Monolith writer or any signing API. The receipts emitted 100 matching readonly
+creations and consumed **0.018453639 test tGLM** in actual fees. The reviewer also checked
+the full 100-record CLI query's artifact consistency, rather than repeating every entity read.
+The consistency file preserves original command-layout names; for example,
+`first10/import-manifest.json` is copied here as `import-first10.json`.
 
 ## Reproduce
 
@@ -169,6 +178,10 @@ boundary tests**, covering source integrity, credential/template filtering, unsa
 publisher/content/receipt/expiry checks, batch limits, durable reservations, reconciliation,
 partial failures and repeat runs. The CLI also passed an explicit strict TypeScript check.
 These deterministic tests do not establish live endpoint trust.
+
+After incorporating accepted main `4c14927` (MN-007 and MN-011), the frozen install and full
+`pnpm check` passed again: **703 tests in 18 files**, lint, package/consumer typechecks and
+production builds. The lockfile merge retained both transport and registry dependency pins.
 
 The actual import, zero-write rerun and independent query are separate live observations.
 The source catalog, license, manifests and JSON were checked for hashes, structure and safe
