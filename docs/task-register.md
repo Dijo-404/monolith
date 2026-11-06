@@ -30,5 +30,8 @@ Read [the plan](plan.md), [architecture](architecture.md), [contracts](contracts
 | MN-020 | [#20 Build the bounded merchant relayer and receipt reconciliation](https://github.com/Dijo-404/monolith/issues/20) | C | conditional (optional) | [MN-019](https://github.com/Dijo-404/monolith/issues/19) | `feat/mn-020-merchant-relayer` |
 | MN-021 | [#21 Prove protected browser checkout with real sponsored USDT settlement](https://github.com/Dijo-404/monolith/issues/21) | D | conditional (optional) | [MN-014](https://github.com/Dijo-404/monolith/issues/14), [MN-020](https://github.com/Dijo-404/monolith/issues/20) | `feat/mn-021-protected-checkout` |
 | MN-022 | [#22 Package the optional Whitechain evidence and final demo](https://github.com/Dijo-404/monolith/issues/22) | C | release (optional) | [MN-017](https://github.com/Dijo-404/monolith/issues/17), [MN-021](https://github.com/Dijo-404/monolith/issues/21) | `feat/mn-022-whitechain-release` |
+| MN-023 | [#36 Prepare no-cost deployment and overnight release hosting](https://github.com/Dijo-404/monolith/issues/36) | C | release | [MN-001](https://github.com/Dijo-404/monolith/issues/1), [MN-002](https://github.com/Dijo-404/monolith/issues/2) | `feat/mn-023-no-cost-deployment` |
 
 Only MN-001 starts ready. Promote downstream tasks after prerequisite merges **and** accepted evidence. MN-017 is the core release; MN-018 through MN-022 are conditional and never block it.
+
+MN-023 was added for the owner-requested overnight no-cost deployment. Its preparation depends only on the accepted foundation; publication does not waive MN-017 or any live-evidence gate. MN-006's additional UI entrypoint, test and design paths were coordinated on issue #6 for the explicitly authorized takeover.

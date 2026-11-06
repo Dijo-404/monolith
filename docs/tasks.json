@@ -213,7 +213,17 @@
     "paths": [
       "apps/dashboard/src/app/**",
       "apps/dashboard/src/components/**",
-      "apps/dashboard/src/styles/**"
+      "apps/dashboard/src/styles/**",
+      "apps/dashboard/index.html",
+      "apps/dashboard/src/main.tsx",
+      "apps/dashboard/src/App.tsx",
+      "apps/dashboard/src/styles.css",
+      "apps/dashboard/test/guide.test.ts",
+      "apps/dashboard/test/lab-reducer.test.ts",
+      "apps/dashboard/PRODUCT.md",
+      "apps/dashboard/DESIGN.md",
+      "apps/dashboard/.impeccable/**",
+      "apps/dashboard/docs/review/**"
     ],
     "scope": [
       "Build a single-screen privacy lab with route lanes, worker status, registry provenance and a run timeline.",
@@ -835,5 +845,45 @@
     ],
     "gate": "OPTIONAL: MN-017 and MN-021 passed; user retains all merges to main and final submission decisions.",
     "conditional": true
+  },
+  {
+    "id": "MN-023",
+    "title": "Prepare no-cost deployment and overnight release hosting",
+    "lane": "C",
+    "phase": "release",
+    "priority": "P0",
+    "estimate": "1–2 hours",
+    "branch": "feat/mn-023-no-cost-deployment",
+    "depends_on": [
+      "MN-001",
+      "MN-002"
+    ],
+    "paths": [
+      "deploy/**",
+      "scripts/deploy/**",
+      "tests/deploy/**",
+      ".openai/**",
+      "docs/deployment.md",
+      "docs/overnight-release.md",
+      "docs/tasks.json",
+      "docs/task-register.md"
+    ],
+    "scope": [
+      "Package the existing dashboard from an exact source commit using the pinned toolchain and explicit public configuration.",
+      "Prepare connected no-cost static hosting without deploying paid resources or uploading secrets.",
+      "Record actual publication URLs, source/content hashes, browser smoke checks and backend lifetime limits; preserve all core evidence gates."
+    ],
+    "acceptance": [
+      "Preparation can run independently after the accepted foundation; final publication uses the real tested application, never the scaffold.",
+      "A clean source-bound build and safe new output produce only declared public static files and reproducible provenance.",
+      "No .env, private keys, local cloud credentials or dependency trees enter the public artifact.",
+      "Public deployment does not convert blocked source proof, synthetic tests or optional payment work into accepted core or sponsor evidence."
+    ],
+    "evidence": [
+      "Exact build/package commands and content hashes",
+      "Actual deployment URL and browser smoke outcome with remaining limits"
+    ],
+    "gate": "MN-001 and MN-002 accepted for independent deployment preparation; final product publication preserves all outstanding application/live-evidence acceptance gates.",
+    "conditional": false
   }
 ]
