@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 160" fill="none" role="img" aria-labelledby="title">
+  <title id="title">Monolith</title>
+  <path fill="#B7A3D3" d="M40 0 80 23 41 48 0 23Z"/>
+  <path fill="#17151D" d="M0 23 41 48V60L18 44V53L46 74V156L40 160 0 134Z"/>
+  <path fill="#8D6AB8" d="M80 23V134L54 152V72L48 66 65 53V44L41 60V48Z"/>
+</svg>

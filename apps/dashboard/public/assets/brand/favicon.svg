@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" fill="none" role="img" aria-labelledby="title">
+  <title id="title">Monolith</title>
+  <rect width="128" height="128" rx="26" fill="#F0EBF8"/>
+  <g transform="translate(36 8) scale(.7)">
+    <path fill="#B7A3D3" d="M40 0 80 23 40 46 0 23Z"/>
+    <path fill="#17151D" d="M0 23 34 43V156L0 134Z"/>
+    <path fill="#8D6AB8" d="M46 43 80 23V134L46 156Z"/>
+  </g>
+</svg>

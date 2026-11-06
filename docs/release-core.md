@@ -1,6 +1,6 @@
 # Core release evidence candidate
 
-The selected measured core is execution commit `c11dace8107f386e5eceb8356395bfdb23035dd1`, public Site7 and real observer runtime10. Its genuine mounted-presenter observation has four fresh server allocations, thirteen unique wire rows and 248 source/build/SDK input bindings. The [original capture](../evidence/core/2026-11-07/originals/current-core9/browser-live.json), [independent review](../evidence/core/2026-11-07/originals/current-core9/independent-review.json) and [producer redaction/binding audit](../evidence/core/2026-11-07/originals/current-core9/binding-redaction-audit.json) retain the actual scope and times. This candidate still requires its exact clean-clone result, independent review and normal owner acceptance; a procedure or passing hash alone is not release completion.
+The selected measured core is execution commit `c11dace8107f386e5eceb8356395bfdb23035dd1`, public Site7 and real observer runtime10. Its genuine mounted-presenter observation has four fresh server allocations, thirteen unique wire rows and 248 source/build/SDK input bindings. The [original capture](../evidence/core/2026-11-07/originals/current-core9/browser-live.json), [independent review](../evidence/core/2026-11-07/originals/current-core9/independent-review.json) and [producer redaction/binding audit](../evidence/core/2026-11-07/originals/current-core9/binding-redaction-audit.json) retain the actual scope and times. The frozen C1 evidence candidate `18cf7e87bed3ec9a9b5227b1f91d4cc51f3055c2` passed its recorded clean-clone checks and independent review. The final documentation candidate still requires its own exact-head validation and normal owner acceptance; C1 results do not become checks of a later commit.
 
 MN009/012/013/014/015/016 are merged and accepted. The exporter implementation merged separately in PR65 as a source checkpoint. This new evidence change preserves the current C11 observation and its original report identities; it does not replace older DFB8/5CF7 successes, blocked attempts or simulated software evidence. A later held visual revision has its own owner and is not described as executed by this capture. Any selected later runtime needs fresh source-bound observation before that later release is claimed.
 
@@ -45,19 +45,24 @@ pnpm exec tsx --tsconfig scripts/tsconfig.evidence.json scripts/export-evidence.
 
 Repeat for private/compare/leak/repair. The CLI validates supported shape, exact identity/time/labels, original-byte hashes and its configured redaction checks. It cannot establish live truth, complete core-proof coverage, universal anonymity or eligibility. Packaging/validation time never renews an old registry generation or observation. Clean-clone tests use labelled synthetic inputs and make no new live-evidence claim.
 
-For the selected public build, rebuild only with the explicit public observer URL and compare the nine Vite output hashes with the retained Site7 provenance:
+To reproduce the original Site7 build, use a separate clean checkout of its recorded execution commit C11. Do not rebuild a later documentation candidate or current main and label its assets as the original Site7 output. Keep the final-candidate checkout and its validation results separate:
 
 ```sh
+git clone --no-local /path/to/reviewed/source /tmp/monolith-site7-source
+cd /tmp/monolith-site7-source
+git checkout --detach c11dace8107f386e5eceb8356395bfdb23035dd1
+pnpm install --frozen-lockfile --offline --store-dir /home/dj/.local/share/pnpm/store --package-import-method copy
+pnpm --filter './packages/**' -r build
 MONOLITH_PUBLIC_OBSERVER_URL=https://d06045ae660681.lhr.life pnpm --filter @monolith/dashboard build
 ```
 
-This is build reproduction, not a new SDK run. The original real workflow already binds the selected runtime inputs. Instructions for a further real run and the bounded no-payment demo remain in [the core demo guide](demo-core.md); live observation must be deliberately source-frozen and coordinated with the runtime owner.
+Compare the nine original Vite output hashes with the retained Site7 provenance. Later transport, registry, CLI, branding or UI changes have separate software checks and are not retrospectively observed by this capture. This is build reproduction, not a new SDK run. The original real workflow already binds the selected runtime inputs. Instructions for a further real run and the bounded no-payment demo remain in [the core demo guide](demo-core.md); live observation must be deliberately source-frozen and coordinated with the runtime owner.
 
 ## Publication, source and remaining limits
 
 The [Site7 native receipt](../evidence/core/2026-11-07/originals/site7/deployment.json), [input audit](../evidence/core/2026-11-07/originals/site7/input-audit.json), [actual HTTPS verification](../evidence/core/2026-11-07/originals/site7/static-verification.json) and [controlled fault/layout result](../evidence/core/2026-11-07/originals/site7/browser-fault/browser-deployed.json) are preserved unchanged. Authored asset hashes are separate from modified served-HTML hashes and the pinned hosting addition. Local gzip/tar hashes and returned opaque service-container metadata are separate; service-container byte identity was not independently retrieved or asserted. The injected worker-host fault grants no real-worker credit.
 
-GitHub repository metadata was observed PUBLIC at `2026-11-06T22:34:11Z`; earlier original records retain their earlier recorded visibility. Public source availability does not establish participant or sponsor eligibility. README status/roadmap text at accepted basebd43 still contains older pending states; #83 owns that factual correction before final handoff. This guide does not claim README has already been refreshed.
+GitHub repository metadata was observed PUBLIC at `2026-11-06T22:34:11Z`; earlier original records retain their earlier recorded visibility. Public source availability does not establish participant or sponsor eligibility. The README status/link correction is a documentation-only continuation by the existing MN017 owner under the recorded MN017/MN083 handoff. It preserves accepted CROPS/Arkiv/AI/track/npm material and deferred human-contribution details. Every C1 original, projection and bundle remains unchanged; MN017 and MN023 acceptance remain pending until their normal owner criteria are accepted.
 
 Hosting/security bootstrap, its fetched challenge runtime and worker bootstrap are non-anonymous and outside transport verification. Destinations see RPC payloads. Source comparison is bounded to the trusted provider, verified worker, chosen endpoint and observation window. The free backend depends on this workstation and provider; process caps and passive health checks do not guarantee uptime, recovery or permanent hostname retention. Historical controls and failed routes remain named evidence rather than erased or explained without proof.
 
