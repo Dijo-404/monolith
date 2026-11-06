@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "sourceTask": "MN-017",
+  "scope": "DERIVED_LOCAL_ARCHIVE_AUDIT_NOT_SERVICE_CONTAINER_IDENTITY",
+  "generatedAt": "2026-11-06T22:30:09.801Z",
+  "localArchive": {
+    "sourcePath": "/tmp/monolith-release-static-20261107-attempt8.tar.gz",
+    "bytes": 244282,
+    "sha256": "6f7d80bbeff55474e2cd7d00f60e0a65ff1c5656a58f9b4658cbe2a973fe2f83",
+    "decompressedTarBytes": 686080,
+    "decompressedTarSha256": "65cfeeb8a553d5f3deb2422cb6c53d43f9e4d4a40bbb620b43c3650f67e202b3",
+    "regularFileCount": 11,
+    "authoredFilesVerified": 10
+  },
+  "nativeSavedVersionId": "appgprj_6aedf7106c2081919627f07802438881~appgver_00dc74da24ac8191b04f62674a03d373",
+  "nativeReturnedStorageMetadata": {
+    "archive_format": "tar",
+    "sediment_file_id": "file_00000000d6608208a180710933c64d31",
+    "content_hash": "sha256:1be788a86f44a66c302d4148faa5ba5646f26ab86197760582c1c4c83b7f4268",
+    "size_bytes": 686080,
+    "file_count": 11
+  },
+  "opaqueServiceObjectRetrievedByThisAudit": false,
+  "serviceContainerByteIdentityVerified": false,
+  "limitations": [
+    "Local container and API-returned storage metadata are separate; no cause or repacking inference.",
+    "Ten authored file hashes were independently compared; hosting additions are separately recorded by the original static verifier."
+  ]
+}

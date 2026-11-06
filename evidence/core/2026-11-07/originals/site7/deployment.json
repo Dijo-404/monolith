@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "scope": "ACTUAL_PUBLIC_CURRENT_CORE_PUBLICATION",
+  "passed": true,
+  "recordedAt": "2026-11-06T22:17:12.916Z",
+  "siteId": "appgprj_6aedf7106c2081919627f07802438881",
+  "version": {
+    "id": "appgprj_6aedf7106c2081919627f07802438881~appgver_00dc74da24ac8191b04f62674a03d373",
+    "project_id": "appgprj_6aedf7106c2081919627f07802438881",
+    "version_number": 7,
+    "source": {
+      "commit_sha": "952e29c3e1f38f51e8e7ccc8b2b16fe0c25cdae5"
+    },
+    "archive_storage": {
+      "archive_format": "tar",
+      "sediment_file_id": "file_00000000d6608208a180710933c64d31",
+      "content_hash": "sha256:1be788a86f44a66c302d4148faa5ba5646f26ab86197760582c1c4c83b7f4268",
+      "size_bytes": 686080,
+      "file_count": 11
+    },
+    "screenshot_url": null,
+    "deployment_id": null
+  },
+  "source": {
+    "project_id": "appgprj_6aedf7106c2081919627f07802438881",
+    "checkout_path": "/tmp/monolith-sites-release-checkout-20261106-2",
+    "commit_sha": "952e29c3e1f38f51e8e7ccc8b2b16fe0c25cdae5",
+    "archive": "/tmp/monolith-release-static-20261107-attempt8.tar.gz"
+  },
+  "deployment": {
+    "id": "appgdep_6aee51cbfd18819184980db779a69356",
+    "project_id": "appgprj_6aedf7106c2081919627f07802438881",
+    "title": "Monolith — Privacy Regression Lab",
+    "version_id": "appgprj_6aedf7106c2081919627f07802438881~appgver_00dc74da24ac8191b04f62674a03d373",
+    "type": "publish",
+    "status": "succeeded",
+    "url": "https://monolith-privacy-lab.madhanxdev.chatgpt.site",
+    "has_mcp": false,
+    "screenshot_asset_pointer": null,
+    "provider_deployment_id": "site---6aedf7106c2081919627f07802438881",
+    "failure_message": null,
+    "env_set_revision": 0,
+    "updated_at": "2026-11-06T22:16:59.747225+00:00"
+  },
+  "applicationSourceCommit": "c11dace8107f386e5eceb8356395bfdb23035dd1",
+  "observerOrigin": "https://d06045ae660681.lhr.life",
+  "inputAudit": "/tmp/monolith-static-publication-preflight-20261107-attempt8.json",
+  "limitations": [
+    "Static publication only; new actual capture required for accepted post-trace guard.",
+    "Service archive object unretieved/container identity unverified, distinct from actual served authored-file equality.",
+    "Private source unchanged; unreleased visual89 not included."
+  ]
+}

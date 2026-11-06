@@ -1,0 +1,205 @@
+{
+  "schemaVersion": 1,
+  "evidence": "OBSERVED_LIVE",
+  "passed": true,
+  "generatedAt": "2026-11-06T22:17:19.809Z",
+  "siteOrigin": "https://monolith-privacy-lab.madhanxdev.chatgpt.site",
+  "sourceCommit": "c11dace8107f386e5eceb8356395bfdb23035dd1",
+  "htmlRedirectPolicy": "EXACT_SAME_ORIGIN_307",
+  "htmlAdditionPolicy": "PINNED_CLOUDFLARE_JSD_TEMPLATE",
+  "snapshotProvenanceSha256": "4299c567113cf682465fe8ee3fb5e1c86fff72789a5c36da39f7ade1e8082418",
+  "files": [
+    {
+      "path": "/assets/THIRD-PARTY-NOTICES.txt",
+      "servedPath": "/assets/THIRD-PARTY-NOTICES.txt",
+      "redirect": null,
+      "bytes": 40959,
+      "sha256": "008926aaaa3737dec8c4aba25faa0a3143626c6e96f59bf7b17c92ef0b5d6ddf",
+      "authoredBytes": 40959,
+      "authoredSha256": "008926aaaa3737dec8c4aba25faa0a3143626c6e96f59bf7b17c92ef0b5d6ddf",
+      "authoredBytesVerified": true,
+      "hostingAddition": null,
+      "status": 200,
+      "mime": "text/plain"
+    },
+    {
+      "path": "/assets/app-CICXmcEX.css",
+      "servedPath": "/assets/app-CICXmcEX.css",
+      "redirect": null,
+      "bytes": 19812,
+      "sha256": "af3d0e4077e657fea1f01f9175e391b7ecee7b072935e6090403425031d26be8",
+      "authoredBytes": 19812,
+      "authoredSha256": "af3d0e4077e657fea1f01f9175e391b7ecee7b072935e6090403425031d26be8",
+      "authoredBytesVerified": true,
+      "hostingAddition": null,
+      "status": 200,
+      "mime": "text/css"
+    },
+    {
+      "path": "/assets/app-Cr7RE_ZT.js",
+      "servedPath": "/assets/app-Cr7RE_ZT.js",
+      "redirect": null,
+      "bytes": 373547,
+      "sha256": "aa6571bbd87e669d89f016b0555abaf9cbd99441e04eed422ec4eecab0e1fde9",
+      "authoredBytes": 373547,
+      "authoredSha256": "aa6571bbd87e669d89f016b0555abaf9cbd99441e04eed422ec4eecab0e1fde9",
+      "authoredBytesVerified": true,
+      "hostingAddition": null,
+      "status": 200,
+      "mime": "text/javascript"
+    },
+    {
+      "path": "/assets/browser-BV4R2-sQ.js",
+      "servedPath": "/assets/browser-BV4R2-sQ.js",
+      "redirect": null,
+      "bytes": 172301,
+      "sha256": "71eb5d7ba875e25ad922eab59d944b3fe0d4cd0756395512f303158f52f5dca1",
+      "authoredBytes": 172301,
+      "authoredSha256": "71eb5d7ba875e25ad922eab59d944b3fe0d4cd0756395512f303158f52f5dca1",
+      "authoredBytesVerified": true,
+      "hostingAddition": null,
+      "status": 200,
+      "mime": "text/javascript"
+    },
+    {
+      "path": "/assets/fragment-mono-latin-yxdJ5AmL.woff2",
+      "servedPath": "/assets/fragment-mono-latin-yxdJ5AmL.woff2",
+      "redirect": null,
+      "bytes": 25224,
+      "sha256": "44c4e39bff5e76652a24a872cbebabccbcfb20f62c4633b27c1f2745cba86b56",
+      "authoredBytes": 25224,
+      "authoredSha256": "44c4e39bff5e76652a24a872cbebabccbcfb20f62c4633b27c1f2745cba86b56",
+      "authoredBytesVerified": true,
+      "hostingAddition": null,
+      "status": 200,
+      "mime": "application/octet-stream"
+    },
+    {
+      "path": "/assets/wix-madefor-display-latin-Blzrepd3.woff2",
+      "servedPath": "/assets/wix-madefor-display-latin-Blzrepd3.woff2",
+      "redirect": null,
+      "bytes": 20168,
+      "sha256": "19bf2f2f1eaa10b2a047a8a1e624a1e12008ab5e3c50ad199ac968f8324f5f4d",
+      "authoredBytes": 20168,
+      "authoredSha256": "19bf2f2f1eaa10b2a047a8a1e624a1e12008ab5e3c50ad199ac968f8324f5f4d",
+      "authoredBytesVerified": true,
+      "hostingAddition": null,
+      "status": 200,
+      "mime": "application/octet-stream"
+    },
+    {
+      "path": "/assets/wix-madefor-text-latin-M4ts_BV7.woff2",
+      "servedPath": "/assets/wix-madefor-text-latin-M4ts_BV7.woff2",
+      "redirect": null,
+      "bytes": 20244,
+      "sha256": "cbd90a79e04d153fd521d90b08e9962628e3139313af330bd898001fe5b36e1a",
+      "authoredBytes": 20244,
+      "authoredSha256": "cbd90a79e04d153fd521d90b08e9962628e3139313af330bd898001fe5b36e1a",
+      "authoredBytesVerified": true,
+      "hostingAddition": null,
+      "status": 200,
+      "mime": "application/octet-stream"
+    },
+    {
+      "path": "/assets/worker-host.html",
+      "servedPath": "/assets/worker-host",
+      "redirect": {
+        "status": 307,
+        "from": "/assets/worker-host.html",
+        "to": "/assets/worker-host"
+      },
+      "bytes": 1411,
+      "sha256": "c268ad5515b3767840063f8fe87ddfb9ea4b7b118bfe7c03471103a2bb9bfec7",
+      "authoredBytes": 297,
+      "authoredSha256": "844c700df979d2bdb16ff70650c1b68b6f51512602dfadeaee94433a3ea6cebe",
+      "authoredBytesVerified": true,
+      "hostingAddition": {
+        "kind": "CLOUDFLARE_JAVASCRIPT_DETECTION",
+        "bytes": 1114,
+        "sha256": "4a9318d2832c480ffba7d93b717c0c68872ecaa5eeb259f690dff515d426cd48",
+        "normalizedTemplateSha256": "5c4f4c7822215cd0625b3ee9a67def801a05caa4891443116af3e81fa371c9b6",
+        "insertion": "BEFORE_CLOSING_BODY",
+        "dynamicFields": [
+          "rayId",
+          "timestamp"
+        ]
+      },
+      "status": 200,
+      "mime": "text/html"
+    },
+    {
+      "path": "/assets/workerHost-BKrclfgn.js",
+      "servedPath": "/assets/workerHost-BKrclfgn.js",
+      "redirect": null,
+      "bytes": 46,
+      "sha256": "be79dfb1b101571e15515125b2769d96b1d5d13a2001ca51e0b4684afdcaa35d",
+      "authoredBytes": 46,
+      "authoredSha256": "be79dfb1b101571e15515125b2769d96b1d5d13a2001ca51e0b4684afdcaa35d",
+      "authoredBytesVerified": true,
+      "hostingAddition": null,
+      "status": 200,
+      "mime": "text/javascript"
+    },
+    {
+      "path": "/index.html",
+      "servedPath": "/",
+      "redirect": {
+        "status": 307,
+        "from": "/index.html",
+        "to": "/"
+      },
+      "bytes": 1998,
+      "sha256": "b65befb978180862a9f58c3498da178ac0aaca0bc83e14c92db51052bcfc7e73",
+      "authoredBytes": 884,
+      "authoredSha256": "e518d5ce35a9f9d4a8a29acb465bae8ede43cde9b40e3f30d2f90df54c373752",
+      "authoredBytesVerified": true,
+      "hostingAddition": {
+        "kind": "CLOUDFLARE_JAVASCRIPT_DETECTION",
+        "bytes": 1114,
+        "sha256": "22f6dc9c311252f2f2cadc5ff91cc834f0c00ab887c366542a6451589e37526b",
+        "normalizedTemplateSha256": "5c4f4c7822215cd0625b3ee9a67def801a05caa4891443116af3e81fa371c9b6",
+        "insertion": "BEFORE_CLOSING_BODY",
+        "dynamicFields": [
+          "rayId",
+          "timestamp"
+        ]
+      },
+      "status": 200,
+      "mime": "text/html"
+    },
+    {
+      "path": "/",
+      "servedPath": "/",
+      "redirect": null,
+      "bytes": 1998,
+      "sha256": "a5bf5b3238a56a53889efc793473b68d6d0a56f037845ee9f72b72d37588843e",
+      "authoredBytes": 884,
+      "authoredSha256": "e518d5ce35a9f9d4a8a29acb465bae8ede43cde9b40e3f30d2f90df54c373752",
+      "authoredBytesVerified": true,
+      "hostingAddition": {
+        "kind": "CLOUDFLARE_JAVASCRIPT_DETECTION",
+        "bytes": 1114,
+        "sha256": "2c1af108308ea5a695017ed1c015ce4e1e55bc919eb3b570fee52a756a042aef",
+        "normalizedTemplateSha256": "5c4f4c7822215cd0625b3ee9a67def801a05caa4891443116af3e81fa371c9b6",
+        "insertion": "BEFORE_CLOSING_BODY",
+        "dynamicFields": [
+          "rayId",
+          "timestamp"
+        ]
+      },
+      "status": 200,
+      "mime": "text/html"
+    }
+  ],
+  "workerHost": {
+    "path": "/assets/worker-host.html",
+    "distinctFromIndex": true,
+    "module": "/assets/workerHost-BKrclfgn.js",
+    "moduleVerified": true
+  },
+  "rootDocumentMatchesIndex": true,
+  "limitations": [
+    "Authored asset identity only; browser worker execution and privacy acceptance require separate observations.",
+    "When explicitly enabled, reviewed hosting security HTML is recorded separately. Its fetched challenge runtime and non-anonymous bootstrap are outside transport verification."
+  ]
+}
