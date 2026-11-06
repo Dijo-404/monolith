@@ -1,0 +1,33 @@
+{
+  "name": "monolith",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "packageManager": "pnpm@12.18.0",
+  "engines": { "node": ">=24.22.2 <25", "pnpm": "12.18.0" },
+  "scripts": {
+    "dev": "pnpm --parallel --filter @monolith/dashboard --filter @monolith/observer dev",
+    "dev:dashboard": "pnpm --filter @monolith/dashboard dev",
+    "dev:observer": "pnpm --filter @monolith/observer dev",
+    "start:observer": "pnpm --filter @monolith/observer start",
+    "lint": "eslint . --max-warnings 0",
+    "typecheck": "pnpm --filter './packages/**' -r build && pnpm -r typecheck",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "build": "pnpm -r build",
+    "check": "pnpm lint && pnpm typecheck && pnpm test && pnpm build"
+  },
+  "devDependencies": {
+    "@eslint/js": "10.0.1",
+    "@types/node": "24.19.2",
+    "eslint": "10.14.0",
+    "eslint-plugin-react-hooks": "7.1.1",
+    "globals": "17.14.0",
+    "tsx": "4.23.15",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.72.1",
+    "vite": "8.3.6",
+    "vitest": "5.1.0"
+  }
+}

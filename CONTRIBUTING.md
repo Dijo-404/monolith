@@ -99,7 +99,9 @@ After merge, verify acceptance criteria and live evidence. Replace `status:revie
 
 ## One-time empty-repository bootstrap — repository owner
 
-At planning time, the remote had no commits and no `main`. The planning work is published on `docs/monolith-team-plan`. A PR cannot target a branch that does not yet exist. When you accept this planning baseline, establish `main` from it:
+The owner authorized adopting the planning baseline on 6 November 2026. `main` now exists at that baseline and is the default branch. New task branches and PRs target `main`; the steps below are historical bootstrap instructions for a fresh empty remote, not a setup step teammates need to repeat.
+
+At planning time, the remote had no commits and no `main`. The planning work was published on `docs/monolith-team-plan`. To establish `main` from that accepted baseline in an empty remote:
 
 ```sh
 git fetch origin
