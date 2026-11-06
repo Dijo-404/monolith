@@ -16,6 +16,10 @@
     "./arkiv": {
       "types": "./dist/adapters/arkiv/writer.d.ts",
       "import": "./dist/adapters/arkiv/writer.js"
+    },
+    "./reader": {
+      "types": "./dist/adapters/arkiv/reader.d.ts",
+      "import": "./dist/adapters/arkiv/reader.js"
     }
   },
   "scripts": {
