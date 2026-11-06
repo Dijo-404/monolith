@@ -11,6 +11,7 @@
     "dev:dashboard": "pnpm --filter @monolith/dashboard dev",
     "dev:observer": "pnpm --filter @monolith/observer dev",
     "start:observer": "pnpm --filter @monolith/observer start",
+    "registry:import": "tsx scripts/import-evm-registry.ts",
     "lint": "eslint . --max-warnings 0",
     "typecheck": "pnpm --filter './packages/**' -r build && pnpm -r typecheck",
     "test": "vitest run",
@@ -19,6 +20,7 @@
     "check": "pnpm lint && pnpm typecheck && pnpm test && pnpm build"
   },
   "devDependencies": {
+    "@monolith/registry": "workspace:*",
     "@eslint/js": "10.0.1",
     "@types/node": "24.19.2",
     "eslint": "10.14.0",

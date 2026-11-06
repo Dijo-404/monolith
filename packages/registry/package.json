@@ -8,6 +8,14 @@
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
+    },
+    "./source": {
+      "types": "./dist/adapters/source/git-snapshot.d.ts",
+      "import": "./dist/adapters/source/git-snapshot.js"
+    },
+    "./arkiv": {
+      "types": "./dist/adapters/arkiv/writer.d.ts",
+      "import": "./dist/adapters/arkiv/writer.js"
     }
   },
   "scripts": {
@@ -15,6 +23,8 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@monolith/shared": "workspace:*"
+    "@monolith/shared": "workspace:*",
+    "@arkiv-network/sdk": "1.0.1",
+    "viem": "2.57.16"
   }
 }

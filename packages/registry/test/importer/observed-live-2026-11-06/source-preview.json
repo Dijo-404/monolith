@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "evidence": "UNTESTED",
+  "status": "SOURCE_ONLY",
+  "source": {
+    "repository": "https://github.com/ethereum-lists/chains",
+    "revision": "e17474286275730fb6b0490b1d7ea1c64a36ed9e",
+    "retrievedAt": "2026-11-06T13:41:58.596Z",
+    "snapshotSha256": "2180efb0c0b38e76578ebd8d6470d1acbabb7f90463dd4134e7c6d90a692c952",
+    "licenseUrl": "https://github.com/ethereum-lists/chains/blob/e17474286275730fb6b0490b1d7ea1c64a36ed9e/LICENSE",
+    "licenseSha256": "1126322e2cc8d165adc4c792eeb195717de2bcc7b39be1ce77959d78e87ef685"
+  },
+  "counts": {
+    "sourceNetworks": 2855,
+    "sourceRpcEntries": 4220,
+    "eligibleNetworks": 2238,
+    "eligibleRecords": 2942,
+    "rejected": 1277,
+    "duplicates": 1,
+    "reasons": {
+      "UNSAFE_HTTPS_URL": 738,
+      "CUSTOM_PATH_REQUIRES_REVIEW": 375,
+      "INACTIVE_OR_REUSED_CHAIN": 162,
+      "QUERY_REQUIRES_REVIEW": 2,
+      "DUPLICATE_WITHIN_CHAIN": 1
+    }
+  },
+  "fetchedDuringThisCommand": false,
+  "limits": "Read local immutable source bytes; zero endpoint probes. This preview is not an Arkiv import."
+}
