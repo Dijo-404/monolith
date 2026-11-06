@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "sourceTask": "MN-025",
+  "scope": "ONE_CURRENT_REAL_HEALTH_CHECK_BEFORE_FINAL_NATIVE_UI_CAPTURE_NO_REGISTRY_OR_TARGET_RPC",
+  "observedAt": "2026-11-06T21:45:07.717Z",
+  "origin": "https://d06045ae660681.lhr.life",
+  "status": 200,
+  "configured": true,
+  "simulatedControlPresent": false,
+  "error": null,
+  "unit": {
+    "LoadState": "loaded",
+    "ActiveState": "active",
+    "SubState": "running",
+    "Restart": "no",
+    "RuntimeMaxUSec": "12h",
+    "MainPID": "485235"
+  },
+  "registryCalls": 0,
+  "observerTargetRpcCalls": 0,
+  "passed": true
+}
