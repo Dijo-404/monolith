@@ -1,2 +1,2 @@
-// Implementation belongs to the dependent task; no runtime integration is provided yet.
-export {};
+export { createMonolithTransport } from './application/transport.js';
+export type { AllowedCall, TransportDriver, TransportOptions } from './ports/driver.js';

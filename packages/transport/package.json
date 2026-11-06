@@ -8,13 +8,19 @@
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
+    },
+    "./browser": {
+      "types": "./dist/browser.d.ts",
+      "import": "./dist/browser.js"
     }
   },
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "typecheck": "tsc -p tsconfig.json --noEmit"
+    "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p tsconfig.test.json --noEmit"
   },
   "dependencies": {
-    "@monolith/shared": "workspace:*"
+    "@monolith/shared": "workspace:*",
+    "@anon-rpc/browser-harness": "0.4.0",
+    "@anon-rpc/harness-core": "0.4.0"
   }
 }
