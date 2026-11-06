@@ -2,7 +2,7 @@
 
 Target: the ETHGlobal Mumbai from-scratch Arkiv + Swarm bonus alongside Monolith's Arkiv track. [Official requirements](https://ethglobal.com/events/mumbai/prizes/arkiv). Implementation tracking: [#99](https://github.com/Dijo-404/monolith/issues/99); actual frontend upload and browser evidence: [PR #101](https://github.com/Dijo-404/monolith/pull/101).
 
-**Current state:** the compiled frontend was actually uploaded to Swarm and passed exact-file and real-worker browser checks. Release-discovery tooling and an offline descriptor are implemented. The new Arkiv release entity has **not** been published; actual postage batch provenance and the demo-video timestamp remain missing. This document does not claim qualification or an award.
+**Current state:** the compiled frontend was uploaded to Swarm and passed exact-file and real-worker browser checks. One Arkiv release entity was published, its transaction confirmed, and a separate key-free read verified all ten files against its descriptor. [Retained release evidence](../deploy/swarm/evidence/2026-11-07/arkiv-release/README.md) includes the initial verification failure and its read-only reconciliation. Actual postage batch provenance and the demo-video timestamp remain missing. This document does not claim qualification or an award.
 
 ## What each system stores
 
@@ -23,13 +23,21 @@ The uploaded collection has no public inventory JSON. Keeping the ten-file inven
 | Buying wallet or batch provider | Gateway-provided postage; purchasing wallet not exposed |
 | Actual postage batch ID | **Unknown: required provenance remains outstanding** |
 | Request stamp selector | `NULL_STAMP`; this is not the actual batch ID |
-| Arkiv release entity key | **Not yet published** |
-| Offline descriptor release ID | `088cc81e88de8f5c1a723dcbc50ea776c6bf927458d93535b4a00cbb9698ede9` |
+| Arkiv release entity key | `0xfc1627a9bf52005565d74111403477cc08c89d584a954da02371ffe73018179d` |
+| Arkiv chain | Rabdi, chain ID `7794095` |
+| Trusted publisher (creator and owner) | `0x93D1A42655F2B0BCFa126e3D2a33e4ab60a74CA4` |
+| Create transaction | `0x5f22569bf2158e00f1be1b3b7f3cdf6c0bbcf06b9023a2bdd0f39e37df36ba28` |
+| Confirmed block / actual fee | `310566` / `174479000000000` wei (test-network token) |
+| Descriptor release ID | `088cc81e88de8f5c1a723dcbc50ea776c6bf927458d93535b4a00cbb9698ede9` |
 | Canonical inventory SHA-256 | `a932f30c7a6113d3a66896d046254b54728f719d71fea6bb5ed3924d979df70b` |
+| Key-free observed content read | `2026-11-06T23:21:25.158Z`: ten files, 673,482 bytes verified |
+| Entity block expiry / descriptor UTC expiry | `353315` / `2026-11-07T23:00:00.000Z` (either expiry ends trust) |
 
 The observed upload used the gateway's supplied postage without an operator account or payment. Its public API does not return a content-to-batch binding. Aggregate TTL/usage and global chain batch lists cannot establish which batch stamped this content. A provider-issued receipt or a known operator batch is needed; no batch ID or buying wallet is invented here. No paid postage/top-up/domain was purchased, and retention is not guaranteed.
 
-The offline descriptor was prepared at `2026-11-06T23:05:21.502Z` with UTC expiry `2026-11-07T23:00:00.000Z`. It is a preview, not an Arkiv observation. A publish attempt must recheck current content availability and lifetime; it must not extend trust by accepting expired data.
+The descriptor was prepared at `2026-11-06T23:05:21.502Z` and published unchanged. Its original preview receipt still says `DESCRIPTOR_PREVIEW_ONLY`, accurately describing that earlier operation; the separate transaction and independent-read receipts establish the later observations. Availability and remaining lifetime must be checked again when reading. An expired entity must fail closed.
+
+The single create ran from frozen code `c4469171763853fc9d21058572a09665ef211846`. Its immediate verification failed because the adapter expected `Uint8Array` while Arkiv SDK 1.0.1 returns a hex string for a bytes field. The durable journal had already retained the entity and transaction identifiers. The adapter was corrected in `a48b750`, with a regression using the SDK's public `bytes()` helper; a read of the known transaction receipt and a fresh key-free entity/content read confirmed the existing publication. No second transaction or automatic replay was used. The original uncertain publication and incomplete first reconciliation receipts remain unchanged.
 
 ## Repository upload and read files
 
@@ -94,8 +102,8 @@ Expected successful result: the actual trusted entity resolves to the fixed Swar
 
 ## Demo moment and integration friction
 
-The final demo video has not been recorded/submitted for this integration; its timestamp is **pending**. It must show the actual Swarm frontend, real Arkiv entity/reference resolution and observed verified read, not this preview.
+The final demo video has not been recorded/submitted for this integration; its timestamp is **pending**. It must show the actual Swarm frontend, real Arkiv entity/reference resolution and observed verified read while the entity remains live. A later expired read must be presented as expired.
 
-Observed difficulties: no initial Swarm setup; provided-gateway postage avoids an immediate purchase but hides actual batch provenance; a first `bzz.link` verification fetch failed; new-site moderation/origin/worker behavior needed actual qualification; font MIME is nonstandard; an interrupted browser attempt had to remain incomplete while fresh source-bound attempts were captured. The successful candidate's real workflow and injected worker-failure checks are retained separately from simulated tool tests.
+Observed difficulties: no initial Swarm setup; provided-gateway postage avoids an immediate purchase but hides actual batch provenance; a first `bzz.link` verification fetch failed; new-site moderation/origin/worker behavior needed actual qualification; font MIME is nonstandard; an interrupted browser attempt had to remain incomplete while fresh source-bound attempts were captured; the real Arkiv SDK bytes response exposed an incorrect adapter fixture after creation, requiring read-only reconciliation. The successful candidate's real workflow and injected worker-failure checks are retained separately from simulated tool tests.
 
 Source-repository publication, license/AI-disclosure acceptance, final partner selection and video submission remain the owner's normal event decisions. A compiled public frontend does not complete those submission requirements. The prior Site/backend and separately owned UI revision were not changed by this task.

@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "phase": "SUBMISSION_KNOWN",
+  "publisher": "0x93d1a42655f2b0bcfa126e3d2a33e4ab60a74ca4",
+  "releaseId": "088cc81e88de8f5c1a723dcbc50ea776c6bf927458d93535b4a00cbb9698ede9",
+  "reservedAt": "2026-11-06T23:14:58.187Z",
+  "automaticRetryAllowed": false,
+  "publication": {
+    "entityKey": "0xfc1627a9bf52005565d74111403477cc08c89d584a954da02371ffe73018179d",
+    "transactionHash": "0x5f22569bf2158e00f1be1b3b7f3cdf6c0bbcf06b9023a2bdd0f39e37df36ba28",
+    "expiresAtBlock": "353315"
+  },
+  "purpose": "SAFE_PUBLIC_KNOWN_ID_JOURNAL_PROJECTION",
+  "evidence": "LOCAL_OPERATOR_STATE",
+  "privateStateModified": false,
+  "limits": "Selected public fields from the retained local journal; chain confirmation and trusted reads are separate receipts."
+}

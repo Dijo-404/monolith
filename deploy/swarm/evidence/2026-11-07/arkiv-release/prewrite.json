@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "purpose": "ARKIV_RELEASE_READ_ONLY_PREWRITE",
+  "evidence": "OBSERVED_LIVE",
+  "startedAt": "2026-11-06T23:11:02.254Z",
+  "publisher": "0x93D1A42655F2B0BCFa126e3D2a33e4ab60a74CA4",
+  "keyMaterialRetained": false,
+  "credentialPathsRetained": false,
+  "signingPerformed": false,
+  "transactionSubmitted": false,
+  "maximumFeeWei": "2000000000000000",
+  "rpcMethods": [
+    "eth_chainId",
+    "eth_blockNumber",
+    "eth_getBalance"
+  ],
+  "signerMatches": true,
+  "currentBlock": "310446",
+  "availableBalanceWei": "9881333859000000000",
+  "sufficientBalance": true,
+  "status": "SIGNER_AND_FIXED_FEE_BALANCE_VERIFIED",
+  "completedAt": "2026-11-06T23:11:03.754Z"
+}
