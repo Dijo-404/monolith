@@ -199,6 +199,8 @@ try {
     const report = JSON.parse(await readFile(await downloaded.path(), 'utf8'));
     assert.equal(report.mode, mode); assert.equal(report.failure, null);
     assert.equal(report.report.evidence, 'OBSERVED_LIVE');
+    assert.equal(await page.getByRole('heading', { name: 'Arkiv endpoint registry' }).locator('..')
+      .getByText('Recorded snapshot', { exact: true }).count(), 1);
     assert.equal(report.scenario.scenarioId, 'monolith.synthetic-balance-widget.v1');
     assert.equal(report.scenario.seed, 'monolith-zero-address-balance-v1');
     assert.match(await page.getByTestId('live-balance').textContent(), /^0x[0-9a-f]+(?:…[0-9a-f]+)?$/);
