@@ -17,5 +17,5 @@ export const LIVE_REGISTRY_POLICY: RegistryPolicy = {
     licenseUrl: `https://github.com/ethereum-lists/chains/blob/${LIVE_SOURCE_REVISION}/LICENSE`,
     urlPrefix: `https://github.com/ethereum-lists/chains/blob/${LIVE_SOURCE_REVISION}/_data/chains/eip155-`,
   },
-  maxManifestAgeMs: 30_000,
+  maxManifestAgeMs: 120_000,
 };

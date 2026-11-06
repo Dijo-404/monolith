@@ -1,0 +1,200 @@
+{
+  "schemaVersion": 1,
+  "auditedAt": "2026-11-06T19:16:33.225Z",
+  "scope": "Five immutable browser capture directories; no credential files or runtime contacts read.",
+  "result": "PASS",
+  "rawObservedIpFields": 0,
+  "credentialPatternFindings": 0,
+  "forbiddenPayloadFields": 0,
+  "pngPrivateMetadataChunks": 0,
+  "allowedInfrastructureAddress": "127.0.0.1 is the explicit local production preview origin; never an observed source address.",
+  "successfulSourceBindingsMatched": 244,
+  "successfulReportAndScreenshotHashesMatched": true,
+  "records": [
+    {
+      "run": "attempt1-20261106",
+      "status": "BLOCKED",
+      "passed": false,
+      "gitHead": "0a2fbea27e24806dcda413bc670cd2b14cb7aa3b",
+      "startedAt": "2026-11-06T17:41:56.817Z",
+      "generatedAt": "2026-11-06T17:42:46.380Z",
+      "failure": "UI_RUN_BLOCKED",
+      "artifactSha256": "8821f14760277c70aa3f322d5d57563ae52cd27b7180e5295b2d23100a26f1ce",
+      "jsonFiles": 2,
+      "files": [
+        {
+          "path": "blocked.png",
+          "bytes": 765216,
+          "sha256": "111a8b5b32dd36f1ed57eb1b76f24ef22253ade484cf058a6179ddc4d909dbc9"
+        },
+        {
+          "path": "browser-live.json",
+          "bytes": 35918,
+          "sha256": "8821f14760277c70aa3f322d5d57563ae52cd27b7180e5295b2d23100a26f1ce"
+        },
+        {
+          "path": "private-report.json",
+          "bytes": 6880,
+          "sha256": "8af8ff5ce88a313ac09b2d7cdcdbeb1960c4cd2c03106597655bbd3668b8316d"
+        },
+        {
+          "path": "private.png",
+          "bytes": 752885,
+          "sha256": "5c47c8da81e0b72e2609b059e1128ae71da0cfbd8cf11360cfb86cacd8c52b7f"
+        }
+      ],
+      "canonicalDirectory": "blocked/attempt-1"
+    },
+    {
+      "run": "attempt2-20261106",
+      "status": "BLOCKED",
+      "passed": false,
+      "gitHead": "c5396cee213f75c49f1649b0526334a701f0edb6",
+      "startedAt": "2026-11-06T17:56:56.571Z",
+      "generatedAt": "2026-11-06T17:57:12.504Z",
+      "failure": "UI_RUN_BLOCKED",
+      "artifactSha256": "e36c559d694fe82235d2078bf8a9fb53b23519da18c520e54ae7b8fc3ac5eb4b",
+      "jsonFiles": 1,
+      "files": [
+        {
+          "path": "blocked.png",
+          "bytes": 713793,
+          "sha256": "6f31d0ba9fedbdab312dae790c10c9e24348bc50c4514a1569e0cc668f44bea0"
+        },
+        {
+          "path": "browser-live.json",
+          "bytes": 31946,
+          "sha256": "e36c559d694fe82235d2078bf8a9fb53b23519da18c520e54ae7b8fc3ac5eb4b"
+        }
+      ],
+      "canonicalDirectory": "blocked/attempt-2"
+    },
+    {
+      "run": "attempt3-20261106",
+      "status": "BLOCKED",
+      "passed": false,
+      "gitHead": "c5396cee213f75c49f1649b0526334a701f0edb6",
+      "startedAt": "2026-11-06T18:12:29.657Z",
+      "generatedAt": "2026-11-06T18:12:48.741Z",
+      "failure": "UI_RUN_BLOCKED",
+      "artifactSha256": "102d6489e356ddb3ab1edf1838c54dc5b67146d3d63928272bfabb1ee5ec23d5",
+      "jsonFiles": 1,
+      "files": [
+        {
+          "path": "blocked.png",
+          "bytes": 713437,
+          "sha256": "4c0a7d3cf8d12cf964342f7863452658c6ab7d6dcf514976adc32968169cccea"
+        },
+        {
+          "path": "browser-live.json",
+          "bytes": 32670,
+          "sha256": "102d6489e356ddb3ab1edf1838c54dc5b67146d3d63928272bfabb1ee5ec23d5"
+        }
+      ],
+      "canonicalDirectory": "blocked/attempt-3"
+    },
+    {
+      "run": "attempt4-20261107",
+      "status": "BLOCKED",
+      "passed": false,
+      "gitHead": "7a64760c86b8aca050bc95277ff218469b5a152e",
+      "startedAt": "2026-11-06T18:49:11.419Z",
+      "generatedAt": "2026-11-06T18:50:26.596Z",
+      "failure": "UI_RUN_BLOCKED",
+      "artifactSha256": "8ec3e94beeef355cf90f254593d64d37f0a96024089adb4e79b2a7e0bc82488c",
+      "jsonFiles": 2,
+      "files": [
+        {
+          "path": "blocked.png",
+          "bytes": 763729,
+          "sha256": "c1a67a9da87d79a8d13819bec8ee30957b2bc52db051b1580d4264f1d08a6c7a"
+        },
+        {
+          "path": "browser-live.json",
+          "bytes": 35918,
+          "sha256": "8ec3e94beeef355cf90f254593d64d37f0a96024089adb4e79b2a7e0bc82488c"
+        },
+        {
+          "path": "private-report.json",
+          "bytes": 6902,
+          "sha256": "6c23910a89cfe93f6c945a4685d28013bb2adff915a485303dd24470c92dd9c5"
+        },
+        {
+          "path": "private.png",
+          "bytes": 753107,
+          "sha256": "c4c2b499a57224d371a05d15e30996667a78aa60966a2c74d2a166879e77ca63"
+        }
+      ],
+      "canonicalDirectory": "blocked/attempt-4"
+    },
+    {
+      "run": "attempt5-20261107",
+      "status": "OBSERVED_LIVE",
+      "passed": true,
+      "gitHead": "d5a1e0a38fe9f21d7237e09ce9bc9c05ed129132",
+      "startedAt": "2026-11-06T19:08:04.629Z",
+      "generatedAt": "2026-11-06T19:10:21.278Z",
+      "failure": null,
+      "artifactSha256": "deb812bc3cff570fa999eefcb8061555f1d2c45b5e60045313f0241f331a687b",
+      "jsonFiles": 5,
+      "files": [
+        {
+          "path": "browser-live.json",
+          "bytes": 45474,
+          "sha256": "deb812bc3cff570fa999eefcb8061555f1d2c45b5e60045313f0241f331a687b"
+        },
+        {
+          "path": "compare-report.json",
+          "bytes": 6441,
+          "sha256": "2844cbd9f458eed28e7a790a0bbc797dfc1869c5a436effd13c762752eabf409"
+        },
+        {
+          "path": "compare.png",
+          "bytes": 760378,
+          "sha256": "f168db958d8ca72e59153fd9e146c4d9105d69c2c16f6bdf6fa4bfcc03940805"
+        },
+        {
+          "path": "leak-report.json",
+          "bytes": 8658,
+          "sha256": "aa1303a47fb30fa411b80700948eaa63cab880acb860be39ac8f7d06427ab119"
+        },
+        {
+          "path": "leak.png",
+          "bytes": 784404,
+          "sha256": "ed8b8db1eb89e61e70d5c6683ef751502c876924cfaba4f26a58c2379b92e372"
+        },
+        {
+          "path": "private-report.json",
+          "bytes": 6904,
+          "sha256": "5fa5e78145b2911dc68e8e6e15c5c524ed9825d1c3ff5768847f55b62419140f"
+        },
+        {
+          "path": "private.png",
+          "bytes": 759652,
+          "sha256": "ad658be8f7e666dc0c7f9d85b781d0841158c84aab8c4b82f70ee8fe08e16b59"
+        },
+        {
+          "path": "repair-320.png",
+          "bytes": 386584,
+          "sha256": "1cd66013d2527bdcf5714880c442253511ae380f5e35cca024ab672555efff70"
+        },
+        {
+          "path": "repair-390.png",
+          "bytes": 388074,
+          "sha256": "a7e37937dddda3684c79db42228b5541c4de1dfa681029cb183027318142036e"
+        },
+        {
+          "path": "repair-report.json",
+          "bytes": 7936,
+          "sha256": "ead0976a33cfc6bab16c79557eb57c41ee8cc97999c2b8ac33cbdcd66eec2d5a"
+        },
+        {
+          "path": "repair.png",
+          "bytes": 772157,
+          "sha256": "7f58754bed85d5f98a235bb68b3c26b70e00d743231008d1769128d81c017f73"
+        }
+      ],
+      "canonicalDirectory": "attempt-5"
+    }
+  ]
+}
