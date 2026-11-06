@@ -30,6 +30,50 @@ export function box(hx: number, hy: number, hz: number): MeshData {
   return { positions: new Float32Array(positions), normals: new Float32Array(normals), indices: new Uint16Array(indices) };
 }
 
+/** Rounded bevels keep the broad slab faces readable under the stage's studio light. */
+export function bevelledBox(hx: number, hy: number, hz: number, bevel: number, steps = 3): MeshData {
+  const half: Vec3 = [hx, hy, hz];
+  const radius = Math.min(bevel, hx, hy, hz);
+  const core = half.map((h) => h - radius);
+  const source = box(hx, hy, hz);
+  const positions: number[] = [];
+  const normals: number[] = [];
+  const indices: number[] = [];
+  const fractions = (size: number) => {
+    const edge = radius / size;
+    return [0, ...Array.from({ length: steps }, (_, i) => edge * (i + 1) / steps),
+      ...Array.from({ length: steps }, (_, i) => 1 - edge * (steps - i) / steps), 1];
+  };
+  for (let face = 0; face < 6; face++) {
+    const offset = face * 12;
+    const a = [...source.positions.slice(offset, offset + 3)];
+    const u = a.map((value, axis) => (source.positions[offset + 3 + axis] ?? 0) - value);
+    const v = a.map((value, axis) => (source.positions[offset + 9 + axis] ?? 0) - value);
+    const us = fractions(Math.hypot(...u));
+    const vs = fractions(Math.hypot(...v));
+    const start = positions.length / 3;
+    for (const y of vs) {
+      for (const x of us) {
+        const point = a.map((value, axis) => value + (u[axis] ?? 0) * x + (v[axis] ?? 0) * y);
+        const closest = point.map((value, axis) => Math.max(-(core[axis] ?? 0), Math.min(core[axis] ?? 0, value)));
+        const direction = point.map((value, axis) => value - (closest[axis] ?? 0));
+        const length = Math.hypot(...direction) || 1;
+        const normal = direction.map((value) => value / length);
+        positions.push(...closest.map((value, axis) => value + (normal[axis] ?? 0) * radius));
+        normals.push(...normal);
+      }
+    }
+    for (let y = 0; y < vs.length - 1; y++) {
+      for (let x = 0; x < us.length - 1; x++) {
+        const a = start + y * us.length + x;
+        const b = a + us.length;
+        indices.push(a, a + 1, b + 1, a, b + 1, b);
+      }
+    }
+  }
+  return { positions: new Float32Array(positions), normals: new Float32Array(normals), indices: new Uint16Array(indices) };
+}
+
 export function sphere(radius: number, segments = 40, rings = 24): MeshData {
   const positions: number[] = [];
   const normals: number[] = [];

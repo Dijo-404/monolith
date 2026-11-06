@@ -1,4 +1,4 @@
-import { box, dustField, octahedron, ribbon, sphere, torus, type MeshData } from './geometry.js';
+import { bevelledBox, dustField, octahedron, ribbon, sphere, torus, type MeshData } from './geometry.js';
 import {
   clamp01,
   easeInOutCubic,
@@ -64,15 +64,15 @@ export interface StageInsets {
 export type AnchorPositions = Partial<Record<AnchorId, { x: number; y: number; visible: boolean }>>;
 
 const RGB = {
-  anon: [0.6, 0.7, 1.0] as Vec3,
-  anonDeep: [0.54, 0.42, 1.0] as Vec3,
-  leak: [1.0, 0.36, 0.28] as Vec3,
+  anon: [0.74, 0.75, 1.0] as Vec3,
+  anonDeep: [0.5, 0.41, 0.88] as Vec3,
+  leak: [1.0, 0.48, 0.4] as Vec3,
   public: [0.95, 0.85, 0.58] as Vec3,
   steel: [0.72, 0.76, 0.86] as Vec3,
   degraded: [0.8, 0.66, 1.0] as Vec3,
   payload: [1.0, 0.95, 0.88] as Vec3,
   grey: [0.75, 0.75, 0.8] as Vec3,
-  idleSeam: [0.34, 0.4, 0.78] as Vec3,
+  idleSeam: [0.64, 0.62, 0.94] as Vec3,
 };
 
 interface Program {
@@ -195,17 +195,17 @@ export class StageRenderer {
       dust: compile(gl, glsl.dustVert, glsl.dustFrag),
     };
     this.meshes = {
-      slab: this.uploadMesh(box(SLAB_HALF[0], SLAB_HALF[1], SLAB_HALF[2])),
+      slab: this.uploadMesh(bevelledBox(SLAB_HALF[0], SLAB_HALF[1], SLAB_HALF[2], 0.065)),
       orb: this.uploadMesh(sphere(0.38)),
       ring: this.uploadMesh(torus(0.62, 0.04)),
-      relay: this.uploadMesh(octahedron(0.24)),
-      widget: this.uploadMesh(box(0.3, 0.19, 0.04)),
+      relay: this.uploadMesh(octahedron(0.29)),
+      widget: this.uploadMesh(bevelledBox(0.3, 0.19, 0.04, 0.025)),
     };
     const lanes = {} as Record<LaneKey, RibbonBuffers>;
     for (const key of Object.keys(LANE_CURVES) as LaneKey[]) lanes[key] = this.uploadRibbon(LANE_CURVES[key]);
     this.lanes = lanes;
     this.floor = this.uploadFloor();
-    this.dust = this.uploadDust(320);
+    this.dust = this.uploadDust(96);
     this.points = this.createPointBuffer(256);
     this.empty = gl.createVertexArray();
     this.relayT = RELAYS.map((relay) => fractionNearest(LANE_CURVES.anon, relay));
@@ -678,7 +678,7 @@ export class StageRenderer {
     const band = flash > 0 && !this.slabFlash.dim ? -1.3 + sweep * 2.6 : restBand;
     this.drawMesh(this.meshes.slab, model(SLAB_CENTER, SLAB_YAW), {
       material: 0,
-      color: [0.009, 0.007, 0.017],
+      color: [0.47, 0.44, 0.65],
       mirror,
       seam: 0.1 + flash * (this.slabFlash.dim ? 0.15 : 0.9),
       seamColor,
@@ -697,9 +697,9 @@ export class StageRenderer {
     const clientPos: Vec3 = [CLIENT[0], CLIENT[1] + bob, CLIENT[2]];
     this.drawMesh(this.meshes.orb, model(clientPos), {
       material: 1,
-      color: [0.28, 0.3, 0.48],
+      color: [0.62, 0.63, 0.8],
       glow: orbGlow,
-      glowAmount: 0.95,
+      glowAmount: 0.28,
       mirror,
       time,
     });
@@ -719,7 +719,7 @@ export class StageRenderer {
         material: ringMaterial,
         color: ringColor,
         glow: ringColor,
-        glowAmount: 0.9 * (0.35 + 0.65 * s.private),
+        glowAmount: 0.4 * (0.35 + 0.65 * s.private),
         opacity: 1,
         mirror,
         time,
@@ -745,7 +745,7 @@ export class StageRenderer {
         const color: Vec3 = blocked ? [0.3, 0.32, 0.4] : RGB.anon;
         this.drawMesh(this.meshes.relay, model(relay, spin), {
           material: 1,
-          color: [0.12, 0.13, 0.2],
+          color: [0.42, 0.41, 0.57],
           glow: color,
           glowAmount: 0.08 + ready * 0.55 * (0.4 + 0.6 * s.private) + pulse * 1.2,
           mirror,
@@ -788,7 +788,7 @@ export class StageRenderer {
       case 'anon': {
         if (scene.passthrough) return null;
         const base =
-          state === 'READY' ? 0.8 : state === 'DEGRADED' ? 0.52 : state === 'BOOTSTRAPPING' ? 0.1 + (s.hops / 3) * 0.32 : 0.08;
+          state === 'READY' ? 0.9 : state === 'DEGRADED' ? 0.62 : state === 'BOOTSTRAPPING' ? 0.2 + (s.hops / 3) * 0.32 : 0.16;
         return {
           color: state === 'DEGRADED' ? RGB.degraded : RGB.anon,
           intensity: base * (0.35 + 0.65 * s.private),
@@ -804,7 +804,7 @@ export class StageRenderer {
       case 'direct':
         return {
           color: RGB.leak,
-          intensity: 0.22 + (1 - s.private) * 0.45,
+          intensity: 0.36 + (1 - s.private) * 0.4,
           dashed: s.private > 0.5,
           width: 11,
           flow: 2.2,
@@ -876,8 +876,8 @@ export class StageRenderer {
     const scene = this.scene;
     const s = this.smooth;
     const blocked = scene.workerState === 'BLOCKED';
-    bloom(CLIENT, 2.6, blocked ? RGB.steel : RGB.anon, 0.32);
-    bloom(CLIENT, 1.1, RGB.payload, 0.35);
+    bloom(CLIENT, 2.2, blocked ? RGB.steel : RGB.anon, 0.15);
+    bloom(CLIENT, 0.9, RGB.payload, 0.16);
     if (!scene.passthrough) {
       RELAYS.forEach((relay, i) => {
         const ready = clamp01(s.hops - i) * (blocked ? 0.2 : 1);

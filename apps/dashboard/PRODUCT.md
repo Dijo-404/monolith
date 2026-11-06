@@ -10,7 +10,7 @@ web
 
 ## Users
 
-- **ETHGlobal judges** watching the four-minute live demo, usually on a projector in a dim hall. They must understand the one comparison (direct read vs Anon-RPC read, and what the endpoint still sees) within about 15 seconds.
+- **ETHGlobal judges** watching the live demo, including on a projector in a lit room. They must understand the one comparison (direct read vs Anon-RPC read, and what the endpoint still sees) within about 15 seconds.
 - **Web3 checkout and wallet engineers** who run the lab locally to see which of their JSON-RPC reads are protected, catch direct-RPC regressions, and export evidence.
 - **Privacy and application-security reviewers** who need reproducible, honestly labelled artifacts rather than a privacy score.
 
@@ -24,7 +24,7 @@ Route-coverage contracts plus adversarial, replayable privacy tests: a privacy-r
 
 ## Operating Context
 
-- Guided four-step lab: direct comparison, private routing, a bypass and repair, and a worker outage. Route cards and an interactive stage lead into detailed checks, worker state, registry provenance and activity.
+- The default live lab has four steps: private read, explicit source comparison, intentional bypass, and repair/rerun. The separately labelled offline walkthrough includes a worker-outage scenario. Route cards and an interactive stage lead into detailed checks, worker state, registry provenance and activity.
 - Demo arc (docs/idea.md §15): direct read exposed → private read via worker with Arkiv-selected endpoint → reveal residual payload exposure and bootstrap note → inject leak, test fails → sandbox repair, rerun passes → optional Whitechain checkout → report.
 - Browser-only Anon-RPC harness; worker bootstrap is slow and observable as BOOTSTRAPPING / READY / DEGRADED / BLOCKED / CLOSED.
 
@@ -37,7 +37,7 @@ Route-coverage contracts plus adversarial, replayable privacy tests: a privacy-r
 - Coverage shows its denominator and scope and exists only for a measured run; zero eligible reads is "unavailable", never 100 percent.
 - Whitechain checkout is conditional (MN-018–MN-022) and stays disabled until its gates pass; the payment path is never depicted as anonymous.
 - The browser bundle receives only `MONOLITH_PUBLIC_OBSERVER_URL`. No third-party requests from the page (fonts are self-hosted).
-- MN-014 owns connecting the accepted observer/registry/transport composition to this shell. MN-006 is an offline fixture demonstration, including its routing and repair controls.
+- The accepted MN-014 composition connects the observer/registry/transport to the default live view. `?mode=simulated` opens the MN-006 offline fixture walkthrough. Switching modes is explicit. Live network mode names the selected mode; individual result badges establish the actual provenance of a run.
 
 ## Brand Commitments
 
@@ -47,8 +47,9 @@ Route-coverage contracts plus adversarial, replayable privacy tests: a privacy-r
 
 ## Evidence on Hand
 
-- This shell uses local `SIMULATED` scenarios and authored timing; no page control dispatches an RPC request. Coverage stays unmeasured and payment stays disabled.
-- Other accepted tasks have real worker and Arkiv evidence; those records are not inputs to this shell and do not upgrade its displayed states to live. The genuine paired-source gate is still separate.
+- The offline walkthrough uses local `SIMULATED` scenarios and authored timing; its controls dispatch no blockchain requests. Coverage stays unmeasured and payment stays disabled there.
+- The default live view receives actual controller results and independent observer receipts. Fresh configuration starts `UNTESTED`; missing required configuration blocks execution. A successful worker alone does not establish the paired source comparison.
+- MN-014's named deployed workflow was separately accepted on issue #14. The presentation follow-up #86 verifies browser usability and offline behavior; its screenshots and fixture journeys provide no new live anonymity, registry, payment or sponsor-eligibility evidence.
 
 ## Product Principles
 

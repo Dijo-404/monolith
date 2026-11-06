@@ -23,7 +23,7 @@ uniform float uSlabPower;
 uniform float uHorizon;
 void main() {
   vec2 uv = vUv;
-  vec3 col = mix(vec3(0.014, 0.009, 0.026), vec3(0.038, 0.027, 0.068), smoothstep(0.0, 1.0, uv.y));
+  vec3 col = mix(vec3(0.025, 0.031, 0.065), vec3(0.062, 0.058, 0.12), smoothstep(0.0, 1.0, uv.y));
   vec2 d = (uv - uFocus) * vec2(uRes.x / uRes.y, 1.0);
   float glow = exp(-dot(d * vec2(0.62, 1.9), d * vec2(0.62, 1.9)) * 2.6);
   col += uTint * 0.11 * glow;
@@ -64,7 +64,7 @@ in vec3 vNormal;
 in vec3 vLocal;
 out vec4 outColor;
 uniform vec3 uEye;
-uniform int uMaterial;      // 0 obsidian slab, 1 emissive body, 2 dashed emissive ring
+uniform int uMaterial;      // 0 satin endpoint slab, 1 emissive body, 2 dashed emissive ring
 uniform vec3 uColor;
 uniform vec3 uGlow;
 uniform float uGlowAmount;
@@ -79,7 +79,7 @@ uniform float uBand;
 
 vec3 sky(vec3 r) {
   float h = r.y;
-  vec3 c = mix(vec3(0.024, 0.017, 0.044), vec3(0.17, 0.14, 0.30), smoothstep(-0.25, 0.8, h));
+  vec3 c = mix(vec3(0.06, 0.064, 0.12), vec3(0.35, 0.31, 0.49), smoothstep(-0.25, 0.8, h));
   c += vec3(0.7, 0.6, 1.0) * 0.55 * exp(-pow((h - 0.04) * 7.0, 2.0));
   c += uSeamColor * uSeam * 0.45 * exp(-pow(h * 4.0, 2.0));
   float side = smoothstep(0.2, 1.0, r.x) * smoothstep(-0.1, 0.5, h);
@@ -91,14 +91,19 @@ void main() {
   vec3 N = normalize(vNormal);
   vec3 V = normalize(uEye - vWorld);
   float fres = pow(1.0 - max(dot(N, V), 0.0), 3.0);
+  // Scene-owned soft key from upper left, plus a weaker right-side fill.
+  // The same world-space directions illuminate every body; these are illustrative studio lights.
+  vec3 L = normalize(vec3(-0.6, 0.8, 0.9));
+  vec3 F = normalize(vec3(1.0, 0.25, 0.2));
+  float key = max(dot(N, L), 0.0);
+  float fill = max(dot(N, F), 0.0);
+  vec3 H = normalize(L + V);
   vec3 col;
   if (uMaterial == 0) {
     vec3 R = reflect(-V, N);
-    // Polished obsidian: dark where it faces you, sky-lit at grazing angles, light at its joints.
-    col = uColor + sky(R) * (0.10 + 0.85 * fres);
-    vec3 L = normalize(vec3(-0.45, 0.85, 0.55));
-    vec3 H = normalize(L + V);
-    col += pow(max(dot(N, H), 0.0), 70.0) * 0.5;
+    // Satin lavender metal: broad faces carry form and bevels catch the key light.
+    col = uColor * (0.28 + 0.66 * key + 0.24 * fill) + sky(R) * (0.20 + 0.42 * fres);
+    col += vec3(0.9, 0.91, 1.0) * pow(max(dot(N, H), 0.0), 48.0) * 0.48;
     vec3 q = abs(vLocal) / uHalf;
     float h = vLocal.y / uHalf.y;
     float sides = 1.0 - step(0.999, q.y);
@@ -112,7 +117,7 @@ void main() {
     float edge = max(max(e.x * e.y, e.y * e.z), e.x * e.z);
     vec3 g = smoothstep(0.86, 1.0, q);
     float halo = max(max(g.x * g.y, g.y * g.z), g.x * g.z);
-    col += uSeamColor * (edge * (0.5 + uSeam * 2.4) + halo * (0.06 + uSeam * 0.5));
+    col += uSeamColor * (edge * (0.16 + uSeam * 1.8) + halo * (0.04 + uSeam * 0.32));
     col += uSeamColor * fres * 0.22;
     float front = step(0.995, q.z) * step(0.0, vLocal.z);
     float scanBand = exp(-pow((vLocal.y / uHalf.y - (uScan * 2.0 - 1.0)) * 16.0, 2.0));
@@ -120,10 +125,10 @@ void main() {
     col += uSeamColor * inner * scanBand * uSeam * 1.1;
     col += uSeamColor * inner * uSeam * 0.06;
   } else {
-    vec3 L = normalize(vec3(-0.5, 0.8, 0.6));
-    float lambert = 0.38 + 0.62 * max(dot(N, L), 0.0);
-    float spec = pow(max(dot(N, normalize(L + V)), 0.0), 40.0);
-    col = uColor * (0.30 + 0.70 * fres) * lambert + uGlow * uGlowAmount * (0.35 + 0.4 * lambert + fres * 1.3) + spec * 0.45;
+    float lambert = 0.28 + 0.7 * key + 0.22 * fill;
+    float spec = pow(max(dot(N, H), 0.0), 40.0);
+    col = uColor * lambert + sky(reflect(-V, N)) * fres * 0.22
+      + uGlow * uGlowAmount * (0.32 + 0.3 * key + fres * 0.7) + spec * 0.3;
     if (uMaterial == 2) {
       float a = atan(vLocal.z, vLocal.x);
       float dash = smoothstep(0.35, 0.5, fract(a * 4.0 / 3.14159 + uTime * 0.35));
@@ -154,7 +159,7 @@ uniform vec3 uLightColor[4];
 uniform float uLightPower[4];
 void main() {
   float r = length((vWorld.xz - uCenter.xz) * vec2(0.62, 1.0));
-  vec3 col = vec3(0.025, 0.018, 0.044) * (1.0 - smoothstep(0.0, 13.0, r) * 0.7);
+  vec3 col = vec3(0.035, 0.038, 0.075) * (1.0 - smoothstep(0.0, 13.0, r) * 0.7);
   for (int i = 0; i < 4; i++) {
     vec2 d = vWorld.xz - uLightPos[i].xz;
     col += uLightColor[i] * uLightPower[i] * exp(-dot(d, d) * 0.9);
@@ -213,8 +218,8 @@ uniform float uPulse;
 uniform float uReveal;
 void main() {
   float s = abs(vSide);
-  float core = exp(-s * s * 15.0);
-  float glow = exp(-s * s * 3.2) * 0.32;
+  float core = exp(-s * s * 10.0);
+  float glow = exp(-s * s * 3.2) * 0.22;
   float flow = 0.7 + 0.3 * sin((vT * 22.0 - uTime * uFlow) * 1.5708);
   float dash = 1.0;
   if (uDashed > 0.5) dash = step(0.5, fract(vT * 46.0 - uTime * 0.25));

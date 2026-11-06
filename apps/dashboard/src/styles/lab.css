@@ -12,7 +12,7 @@ html {
   background: var(--bg);
   -webkit-text-size-adjust: 100%;
   scroll-behavior: smooth;
-  scroll-padding-top: 16px;
+  scroll-padding-top: calc(var(--lab-header-height, 94px) + 16px);
 }
 
 body {
@@ -102,11 +102,71 @@ code {
 /* ================================================================== header */
 
 .site-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
   gap: 16px;
-  padding: 20px var(--page-x) 12px;
+  padding: 20px var(--page-x);
+  background: var(--bg);
+  border-bottom: 1px solid var(--line);
+}
+
+main,
+.lab-intro {
+  max-width: 1520px;
+  margin-inline: auto;
+}
+
+.skip-link {
+  position: fixed;
+  z-index: 30;
+  top: 12px;
+  left: var(--page-x);
+  padding: 12px 20px;
+  border-radius: var(--radius-sm);
+  background: var(--ink);
+  color: var(--surface);
+  transform: translateY(-160%);
+}
+
+.skip-link:focus {
+  transform: none;
+}
+
+.lab-intro {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 420px);
+  align-items: center;
+  gap: 8px 48px;
+  padding: 34px var(--page-x) 30px;
+}
+
+.lab-intro__title {
+  font-family: var(--font-display);
+  font-size: 3rem;
+  font-weight: 600;
+  line-height: 1.08;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+
+.lab-intro__title span {
+  color: var(--protected);
+}
+
+.lab-intro__body {
+  max-width: 46ch;
+  color: var(--ink-2);
+  line-height: 1.55;
+}
+
+.lab-intro__mode {
+  grid-column: 1 / -1;
+  color: var(--ink-3);
+  font-size: 0.875rem;
 }
 
 .brand {
@@ -142,6 +202,10 @@ code {
 }
 
 .pill-nav a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
   padding: 9px 18px;
   border-radius: 999px;
   color: var(--ink-2);
@@ -156,9 +220,32 @@ code {
   color: var(--ink);
 }
 
-.pill-nav a[aria-current='true'] {
-  background: var(--bg);
+.pill-nav a[aria-current='location'] {
+  background: var(--protected-soft);
   color: var(--ink);
+}
+
+.header-mode {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 14px;
+}
+
+.mode-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 44px;
+  color: var(--protected);
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: none;
+  text-underline-offset: 4px;
+}
+
+.mode-switch:hover {
+  text-decoration: underline;
 }
 
 .sim-pill {
@@ -166,10 +253,9 @@ code {
   align-items: center;
   gap: 8px;
   justify-self: end;
-  padding: 8px 14px;
+  padding: 7px 12px;
   border-radius: 999px;
   background: var(--surface);
-  box-shadow: var(--shadow-float);
   color: var(--ink-2);
   font-size: 0.875rem;
   font-weight: 500;
@@ -207,10 +293,9 @@ code {
 
 .hero {
   display: grid;
-  grid-template-columns: minmax(340px, 0.78fr) minmax(0, 1.5fr);
+  grid-template-columns: minmax(340px, 0.83fr) minmax(0, 1.5fr);
   gap: clamp(24px, 3vw, 48px);
-  min-height: calc(100dvh - 76px);
-  padding: 8px var(--page-x) 32px;
+  padding: 0 var(--page-x) 44px;
 }
 
 /* ---- guide */
@@ -219,7 +304,7 @@ code {
   display: flex;
   flex-direction: column;
   min-width: 0;
-  padding-top: clamp(8px, 3vh, 40px);
+  padding-top: 10px;
 }
 
 .guide__progress {
@@ -255,10 +340,10 @@ code {
   margin-top: 10px;
   max-width: 13ch;
   font-family: var(--font-display);
-  font-size: clamp(2.25rem, 1.4rem + 2.2vw, 3.5rem);
+  font-size: 2.5rem;
   font-weight: 600;
-  line-height: 1.04;
-  letter-spacing: -0.035em;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
   text-wrap: balance;
 }
 
@@ -266,7 +351,7 @@ code {
   margin-top: 18px;
   max-width: 42ch;
   color: var(--ink-2);
-  font-size: 1.0625rem;
+  font-size: 1rem;
   line-height: 1.6;
 }
 
@@ -312,7 +397,7 @@ code {
 
 .steps {
   display: grid;
-  gap: 2px;
+  gap: 4px;
   margin-top: auto;
   padding-top: 28px;
 }
@@ -387,13 +472,16 @@ code {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  height: 52px;
+  min-height: 52px;
+  height: auto;
   padding: 0 26px;
   border: 0;
   border-radius: 999px;
   font-size: 1rem;
   font-weight: 600;
-  white-space: nowrap;
+  padding-block: 12px;
+  white-space: normal;
+  text-align: center;
   cursor: pointer;
   transition:
     background-color 0.2s,
@@ -442,7 +530,7 @@ code {
 }
 
 .btn--small {
-  height: 38px;
+  min-height: 44px;
   padding: 0 16px;
   font-size: 0.875rem;
 }
@@ -458,7 +546,7 @@ code {
 
 .stage-card {
   position: relative;
-  min-height: 380px;
+  min-height: 410px;
   border-radius: var(--radius-xl);
   background: var(--stage);
   box-shadow: var(--shadow-stage);
@@ -501,7 +589,7 @@ code {
   border-radius: 8px;
   background: none;
   color: var(--stage-ink);
-  font-size: 0.8125rem;
+  font-size: 0.875rem;
   font-weight: 500;
   white-space: nowrap;
   text-shadow: 0 1px 10px rgb(0 0 0 / 0.8);
@@ -536,7 +624,7 @@ code {
 
 .stage-label--minor {
   color: var(--stage-ink-2);
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
 }
 
 .stage-label--minor .stage-label__dot {
@@ -544,6 +632,7 @@ code {
 }
 
 .stage-label--action {
+  min-height: 44px;
   pointer-events: auto;
   cursor: pointer;
 }
@@ -563,7 +652,7 @@ code {
   align-items: center;
   gap: 8px;
   color: var(--stage-ink-2);
-  font-size: 0.8125rem;
+  font-size: 0.875rem;
   font-weight: 500;
   pointer-events: none;
 }
@@ -663,7 +752,7 @@ code {
 
 .stage-fallback__note {
   color: var(--stage-ink-2);
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
 }
 
 .fallback-lane {
@@ -747,7 +836,7 @@ code {
 .route-card {
   min-width: 0;
   padding: 18px 22px 20px;
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-md);
   background: var(--surface);
   box-shadow: var(--shadow-card);
 }
@@ -774,7 +863,7 @@ code {
 .route-card__value {
   margin-top: 2px;
   font-family: var(--font-display);
-  font-size: 1.625rem;
+  font-size: 1.5rem;
   font-weight: 600;
   line-height: 1.15;
   letter-spacing: -0.02em;
@@ -794,11 +883,9 @@ code {
 
 .route-card__meta {
   margin-top: 8px;
-  overflow: hidden;
   color: var(--ink-2);
   font-size: 0.875rem;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+  overflow-wrap: anywhere;
 }
 
 .route-card__meta .readable {
@@ -809,7 +896,7 @@ code {
 /* ================================================================== details */
 
 .details {
-  padding: 72px var(--page-x) 96px;
+  padding: 48px var(--page-x) 64px;
   border-top: 1px solid var(--line);
   background: var(--bg);
 }
@@ -825,7 +912,7 @@ code {
 
 .details__head h2 {
   font-family: var(--font-display);
-  font-size: clamp(1.75rem, 1.3rem + 1.4vw, 2.5rem);
+  font-size: 2rem;
   font-weight: 600;
   line-height: 1.1;
   letter-spacing: -0.03em;
@@ -846,7 +933,7 @@ code {
 .card {
   min-width: 0;
   padding: 24px;
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-md);
   background: var(--surface);
   box-shadow: var(--shadow-card);
 }
@@ -946,14 +1033,15 @@ code {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  height: 26px;
+  min-height: 26px;
   padding: 0 10px;
   border-radius: 999px;
   background: var(--surface-2);
   color: var(--ink-2);
   font-size: 0.75rem;
   font-weight: 600;
-  white-space: nowrap;
+  flex-shrink: 0;
+  white-space: normal;
 }
 
 .tag--sim {
@@ -1216,6 +1304,12 @@ code {
   transition: background-color 0.25s var(--ease-out);
 }
 
+.switch::before {
+  content: '';
+  position: absolute;
+  inset: -9px 0;
+}
+
 .switch__thumb {
   position: absolute;
   top: 3px;
@@ -1242,7 +1336,7 @@ code {
 
 .select {
   appearance: none;
-  height: 40px;
+  min-height: 44px;
   padding: 0 38px 0 14px;
   border: 0;
   border-radius: var(--radius-sm);
@@ -1260,6 +1354,25 @@ code {
 /* ================================================================== responsive */
 
 @media (max-width: 1180px) {
+  .lab-intro {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    padding-block: 26px;
+  }
+
+  .lab-intro__body {
+    max-width: 76ch;
+  }
+
+  .header-mode {
+    gap: 10px;
+  }
+
+  .sim-pill {
+    padding-inline: 10px;
+    font-size: 0.8125rem;
+  }
+
   .hero {
     grid-template-columns: minmax(300px, 0.9fr) minmax(0, 1.3fr);
   }
@@ -1272,10 +1385,25 @@ code {
 @media (max-width: 899px) {
   .site-header {
     grid-template-columns: 1fr auto;
+    gap: 8px;
+    padding-block: 12px;
   }
 
   .pill-nav {
-    display: none;
+    grid-column: 1 / -1;
+    grid-row: 2;
+    justify-self: center;
+    padding: 3px;
+    box-shadow: none;
+  }
+
+  .pill-nav a {
+    min-width: 120px;
+    padding-block: 7px;
+  }
+
+  .header-mode {
+    gap: 10px;
   }
 
   .brand__product {
@@ -1293,15 +1421,29 @@ code {
 
   .guide__title {
     max-width: 16ch;
+    font-size: 2.25rem;
   }
 
   .steps {
-    margin-top: 28px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin-top: 8px;
+    padding-top: 12px;
+  }
+
+  .step {
+    align-items: flex-start;
+    gap: 10px;
+    height: 100%;
+    font-size: 0.875rem;
+  }
+
+  .step__state {
+    display: none;
   }
 
   .stage-card {
     min-height: 0;
-    height: clamp(280px, 62vw, 460px);
+    height: clamp(300px, 62vw, 460px);
   }
 
   .stage-label--wide-only {
@@ -1316,9 +1458,28 @@ code {
     display: inline;
   }
 
-  .hud--tr,
+  .hud--tr {
+    top: 46px;
+    right: auto;
+    left: 20px;
+    font-size: 0.75rem;
+  }
+
+  .hud--tl,
+  .hud--bl {
+    left: 20px;
+    font-size: 0.8125rem;
+  }
+
+  .hud--bl {
+    max-width: calc(100% - 40px);
+  }
+
   .hud--br {
-    display: none;
+    top: 20px;
+    bottom: auto;
+    right: 20px;
+    font-size: 0.75rem;
   }
 
   .details {
@@ -1344,6 +1505,67 @@ code {
 }
 
 @media (max-width: 520px) {
+  .brand__name {
+    font-size: 1.125rem;
+  }
+
+  .header-mode {
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0;
+  }
+
+  .sim-pill {
+    padding: 3px 8px;
+    font-size: 0.75rem;
+  }
+
+  .mode-switch {
+    min-height: 44px;
+    font-size: 0.8125rem;
+  }
+
+  .lab-intro {
+    padding-top: 26px;
+    padding-bottom: 28px;
+  }
+
+  .lab-intro__title {
+    max-width: 15ch;
+    font-size: 2.5rem;
+    line-height: 1.08;
+  }
+
+  .lab-intro__body {
+    font-size: 0.9375rem;
+  }
+
+  .lab-intro__mode {
+    font-size: 0.8125rem;
+  }
+
+  .hero {
+    gap: 24px;
+    padding-bottom: 32px;
+  }
+
+  .guide__title {
+    font-size: 2rem;
+    max-width: 17ch;
+  }
+
+  .guide__body {
+    margin-top: 12px;
+  }
+
+  .guide__actions {
+    margin-top: 20px;
+  }
+
+  .guide__status {
+    min-height: 0;
+  }
+
   .card__head {
     flex-wrap: wrap;
   }
@@ -1359,6 +1581,30 @@ code {
   .hud--bl {
     gap: 12px;
     font-size: 0.75rem;
+  }
+
+  .hud--br {
+    display: none;
+  }
+
+  .card {
+    padding: 20px;
+  }
+
+  .facts > div {
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1fr);
+  }
+
+  .control {
+    flex-wrap: wrap;
+  }
+
+  .control__text {
+    flex: 1 1 140px;
+  }
+
+  .select {
+    max-width: 100%;
   }
 }
 

@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "issue": "https://github.com/Dijo-404/monolith/issues/86",
+  "reviewer": "impeccable_finish_reviewer",
+  "initialDisposition": "fix",
+  "initialFinding": "Mobile and tablet sticky headers covered step progress and count after anchor navigation.",
+  "finalDisposition": "ship",
+  "findingScore": "resolved",
+  "correction": "Measure the header border-box height using ResizeObserver and reserve that height plus 16 CSS pixels for anchor scrolling; clean up observers, listeners and the custom property.",
+  "evidence": {
+    "browserResult": "browser/current/browser-result.json",
+    "browserResultSha256": "dd97185b2c85ea667c82136e393d58697649336a532d42820a9e487a3e508bc7",
+    "navigationResult": "browser/navigation/navigation-result.json",
+    "navigationResultSha256": "0e86ce1fec8f6c326388627d4fe70244aa32f39f42e66f590967863a247f619b",
+    "postNavigationWidths": [320, 390, 768],
+    "browserChecksPassed": 26
+  },
+  "reviewScope": "The initial review inspected 13 valid presentation captures and source. The verdict pass scored the original anchor finding and corrected equivalent-reflow evidence using seven current captures plus three actual post-navigation viewport frames. No regression from the fix was identified.",
+  "limits": [
+    "Equivalent reflow is not an actual OS or browser zoom-setting test.",
+    "The reviewer inspected source and captures, and did not independently run the browser suite.",
+    "Fixtures remain SIMULATED; live idle/configuration-blocked views provide no new live anonymity, payment or sponsor acceptance."
+  ]
+}
