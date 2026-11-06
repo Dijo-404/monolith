@@ -2,7 +2,11 @@ import { createMonolithTransport } from '@monolith/transport';
 import { createBrowserDriver } from '@monolith/transport/browser';
 import type { EndpointCandidate, RpcTrace } from '@monolith/shared';
 
-const TARGET = 'https://ethereum-rpc.publicnode.com';
+const TARGET = (globalThis as typeof globalThis & { monolithLiveTarget?: string }).monolithLiveTarget
+  ?? 'https://ethereum-rpc.publicnode.com';
+if (!['https://ethereum-rpc.publicnode.com', 'https://ethereum.publicnode.com'].includes(TARGET)) {
+  throw new Error('Unsupported acceptance target.');
+}
 const clock = { now: () => new Date().toISOString() };
 const progress = { phase: 'IDLE' };
 const update = (phase: string) => {

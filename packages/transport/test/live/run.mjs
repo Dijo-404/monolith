@@ -13,11 +13,21 @@ const repoRequire = createRequire(join(repository, 'package.json'));
 const transportRequire = createRequire(join(repository, 'packages/transport/package.json'));
 const { createServer } = await import(repoRequire.resolve('vite'));
 const args = process.argv.slice(2);
-const offlineOnly = args.includes('--offline-only');
-const outputFlag = args.indexOf('--output');
-const outputPath = outputFlag >= 0 ? resolve(args[outputFlag + 1] ?? '') : undefined;
-if (args.some((arg, index) => arg !== '--offline-only' && arg !== '--output' && index !== outputFlag + 1)
-  || (outputFlag >= 0 && !args[outputFlag + 1])) throw new Error('Use --offline-only and/or --output <path>.');
+const approvedTargets = Object.freeze({
+  'ethereum-rpc': 'https://ethereum-rpc.publicnode.com',
+  'ethereum-main': 'https://ethereum.publicnode.com',
+});
+let offlineOnly = false;
+let outputPath;
+let targetKey = 'ethereum-rpc';
+for (let index = 0; index < args.length; index++) {
+  const option = args[index];
+  if (option === '--offline-only') offlineOnly = true;
+  else if (option === '--output' && args[index + 1]) outputPath = resolve(args[++index]);
+  else if (option === '--target' && Object.hasOwn(approvedTargets, args[index + 1] ?? '')) targetKey = args[++index];
+  else throw new Error('Use --offline-only, --output <path>, --target ethereum-rpc|ethereum-main.');
+}
+const target = approvedTargets[targetKey];
 
 let toolDirectory = process.env['MONOLITH_BROWSER_TOOLS'];
 if (!toolDirectory) {
@@ -57,9 +67,9 @@ const artifact = {
   transportSourceSha256: await sourceHashes(join(repository, 'packages/transport/src')),
   compiledTransportSha256: await sourceHashes(join(repository, 'packages/transport/dist'), '', '.js'),
   lockfileSha256: digest(await readFile(join(repository, 'pnpm-lock.yaml'))),
+  targetConfiguration: { key: targetKey, origin: target },
   cleanupControl: null, liveRead: null,
 };
-const target = 'https://ethereum-rpc.publicnode.com';
 let browser;
 let server;
 
@@ -71,6 +81,7 @@ function encodedResolvers(url) {
 
 async function cleanupControl() {
   const context = await browser.newContext();
+  await context.addInitScript((origin) => { globalThis.monolithLiveTarget = origin; }, target);
   const page = await context.newPage();
   const bundle = Buffer.from('/* SIMULATED disposal-only bundle. Never executed. */');
   const resolver = 'https://resolver.monolith.example/worker.js';
@@ -118,11 +129,45 @@ async function cleanupControl() {
 
 async function protectedRead() {
   const context = await browser.newContext();
+  await context.addInitScript((origin) => { globalThis.monolithLiveTarget = origin; }, target);
   const page = await context.newPage();
   let directRequests = 0;
+  let locallyHandledPreflights = 0;
+  const bootstrapSelectors = new Set();
   const replies = [];
   const pending = [];
-  await context.route(`${target}/**`, async (route) => { directRequests++; await route.abort('blockedbyclient'); });
+  await context.route(`${target}/**`, async (route) => {
+    const request = route.request();
+    // A bootstrap-origin target needs a capability-shaped exception, never a method-wide bypass.
+    if (target === 'https://ethereum.publicnode.com') {
+      if (request.method() === 'OPTIONS') {
+        locallyHandledPreflights++;
+        await route.fulfill({ status: 204, headers: { 'access-control-allow-origin': '*',
+          'access-control-allow-methods': 'POST', 'access-control-allow-headers': 'content-type' } });
+        return;
+      }
+      let body;
+      try { body = request.postDataJSON(); } catch { /* An invalid envelope is not a bootstrap capability. */ }
+      const tx = body?.params?.[0];
+      const selector = tx?.data;
+      const id = selector === '0x3898587d' ? 'monolith_bootstrap_hash'
+        : selector === '0x1c67ff29' ? 'monolith_bootstrap_resolvers' : undefined;
+      if (request.method() === 'POST' && new URL(request.url()).pathname === '/'
+        && !new URL(request.url()).search && request.headers()['content-type'] === 'application/json'
+        && body && Object.keys(body).sort().join(',') === 'id,jsonrpc,method,params'
+        && body.jsonrpc === '2.0' && id && body.id === id && body.method === 'eth_call'
+        && Array.isArray(body.params) && body.params.length === 2 && body.params[1] === 'latest'
+        && tx && Object.keys(tx).sort().join(',') === 'data,to'
+        && typeof tx.to === 'string' && tx.to.toLowerCase() === '0x3acd9742c68f6d993066ae25533e09b9e1f60ed0'
+        && !bootstrapSelectors.has(selector) && bootstrapSelectors.size < 2) {
+        bootstrapSelectors.add(selector);
+        await route.continue();
+        return;
+      }
+    }
+    directRequests++;
+    await route.abort('blockedbyclient');
+  });
   page.on('response', (response) => {
     let url;
     try { url = new URL(response.url()); } catch { return; }
@@ -156,7 +201,8 @@ async function protectedRead() {
     const matching = replies.filter((reply) => observed.worker?.workerHash === reply.keccak256);
     return { ...observed, directDetectionSelfCheck,
       independentHttpBoundary: { ordinaryTargetRequests: directRequests,
-        scope: 'Ordinary browser HTTP to configured target; excludes WebRTC/KPS and disclosed bootstrap.' },
+        exactSpecifierBootstrapExceptions: bootstrapSelectors.size, locallyHandledPreflights,
+        scope: 'Ordinary browser HTTP to configured target; excludes WebRTC/KPS and exact disclosed specifier bootstrap.' },
       resolverResponses: matching, contextDestroyed: true };
   } finally {
     clearInterval(heartbeat); clearTimeout(watchdog); await context.close();
@@ -185,6 +231,7 @@ try {
   const accepted = live?.evidence === 'OBSERVED_LIVE' && live.failure === null && live.result === '0x1'
     && live.endpointValidated && live.readState === 'READY' && live.worker?.bootstrapCalls === 2
     && live.directDetectionSelfCheck && live.independentHttpBoundary.ordinaryTargetRequests === 0
+    && (target !== 'https://ethereum.publicnode.com' || live.independentHttpBoundary.exactSpecifierBootstrapExceptions === 2)
     && live.shutdown.state === 'CLOSED' && live.shutdown.iframeCount === 0 && live.shutdown.metadataCleared
     && live.shutdown.postCloseReadRejected && live.contextDestroyed
     && protectedTrace.length >= 2 && bootstraps.length === 2 && bootstraps.every((trace) => trace.success)

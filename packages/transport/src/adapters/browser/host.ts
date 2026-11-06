@@ -44,7 +44,10 @@ export function installBrowserHost(): () => void {
     const traceSink: TraceSink = { emit: (trace) => port?.postMessage({ kind: 'trace', trace }) };
     const provider = createBootstrapProvider({ network: input.network, rpcUrl: input.bootstrapRpcUrl,
       signal: lifetime.signal, traceSink, clock });
-    const config = input.network === 'tor' && input.torGateways ? { gateways: input.torGateways } : undefined;
+    // mix-fetch 3.0.0 ignores RequestInit.redirect. Its zero redirect budget is
+    // the enforced guard: the initial request may run, no Location is followed.
+    const config = input.network === 'nym' ? { maxRedirects: 0 }
+      : input.network === 'tor' && input.torGateways ? { gateways: input.torGateways } : undefined;
     worker = new AnonRpcWorker({ address: provider.metadata().specifier,
       preExisting: { rpcProvider: provider }, ...(config ? { config } : {}) });
     const currentWorker = worker;
