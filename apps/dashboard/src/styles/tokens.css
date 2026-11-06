@@ -1,0 +1,77 @@
+/* Self-hosted faces: the lab makes no third-party requests. Licences sit beside the files. */
+@font-face {
+  font-family: 'Wix Madefor Display';
+  src: url('./fonts/wix-madefor-display-latin.woff2') format('woff2');
+  font-weight: 400 800;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Wix Madefor Text';
+  src: url('./fonts/wix-madefor-text-latin.woff2') format('woff2');
+  font-weight: 400 800;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Fragment Mono';
+  src: url('./fonts/fragment-mono-latin.woff2') format('woff2');
+  font-weight: 400;
+  font-display: swap;
+}
+
+:root {
+  color-scheme: light;
+
+  /* Ground and surfaces: soft lavender-grey page, white cards */
+  --bg: #f3f2f8;
+  --bg-deep: #e9e7f2;
+  --surface: #ffffff;
+  --surface-2: #f7f6fb;
+  --line: #e6e4ee;
+  --line-strong: #d5d2e0;
+
+  /* Ink */
+  --ink: #17141f;
+  --ink-2: #4b4759;
+  --ink-3: #6c687d;
+
+  /* One accent: the protected route */
+  --accent: #b9c3ff;
+  --accent-hover: #a9b5ff;
+  --accent-press: #9aa8fb;
+  --accent-ink: #12173f;
+  --protected: #3f53d0;
+  --protected-soft: #eceffe;
+
+  /* Meaning colours, used only for their meaning */
+  --exposed: #c9372f;
+  --exposed-soft: #fdeceb;
+  --good: #17784d;
+  --good-soft: #e2f3ea;
+  --sim: #8f5c09;
+  --sim-dot: #e0a33b;
+
+  /* The stage card */
+  --stage: #0d0b16;
+  --stage-ink: #ece9f6;
+  --stage-ink-2: rgb(236 233 246 / 0.64);
+  --stage-anon: #a3b6ff;
+  --stage-direct: #ff7a6b;
+
+  --font-display: 'Wix Madefor Display', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-text: 'Wix Madefor Text', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'Fragment Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+
+  --radius-xl: 28px;
+  --radius-lg: 20px;
+  --radius-md: 14px;
+  --radius-sm: 10px;
+
+  --shadow-card: 0 1px 2px rgb(23 20 31 / 0.04), 0 14px 32px -18px rgb(23 20 31 / 0.16);
+  --shadow-stage: 0 36px 70px -36px rgb(23 20 31 / 0.55);
+  --shadow-float: 0 1px 2px rgb(23 20 31 / 0.05), 0 10px 28px -14px rgb(23 20 31 / 0.18);
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --page-x: clamp(16px, 3vw, 40px);
+}
