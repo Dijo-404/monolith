@@ -138,7 +138,15 @@
       "apps/observer/src/adapters/http/observer.ts",
       "apps/observer/src/adapters/upstream/**",
       "apps/observer/src/composition/server.ts",
-      "apps/observer/test/observer/**"
+      "apps/observer/test/observer/**",
+      "apps/observer/src/adapters/http/**",
+      "apps/observer/src/composition/env.ts",
+      "apps/observer/src/composition/start.ts",
+      "apps/observer/test/env.test.ts",
+      "apps/observer/test/server.test.ts",
+      "docs/observer.md",
+      ".env.example",
+      "docs/tasks.json"
     ],
     "scope": [
       "Expose the observer JSON-RPC endpoint and separate short-lived diagnostic lookup defined by the shared contracts.",
