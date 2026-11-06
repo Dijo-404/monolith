@@ -1,0 +1,797 @@
+[
+  {
+    "id": "MN-001",
+    "title": "Bootstrap the TypeScript workspace and baseline checks",
+    "lane": "D",
+    "phase": "foundation",
+    "priority": "P0",
+    "estimate": "1–2 hours",
+    "branch": "feat/mn-001-workspace",
+    "depends_on": [],
+    "paths": [
+      "package.json",
+      "pnpm-workspace.yaml",
+      "pnpm-lock.yaml",
+      "tsconfig.base.json",
+      ".github/workflows/ci.yml",
+      ".env.example",
+      "LICENSE",
+      "apps/*/package.json",
+      "packages/*/package.json"
+    ],
+    "scope": [
+      "Create the React/Vite dashboard, Fastify observer and shared TypeScript package manifests matching the architecture; keep the optional relayer and Solidity toolchain disabled.",
+      "Pin runtime/package-manager versions, add environment validation and one workspace command per required check.",
+      "Select an open-source project license with the project owner and retain upstream notices separately; the data source MIT license does not license our new code automatically."
+    ],
+    "acceptance": [
+      "A clean clone can install from the committed lockfile and run documented lint, typecheck, build and available test commands.",
+      "CI runs baseline checks on pull requests without production/testnet signing keys.",
+      "Only the documented public configuration is exposed to the browser; no secrets are committed."
+    ],
+    "evidence": [
+      "Clean-install and CI output",
+      "Workspace setup instructions and environment-variable classification"
+    ],
+    "gate": "Dependencies merged to main; task unclaimed.",
+    "conditional": false
+  },
+  {
+    "id": "MN-002",
+    "title": "Freeze versioned shared contracts and integration fixtures",
+    "lane": "A",
+    "phase": "foundation",
+    "priority": "P0",
+    "estimate": "1–2 hours",
+    "branch": "feat/mn-002-shared-contracts",
+    "depends_on": [
+      "MN-001"
+    ],
+    "paths": [
+      "packages/shared/src/**",
+      "tests/fixtures/contracts/**",
+      "docs/contracts.md"
+    ],
+    "scope": [
+      "Implement the initial DTOs, validation schemas and error codes from docs/contracts.md using the Monolith naming.",
+      "Freeze read transport, trace, registry snapshot, observer diagnostics and evidence interfaces; mark the payment contract provisional until MN-018.",
+      "Provide synthetic success/error fixtures for the other lanes."
+    ],
+    "acceptance": [
+      "All lanes can import the shared public package without importing browser/server SDKs.",
+      "Fixtures cover malformed RPC envelopes, version mismatch, expired registry data and unavailable worker states.",
+      "The reviewed contracts document names the owning lane and the rule for breaking changes."
+    ],
+    "evidence": [
+      "Reviewed public types and fixture examples",
+      "Contract validation output"
+    ],
+    "gate": "Dependencies merged to main; task unclaimed.",
+    "conditional": false
+  },
+  {
+    "id": "MN-003",
+    "title": "Prove a real browser Anon-RPC worker can read a chain",
+    "lane": "A",
+    "phase": "preflight",
+    "priority": "P0",
+    "estimate": "45–90 minutes",
+    "branch": "feat/mn-003-anon-preflight",
+    "depends_on": [
+      "MN-002"
+    ],
+    "paths": [
+      "apps/dashboard/src/spikes/anon/**",
+      "docs/preflight/anon.md"
+    ],
+    "scope": [
+      "Use the official browser harness with a real Tor-JS or Nym worker in the intended browser.",
+      "Record the installed version, specifier, integrity metadata, gateway and separately disclosed bootstrap request.",
+      "Make an actual allowed chain read and document worker shutdown and failure behavior.",
+      "Run the isolated discovery experiment at time zero while foundation work proceeds; its temporary environment must not edit the shared workspace manifests or lockfile."
+    ],
+    "acceptance": [
+      "A real protected read returns a chain result; passthrough or mocked success cannot pass this task.",
+      "Runtime constraints such as CORS, gateway and iframe policy are recorded with reproduction steps.",
+      "If neither anonymizing worker works within the timebox, mark blocked and pause ancillary sponsor work rather than invent evidence."
+    ],
+    "evidence": [
+      "Redacted actual worker metadata and read result",
+      "Browser/version and exact reproduction command"
+    ],
+    "gate": "Formal integration/merge requires MN-002 merged. A bounded isolated feasibility experiment may start immediately from docs/monolith-team-plan in the listed spike paths; claim experiment ownership in the issue, avoid shared manifests/lockfile edits, and record the result. Rebase to merged dependencies before final task acceptance.",
+    "conditional": false
+  },
+  {
+    "id": "MN-004",
+    "title": "Build the controlled read-only observer API",
+    "lane": "C",
+    "phase": "core",
+    "priority": "P0",
+    "estimate": "2–3 hours",
+    "branch": "feat/mn-004-observer-api",
+    "depends_on": [
+      "MN-002"
+    ],
+    "paths": [
+      "apps/observer/src/domain/**",
+      "apps/observer/src/application/observe-read.ts",
+      "apps/observer/src/application/get-diagnostics.ts",
+      "apps/observer/src/adapters/http/observer.ts",
+      "apps/observer/src/adapters/upstream/**",
+      "apps/observer/src/composition/server.ts",
+      "apps/observer/test/observer/**"
+    ],
+    "scope": [
+      "Expose the observer JSON-RPC endpoint and separate short-lived diagnostic lookup defined by the shared contracts.",
+      "Use a fixed configured upstream identifier, a minimal read-method allowlist and safe known-contract eth_call selectors.",
+      "Bound request sizes/timeouts, reject arbitrary destinations and write methods, and classify peer sources only through trusted proxy configuration."
+    ],
+    "acceptance": [
+      "The endpoint preserves a valid JSON-RPC response envelope and matching request ID.",
+      "Write calls, arbitrary upstream URLs, private-network destinations and unsafe redirects are rejected before forwarding.",
+      "Raw IPs, RPC payloads and forwarding headers are absent from persisted/public logs; spoofed client headers cannot assert anonymized egress.",
+      "Diagnostic expiry, CORS policy and trusted reverse-proxy behavior are exercised in focused service checks."
+    ],
+    "evidence": [
+      "Allowed-read and rejected-proxy test output",
+      "Documented upstream, retention and proxy configuration"
+    ],
+    "gate": "Dependencies merged to main; task unclaimed.",
+    "conditional": false
+  },
+  {
+    "id": "MN-005",
+    "title": "Prove an Arkiv write and independent trusted query",
+    "lane": "B",
+    "phase": "preflight",
+    "priority": "P0",
+    "estimate": "45–90 minutes",
+    "branch": "feat/mn-005-arkiv-preflight",
+    "depends_on": [
+      "MN-002"
+    ],
+    "paths": [
+      "packages/registry/src/spikes/**",
+      "docs/preflight/arkiv.md"
+    ],
+    "scope": [
+      "Confirm the current Arkiv testnet and SDK configuration against official documentation.",
+      "Write a genuine public sample entity with explicit expiry from a dedicated publisher wallet.",
+      "Query it independently with creator/owner filtering; use public synthetic metadata only.",
+      "Run the isolated discovery experiment at time zero while foundation work proceeds; its temporary environment must not edit the shared workspace manifests or lockfile."
+    ],
+    "acceptance": [
+      "An actual transaction hash, entity key, publisher address, expiry and query command are recorded.",
+      "A query under the expected publisher finds the entity; a similarly tagged foreign-publisher entity is not trusted.",
+      "An SDK-only installation or local fixture cannot be reported as live integration."
+    ],
+    "evidence": [
+      "Actual Arkiv transaction/entity references",
+      "Independent query output and SDK version"
+    ],
+    "gate": "Formal integration/merge requires MN-002 merged. A bounded isolated feasibility experiment may start immediately from docs/monolith-team-plan in the listed spike paths; claim experiment ownership in the issue, avoid shared manifests/lockfile edits, and record the result. Rebase to merged dependencies before final task acceptance.",
+    "conditional": false
+  },
+  {
+    "id": "MN-006",
+    "title": "Create the dashboard shell with honest source states",
+    "lane": "D",
+    "phase": "core",
+    "priority": "P1",
+    "estimate": "1–2 hours",
+    "branch": "feat/mn-006-dashboard-shell",
+    "depends_on": [
+      "MN-002"
+    ],
+    "paths": [
+      "apps/dashboard/src/app/**",
+      "apps/dashboard/src/components/**",
+      "apps/dashboard/src/styles/**"
+    ],
+    "scope": [
+      "Build a single-screen privacy lab with route lanes, worker status, registry provenance and a run timeline.",
+      "Use the shared synthetic fixtures while adapters are in flight.",
+      "Keep optional payment controls disabled and label fixture data SIMULATED."
+    ],
+    "acceptance": [
+      "BOOTSTRAPPING, READY, BLOCKED and unavailable states are visible and usable.",
+      "Private mode starts enabled; the direct negative control requires explicit separate action.",
+      "Payload visibility and non-anonymous bootstrap are described; no fabricated coverage or successful-payment indicators appear."
+    ],
+    "evidence": [
+      "Screenshots or a local walkthrough with fixture badge",
+      "Component build/typecheck output"
+    ],
+    "gate": "Dependencies merged to main; task unclaimed.",
+    "conditional": false
+  },
+  {
+    "id": "MN-007",
+    "title": "Implement fail-closed MonolithTransport with trace events",
+    "lane": "A",
+    "phase": "core",
+    "priority": "P0",
+    "estimate": "2–3 hours",
+    "branch": "feat/mn-007-private-transport",
+    "depends_on": [
+      "MN-003"
+    ],
+    "paths": [
+      "packages/transport/src/**",
+      "packages/transport/test/**"
+    ],
+    "scope": [
+      "Wrap the official worker behind the frozen browser transport port with explicit initialize/read/close lifecycle.",
+      "Enforce allowed chains/methods, required privacy, bounded retries and a separate opt-in direct comparison adapter.",
+      "Emit redacted traces for reads, failures, probes and the separately classified bootstrap."
+    ],
+    "acceptance": [
+      "Timeouts, 429s, worker absence and retries never produce an ordinary direct-RPC fallback.",
+      "Passthrough is NOT_ANONYMIZED and excluded from protected coverage.",
+      "Response IDs, malformed envelopes, upstream errors and disposal are handled explicitly.",
+      "Endpoint chain probes use the initialized privacy transport; browser bootstrap is the disclosed exception."
+    ],
+    "evidence": [
+      "Focused policy and failure-case test output",
+      "One actual protected read using the package adapter"
+    ],
+    "gate": "Dependencies merged to main; task unclaimed.",
+    "conditional": false
+  },
+  {
+    "id": "MN-008",
+    "title": "Implement the licensed, rerunnable registry importer",
+    "lane": "B",
+    "phase": "core",
+    "priority": "P0",
+    "estimate": "2–3 hours",
+    "branch": "feat/mn-008-registry-importer",
+    "depends_on": [
+      "MN-005"
+    ],
+    "paths": [
+      "packages/registry/src/application/import-registry.ts",
+      "packages/registry/src/domain/source-policy.ts",
+      "packages/registry/src/adapters/arkiv/schema.ts",
+      "packages/registry/src/adapters/arkiv/writer.ts",
+      "packages/registry/src/adapters/source/**",
+      "packages/registry/src/ports/source-snapshot.ts",
+      "packages/registry/src/ports/entity-writer.ts",
+      "scripts/import-evm-registry.ts",
+      "packages/registry/test/importer/**"
+    ],
+    "scope": [
+      "Import an immutable ethereum-lists/chains snapshot with its license notices, source SHA and manifest hash.",
+      "Filter unsafe, credential-bearing, non-HTTPS and placeholder URLs; record rejected reasons.",
+      "Write expiring Monolith registry entities in bounded batches with resumable/repeat-run behavior and real manifests."
+    ],
+    "acceptance": [
+      "A second run handles already imported records predictably without pretending a new snapshot was fetched.",
+      "Record actual eligible/imported/rejected counts, targeting a useful eligible set such as 100 networks where available; report shortfalls honestly.",
+      "A selected imported record can be independently fetched from Arkiv with source and publisher provenance.",
+      "Whitechain documentation is not silently relabeled as MIT source data."
+    ],
+    "evidence": [
+      "Import manifest with actual counts and immutable source SHA",
+      "Arkiv transaction/entity references and retained source license"
+    ],
+    "gate": "Dependencies merged to main; task unclaimed.",
+    "conditional": false
+  },
+  {
+    "id": "MN-009",
+    "title": "Record paired direct and anonymized observer proof",
+    "lane": "C",
+    "phase": "integration",
+    "priority": "P0",
+    "estimate": "1–2 hours",
+    "branch": "feat/mn-009-paired-observer-proof",
+    "depends_on": [
+      "MN-004",
+      "MN-007"
+    ],
+    "paths": [
+      "tests/privacy/live-observer/**",
+      "scripts/compare-rpc-routes.ts",
+      "docs/preflight/observer.md"
+    ],
+    "scope": [
+      "Run the same synthetic read against the controlled observer using explicit direct comparison and the real anonymizing worker.",
+      "Pair verified worker identity/integrity metadata with independently observed source diagnostics.",
+      "Show that the destination still sees the method and whether an address is present."
+    ],
+    "acceptance": [
+      "Both reads return genuine chain results and the worker path shows supported distinct observed egress evidence.",
+      "If the source cannot be established through the deployment proxy, the result is inconclusive rather than a successful anonymity claim.",
+      "Source class is not accepted from a client route label or untrusted forwarded header.",
+      "Public artifacts contain no raw IP or inspected private wallet address."
+    ],
+    "evidence": [
+      "Actual paired redacted comparison and worker references",
+      "Observer deployment/proxy description"
+    ],
+    "gate": "Dependencies merged to main; task unclaimed.",
+    "conditional": false
+  },
+  {
+    "id": "MN-010",
+    "title": "Serve trusted Arkiv snapshots with freshness and endpoint policy",
+    "lane": "B",
+    "phase": "core",
+    "priority": "P0",
+    "estimate": "2–3 hours",
+    "branch": "feat/mn-010-registry-reader",
+    "depends_on": [
+      "MN-008"
+    ],
+    "paths": [
+      "packages/registry/src/application/query-registry.ts",
+      "packages/registry/src/domain/publisher-policy.ts",
+      "packages/registry/src/domain/freshness.ts",
+      "packages/registry/src/domain/endpoint-policy.ts",
+      "packages/registry/src/adapters/arkiv/reader.ts",
+      "packages/registry/src/adapters/cache/**",
+      "packages/registry/src/ports/entity-reader.ts",
+      "apps/observer/src/adapters/http/registry.ts",
+      "apps/observer/src/composition/registry.ts",
+      "apps/observer/test/registry/**",
+      "packages/registry/test/reader/**"
+    ],
+    "scope": [
+      "Query public network metadata by trusted creator/owner and publish a sanitized shared snapshot API without wallet/session parameters.",
+      "Validate provenance, expiry, allowed HTTPS origins and DNS/IP policy before any server-side probe.",
+      "Keep MVP selection blocked on Arkiv outage. If a cache fallback is added, accept only a previously verified signed snapshot with pinned verification key, maximum age and explicit source/age display."
+    ],
+    "acceptance": [
+      "Forged matching-schema records, expired entries, credentials, private addresses, DNS rebinding and unsafe redirect targets are rejected.",
+      "Arkiv outage blocks registry-dependent selection by default; any optional verified cache never appears as live Arkiv data.",
+      "If a cache fallback is implemented, its validation rejects modified payloads, wrong signers and excessive age; otherwise no cache silently permits routing.",
+      "The published snapshot is identical for clients requesting the same public chain data, without wallet-specific queries."
+    ],
+    "evidence": [
+      "Adversarial registry/cache test output",
+      "Actual Arkiv-backed API response with provenance"
+    ],
+    "gate": "Dependencies merged to main; task unclaimed.",
+    "conditional": false
+  },
+  {
+    "id": "MN-011",
+    "title": "Compute privacy reports from measured trace inputs",
+    "lane": "C",
+    "phase": "core",
+    "priority": "P0",
+    "estimate": "1–2 hours",
+    "branch": "feat/mn-011-privacy-analyzer",
+    "depends_on": [
+      "MN-002",
+      "MN-004"
+    ],
+    "paths": [
+      "packages/privacy-analyzer/src/**",
+      "packages/privacy-analyzer/test/**",
+      "tests/fixtures/privacy/**"
+    ],
+    "scope": [
+      "Calculate protected/eligible counts, bypass findings, completion rate and comparable latency summaries from actual run inputs.",
+      "Keep bootstrap, passthrough, blocked reads and simulated runs explicit in the model.",
+      "Redact and version the report before export."
+    ],
+    "acceptance": [
+      "Protected coverage uses a reproducible denominator and does not count blocked, passthrough or direct comparison as protected.",
+      "A zero eligible-read run is unavailable, not a made-up 100 percent success.",
+      "Fixtures verify leak callsite reporting, missing/duplicate traces and raw-data redaction.",
+      "The report states the instrumented application and known egress scope."
+    ],
+    "evidence": [
+      "Report fixture and meaningful analyzer test output",
+      "Exported synthetic report clearly marked simulated"
+    ],
+    "gate": "Dependencies merged to main; task unclaimed.",
+    "conditional": false
+  },
+  {
+    "id": "MN-012",
+    "title": "Catch direct-RPC bypasses in browser tests and CI",
+    "lane": "D",
+    "phase": "core",
+    "priority": "P0",
+    "estimate": "2–3 hours",
+    "branch": "feat/mn-012-privacy-regression-ci",
+    "depends_on": [
+      "MN-006",
+      "MN-007",
+      "MN-011"
+    ],
+    "paths": [
+      "tests/e2e/privacy/**",
+      "tests/privacy/egress/**",
+      "tests/fixtures/leak-widget/**",
+      "scripts/check-rpc-egress.ts",
+      ".github/workflows/privacy.yml"
+    ],
+    "scope": [
+      "Instrument known RPC-origin browser requests independently of transport traces using Playwright.",
+      "Add a repository rule against unreviewed raw fetch or direct viem HTTP calls for configured production RPC origins.",
+      "Create explicit synthetic leak/no-leak fixtures and tightly scoped bootstrap/direct-control exemptions."
+    ],
+    "acceptance": [
+      "Injecting a widget bypass fails with the actual method, callsite and seed; the correctly routed fixture passes.",
+      "Worker outage and retry scenarios show no unexpected direct network request.",
+      "Blocking all reads fails functional acceptance, so a privacy pass cannot hide a broken app.",
+      "Mocked routing tests are labeled software regressions and do not count as live anonymity proof."
+    ],
+    "evidence": [
+      "Captured failing and passing test outputs for the same fixture",
+      "Documented interception scope and explicit exemptions"
+    ],
+    "gate": "Dependencies merged to main; task unclaimed.",
+    "conditional": false
+  },
+  {
+    "id": "MN-013",
+    "title": "Connect trusted registry selection to protected chain probes",
+    "lane": "A",
+    "phase": "integration",
+    "priority": "P0",
+    "estimate": "1–2 hours",
+    "branch": "feat/mn-013-registry-transport-wiring",
+    "depends_on": [
+      "MN-007",
+      "MN-010"
+    ],
+    "paths": [
+      "apps/dashboard/src/composition/transport.ts",
+      "apps/dashboard/src/composition/registry.ts",
+      "tests/e2e/registry-routing/**"
+    ],
+    "scope": [
+      "Wire shared public registry snapshots into MonolithTransport at the dashboard composition boundary.",
+      "Initialize the worker before an endpoint eth_chainId probe and reject mismatched candidates.",
+      "Use a bounded bootstrap endpoint policy to avoid recursively needing a fully validated endpoint before the validating probe."
+    ],
+    "acceptance": [
+      "A real Arkiv-backed candidate affects route selection; it is not merely a displayed log record.",
+      "Wrong chain, forged publisher and expired snapshot scenarios fail before ordinary application reads.",
+      "The chain probe obeys required privacy and no direct probe is hidden as configuration traffic.",
+      "A previously verified cache is visibly identified and cannot silently bypass trust checks."
+    ],
+    "evidence": [
+      "Actual registry-driven read and provenance references",
+      "Wrong-chain/expired/forged route test output"
+    ],
+    "gate": "Dependencies merged to main; task unclaimed.",
+    "conditional": false
+  },
+  {
+    "id": "MN-014",
+    "title": "Wire real worker, observer and registry state into the dashboard",
+    "lane": "D",
+    "phase": "integration",
+    "priority": "P1",
+    "estimate": "2–3 hours",
+    "branch": "feat/mn-014-live-lab-ui",
+    "depends_on": [
+      "MN-006",
+      "MN-009",
+      "MN-011",
+      "MN-013"
+    ],
+    "paths": [
+      "apps/dashboard/src/features/lab/**",
+      "apps/dashboard/src/features/registry/**",
+      "apps/dashboard/src/composition/lab.ts",
+      "tests/e2e/lab-ui/**"
+    ],
+    "scope": [
+      "Replace the fixture adapters with reviewed transport, observer, registry and analyzer outputs.",
+      "Show default private reads, explicit direct comparison, remaining payload exposure, bootstrap metadata and registry freshness.",
+      "Display observed, simulated, untested and blocked states from actual result provenance."
+    ],
+    "acceptance": [
+      "The selected endpoint, source SHA and Arkiv entity references match the read actually issued.",
+      "Worker/network failure leaves the privacy read blocked with an actionable state.",
+      "Displayed coverage and latency come from the current run with their denominator and scope.",
+      "The ordinary lab runs without any optional Whitechain service or key."
+    ],
+    "evidence": [
+      "Live dashboard walkthrough and matching report",
+      "Browser integration check output"
+    ],
+    "gate": "Dependencies merged to main; task unclaimed.",
+    "conditional": false
+  },
+  {
+    "id": "MN-015",
+    "title": "Publish independent registry consumer and Arkiv evidence docs",
+    "lane": "B",
+    "phase": "integration",
+    "priority": "P1",
+    "estimate": "1–2 hours",
+    "branch": "feat/mn-015-registry-consumer-docs",
+    "depends_on": [
+      "MN-010"
+    ],
+    "paths": [
+      "scripts/registry-query-example.ts",
+      "arkiv/schema.md",
+      "arkiv/friction.md",
+      "arkiv/reach.md",
+      "arkiv/why-arkiv.md",
+      "arkiv/data-quality.md",
+      "docs/registry-setup.md"
+    ],
+    "scope": [
+      "Create a read-only CLI consumer that directly queries the Arkiv dataset without the Monolith backend.",
+      "Document schema, publisher, expiry, source licensing, import/query commands and real quality counts.",
+      "Record actual SDK friction and usage/provenance rather than invented adoption."
+    ],
+    "acceptance": [
+      "A teammate can reproduce the public query using the documented publisher and network configuration.",
+      "All five required Arkiv documents include genuine evidence or explicitly stated pending items.",
+      "The query is independent of the dashboard cache and returns records with verifiable provenance.",
+      "The source license and immutable commit are linked and actual import counts match the manifest."
+    ],
+    "evidence": [
+      "Independent consumer output",
+      "Complete Arkiv documentation and source-notice references"
+    ],
+    "gate": "Dependencies merged to main; task unclaimed.",
+    "conditional": false
+  },
+  {
+    "id": "MN-016",
+    "title": "Deliver the reproducible leak, repair and rerun walkthrough",
+    "lane": "D",
+    "phase": "integration",
+    "priority": "P0",
+    "estimate": "1–2 hours",
+    "branch": "feat/mn-016-break-fix-demo",
+    "depends_on": [
+      "MN-012",
+      "MN-014"
+    ],
+    "paths": [
+      "apps/dashboard/src/features/sandbox/**",
+      "tests/e2e/break-fix/**",
+      "docs/demo-core.md"
+    ],
+    "scope": [
+      "Connect leak injection to a controlled sandbox fixture and display the real failing report.",
+      "Show the supported code change/diff that routes the leaking read through MonolithTransport and rerun the same acceptance checks.",
+      "Keep optional automatic codemods out of scope; a deterministic supported patch or explicit reviewed fixture switch is sufficient."
+    ],
+    "acceptance": [
+      "The same legitimate read works before/after while the intentional direct bypass is caught and removed.",
+      "The UI distinguishes a sandbox patch/fixture from an edit to arbitrary production code.",
+      "A rerun actually recomputes pass/fail rather than changing a badge.",
+      "A no-payment demo explains the core product and preserves the privacy truth statements."
+    ],
+    "evidence": [
+      "Failing report, repair diff and successful rerun with a common test seed",
+      "Core demo script"
+    ],
+    "gate": "Dependencies merged to main; task unclaimed.",
+    "conditional": false
+  },
+  {
+    "id": "MN-017",
+    "title": "Package core evidence and validate a clean-clone release",
+    "lane": "C",
+    "phase": "release",
+    "priority": "P0",
+    "estimate": "2–3 hours",
+    "branch": "feat/mn-017-core-release",
+    "depends_on": [
+      "MN-009",
+      "MN-012",
+      "MN-013",
+      "MN-014",
+      "MN-015",
+      "MN-016"
+    ],
+    "paths": [
+      "scripts/export-evidence.ts",
+      "docs/release-core.md",
+      "docs/evidence-policy.md",
+      "README.md",
+      "evidence/**"
+    ],
+    "scope": [
+      "Export only real redacted run evidence with a verification manifest, retaining synthetic reports under a separate clearly marked fixture location.",
+      "Validate setup and core demo from a clean clone without Whitechain credentials.",
+      "Prepare the EF/Arkiv submission checklist and distinguish documented design, local regression tests and observed runtime results."
+    ],
+    "acceptance": [
+      "Real worker, paired observer proof, fail/fix report, actual Arkiv import/query and registry-driven route selection are reproducible with actual evidence. Missing core proof keeps this release task blocked; a drafted report does not count as acceptance.",
+      "The core release needs no conditional task, payment contract or relayer to pass.",
+      "No raw IP, private key, inspected private address or stable user-session identifier is present in public exports.",
+      "README gives exact run/check commands and honestly names unresolved dependencies; event deadlines and current eligibility are checked in the participant dashboard."
+    ],
+    "evidence": [
+      "Clean-clone validation output",
+      "Redacted actual evidence bundle and verification manifest",
+      "Core demo and submission checklist"
+    ],
+    "gate": "Dependencies merged to main; task unclaimed.",
+    "conditional": false
+  },
+  {
+    "id": "MN-018",
+    "title": "Preflight the designated Whitechain token and gasless route",
+    "lane": "C",
+    "phase": "conditional",
+    "priority": "P2",
+    "estimate": "1–2 hours",
+    "branch": "feat/mn-018-whitechain-preflight",
+    "depends_on": [
+      "MN-009",
+      "MN-013"
+    ],
+    "paths": [
+      "docs/preflight/whitechain.md",
+      "scripts/whitechain-preflight.ts"
+    ],
+    "scope": [
+      "Confirm chain ID 1874, designated test-USDT, decimals, verified token ABI and actual authorization capabilities.",
+      "Confirm access to test-USDT and merchant WBT without requiring shopper WBT; test protected Whitechain reads.",
+      "Select token-native authorization only when tested; otherwise record mentor confirmation before using the disclosed prefunded-credit-vault route."
+    ],
+    "acceptance": [
+      "EF protected comparison and real Arkiv-backed selection are already operating.",
+      "The route choice cites deployed token evidence; permit/EIP-3009 support is never assumed from the name USDT.",
+      "Test funding, signer/admin separation and no-shopper-gas assumptions are documented.",
+      "If funding, protected reads or an acceptable gasless route cannot be proven within the timebox, mark optional work blocked and return lane C to core hardening."
+    ],
+    "evidence": [
+      "Actual token ABI/code/read results and protected chain read",
+      "Route decision, funding evidence and mentor response if vault route is used"
+    ],
+    "gate": "OPTIONAL: MN-009 and MN-013 merged with actual live evidence; owner explicitly activates Whitechain. This bounded preflight does not block the core.",
+    "conditional": true
+  },
+  {
+    "id": "MN-019",
+    "title": "Implement and verify the selected signed payment contract",
+    "lane": "C",
+    "phase": "conditional",
+    "priority": "P2",
+    "estimate": "2–3 hours",
+    "branch": "feat/mn-019-payment-contract",
+    "depends_on": [
+      "MN-018"
+    ],
+    "paths": [
+      "contracts/src/**",
+      "contracts/test/**",
+      "contracts/script/**",
+      "contracts/foundry.toml",
+      "docs/payments-contract.md"
+    ],
+    "scope": [
+      "Implement only the selected route from MN-018; pin the designated token and fixed merchant/payment semantics.",
+      "Bind EIP-712 domain, payer, merchant, amount, order ID, nonce and deadline; enforce replay resistance and administrative restrictions.",
+      "For a vault, implement funded-credit conservation, safe token transfers and explicit prefunding disclosure; deploy and verify required contracts on the selected testnet."
+    ],
+    "acceptance": [
+      "Wrong signer/domain/chain, expired or altered intent and nonce replay are rejected in Foundry checks.",
+      "Credit/vault conservation, role separation and reentrancy defenses are checked where the selected route uses a vault.",
+      "Deployment uses chain 1874 and the designated test-USDT; verified explorer code matches the committed source.",
+      "An unsupported token authorization scheme never becomes a fabricated successful settlement."
+    ],
+    "evidence": [
+      "Focused Foundry output",
+      "Actual deployment, verification and token references"
+    ],
+    "gate": "OPTIONAL: MN-018 passed, live core remains working, and the accepted gasless route is recorded.",
+    "conditional": true
+  },
+  {
+    "id": "MN-020",
+    "title": "Build the bounded merchant relayer and receipt reconciliation",
+    "lane": "C",
+    "phase": "conditional",
+    "priority": "P2",
+    "estimate": "2–3 hours",
+    "branch": "feat/mn-020-merchant-relayer",
+    "depends_on": [
+      "MN-019"
+    ],
+    "paths": [
+      "apps/relayer/**",
+      "docs/relayer-setup.md"
+    ],
+    "scope": [
+      "Implement the frozen quote, signed-intent submission and merchant-scoped status endpoints.",
+      "Validate fixed targets/functions, token, chain, signature domain, merchant, bounded amounts and gas/rate limits.",
+      "Handle idempotent retries and pending/failed/reconcile states; keep admin, relayer and browser secrets separate."
+    ],
+    "acceptance": [
+      "Arbitrary calldata/target, tampered quote, invalid signature, excessive amount and replay cannot spend merchant gas without controls.",
+      "Duplicate submissions reconcile to one settled intent even across server retry/restart.",
+      "Settlement requires the correct onchain receipt and designated USDT Transfer semantics, not a front-end toast.",
+      "Order status is merchant-scoped; public logs omit private intent payloads and keys."
+    ],
+    "evidence": [
+      "Relayer abuse/idempotency/reconciliation test output",
+      "Redacted actual submission and receipt references"
+    ],
+    "gate": "OPTIONAL: MN-019 passed with verified deployed contract; core acceptance remains green.",
+    "conditional": true
+  },
+  {
+    "id": "MN-021",
+    "title": "Prove protected browser checkout with real sponsored USDT settlement",
+    "lane": "D",
+    "phase": "conditional",
+    "priority": "P2",
+    "estimate": "2–3 hours",
+    "branch": "feat/mn-021-protected-checkout",
+    "depends_on": [
+      "MN-014",
+      "MN-020"
+    ],
+    "paths": [
+      "apps/dashboard/src/features/checkout/**",
+      "apps/dashboard/src/composition/checkout.ts",
+      "tests/e2e/checkout/**"
+    ],
+    "scope": [
+      "Add shopper authorization and merchant receipt views using the selected payment route.",
+      "Route all app-owned balance and payment-status reads through MonolithTransport; keep signed submission separate.",
+      "Settle the designated test-USDT with merchant-sponsored WBT gas and show a public explorer receipt."
+    ],
+    "acceptance": [
+      "The shopper has no WBT and submits no gas-paying transaction, while the merchant receives actual designated test-USDT.",
+      "The receipt demonstrates the expected payer/merchant/order/amount semantics and who paid gas.",
+      "Injecting a direct checkout-status read fails privacy tests even if payment succeeded; the repair preserves settlement and passes.",
+      "Network outage blocks protected reads without direct fallback; onchain payment visibility and any vault custody are explicitly disclosed."
+    ],
+    "evidence": [
+      "Actual gas-sponsored transaction and Transfer receipt",
+      "Payer WBT evidence and merchant balance/receipt",
+      "Failing and passing checkout privacy runs"
+    ],
+    "gate": "OPTIONAL: MN-020 passed and live core still works; do not replace core adapters with mocked payment success.",
+    "conditional": true
+  },
+  {
+    "id": "MN-022",
+    "title": "Package the optional Whitechain evidence and final demo",
+    "lane": "C",
+    "phase": "release",
+    "priority": "P2",
+    "estimate": "1–2 hours",
+    "branch": "feat/mn-022-whitechain-release",
+    "depends_on": [
+      "MN-017",
+      "MN-021"
+    ],
+    "paths": [
+      "WHITECHAIN_FEEDBACK.md",
+      "docs/demo-whitechain.md",
+      "docs/release-whitechain.md",
+      "README.md",
+      "evidence/**"
+    ],
+    "scope": [
+      "Extend the core evidence manifest with verified deployment, actual USDT settlement and sponsored-gas proof.",
+      "Write real integration feedback, Whitechain usefulness and the selected route limitations.",
+      "Record the complete 2–4 minute demo and validate sponsor submission requirements against current official sources."
+    ],
+    "acceptance": [
+      "Core evidence remains valid independently of optional payment evidence.",
+      "All claimed Whitechain proofs have actual explorer/contract/token references and an accepted gasless flow.",
+      "No mock, unverified deployment or pending transaction is narrated as completed settlement.",
+      "If optional evidence is incomplete, submit the honest core demo and omit the Whitechain qualification claim."
+    ],
+    "evidence": [
+      "Complete optional evidence manifest",
+      "WHITECHAIN_FEEDBACK.md and 2–4 minute demo link",
+      "Final conditional submission checklist"
+    ],
+    "gate": "OPTIONAL: MN-017 and MN-021 passed; user retains all merges to main and final submission decisions.",
+    "conditional": true
+  }
+]
