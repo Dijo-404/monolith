@@ -180,6 +180,13 @@
       "bytes": 1318,
       "recordKind": "DERIVED_AUDIT_NOT_ORIGINAL_RECEIPT",
       "producerSourcePath": null
+    },
+    {
+      "path": "evidence/core/2026-11-07/originals/site7/root-archive-local-audit.json",
+      "sha256": "335e31f7af339e865c57f507e5da7c99e7fd980a0d8144fdbae4c41443481261",
+      "bytes": 1846,
+      "recordKind": "UNCHANGED_RETAINED_ROOT_ARCHIVE_AUDIT",
+      "producerSourcePath": "/tmp/monolith-site7-archive-local-audit-20261107.json"
     }
   ]
 }
