@@ -5,6 +5,12 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+    inputs:
+      publish_cli_github_packages:
+        description: Mirror the audited CLI 0.1.0 release to GitHub Packages
+        type: boolean
+        required: false
+        default: false
 
 permissions:
   contents: read
@@ -31,3 +37,76 @@ jobs:
         run: pnpm install --frozen-lockfile
       - name: Lint, typecheck, test and build
         run: pnpm check
+
+  publish-cli-github-packages:
+    name: Publish verified CLI to GitHub Packages
+    if: ${{ github.repository == 'Dijo-404/monolith' && github.event_name == 'workflow_dispatch' && inputs.publish_cli_github_packages == true }}
+    needs: workspace
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      packages: write
+    concurrency:
+      group: github-packages-monolith-cli-0.1.0
+      cancel-in-progress: false
+    env:
+      CLI_SHA256: 78f3ff0ff00bfa37c099f6deb945445e8abdf83bc982af1d4bfb1e2e1f9db89e
+      NPM_CONFIG_LOGS_MAX: '0'
+      NPM_CONFIG_UPDATE_NOTIFIER: 'false'
+    steps:
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24.22.2
+          registry-url: https://npm.pkg.github.com
+          scope: '@dijo-404'
+      - name: Download and verify the already-published npm archive
+        shell: bash
+        run: |
+          curl --fail --silent --show-error --location --proto '=https' --tlsv1.2 \
+            https://registry.npmjs.org/@dijo-404/monolith-cli/-/monolith-cli-0.1.0.tgz \
+            --output "$RUNNER_TEMP/monolith-cli-0.1.0.tgz"
+          echo "$CLI_SHA256  $RUNNER_TEMP/monolith-cli-0.1.0.tgz" | sha256sum --check
+      - name: Publish the exact archive to this repository's registry
+        env:
+          NODE_AUTH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          if npm view @dijo-404/monolith-cli@0.1.0 version --registry=https://npm.pkg.github.com > /dev/null 2>&1; then
+            echo 'Version 0.1.0 already exists; verifying its immutable bytes below.'
+          else
+            npm publish "$RUNNER_TEMP/monolith-cli-0.1.0.tgz" --ignore-scripts --registry=https://npm.pkg.github.com
+          fi
+      - name: Verify registry bytes and a fresh installed executable
+        env:
+          NODE_AUTH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          mkdir "$RUNNER_TEMP/github-package-readback" "$RUNNER_TEMP/github-package-consumer"
+          npm pack @dijo-404/monolith-cli@0.1.0 --ignore-scripts \
+            --registry=https://npm.pkg.github.com \
+            --pack-destination "$RUNNER_TEMP/github-package-readback"
+          echo "$CLI_SHA256  $RUNNER_TEMP/github-package-readback/dijo-404-monolith-cli-0.1.0.tgz" | sha256sum --check
+          npm install --prefix "$RUNNER_TEMP/github-package-consumer" \
+            --ignore-scripts --no-audit --no-fund --package-lock=false --engine-strict \
+            --registry=https://npm.pkg.github.com @dijo-404/monolith-cli@0.1.0
+          test "$("$RUNNER_TEMP/github-package-consumer/node_modules/.bin/monolith" --version)" = '0.1.0'
+          "$RUNNER_TEMP/github-package-consumer/node_modules/.bin/monolith" --help
+          "$RUNNER_TEMP/github-package-consumer/node_modules/.bin/monolith" doctor --json
+      - name: Verify and report the repository association
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          gh api --paginate --slurp 'users/Dijo-404/packages?package_type=npm&per_page=100' \
+            | jq 'add | map(select((.name == "monolith-cli" or .name == "@dijo-404/monolith-cli") and .package_type == "npm")) | if length == 1 then .[0] | {name, package_type, visibility, html_url, repository: .repository.full_name} else error("Expected exactly one Monolith CLI package") end' \
+            > "$RUNNER_TEMP/github-package-metadata.json"
+          node --input-type=module -e '
+            import assert from "node:assert/strict";
+            import { readFileSync } from "node:fs";
+            const data = JSON.parse(readFileSync(process.env.RUNNER_TEMP + "/github-package-metadata.json", "utf8"));
+            assert.ok(["monolith-cli", "@dijo-404/monolith-cli"].includes(data.name));
+            assert.equal(data.package_type, "npm");
+            assert.equal(data.repository, "Dijo-404/monolith");
+            console.log(JSON.stringify(data));
+          '
