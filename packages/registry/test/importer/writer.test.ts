@@ -1,6 +1,7 @@
 import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
-import { describe, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
+import * as arkivSdk from '@arkiv-network/sdk';
 import { normalizeSourceSnapshot, SOURCE_REPOSITORY } from '../../src/domain/source-policy.js';
 import { importRegistry } from '../../src/application/import-registry.js';
 import type { ImportJournal, JournalStore } from '../../src/ports/entity-writer.js';
@@ -10,7 +11,10 @@ import {
   IMPORT_BATCH_GAS_LIMIT, IMPORT_GAS_PRICE_WEI, type ArkivWriterClient,
 } from '../../src/adapters/arkiv/writer.js';
 
-// SIMULATED SDK rows and receipts. These tests never create a network or wallet client.
+// Keep the real SDK implementations while recording their transport construction.
+vi.mock('@arkiv-network/sdk', { spy: true });
+
+// SIMULATED rows, receipts and intercepted SDK HTTP requests. No network or signing is used.
 const publisher = `0x${'1'.repeat(40)}`;
 const foreign = `0x${'2'.repeat(40)}`;
 const entityKey = `0x${'a'.repeat(64)}`;
@@ -319,5 +323,73 @@ describe('Arkiv importer adapter — SIMULATED SDK boundary', () => {
     }
     expect(client.getChainId).not.toHaveBeenCalled();
     expect(client.executeBatch).not.toHaveBeenCalled();
+  });
+});
+
+
+// Publicly known fixture scalar 1, solely for constructing an offline wallet client.
+// No transaction is constructed or signed with this fixture.
+const fixturePrivateKey = `0x${'0'.repeat(63)}1`;
+const fixturePublisher = '0x7e5f4552091a69125d5dfcb7b8c2659029395bdf';
+const rabdiRpcUrl = 'https://rpc.rabdi.db-chain.testnet.arkiv.network/';
+const redirectStatuses = [301, 302, 303, 307, 308] as const;
+
+afterEach(() => vi.unstubAllGlobals());
+
+describe('Rabdi importer — intercepted real SDK HTTP transports, SIMULATED evidence', () => {
+  it.each(['public', 'wallet'] as const)('rejects redirects in the effective %s transport without retrying', async (kind) => {
+    const publicFactory = vi.mocked(arkivSdk.createPublicClient);
+    const walletFactory = vi.mocked(arkivSdk.createWalletClient);
+    createRabdiEntityWriter({ publisher: fixturePublisher, privateKey: fixturePrivateKey });
+    const settings = kind === 'public' ? publicFactory.mock.calls[0]?.[0] : walletFactory.mock.calls[0]?.[0];
+    if (!settings?.transport) throw new Error('Missing configured SDK transport.');
+    const transport = settings.transport({ chain: settings.chain, pollingInterval: 2_000 });
+    for (const status of redirectStatuses) {
+      const requests: Request[] = [];
+      const fetch = vi.fn(async (input: RequestInfo | URL, init?: RequestInit) => {
+        requests.push(new Request(input, init));
+        return new Response('synthetic-private-provider-body', {
+          status, headers: { location: 'https://redirect.example/?private=synthetic-secret' },
+        });
+      });
+      vi.stubGlobal('fetch', fetch);
+      await expect(transport.request({ method: 'eth_chainId' })).rejects.toThrow();
+      expect(fetch).toHaveBeenCalledTimes(1);
+      expect(requests).toHaveLength(1);
+      expect(requests[0]?.url).toBe(rabdiRpcUrl);
+      expect(requests[0]?.redirect).toBe('error');
+    }
+  });
+
+  it.each(['currentBlock', 'lookup'] as const)('sanitizes redirect failure through %s without retry or fallback', async (operation) => {
+    const requests: Request[] = [];
+    vi.stubGlobal('fetch', vi.fn(async (input: RequestInfo | URL, init?: RequestInit) => {
+      requests.push(new Request(input, init));
+      throw new TypeError('synthetic-private-provider-body https://redirect.example/?private=synthetic-secret');
+    }));
+    const writer = createRabdiEntityWriter({ publisher });
+    const pending = operation === 'currentBlock' ? writer.currentBlock() : writer.lookup([candidate()]);
+    await expect(pending).rejects.toThrow(operation === 'currentBlock' ? /^ARKIV_BLOCK_UNAVAILABLE$/ : /^ARKIV_LOOKUP_FAILED$/);
+    expect(requests).toHaveLength(1);
+    expect(requests[0]?.url).toBe(rabdiRpcUrl);
+    expect(requests[0]?.redirect).toBe('error');
+  });
+
+  it('retains key-free successful chain-pinned reads with redirect denial', async () => {
+    const walletFactory = vi.mocked(arkivSdk.createWalletClient);
+    const requests: Request[] = [];
+    vi.stubGlobal('fetch', vi.fn(async (input: RequestInfo | URL, init?: RequestInit) => {
+      const request = new Request(input, init);
+      requests.push(request);
+      const rpc = JSON.parse(await request.text()) as { id: number; method: string };
+      if (!['eth_chainId', 'eth_blockNumber'].includes(rpc.method)) throw new Error('Unexpected SDK RPC.');
+      return Response.json({ jsonrpc: '2.0', id: rpc.id,
+        result: rpc.method === 'eth_chainId' ? `0x${ARKIV_CHAIN_ID.toString(16)}` : '0x64' });
+    }));
+    const writer = createRabdiEntityWriter({ publisher });
+    await expect(writer.currentBlock()).resolves.toBe(100n);
+    expect(walletFactory).not.toHaveBeenCalled();
+    expect(requests).toHaveLength(2);
+    expect(requests.every((request) => request.url === rabdiRpcUrl && request.redirect === 'error')).toBe(true);
   });
 });

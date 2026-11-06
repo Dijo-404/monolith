@@ -56,12 +56,16 @@ export function Icon({ name, size = 18 }: { readonly name: IconName; readonly si
   );
 }
 
-/** The Monolith mark: a dark slab in 1 : 2.25 proportion with a seam of light. */
+/** Decorative faceted monolith; the adjacent wordmark supplies its accessible name. */
 export function Mark({ size = 28 }: { readonly size?: number }) {
   return (
-    <svg className="mark" width={size * 0.6} height={size} viewBox="0 0 15 25" aria-hidden="true" focusable="false">
-      <rect x="0.5" y="0.5" width="14" height="24" rx="2.5" fill="#17141f" />
-      <path d="M3.5 8.5h8" stroke="#b9c3ff" strokeWidth="1.6" strokeLinecap="round" />
-    </svg>
+    <img
+      className="mark"
+      src={`${import.meta.env.BASE_URL}assets/brand/monolith-mark.svg`}
+      width={size * 0.5}
+      height={size}
+      alt=""
+      aria-hidden="true"
+    />
   );
 }

@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "evidence": "INCOMPLETE",
+  "runnerProcessesAbsentBeforeNewAttempt": true,
+  "inference": "No success or failure acceptance is inferred from incomplete output.",
+  "attempts": [
+    {
+      "attempt": "monolith-swarm-browser-fault-20261107",
+      "status": "INCOMPLETE_AFTER_TURN_INTERRUPTION",
+      "completionReportPresent": false,
+      "files": [
+        {
+          "path": "published-1440.png",
+          "bytes": 726121,
+          "sha256": "ac66bb663dda283656efcf98e9a6d7192b03b6359b91bfcd685fd7d72ee16e27"
+        },
+        {
+          "path": "published-320.png",
+          "bytes": 359187,
+          "sha256": "84a606ab0fed1983e4adcd8839db6350f24b8c7b6120c4be09d81326704096c0"
+        },
+        {
+          "path": "published-390.png",
+          "bytes": 351876,
+          "sha256": "575045302c031be8d2e662b58cc98efb2cec8f1e8108c1d3c932a666dafc07e9"
+        },
+        {
+          "path": "published-webgl-fallback.png",
+          "bytes": 340110,
+          "sha256": "c6d0f589ac74400bb28ae0446427e283183595a8e86e82492c9b3563026a88b0"
+        }
+      ]
+    },
+    {
+      "attempt": "monolith-swarm-browser-live-20261107",
+      "status": "INCOMPLETE_AFTER_TURN_INTERRUPTION",
+      "completionReportPresent": false,
+      "files": []
+    }
+  ]
+}

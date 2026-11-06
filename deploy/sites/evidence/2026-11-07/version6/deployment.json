@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "scope": "ACTUAL_PUBLIC_STATIC_PRESENTER_PUBLICATION",
+  "passed": true,
+  "recordedAt": "2026-11-06T21:44:40.860Z",
+  "siteId": "appgprj_6aedf7106c2081919627f07802438881",
+  "version": {
+    "id": "appgprj_6aedf7106c2081919627f07802438881~appgver_5dcbd7e6bbd081918609a1907425c6c1",
+    "project_id": "appgprj_6aedf7106c2081919627f07802438881",
+    "version_number": 6,
+    "source": {
+      "commit_sha": "4d6c2b4e223d63e106e49ecb8167763f7f1fffb1"
+    },
+    "archive_storage": {
+      "archive_format": "tar",
+      "sediment_file_id": "file_00000000aebc820898bf25212ce6451b",
+      "content_hash": "sha256:7e94bc76317d04e0977787b48810c6159bb21689b0518ee507a776eacd605390",
+      "size_bytes": 686080,
+      "file_count": 11
+    },
+    "screenshot_url": null,
+    "deployment_id": null
+  },
+  "source": {
+    "project_id": "appgprj_6aedf7106c2081919627f07802438881",
+    "checkout_path": "/tmp/monolith-sites-release-checkout-20261106-2",
+    "commit_sha": "4d6c2b4e223d63e106e49ecb8167763f7f1fffb1",
+    "archive": "/tmp/monolith-release-static-20261107-attempt7.tar.gz"
+  },
+  "deployment": {
+    "id": "appgdep_6aee4a2e7af08191b8a2c11f6198d1ab",
+    "project_id": "appgprj_6aedf7106c2081919627f07802438881",
+    "title": "Monolith — Privacy Regression Lab",
+    "version_id": "appgprj_6aedf7106c2081919627f07802438881~appgver_5dcbd7e6bbd081918609a1907425c6c1",
+    "type": "publish",
+    "status": "succeeded",
+    "url": "https://monolith-privacy-lab.madhanxdev.chatgpt.site",
+    "has_mcp": false,
+    "screenshot_asset_pointer": null,
+    "provider_deployment_id": "site---6aedf7106c2081919627f07802438881",
+    "failure_message": null,
+    "env_set_revision": 0,
+    "updated_at": "2026-11-06T21:44:29.815530+00:00"
+  },
+  "applicationSourceCommit": "dfb08028da0fac156b9940dd117d892642717355",
+  "observerOrigin": "https://d06045ae660681.lhr.life",
+  "inputAudit": "/tmp/monolith-static-publication-preflight-20261107-attempt7.json",
+  "limitations": [
+    "Static publication only; actual final presenter workflow and release acceptance require separate records.",
+    "Opaque API storage object was not retrieved; actual served authored-file bytes are checked separately.",
+    "Source private. Free observer depends on workstation/provider; previous failure causes unproven."
+  ]
+}

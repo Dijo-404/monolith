@@ -1,0 +1,128 @@
+{
+  "schemaVersion": 1,
+  "purpose": "GET_ONLY_SWARM_PREFLIGHT",
+  "startedAt": "2026-11-06T22:45:52.799Z",
+  "completedAt": "2026-11-06T22:45:54.416Z",
+  "scope": "Explicit target probes only; loopback observations are SIMULATED. Public responses are capture-time observations.",
+  "limits": {
+    "requestTimeoutMs": 10000,
+    "maxResponseBytes": 65536,
+    "redirectsFollowed": false,
+    "method": "GET"
+  },
+  "selectedBatchId": null,
+  "minimumTtlSeconds": 3600,
+  "observations": [
+    {
+      "name": "bee-health",
+      "method": "GET",
+      "evidence": "OBSERVED_LIVE",
+      "targetOriginSha256": "f4e8f94dd46bbd927f658ce1d2c31d55a54c8040976419c10c1b593313db650e",
+      "statusCode": 200,
+      "responseBytes": 2,
+      "status": "PASS",
+      "resultCode": "EXPECTED_RESPONSE",
+      "healthy": true,
+      "format": "PLAIN_OK"
+    },
+    {
+      "name": "bee-readiness",
+      "method": "GET",
+      "evidence": "OBSERVED_LIVE",
+      "targetOriginSha256": "f4e8f94dd46bbd927f658ce1d2c31d55a54c8040976419c10c1b593313db650e",
+      "statusCode": 200,
+      "responseBytes": 2,
+      "status": "PASS",
+      "resultCode": "EXPECTED_RESPONSE",
+      "healthy": true,
+      "format": "PLAIN_OK"
+    },
+    {
+      "name": "bee-gateway",
+      "method": "GET",
+      "evidence": "OBSERVED_LIVE",
+      "targetOriginSha256": "f4e8f94dd46bbd927f658ce1d2c31d55a54c8040976419c10c1b593313db650e",
+      "statusCode": 200,
+      "responseBytes": 16,
+      "status": "PASS",
+      "resultCode": "EXPECTED_RESPONSE",
+      "gatewayModeReported": true
+    },
+    {
+      "name": "bee-metrics",
+      "method": "GET",
+      "evidence": "OBSERVED_LIVE",
+      "targetOriginSha256": "f4e8f94dd46bbd927f658ce1d2c31d55a54c8040976419c10c1b593313db650e",
+      "statusCode": 200,
+      "responseBytes": 1338,
+      "status": "PASS",
+      "resultCode": "EXPECTED_RESPONSE",
+      "aggregateMetrics": {
+        "stamp_usable_count_gauge": 1,
+        "stamp_ttl_gauge": 117821,
+        "stamp_usage_gauge": 0.015625
+      },
+      "recognizedAggregateCount": 3
+    },
+    {
+      "name": "observer-health",
+      "method": "GET",
+      "evidence": "OBSERVED_LIVE",
+      "targetOriginSha256": "3bd9ef6a1fb11426b6bf6b2a732adce6f521daa204c725c9523d116db563c281",
+      "statusCode": 200,
+      "responseBytes": 82,
+      "status": "PASS",
+      "resultCode": "EXPECTED_RESPONSE",
+      "configuredReported": true,
+      "registryAvailabilityTested": false,
+      "workerExecutionTested": false
+    },
+    {
+      "name": "reference-bzz.link",
+      "method": "GET",
+      "evidence": "OBSERVED_LIVE",
+      "targetOriginSha256": "9e59cdb2920cb2e446b2820476189e52fd659877cf76ceedb33eafc7a6ebbefd",
+      "statusCode": 200,
+      "responseBytes": 10359,
+      "status": "PASS",
+      "resultCode": "EXPECTED_RESPONSE",
+      "reference": "bc9b942212421e2a19fe1ffdf0add641ae530923041ea8f549381747b14b2f2d",
+      "manifestCid": "bah5acgzaxsnziiqsiipcugp6d767blowigxfgcjdaqpkr5kjhalupmklf4wq",
+      "bodySha256": "3040dcaeb751ca304b7a17af16c311ae0633a5cdfce02db5e5d37424b72805b8",
+      "artifactIdentityVerified": false,
+      "originIsolationVerified": false
+    },
+    {
+      "name": "reference-bzz.limo",
+      "method": "GET",
+      "evidence": "OBSERVED_LIVE",
+      "targetOriginSha256": "9f808864b802574282fcff98d0541ccdb180ca3dbfbdd5f9e4e7c73bfa6f1733",
+      "statusCode": 200,
+      "responseBytes": 10359,
+      "status": "PASS",
+      "resultCode": "EXPECTED_RESPONSE",
+      "reference": "bc9b942212421e2a19fe1ffdf0add641ae530923041ea8f549381747b14b2f2d",
+      "manifestCid": "bah5acgzaxsnziiqsiipcugp6d767blowigxfgcjdaqpkr5kjhalupmklf4wq",
+      "bodySha256": "3040dcaeb751ca304b7a17af16c311ae0633a5cdfce02db5e5d37424b72805b8",
+      "artifactIdentityVerified": false,
+      "originIsolationVerified": false
+    }
+  ],
+  "summary": {
+    "attempted": 7,
+    "passed": 7,
+    "blocked": 0
+  },
+  "deploymentReady": false,
+  "gates": {
+    "upload": "UNTESTED",
+    "postageProvenance": "UNKNOWN",
+    "uploadEntitlement": "UNKNOWN",
+    "sdk": "UNTESTED",
+    "browser": "UNTESTED",
+    "arkiv": "UNTESTED",
+    "isolation": "UNTESTED",
+    "artifactIdentity": "UNTESTED",
+    "backendRegistry": "UNTESTED"
+  }
+}

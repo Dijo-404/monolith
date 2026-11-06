@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "scope": "STATIC_PUBLICATION_INPUT_AUDIT",
+  "passed": true,
+  "generatedAt": "2026-11-06T21:42:41.719Z",
+  "sourceCommit": "dfb08028da0fac156b9940dd117d892642717355",
+  "observerOrigin": "https://d06045ae660681.lhr.life",
+  "staticFiles": 10,
+  "uiDistEqualFiles": 9,
+  "retainedNotices": 26,
+  "totalRegularFilesScanned": 39,
+  "actualServerCredentialConfigured": true,
+  "credentialBytesExposed": false,
+  "privateSourceArchivePresent": false,
+  "provenanceSha256": "cfb10eb4fcf4d4a191a51c737b443ced31c5ec51200564b0d8067434c2a04209",
+  "limitations": [
+    "Input audit only; real observer10 metadata/stability and actual final-source browser acceptance are separate."
+  ]
+}

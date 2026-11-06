@@ -12,6 +12,8 @@ Only an exact one-send synthetic bootstrap call can be excluded: URL, POST metho
 
 `static.mjs` recursively inspects `.js`, `.jsx`, `.mjs`, `.cjs`, `.ts`, `.tsx`, `.mts` and `.cts` files under dashboard source and transport browser adapters. The installed TypeScript parser selects the syntax mode from each filename, including JSX and TSX, so executable expressions inside components are inspected while JSX text, comments and string explanations remain data. It rejects unreviewed raw network primitives, aliases/destructuring, simple computed property forms and direct viem/ethers/web3 imports. Reviewed adapter files are pinned by whole-file SHA256: bounded bootstrap, explicit direct debug control, verified SDK host and public registry metadata. An adapter edit requires explicit boundary review and a visible pin update; the same check applies to every supported source extension. This is a conservative rule, not universal JavaScript deobfuscation; CSP, workers, arbitrary dependencies and third-party apps are not thereby proven safe.
 
+Source discovery rejects symbolic links at the repository root, either scanned source root, their repository-relative ancestors, and every nested entry. It rejects directory and file links, including in-tree aliases, dangling links, cycles and links with approved adapter hashes, without following their targets. Diagnostics identify only the repository-relative link path with a fixed message; linked source does not earn a scanned-file count or satisfy an adapter pin. These checks describe the inspected checkout, not protection against concurrent hostile filesystem replacement.
+
 Use Node 24.22.2 / pnpm 12.18.0:
 
 ```sh

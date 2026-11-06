@@ -1,5 +1,7 @@
 # MONOLITH — Final Verified Project Blueprint
 
+**Current target update — 7 November 2026:** The owner selected EF, Arkiv, Uniswap and Whitechain as development targets, including Whitechain Scale, Operate and Tokenize. Follow the [completion plan](track-completion-plan.md) and [current delivery plan](plan.md). The original v2 blueprint below preserves the earlier scope decision; its optional/conditional sponsor wording is historical and does not cancel the newly activated workstream. Implementation and evidence still follow their actual GitHub tasks.
+
 **Product name:** Monolith — The Privacy Crash-Test Lab for Web3 Checkout\
 **Tagline:** *Break your checkout's privacy. Fix the leak. Prove the payment still works.*\
 **Version:** 2.0, architecture and implementation specification\
