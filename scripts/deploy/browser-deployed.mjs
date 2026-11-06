@@ -7,6 +7,7 @@ import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { publicObserverOrigin } from './prepare-static.mjs';
+import { classifyFrameInventory, collectFrameDescriptors } from '../../deploy/sites/hosting-frames.mjs';
 
 const [siteValue, observerValue, verificationPath, output] = process.argv.slice(2);
 assert(process.version === 'v24.22.2' && process.argv.length === 6 && output && process.env['MONOLITH_BROWSER_TOOLS'],
@@ -25,17 +26,28 @@ const artifact = {
   schemaVersion: 1, evidence: 'BLOCKED', passed: false, siteOrigin: site, observerOrigin: observer,
   sourceCommit: verified.sourceCommit, staticVerificationSha256: digest(verifiedBytes),
   runnerSha256: digest(await readFile(fileURLToPath(import.meta.url))), startedAt: new Date().toISOString(), generatedAt: null,
+  framePolicySha256: digest(await readFile(new URL('../../deploy/sites/hosting-frames.mjs', import.meta.url))), frameChecks: [],
   browser: null, playwright: '1.65.0', node: process.version, layouts: [], screenshots: [],
   fault: 'TEST_INJECTED_WORKER_HOST_NETWORK_ABORT', workerHostAborts: 0,
   attemptedExternalRequests: 0, guardSelfCheck: false, uiBlocked: false, uiErrorCode: null,
   pageErrors: 0, contextDestroyed: false,
   limitations: ['Injected document unavailability tests startup fail-closed behavior; this is not an observed provider outage.',
     'No worker is allowed to start in this fault case. The separate live workflow proves normal worker execution.',
+    'Separately recognized hosting security bootstrap is not anonymous; its fetched challenge runtime is outside transport verification.',
     'Request capture covers the fresh browser context, not extensions or unrelated pages.'],
 };
 const browser = await chromium.launch({ headless: true });
 artifact.browser = browser.version();
 const contexts = [];
+const checkFrames = async (page, phase) => {
+  const descriptors = await page.evaluate(collectFrameDescriptors, { origin: site });
+  const counts = classifyFrameInventory(descriptors, {
+    allowCloudflare: verified.htmlAdditionPolicy === 'PINNED_CLOUDFLARE_JSD_TEMPLATE',
+  });
+  artifact.frameChecks.push({ phase, ...counts });
+  assert(counts.valid, 'Unrecognized or duplicate application/hosting frame.');
+  assert.equal(counts.monolith, 0, 'Disposable Monolith frame was not removed.');
+};
 const screenshot = async (page, name) => {
   await page.screenshot({ path: join(output, name), fullPage: true });
   artifact.screenshots.push({ path: name, sha256: digest(await readFile(join(output, name))) });
@@ -60,6 +72,7 @@ const open = async (fallback = false) => {
   page.on('pageerror', () => artifact.pageErrors++);
   await page.goto(site);
   await page.getByRole('heading', { name: 'Monolith live privacy lab' }).waitFor();
+  await checkFrames(page, fallback ? 'FALLBACK_BEFORE_STARTUP' : 'BEFORE_STARTUP');
   return page;
 };
 let heartbeat;
@@ -89,7 +102,7 @@ try {
   const code = await page.locator('.live-error .mono').textContent();
   assert.equal(code, 'WORKER_UNAVAILABLE'); artifact.uiErrorCode = code;
   assert.equal(await page.getByRole('button', { name: 'Export measured report' }).isDisabled(), true);
-  assert.equal(await page.locator('iframe').count(), 0);
+  await checkFrames(page, 'AFTER_INJECTED_WORKER_UNAVAILABILITY');
   await screenshot(page, 'published-worker-unavailable.png');
   for (const context of contexts) await context.close();
   artifact.contextDestroyed = true;
