@@ -44,12 +44,28 @@ result to assess the selected runtime. See the [official access-key documentatio
 for supported header authentication and quotas. Never include the credential file
 or its hash in a source/runtime evidence bundle.
 
+The anonymous SSH default remains unchanged. After registering a dedicated
+public key with a free localhost.run account, the operator may explicitly append
+both `--ssh-identity /absolute/private-identity` and `--ssh-user monolith-demo`.
+The login is a bounded lowercase ASCII name and cannot be `nokey`; the destination
+is still fixed to localhost.run on port22. One option without the other fails
+before startup. The selected identity must be an absolute regular non-symlink
+file owned by the current user, owner-readable and inaccessible to other users.
+Selected and resolved paths reject OpenSSH percent/environment expansion syntax.
+The launcher checks only file metadata: OpenSSH alone reads the key contents.
+No private identity path, content or hash enters status/evidence; status adds only
+the `sshAuthenticationMode` enum. Dedicated mode disables IdentityAgent and keeps
+BatchMode, IdentitiesOnly and all existing host-pin/forwarding guards. Rejected
+authentication closes the backend without falling back to anonymous mode.
+Free registered authentication does not establish permanent hostname availability
+and does not authorize billing activation or a paid/custom domain.
+
 All three flags are required. The status file must be new. The launcher never
 enrolls or replaces an SSH identity. Use the explicitly reviewed public host pin
 from [MN009's provider observation](../../tests/privacy/live-observer/observed-localhost-run-provider-help-2026-11-06.json).
 Initial enrollment was TOFU; strict pinning subsequently rejects a changed key.
 The actual server help supported `--proxy-protocol-v2`; older website flag names
-were rejected. This temporary SSH tunnel requires no paid resource, payer,
+were rejected. The anonymous temporary SSH tunnel requires no paid resource, payer,
 localhost.run account or private SSH key.
 
 For a session-independent demo process on this Linux workstation, the operator
@@ -123,3 +139,11 @@ copies remain byte-identical. This describes the capture-time runtime and is
 not current availability proof. Follow the [latest operational updates](https://github.com/Dijo-404/monolith/issues/40)
 and verify the current backend origin before final dashboard QA. The 12-hour cap
 and unprivileged sleep/idle inhibitor do not guarantee provider or hostname lifetime.
+
+The later [registered runtime8 record](evidence/2026-11-07/runtime8/deployment-record.json)
+retains separate startup, exact source/tool bindings, public metadata and a
+three-minute health observation. Its actual authentication mode is dedicated-key;
+the public metadata succeeded without an observer-target RPC. A new genuine
+browser/source workflow remains required for that origin. Billing stays inactive
+and only the free assigned hostname is used. Follow the timestamped record and
+current health rather than treating the older capture as current liveness.
