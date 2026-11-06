@@ -996,7 +996,9 @@
       "docs/cli.md",
       "pnpm-lock.yaml",
       "docs/tasks.json",
-      "docs/task-register.md"
+      "docs/task-register.md",
+      "tooling/eslint/architecture.mjs",
+      "tests/tooling/architecture.test.mjs"
     ],
     "scope": [
       "Prepare an npm-distributable @monolith/cli package exposing the monolith executable, using existing public shared/analyzer exports and one set of command handlers for CLI and TUI.",

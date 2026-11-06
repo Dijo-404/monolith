@@ -13,6 +13,9 @@ async function errors(file, source) {
 
 describe('clean architecture lint boundaries', () => {
   it.each([
+    ['packages/cli/src/commands.ts', "import '@monolith/transport/adapters/browser';"],
+    ['packages/cli/src/commands.ts', "import '@monolith/privacy-analyzer/src/analyze.js';"],
+    ['packages/cli/src/commands.ts', "import '../../../apps/dashboard/src/composition/lab.js';"],
     ['packages/transport/src/domain/policy.ts', "import 'fastify';"],
     ['packages/registry/src/application/query.ts', "import '@arkiv-network/sdk';"],
     ['packages/privacy-analyzer/src/index.ts', "import 'node:fs';"],
@@ -29,6 +32,8 @@ describe('clean architecture lint boundaries', () => {
   });
 
   it.each([
+    ['packages/cli/src/commands.ts', "import '@monolith/shared';"],
+    ['packages/cli/src/commands.ts', "import '@monolith/privacy-analyzer';"],
     ['apps/dashboard/src/App.tsx', "import '@monolith/transport';"],
     ['packages/transport/src/domain/policy.ts', "import '@monolith/shared';"],
     ['packages/registry/src/adapters/arkiv/reader.ts', "import '@arkiv-network/sdk';"],
