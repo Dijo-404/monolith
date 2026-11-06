@@ -49,6 +49,7 @@ Snapshot: **7 November 2026 (IST)**. GitHub issues hold live acceptance status.
 | **CLI/TUI** | Merged source package, local analysis, JSON output and terminal menu | [npm publication and release acceptance](https://github.com/Dijo-404/monolith/issues/50) |
 | **Deployment** | Static packaging/verification and reusable temporary observer tooling | [Final hosted dashboard checks](https://github.com/Dijo-404/monolith/issues/36) and [public-backend acceptance](https://github.com/Dijo-404/monolith/issues/40) |
 | **New integrations** | Tracked work for [Uniswap quote privacy tests](https://github.com/Dijo-404/monolith/issues/55) and [protected provider selection](https://github.com/Dijo-404/monolith/issues/56) | Integrated UI/backend behavior and live evidence; neither is a completed product feature |
+| **Whitechain tracks** | Activated [Scale, Operate and Tokenize completion plan](docs/track-completion-plan.md#whitechain-shared-work) | Finish protected sponsored checkout, reusable merchant integration, asset lifecycle and track demonstrations |
 
 Historical `OBSERVED_LIVE` records describe their exact past runs. The [core release](https://github.com/Dijo-404/monolith/issues/17) still requires its own accepted evidence bundle and clean-clone validation.
 
@@ -301,7 +302,7 @@ The default environment enables no upstream targets or registry trust configurat
 - Live dashboard composition is implemented, but accepted reusable public-backend evidence ([MN-025](https://github.com/Dijo-404/monolith/issues/40)) and the actual public dashboard walkthrough ([MN-014](https://github.com/Dijo-404/monolith/issues/14)) remain pending. Final release evidence is separate tracked work.
 - Browser regression coverage is scoped to configured origins and ordinary Chromium HTTP traffic. It does not cover arbitrary third-party apps, wallet extensions, WebRTC/KPS traffic or every possible JavaScript bypass.
 - Timestamped live evidence records a past run. Worker availability, endpoint freshness and network behavior must be checked again for a new run.
-- Whitechain checkout remains conditional and disabled. No payment settlement or sponsor eligibility is claimed.
+- Whitechain Scale, Operate and Tokenize are activated development targets. Complete the tracked checkout, reusable merchant integration, asset lifecycle and actual settlement evidence before enabling runtime payment controls.
 
 ## CROPS
 
@@ -314,7 +315,7 @@ Privacy is the lead property. These are the implementation's guarantees and trad
 
 ## Hackathon submission and AI use
 
-The owner confirmed **Classic / new project** registration. Candidate tracks are EF Anon-RPC/CROPS and Arkiv Mirror/Build from scratch; eligibility and final release acceptance remain pending. Uniswap is tracked in [MN-027](https://github.com/Dijo-404/monolith/issues/55), and Whitechain payments remain disabled. See the [complete prize audit](docs/prize-compliance.md) for requirements, evidence and outstanding actions.
+The owner confirmed **Classic / new project** registration and selected four development targets: **EF Anon-RPC/CROPS**, **Arkiv Mirror/Build from scratch**, **Uniswap Build**, and **Whitechain Scale/Operate/Tokenize**. The [track completion plan](docs/track-completion-plan.md) lists the implementation, tests, feedback and evidence to finish for every target, with linked GitHub tasks. The event permits selecting three partners at submission. See the [prize audit](docs/prize-compliance.md) for current evidence and submission requirements; planned work is not represented as completed integration.
 
 AI coding assistants contributed planning, implementation, tests, documentation and review across this repository. [AI usage and prompt inventory](docs/ai-usage.md) identifies assisted files and reused assets, retains the available audit prompts, and explicitly records missing historical prompts and owner-supplied human-contribution details. This is an incomplete submission disclosure until those details are verified.
 
@@ -332,6 +333,10 @@ AI coding assistants contributed planning, implementation, tests, documentation 
 - [ ] Owner-approved npm CLI publication
 - [ ] Real protected Uniswap quote with bypass detection and useful repair
 - [ ] Protected endpoint diagnostics and explicit provider selection
+- [ ] Whitechain protected sponsored-USDT checkout and Scale demonstration
+- [ ] Reusable merchant integration and Operate demonstration
+- [ ] Contract-enforced asset lifecycle and Tokenize demonstration
+- [ ] Complete partner feedback files, forms, videos and verified evidence bundle
 
 ## Documentation
 
@@ -339,6 +344,7 @@ AI coding assistants contributed planning, implementation, tests, documentation 
 | :--- | :--- |
 | [Project idea](docs/idea.md) | Product design, threat model and evidence gates |
 | [Prize compliance](docs/prize-compliance.md) · [AI usage](docs/ai-usage.md) | Classic track requirements, source-linked evidence and unresolved submission gates |
+| [Track completion plan](docs/track-completion-plan.md) | Full Uniswap and Whitechain Scale/Operate/Tokenize implementation and evidence checklist |
 | [Delivery plan](docs/plan.md) · [Task register](docs/task-register.md) | Dependencies, path ownership and GitHub issue links |
 | [Architecture](docs/architecture.md) · [Integration contracts](docs/contracts.md) | Module boundaries, shared interfaces and trust rules |
 | [Observer](docs/observer.md) | Read API, operator configuration, source topology and retention |

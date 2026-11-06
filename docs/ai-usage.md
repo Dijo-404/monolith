@@ -16,7 +16,7 @@ The following identifies concrete assisted areas and representative files. It do
 | Observer, analysis and shared contracts | [observer](../apps/observer/src), [analyzer](../packages/privacy-analyzer/src), [shared package](../packages/shared/src), [task #4](https://github.com/Dijo-404/monolith/issues/4), [task #11](https://github.com/Dijo-404/monolith/issues/11) |
 | Dashboard and browser checks | [live controller](../apps/dashboard/src/features/lab/live-controller.ts), [dashboard](../apps/dashboard/src), [privacy checks](../tests/privacy/egress), [task #14](https://github.com/Dijo-404/monolith/issues/14) |
 | CLI and deployment tooling | [CLI](../packages/cli/src), [deployment scripts](../scripts/deploy), [task #50](https://github.com/Dijo-404/monolith/issues/50), [task #36](https://github.com/Dijo-404/monolith/issues/36) |
-| This compliance audit | [README](../README.md), [prize audit](prize-compliance.md), this file, [Arkiv usage](../arkiv/how-you-use-arkiv.md), [task #83](https://github.com/Dijo-404/monolith/issues/83) |
+| This compliance audit and expanded target plan | [README](../README.md), [prize audit](prize-compliance.md), [completion plan](track-completion-plan.md), this file, [Arkiv usage](../arkiv/how-you-use-arkiv.md), activated task metadata and [task #83](https://github.com/Dijo-404/monolith/issues/83) |
 
 AI-assisted preparation or interpretation does not establish a live result. Actual run artifacts retain their timestamps and evidence kinds; mocks/fixtures remain `SIMULATED`. Human narration and an actual product demonstration are still needed for the submission video.
 
@@ -45,6 +45,14 @@ Registration clarification:
 ```text
 Question: Which ETHGlobal track is your team registered in? This determines whether the new-project or Continuity prizes apply.
 Answer: Classic / new project
+```
+
+Followup scope request, referring to Uniswap and Whitechain:
+
+```text
+Uniswap remains conditional; Whitechain currently lacks qualification evidence.
+
+add these also dont keep anything as conditional or lacks qualification add eveything and ill try finishing all of them
 ```
 
 This audit also followed the repository instructions in [AGENTS.md](../AGENTS.md). No complete archive of earlier implementation prompts or every internal agent delegation has been assembled here. Do not export raw conversations: they may contain keys, private account details or unrelated private information. Retain the relevant actual project prompts/planning artifacts after removing secrets; identify any material redaction or unavailable history honestly.

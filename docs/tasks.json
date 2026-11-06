@@ -680,7 +680,7 @@
     "id": "MN-018",
     "title": "Preflight the designated Whitechain token and gasless route",
     "lane": "C",
-    "phase": "conditional",
+    "phase": "preflight",
     "priority": "P2",
     "estimate": "1–2 hours",
     "branch": "feat/mn-018-whitechain-preflight",
@@ -701,20 +701,20 @@
       "EF protected comparison and real Arkiv-backed selection are already operating.",
       "The route choice cites deployed token evidence; permit/EIP-3009 support is never assumed from the name USDT.",
       "Test funding, signer/admin separation and no-shopper-gas assumptions are documented.",
-      "If funding, protected reads or an acceptable gasless route cannot be proven within the timebox, mark optional work blocked and return lane C to core hardening."
+      "If funding, protected reads or an acceptable gasless route cannot be proven within the timebox, record the exact blocker and recovery action while retaining the selected Whitechain completion target; never fabricate feasibility."
     ],
     "evidence": [
       "Actual token ABI/code/read results and protected chain read",
       "Route decision, funding evidence and mentor response if vault route is used"
     ],
-    "gate": "OPTIONAL: MN-009 and MN-013 merged with actual live evidence; owner explicitly activates Whitechain. This bounded preflight does not block the core.",
-    "conditional": true
+    "gate": "Owner activated Whitechain on 7 November 2026. MN-009 and MN-013 must be merged with accepted actual live evidence; this registration must merge before normal readiness/claim. The bounded preflight remains independent of the core release.",
+    "conditional": false
   },
   {
     "id": "MN-019",
     "title": "Implement and verify the selected signed payment contract",
     "lane": "C",
-    "phase": "conditional",
+    "phase": "integration",
     "priority": "P2",
     "estimate": "2–3 hours",
     "branch": "feat/mn-019-payment-contract",
@@ -743,14 +743,14 @@
       "Focused Foundry output",
       "Actual deployment, verification and token references"
     ],
-    "gate": "OPTIONAL: MN-018 passed, live core remains working, and the accepted gasless route is recorded.",
-    "conditional": true
+    "gate": "MN-018 passed, live core remains working, and the accepted gasless route is recorded.",
+    "conditional": false
   },
   {
     "id": "MN-020",
     "title": "Build the bounded merchant relayer and receipt reconciliation",
     "lane": "C",
-    "phase": "conditional",
+    "phase": "integration",
     "priority": "P2",
     "estimate": "2–3 hours",
     "branch": "feat/mn-020-merchant-relayer",
@@ -776,14 +776,14 @@
       "Relayer abuse/idempotency/reconciliation test output",
       "Redacted actual submission and receipt references"
     ],
-    "gate": "OPTIONAL: MN-019 passed with verified deployed contract; core acceptance remains green.",
-    "conditional": true
+    "gate": "MN-019 passed with verified deployed contract; core acceptance remains green.",
+    "conditional": false
   },
   {
     "id": "MN-021",
     "title": "Prove protected browser checkout with real sponsored USDT settlement",
     "lane": "D",
-    "phase": "conditional",
+    "phase": "integration",
     "priority": "P2",
     "estimate": "2–3 hours",
     "branch": "feat/mn-021-protected-checkout",
@@ -812,12 +812,12 @@
       "Payer WBT evidence and merchant balance/receipt",
       "Failing and passing checkout privacy runs"
     ],
-    "gate": "OPTIONAL: MN-020 passed and live core still works; do not replace core adapters with mocked payment success.",
-    "conditional": true
+    "gate": "MN-020 passed and live core still works; do not replace core adapters with mocked payment success.",
+    "conditional": false
   },
   {
     "id": "MN-022",
-    "title": "Package the optional Whitechain evidence and final demo",
+    "title": "Package the Whitechain three-track evidence and final demo",
     "lane": "C",
     "phase": "release",
     "priority": "P2",
@@ -825,7 +825,9 @@
     "branch": "feat/mn-022-whitechain-release",
     "depends_on": [
       "MN-017",
-      "MN-021"
+      "MN-021",
+      "MN-030",
+      "MN-031"
     ],
     "paths": [
       "WHITECHAIN_FEEDBACK.md",
@@ -835,23 +837,23 @@
       "evidence/**"
     ],
     "scope": [
-      "Extend the core evidence manifest with verified deployment, actual USDT settlement and sponsored-gas proof.",
+      "Extend the core evidence manifest with verified deployment, actual designated-USDT settlement, sponsored-gas proof, reusable merchant integration and contract-enforced asset lifecycle evidence for Scale, Operate and Tokenize.",
       "Write real integration feedback, Whitechain usefulness and the selected route limitations.",
       "Record the complete 2–4 minute demo and validate sponsor submission requirements against current official sources."
     ],
     "acceptance": [
-      "Core evidence remains valid independently of optional payment evidence.",
+      "Core evidence remains valid independently of the payment and asset-lifecycle evidence.",
       "All claimed Whitechain proofs have actual explorer/contract/token references and an accepted gasless flow.",
       "No mock, unverified deployment or pending transaction is narrated as completed settlement.",
-      "If optional evidence is incomplete, submit the honest core demo and omit the Whitechain qualification claim."
+      "Each selected Whitechain track is checked against its actual completed demonstration and shared sponsor requirements; unchecked work stays on the completion plan and is never described as qualified."
     ],
     "evidence": [
-      "Complete optional evidence manifest",
+      "Complete Whitechain three-track evidence manifest",
       "WHITECHAIN_FEEDBACK.md and 2–4 minute demo link",
-      "Final conditional submission checklist"
+      "Final Scale, Operate and Tokenize submission checklist and evidence references"
     ],
-    "gate": "OPTIONAL: MN-017 and MN-021 passed; user retains all merges to main and final submission decisions.",
-    "conditional": true
+    "gate": "MN-017, MN-021, MN-030 and MN-031 merged with accepted actual evidence. Owner retains merges to main, source publication and final selection of at most three partner programs.",
+    "conditional": false
   },
   {
     "id": "MN-023",
@@ -1175,6 +1177,80 @@
       "Pinned example provenance/license, reviewed local diagnostic contract, complete source/patch/policy/capture bindings, redacted diff/evidence artifacts and documented limitations"
     ],
     "gate": "MN-017, MN-023, MN-025 and MN-026 merged with accepted evidence, plus this registration merged; task unclaimed until a normal fresh claim. Keep this P2 extension outside MN-017's required graph; MN-027/MN-028 are independent extensions, not prerequisites. The first slice owns only its new runner/example/test/documentation paths. Coordinate any needed existing browser-runner extraction, CLI integration, shared contract, egress adapter/inventory or root manifest/lockfile change on the affected issues and update scope before editing; no ownership transfers or policy exemptions are implied. Registration adds planned work only, not harness implementation, model/hosting spend, package publication, source publication, deployment or merge authority.",
+    "conditional": false
+  },
+  {
+    "id": "MN-030",
+    "title": "Ship a reusable Whitechain merchant checkout integration",
+    "lane": "D",
+    "phase": "integration",
+    "priority": "P2",
+    "estimate": "2–3 hours",
+    "branch": "feat/mn-030-merchant-checkout-integration",
+    "depends_on": [
+      "MN-021"
+    ],
+    "paths": [
+      "packages/checkout/**",
+      "examples/merchant-checkout/**",
+      "tests/e2e/merchant-checkout/**",
+      "docs/merchant-checkout.md"
+    ],
+    "scope": [
+      "Expose the accepted payment flow as a small public checkout widget/SDK or payment-link API; integrate it in a separate licensed merchant demo application in roughly 20 application lines.",
+      "Coordinate public ports with the accepted contract/relayer/checkout owners, preserve protected read injection and separate signed submission. Root manifest/lockfile/dependency changes require a separately agreed single owner.",
+      "Show merchant and customer views with order-to-receipt behavior, bounded pending/failure/reconciliation and duplicate handling."
+    ],
+    "acceptance": [
+      "A separate merchant app imports only public package exports and completes an actual designated-USDT payment through the accepted flow; the example and integration line count are retained.",
+      "App-owned chain/status reads use an injected protected transport or block, with no SDK-default direct fallback. Existing payment/privacy invariants remain enforced.",
+      "Meaningful integration tests cover useful success, pending/failure/reconcile, duplicate submission and forbidden configuration; mock outcomes are distinct from actual settlement evidence.",
+      "Setup, architecture, API/integration example and limitations are documented. Refund, renewal or accounting export examples are extra credit, not all mandatory."
+    ],
+    "evidence": [
+      "Independent-app integration source and exact line-count reference",
+      "Actual merchant/customer walkthrough, source-bound settlement receipt and focused integration test results"
+    ],
+    "gate": "MN-021 merged with accepted actual settlement evidence and this registration merged. Coordinate interfaces/paths with MN-019/MN-020/MN-021 and the current application owner before a normal fresh claim; no root manifest/lockfile or runtime ownership is granted.",
+    "conditional": false
+  },
+  {
+    "id": "MN-031",
+    "title": "Implement a contract-enforced Whitechain asset lifecycle",
+    "lane": "C",
+    "phase": "integration",
+    "priority": "P2",
+    "estimate": "3–5 hours",
+    "branch": "feat/mn-031-whitechain-asset-lifecycle",
+    "depends_on": [
+      "MN-019",
+      "MN-021"
+    ],
+    "paths": [
+      "contracts/src/rwa/**",
+      "contracts/test/rwa/**",
+      "contracts/script/rwa/**",
+      "apps/dashboard/src/features/tokenize/**",
+      "apps/dashboard/src/composition/tokenize.ts",
+      "tests/e2e/tokenize/**",
+      "docs/whitechain-tokenize.md"
+    ],
+    "scope": [
+      "Choose one bounded synthetic invoice-financing or test-note model with clear issuer/investor/business roles and prototype assumptions; ordinary invoice payment alone is not a Tokenize lifecycle.",
+      "Enforce real lifecycle/transfer rules in contracts, deploy and verify on Whitechain Sepolia1874, and demonstrate issuance-to-funding/payment/settlement with designated USDT0xcedfB56113143d55b2358b8CFbB0dEB5Ad2f55a7 for every lifecycle payment.",
+      "Add the corresponding role views and protect browser chain/status reads; coordinate existing contract/composition boundaries before editing. Root manifests/lockfile, existing checkout/relayer and runtime operations remain outside this scope."
+    ],
+    "acceptance": [
+      "Meaningful transfer/lifecycle rules such as participant admission, maturity and settlement conditions are contract-enforced; a mint button or unenforced NFT is insufficient.",
+      "One full lifecycle step has verified deployed source, genuine successful designated-token receipts and matching actors/amounts/state transitions. Synthetic asset inputs remain labeled and do not assert real customer assets or legally enforceable rights.",
+      "Tests cover role/transfer violations, premature/expired/repeated settlement and token/accounting invariants. Protected reads fail closed and existing useful checkout behavior is retained.",
+      "The issuer/investor/business demonstration, setup, architecture, asset assumptions and limitations are documented for MN-022 packaging."
+    ],
+    "evidence": [
+      "Verified asset-lifecycle source/deployment, enforced-rule tests and exact commands/results",
+      "Actual role-based lifecycle demo, designated-USDT receipts and state-transition references with honestly labeled synthetic inputs"
+    ],
+    "gate": "MN-019 and MN-021 merged with accepted verified-contract/actual-payment evidence and this registration merged. Coordinate contract/build/composition interfaces with MN-019/MN-021 and the current dashboard owner before a normal fresh claim; no deployment/funding/signing or other-owner path permission is inferred from registration.",
     "conditional": false
   }
 ]
