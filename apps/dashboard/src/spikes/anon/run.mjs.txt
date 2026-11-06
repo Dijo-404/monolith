@@ -1,0 +1,187 @@
+// Self-contained, explicitly live runner. All installs/builds/results stay in /tmp.
+// Run with the pinned workspace Node version; no monorepo manifest/lockfile is needed.
+import { mkdtemp, copyFile, writeFile, readFile } from 'node:fs/promises';
+import { createHash } from 'node:crypto';
+import { tmpdir } from 'node:os';
+import { join, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { createRequire } from 'node:module';
+import { spawnSync } from 'node:child_process';
+
+const directory = dirname(fileURLToPath(import.meta.url));
+const environment = await mkdtemp(join(tmpdir(), 'monolith-anon-'));
+const versions = {
+  '@anon-rpc/browser-harness': '0.4.0',
+  '@anon-rpc/harness-core': '0.4.0',
+  '@noble/hashes': '1.8.0',
+  playwright: '1.65.0',
+  vite: '8.3.6',
+  typescript: '6.0.3',
+};
+await writeFile(join(environment, 'package.json'), JSON.stringify({
+  name: 'monolith-isolated-anon-preflight', private: true, type: 'module', dependencies: versions,
+}, null, 2));
+await copyFile(join(directory, 'index.html'), join(environment, 'index.html'));
+// Keep the SDK experiment outside the dashboard's TypeScript compilation.
+await copyFile(join(directory, 'main.ts.txt'), join(environment, 'main.ts'));
+console.log(`Isolated environment: ${environment}`);
+const installed = spawnSync('npm', ['install', '--no-fund'], { cwd: environment, stdio: 'inherit' });
+if (installed.status !== 0) throw new Error('Isolated npm installation failed');
+const lockBytes = await readFile(join(environment, 'package-lock.json'));
+const lock = JSON.parse(lockBytes);
+const require = createRequire(join(environment, 'package.json'));
+const { chromium } = require('playwright');
+const { keccak_256 } = require('@noble/hashes/sha3');
+const { createServer } = await import(require.resolve('vite'));
+const checked = spawnSync(process.execPath, [require.resolve('typescript/bin/tsc'),
+  '--noEmit', '--strict', '--target', 'ES2022', '--module', 'ESNext',
+  '--moduleResolution', 'bundler', '--lib', 'ES2022,DOM', '--skipLibCheck', 'main.ts',
+], { cwd: environment, encoding: 'utf8' });
+if (checked.status !== 0) throw new Error(`Spike typecheck failed\n${checked.stdout}${checked.stderr}`);
+const timeoutMs = Number(process.env.MONOLITH_ATTEMPT_MS ?? 180000);
+if (!Number.isInteger(timeoutMs) || timeoutMs < 1000 || timeoutMs > 300000) {
+  throw new Error('MONOLITH_ATTEMPT_MS must be 1000..300000');
+}
+const selected = process.argv.slice(2);
+const networks = selected.length ? selected : ['tor', 'nym'];
+if (networks.some((network) => !['tor', 'nym'].includes(network))) throw new Error('Use tor and/or nym');
+let server;
+let browser;
+const artifact = {
+  schemaVersion: 1, startedAt: new Date().toISOString(), generatedAt: null, experimentOnly: true,
+  browser: null, node: process.version, dependencies: versions,
+  isolatedLockSha256: createHash('sha256').update(lockBytes).digest('hex'),
+  lockResolvedPackages: Object.fromEntries(Object.entries(lock.packages)
+    .filter(([path]) => path).map(([path, pkg]) => [path, pkg.version])),
+  timeoutMs, typecheck: 'PASS', attempts: [],
+};
+try {
+  server = await createServer({ root: environment, configFile: false,
+    server: { host: '127.0.0.1', port: 4317, strictPort: true },
+  });
+  await server.listen();
+  browser = await chromium.launch({ headless: true,
+    ...(process.env.MONOLITH_CHROMIUM_PATH ? { executablePath: process.env.MONOLITH_CHROMIUM_PATH } : {}),
+  });
+  artifact.browser = browser.version();
+  for (const network of networks) {
+    console.log(`Starting ${network}; bounded to ${timeoutMs} ms`);
+    const context = await browser.newContext({ viewport: { width: 1024, height: 768 } });
+    const page = await context.newPage();
+    const directAppRequests = [];
+    const failures = [];
+    const resolverResponses = [];
+    const pending = [];
+    await context.addInitScript(() => {
+      // Coarse WebRTC state only: never capture ICE candidates or source IPs.
+      globalThis.monolithRtcStates = [];
+      const Original = globalThis.RTCPeerConnection;
+      globalThis.RTCPeerConnection = class extends Original {
+        constructor(...args) {
+          super(...args);
+          this.addEventListener('iceconnectionstatechange', () =>
+            globalThis.monolithRtcStates.push(this.iceConnectionState));
+        }
+      };
+    });
+    // Independent network boundary: any ordinary page request to the protected
+    // target fails the experiment. KPS/WebRTC is outside HTTP interception scope.
+    await context.route('https://ethereum-rpc.publicnode.com/**', async (route) => {
+      directAppRequests.push({ method: route.request().method() });
+      await route.abort('blockedbyclient');
+    });
+    page.on('requestfailed', (request) => {
+      try {
+        const url = new URL(request.url());
+        if (url.protocol === 'https:') failures.push({ origin: url.origin,
+          method: request.method(), code: request.failure()?.errorText });
+      } catch { /* non-URL browser event */ }
+    });
+    page.on('response', (response) => {
+      const url = new URL(response.url());
+      if (url.protocol !== 'https:' || response.request().method() !== 'GET') return;
+      const task = (async () => {
+        try {
+          const body = await response.body();
+          // Content bytes are never saved; only hashes of actual resolver replies.
+          resolverResponses.push({ url: `${url.origin}${url.pathname}`, status: response.status(),
+            bytes: body.length, keccak256: `0x${Buffer.from(keccak_256(body)).toString('hex')}` });
+        } catch { /* no complete response body on network failure */ }
+      })();
+      pending.push(task);
+    });
+    await page.goto('http://127.0.0.1:4317', { waitUntil: 'load' });
+    await page.waitForFunction(() => typeof globalThis.runPreflight === 'function');
+    // Deliberate negative control, aborted before egress. Verify interception
+    // works rather than trusting an empty observed request list.
+    await page.evaluate(async () => {
+      try { await fetch('https://ethereum-rpc.publicnode.com/', { method: 'POST' }); }
+      catch { /* the boundary must abort this deliberate control */ }
+    });
+    const directDetectionSelfCheck = directAppRequests.length === 1;
+    const selfCheckFailures = failures.splice(0);
+    directAppRequests.length = 0;
+    let observed;
+    let rtcStates;
+    let watchdog;
+    const heartbeat = setInterval(async () => {
+      try {
+        const progress = await page.evaluate(() => ({ stage: globalThis.preflightProgress?.stage,
+          calls: globalThis.preflightProgress?.bootstrap.calls.length,
+          logs: globalThis.preflightProgress?.workerLogs }));
+        console.log(JSON.stringify({ network, progress }));
+      } catch { /* context has been disposed */ }
+    }, 30000);
+    try {
+      observed = await Promise.race([
+        page.evaluate(({ network, timeoutMs }) => globalThis.runPreflight(network, timeoutMs),
+          { network, timeoutMs }),
+        new Promise((_, reject) => {
+          watchdog = setTimeout(() => reject(new Error('Browser attempt watchdog')), timeoutMs + 15000);
+        }),
+      ]);
+      rtcStates = await page.evaluate(() => globalThis.monolithRtcStates);
+    } finally {
+      clearTimeout(watchdog);
+      clearInterval(heartbeat);
+      // Dispose before waiting on response.body(): a stalled resolver must not
+      // outlive the attempt deadline. Earlier complete bodies remain hashable.
+      await context.close();
+      await Promise.allSettled(pending);
+    }
+    const hashes = resolverResponses
+      .filter((reply) => observed.specifierMetadata?.resolvers.includes(reply.url))
+      .map((reply) => ({ ...reply,
+        matchesCapturedSpecifier: reply.keccak256 === observed.specifierMetadata?.workerHash,
+      }));
+    const attempt = { ...observed, directDetectionSelfCheck, selfCheckFailures, rtcStates,
+      independentHttpBoundary: { directAppRequests: directAppRequests.length,
+        scope: 'ordinary browser HTTP to the configured target; excludes WebRTC/KPS' },
+      resolverResponses: hashes, networkFailures: failures,
+    };
+    artifact.attempts.push(attempt);
+    // close() alone cannot cancel late SDK bootstrap awaits. Context destruction
+    // disposes the complete page/iframe/WebRTC environment between attempts.
+    attempt.shutdown.contextDestroyed = true;
+    artifact.generatedAt = new Date().toISOString();
+    await writeFile(join(environment, 'observed.json'), `${JSON.stringify(artifact, null, 2)}\n`);
+    console.log(JSON.stringify({ network, stage: observed.stage, result: observed.result,
+      failure: observed.failure, ready: observed.harnessReadyObserved,
+      directAppRequests: directAppRequests.length, resolverHashes: hashes, failures }));
+  }
+} finally {
+  await browser?.close();
+  await server?.close();
+}
+console.log(`Redacted observations: ${join(environment, 'observed.json')}`);
+if (artifact.attempts.some((a) => a.independentHttpBoundary.directAppRequests !== 0 ||
+    !a.directDetectionSelfCheck || !a.shutdown.closeCalled || !a.shutdown.futureReadRejected ||
+    a.shutdown.rejectionCode !== 'WORKER_CLOSED' || !a.shutdown.contextDestroyed ||
+    a.shutdown.iframeCountAfterClose !== 0)) process.exitCode = 2;
+else if (!artifact.attempts.some((a) => a.evidence === 'OBSERVED_LIVE' &&
+    a.harnessReadyObserved && a.result === '0x1' && a.failure === null &&
+    a.bootstrap.calls.length === 2 && a.bootstrap.calls.every((call) => call.success && call.nonAnonymous) &&
+    a.resolverResponses.some((reply) => reply.status === 200 && reply.bytes > 0 &&
+      reply.matchesCapturedSpecifier && reply.keccak256 === a.specifierMetadata?.workerHash))) {
+  process.exitCode = 1;
+}

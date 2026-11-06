@@ -1,0 +1,11 @@
+{
+  "fixtureVersion": 1,
+  "evidence": "SIMULATED",
+  "description": "Negative test: neither result nor error is present.",
+  "contract": "jsonRpcResponseSchema",
+  "expected": "invalid",
+  "payload": {
+    "jsonrpc": "2.0",
+    "id": "fixture-rpc-001"
+  }
+}

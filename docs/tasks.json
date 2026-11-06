@@ -62,7 +62,13 @@
     "paths": [
       "packages/shared/src/**",
       "tests/fixtures/contracts/**",
-      "docs/contracts.md"
+      "docs/contracts.md",
+      "packages/shared/test/**",
+      "packages/shared/tsconfig.test.json",
+      "packages/shared/tsconfig.json",
+      "packages/shared/package.json",
+      "pnpm-lock.yaml",
+      "docs/tasks.json"
     ],
     "scope": [
       "Implement the initial DTOs, validation schemas and error codes from docs/contracts.md using the Monolith naming.",
@@ -132,7 +138,15 @@
       "apps/observer/src/adapters/http/observer.ts",
       "apps/observer/src/adapters/upstream/**",
       "apps/observer/src/composition/server.ts",
-      "apps/observer/test/observer/**"
+      "apps/observer/test/observer/**",
+      "apps/observer/src/adapters/http/**",
+      "apps/observer/src/composition/env.ts",
+      "apps/observer/src/composition/start.ts",
+      "apps/observer/test/env.test.ts",
+      "apps/observer/test/server.test.ts",
+      "docs/observer.md",
+      ".env.example",
+      "docs/tasks.json"
     ],
     "scope": [
       "Expose the observer JSON-RPC endpoint and separate short-lived diagnostic lookup defined by the shared contracts.",
@@ -231,7 +245,10 @@
     ],
     "paths": [
       "packages/transport/src/**",
-      "packages/transport/test/**"
+      "packages/transport/test/**",
+      "packages/transport/package.json",
+      "packages/transport/tsconfig*.json",
+      "pnpm-lock.yaml"
     ],
     "scope": [
       "Wrap the official worker behind the frozen browser transport port with explicit initialize/read/close lifecycle.",
@@ -271,7 +288,14 @@
       "packages/registry/src/ports/source-snapshot.ts",
       "packages/registry/src/ports/entity-writer.ts",
       "scripts/import-evm-registry.ts",
-      "packages/registry/test/importer/**"
+      "scripts/importer-key-file.ts",
+      "packages/registry/test/importer/**",
+      "packages/registry/src/index.ts",
+      "packages/registry/package.json",
+      "packages/registry/tsconfig.json",
+      "package.json",
+      "pnpm-lock.yaml",
+      "docs/tasks.json"
     ],
     "scope": [
       "Import an immutable ethereum-lists/chains snapshot with its license notices, source SHA and manifest hash.",
@@ -348,7 +372,13 @@
       "apps/observer/src/adapters/http/registry.ts",
       "apps/observer/src/composition/registry.ts",
       "apps/observer/test/registry/**",
-      "packages/registry/test/reader/**"
+      "packages/registry/test/reader/**",
+      "packages/registry/src/index.ts",
+      "packages/registry/package.json",
+      "apps/observer/src/composition/server.ts",
+      "apps/observer/src/composition/start.ts",
+      ".env.example",
+      "docs/tasks.json"
     ],
     "scope": [
       "Query public network metadata by trusted creator/owner and publish a sanitized shared snapshot API without wallet/session parameters.",

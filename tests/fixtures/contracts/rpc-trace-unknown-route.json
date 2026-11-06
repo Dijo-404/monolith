@@ -1,0 +1,22 @@
+{
+  "fixtureVersion": 1,
+  "evidence": "SIMULATED",
+  "description": "Negative test: fabricated route categories are rejected.",
+  "contract": "rpcTraceSchema",
+  "expected": "invalid",
+  "payload": {
+    "schemaVersion": 1,
+    "readId": "fixture-read-001",
+    "attempt": 1,
+    "endpointId": "fixture-endpoint-001",
+    "chainId": "1",
+    "method": "eth_chainId",
+    "callsite": "fixture.chain-id:1",
+    "route": "anonymous-guaranteed",
+    "durationMs": 25,
+    "success": true,
+    "bootstrap": false,
+    "evidence": "SIMULATED",
+    "payloadVisibility": "rpc-endpoint-can-read"
+  }
+}

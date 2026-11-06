@@ -1,0 +1,16 @@
+{
+  "fixtureVersion": 1,
+  "evidence": "SIMULATED",
+  "description": "Negative test: mutually exclusive result and error are both present.",
+  "contract": "jsonRpcResponseSchema",
+  "expected": "invalid",
+  "payload": {
+    "jsonrpc": "2.0",
+    "id": "fixture-rpc-001",
+    "result": "0x1",
+    "error": {
+      "code": -32000,
+      "message": "Synthetic failure"
+    }
+  }
+}

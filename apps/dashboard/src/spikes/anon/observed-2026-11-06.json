@@ -1,0 +1,264 @@
+{
+  "schemaVersion": 1,
+  "experimentOnly": true,
+  "browser": "158.0.8127.18",
+  "node": "v24.22.2",
+  "dependencies": {
+    "@anon-rpc/browser-harness": "0.4.0",
+    "@anon-rpc/harness-core": "0.4.0",
+    "@noble/hashes": "1.8.0",
+    "playwright": "1.65.0",
+    "vite": "8.3.6",
+    "typescript": "6.0.3"
+  },
+  "isolatedLockSha256": "2b6481419dc8935d8b520090f3fae3f62233ac5e0b71c6b69b0c71d0f88951fb",
+  "timeoutMs": 180000,
+  "typecheck": "PASS",
+  "attempts": [
+    {
+      "schemaVersion": 1,
+      "observedAt": "2026-11-06T12:17:48.399Z",
+      "evidence": "BLOCKED",
+      "network": "tor",
+      "specifier": "0x700dA3193D35fA54Cd3fBf29B66f2a2A0385659e",
+      "config": {
+        "gateways": [
+          "152.236.3.22:12298:uEiCH0VdbhryzJcMtCfB0vLA4sOvHdQ4hq5w7CopcwU59bQ"
+        ]
+      },
+      "bootstrap": {
+        "origin": "https://ethereum.publicnode.com",
+        "disclosure": "NON_ANONYMOUS_SPECIFIER_LOOKUP",
+        "calls": [
+          {
+            "selector": "0x3898587d",
+            "success": true,
+            "nonAnonymous": true
+          },
+          {
+            "selector": "0x1c67ff29",
+            "success": true,
+            "nonAnonymous": true
+          }
+        ]
+      },
+      "target": {
+        "url": "https://ethereum-rpc.publicnode.com",
+        "expectedChainId": "1",
+        "method": "eth_chainId"
+      },
+      "stage": "BLOCKED",
+      "specifierMetadata": {
+        "workerHash": "0x5b62f358ce7a2b94ee9bc3a0e6a08757db68fa08fc348276f31eda788aec818b",
+        "resolvers": [
+          "https://cdn.jsdelivr.net/npm/tor-js@0.4.4/dist/anon-rpc-worker.js",
+          "https://unpkg.com/tor-js@0.4.4/dist/anon-rpc-worker.js",
+          "https://raw.githubusercontent.com/ethereum/tor-js/keccak/5b/62f358ce7a2b94ee9bc3a0e6a08757db68fa08fc348276f31eda788aec818b",
+          "kps: [public contract resolver; omitted from export]"
+        ],
+        "source": "captured bootstrap responses; not a harness metadata getter"
+      },
+      "harnessReadyObserved": false,
+      "result": null,
+      "failure": "ATTEMPT_DEADLINE",
+      "workerLogs": 25,
+      "workerDiagnostics": {
+        "torBootstrapPercent": null,
+        "gatewayFailures": 1,
+        "timeouts": 3,
+        "errors": 0
+      },
+      "shutdown": {
+        "closeCalled": true,
+        "iframeCountAfterClose": 0,
+        "futureReadRejected": true,
+        "rejectionCode": "WORKER_CLOSED",
+        "rejectionMs": 0,
+        "contextDestroyed": true
+      },
+      "durationMs": 180003,
+      "limitations": [
+        "No paired observer proof: MN-009 remains UNTESTED.",
+        "The destination can read RPC payloads.",
+        "Harness ready is not proof of anonymous egress.",
+        "Browser context teardown is required after close to cancel late bootstrap work."
+      ],
+      "directDetectionSelfCheck": true,
+      "selfCheckFailures": [
+        {
+          "origin": "https://ethereum-rpc.publicnode.com",
+          "method": "POST",
+          "code": "net::ERR_BLOCKED_BY_CLIENT.Inspector"
+        }
+      ],
+      "rtcStates": [
+        "checking",
+        "checking",
+        "checking",
+        "checking",
+        "checking",
+        "checking",
+        "checking",
+        "checking",
+        "checking",
+        "checking",
+        "checking",
+        "checking"
+      ],
+      "independentHttpBoundary": {
+        "directAppRequests": 0,
+        "scope": "ordinary browser HTTP to the configured target; excludes WebRTC/KPS"
+      },
+      "resolverResponses": [
+        {
+          "url": "https://cdn.jsdelivr.net/npm/tor-js@0.4.4/dist/anon-rpc-worker.js",
+          "status": 200,
+          "bytes": 6874306,
+          "keccak256": "0x5b62f358ce7a2b94ee9bc3a0e6a08757db68fa08fc348276f31eda788aec818b",
+          "matchesCapturedSpecifier": true
+        }
+      ],
+      "networkFailures": []
+    },
+    {
+      "schemaVersion": 1,
+      "observedAt": "2026-11-06T12:20:48.498Z",
+      "evidence": "OBSERVED_LIVE",
+      "network": "nym",
+      "specifier": "0x3aCD9742C68F6d993066Ae25533e09b9e1f60eD0",
+      "config": null,
+      "bootstrap": {
+        "origin": "https://ethereum.publicnode.com",
+        "disclosure": "NON_ANONYMOUS_SPECIFIER_LOOKUP",
+        "calls": [
+          {
+            "selector": "0x3898587d",
+            "success": true,
+            "nonAnonymous": true
+          },
+          {
+            "selector": "0x1c67ff29",
+            "success": true,
+            "nonAnonymous": true
+          }
+        ]
+      },
+      "target": {
+        "url": "https://ethereum-rpc.publicnode.com",
+        "expectedChainId": "1",
+        "method": "eth_chainId"
+      },
+      "stage": "READ_RETURNED",
+      "specifierMetadata": {
+        "workerHash": "0xf13a448a8721b9d0b20da3d5b80ffe00bf4c5bb3aae812a38d3d1e3bc81fceb8",
+        "resolvers": [
+          "https://cdn.jsdelivr.net/npm/@nymproject/anon-rpc-worker@0.1.0/dist/nym-anon-rpc-worker.js",
+          "https://unpkg.com/@nymproject/anon-rpc-worker@0.1.0/dist/nym-anon-rpc-worker.js",
+          "https://raw.githubusercontent.com/nymtech/anon-rpc-worker/keccak/f1/3a448a8721b9d0b20da3d5b80ffe00bf4c5bb3aae812a38d3d1e3bc81fceb8"
+        ],
+        "source": "captured bootstrap responses; not a harness metadata getter"
+      },
+      "harnessReadyObserved": true,
+      "result": "0x1",
+      "failure": null,
+      "workerLogs": 1,
+      "workerDiagnostics": {
+        "torBootstrapPercent": null,
+        "gatewayFailures": 0,
+        "timeouts": 0,
+        "errors": 0
+      },
+      "shutdown": {
+        "closeCalled": true,
+        "iframeCountAfterClose": 0,
+        "futureReadRejected": true,
+        "rejectionCode": "WORKER_CLOSED",
+        "rejectionMs": 0,
+        "contextDestroyed": true
+      },
+      "durationMs": 24221,
+      "limitations": [
+        "No paired observer proof: MN-009 remains UNTESTED.",
+        "The destination can read RPC payloads.",
+        "Harness ready is not proof of anonymous egress.",
+        "Browser context teardown is required after close to cancel late bootstrap work."
+      ],
+      "directDetectionSelfCheck": true,
+      "selfCheckFailures": [
+        {
+          "origin": "https://ethereum-rpc.publicnode.com",
+          "method": "POST",
+          "code": "net::ERR_BLOCKED_BY_CLIENT.Inspector"
+        }
+      ],
+      "rtcStates": [],
+      "independentHttpBoundary": {
+        "directAppRequests": 0,
+        "scope": "ordinary browser HTTP to the configured target; excludes WebRTC/KPS"
+      },
+      "resolverResponses": [
+        {
+          "url": "https://cdn.jsdelivr.net/npm/@nymproject/anon-rpc-worker@0.1.0/dist/nym-anon-rpc-worker.js",
+          "status": 200,
+          "bytes": 18283862,
+          "keccak256": "0xf13a448a8721b9d0b20da3d5b80ffe00bf4c5bb3aae812a38d3d1e3bc81fceb8",
+          "matchesCapturedSpecifier": true
+        }
+      ],
+      "networkFailures": []
+    }
+  ],
+  "startedAt": "2026-11-06T12:17:48.019Z",
+  "generatedAt": "2026-11-06T12:21:12.729Z",
+  "lockResolvedPackages": {
+    "node_modules/@anon-rpc/browser-harness": "0.4.0",
+    "node_modules/@anon-rpc/harness-core": "0.4.0",
+    "node_modules/@kpstreams/core": "0.2.1",
+    "node_modules/@kpstreams/webrtc-client": "0.2.1",
+    "node_modules/@noble/hashes": "1.8.0",
+    "node_modules/@oxc-project/types": "0.156.0",
+    "node_modules/@rolldown/binding-android-arm-eabi": "1.2.16",
+    "node_modules/@rolldown/binding-android-arm64": "1.2.16",
+    "node_modules/@rolldown/binding-darwin-arm64": "1.2.16",
+    "node_modules/@rolldown/binding-darwin-x64": "1.2.16",
+    "node_modules/@rolldown/binding-freebsd-x64": "1.2.16",
+    "node_modules/@rolldown/binding-linux-arm-gnueabihf": "1.2.16",
+    "node_modules/@rolldown/binding-linux-arm64-gnu": "1.2.16",
+    "node_modules/@rolldown/binding-linux-arm64-musl": "1.2.16",
+    "node_modules/@rolldown/binding-linux-ppc64-gnu": "1.2.16",
+    "node_modules/@rolldown/binding-linux-s390x-gnu": "1.2.16",
+    "node_modules/@rolldown/binding-linux-x64-gnu": "1.2.16",
+    "node_modules/@rolldown/binding-linux-x64-musl": "1.2.16",
+    "node_modules/@rolldown/binding-openharmony-arm64": "1.2.16",
+    "node_modules/@rolldown/binding-win32-arm64-msvc": "1.2.16",
+    "node_modules/@rolldown/binding-win32-x64-msvc": "1.2.16",
+    "node_modules/@rolldown/pluginutils": "1.0.1",
+    "node_modules/detect-libc": "2.1.2",
+    "node_modules/fdir": "6.5.0",
+    "node_modules/fsevents": "2.3.3",
+    "node_modules/lightningcss": "1.33.0",
+    "node_modules/lightningcss-android-arm64": "1.33.0",
+    "node_modules/lightningcss-darwin-arm64": "1.33.0",
+    "node_modules/lightningcss-darwin-x64": "1.33.0",
+    "node_modules/lightningcss-freebsd-x64": "1.33.0",
+    "node_modules/lightningcss-linux-arm-gnueabihf": "1.33.0",
+    "node_modules/lightningcss-linux-arm64-gnu": "1.33.0",
+    "node_modules/lightningcss-linux-arm64-musl": "1.33.0",
+    "node_modules/lightningcss-linux-x64-gnu": "1.33.0",
+    "node_modules/lightningcss-linux-x64-musl": "1.33.0",
+    "node_modules/lightningcss-win32-arm64-msvc": "1.33.0",
+    "node_modules/lightningcss-win32-x64-msvc": "1.33.0",
+    "node_modules/nanoid": "3.3.20",
+    "node_modules/picocolors": "1.1.1",
+    "node_modules/picomatch": "4.0.7",
+    "node_modules/playwright": "1.65.0",
+    "node_modules/playwright-core": "1.65.0",
+    "node_modules/postcss": "8.5.32",
+    "node_modules/rolldown": "1.2.16",
+    "node_modules/source-map-js": "1.2.2",
+    "node_modules/tinyglobby": "0.2.17",
+    "node_modules/typescript": "6.0.3",
+    "node_modules/vite": "8.3.6"
+  },
+  "exportNotes": "Metadata normalization only: startedAt was originally labeled generatedAt; completion uses original file modification time. Package inventory is the isolated lock resolution including optional platforms. Attempt observations are unchanged."
+}

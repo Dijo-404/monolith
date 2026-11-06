@@ -1,0 +1,35 @@
+{
+  "fixtureVersion": 1,
+  "evidence": "SIMULATED",
+  "description": "Negative test: v2 cannot silently enter a v1 consumer.",
+  "contract": "registryManifestSchema",
+  "expected": "UNSUPPORTED_VERSION",
+  "payload": {
+    "schemaVersion": 2,
+    "revision": "fixture-manifest-v1",
+    "generatedAt": "2030-01-01T00:00:00Z",
+    "expiresAt": "2030-01-01T01:00:00Z",
+    "evidence": "SIMULATED",
+    "origin": "fixture",
+    "endpoints": [
+      {
+        "endpointId": "fixture-endpoint-001",
+        "chainId": "1",
+        "chainName": "Synthetic fixture chain",
+        "rpcUrl": "https://rpc.example.com",
+        "publisher": {
+          "creator": "0x1111111111111111111111111111111111111111",
+          "owner": "0x1111111111111111111111111111111111111111"
+        },
+        "entityKey": "0x2222222222222222222222222222222222222222222222222222222222222222",
+        "expiresAt": "2030-01-01T01:00:00Z",
+        "source": {
+          "url": "https://source.example.com/chains",
+          "revision": "1111111111111111111111111111111111111111",
+          "licenseUrl": "https://source.example.com/LICENSE",
+          "snapshotSha256": "3333333333333333333333333333333333333333333333333333333333333333"
+        }
+      }
+    ]
+  }
+}

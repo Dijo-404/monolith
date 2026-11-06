@@ -1,0 +1,228 @@
+{
+  "fixtureVersion": 1,
+  "evidence": "SIMULATED",
+  "description": "A wholly synthetic two-read leak and repair fixture. Hypothetical worker routes and timing values are not live anonymity evidence.",
+  "scope": {
+    "reportRunId": "public-run-fixture-001",
+    "application": "leak-lab",
+    "origins": [
+      {
+        "alias": "rpc-primary",
+        "origin": "https://rpc.example.com"
+      }
+    ],
+    "callsites": [
+      {
+        "alias": "balance-widget",
+        "label": "lab.balance"
+      },
+      {
+        "alias": "worker-bootstrap",
+        "label": "worker.bootstrap"
+      }
+    ],
+    "scenarios": [
+      {
+        "alias": "read-scenario",
+        "label": "read"
+      }
+    ],
+    "bootstrapRules": [],
+    "captureComplete": true
+  },
+  "cases": [
+    {
+      "name": "injected direct bypass",
+      "input": {
+        "schemaVersion": 1,
+        "runId": "private-run-seed-001",
+        "evidence": "SIMULATED",
+        "reads": [
+          {
+            "readId": "private-read-seed-001",
+            "endpointId": "private-endpoint-001",
+            "chainId": "1",
+            "method": "eth_chainId",
+            "callsiteAlias": "balance-widget",
+            "scenarioAlias": "read-scenario",
+            "privacyRequired": true
+          },
+          {
+            "readId": "private-read-seed-002",
+            "endpointId": "private-endpoint-001",
+            "chainId": "1",
+            "method": "eth_chainId",
+            "callsiteAlias": "balance-widget",
+            "scenarioAlias": "read-scenario",
+            "privacyRequired": true
+          }
+        ],
+        "traces": [
+          {
+            "schemaVersion": 1,
+            "readId": "private-read-seed-001",
+            "attempt": 1,
+            "endpointId": "private-endpoint-001",
+            "chainId": "1",
+            "method": "eth_chainId",
+            "callsite": "balance-widget",
+            "route": "anon-nym",
+            "durationMs": 25,
+            "success": true,
+            "bootstrap": false,
+            "evidence": "SIMULATED",
+            "payloadVisibility": "rpc-endpoint-can-read"
+          }
+        ],
+        "attempts": [
+          {
+            "eventId": "private-event-seed-001",
+            "ref": {
+              "readId": "private-read-seed-001",
+              "attempt": 1
+            },
+            "endpointId": "private-endpoint-001",
+            "chainId": "1",
+            "method": "eth_chainId",
+            "originAlias": "rpc-primary",
+            "callsiteAlias": "balance-widget",
+            "route": "anon-nym",
+            "sent": true,
+            "completed": true,
+            "durationMs": 25,
+            "workerVerified": true,
+            "evidence": "SIMULATED"
+          },
+          {
+            "eventId": "private-event-seed-002",
+            "ref": {
+              "readId": "private-read-seed-002",
+              "attempt": 1
+            },
+            "endpointId": "private-endpoint-001",
+            "chainId": "1",
+            "method": "eth_chainId",
+            "originAlias": "rpc-primary",
+            "callsiteAlias": "balance-widget",
+            "route": "direct-debug",
+            "sent": true,
+            "completed": true,
+            "durationMs": 25,
+            "workerVerified": false,
+            "evidence": "SIMULATED"
+          }
+        ]
+      },
+      "expected": [
+        2,
+        1,
+        2,
+        0.5
+      ]
+    },
+    {
+      "name": "same useful reads after protected repair",
+      "input": {
+        "schemaVersion": 1,
+        "runId": "private-run-seed-001",
+        "evidence": "SIMULATED",
+        "reads": [
+          {
+            "readId": "private-read-seed-001",
+            "endpointId": "private-endpoint-001",
+            "chainId": "1",
+            "method": "eth_chainId",
+            "callsiteAlias": "balance-widget",
+            "scenarioAlias": "read-scenario",
+            "privacyRequired": true
+          },
+          {
+            "readId": "private-read-seed-002",
+            "endpointId": "private-endpoint-001",
+            "chainId": "1",
+            "method": "eth_chainId",
+            "callsiteAlias": "balance-widget",
+            "scenarioAlias": "read-scenario",
+            "privacyRequired": true
+          }
+        ],
+        "traces": [
+          {
+            "schemaVersion": 1,
+            "readId": "private-read-seed-001",
+            "attempt": 1,
+            "endpointId": "private-endpoint-001",
+            "chainId": "1",
+            "method": "eth_chainId",
+            "callsite": "balance-widget",
+            "route": "anon-nym",
+            "durationMs": 25,
+            "success": true,
+            "bootstrap": false,
+            "evidence": "SIMULATED",
+            "payloadVisibility": "rpc-endpoint-can-read"
+          },
+          {
+            "schemaVersion": 1,
+            "readId": "private-read-seed-002",
+            "attempt": 1,
+            "endpointId": "private-endpoint-001",
+            "chainId": "1",
+            "method": "eth_chainId",
+            "callsite": "balance-widget",
+            "route": "anon-nym",
+            "durationMs": 25,
+            "success": true,
+            "bootstrap": false,
+            "evidence": "SIMULATED",
+            "payloadVisibility": "rpc-endpoint-can-read"
+          }
+        ],
+        "attempts": [
+          {
+            "eventId": "private-event-seed-001",
+            "ref": {
+              "readId": "private-read-seed-001",
+              "attempt": 1
+            },
+            "endpointId": "private-endpoint-001",
+            "chainId": "1",
+            "method": "eth_chainId",
+            "originAlias": "rpc-primary",
+            "callsiteAlias": "balance-widget",
+            "route": "anon-nym",
+            "sent": true,
+            "completed": true,
+            "durationMs": 25,
+            "workerVerified": true,
+            "evidence": "SIMULATED"
+          },
+          {
+            "eventId": "private-event-seed-002",
+            "ref": {
+              "readId": "private-read-seed-002",
+              "attempt": 1
+            },
+            "endpointId": "private-endpoint-001",
+            "chainId": "1",
+            "method": "eth_chainId",
+            "originAlias": "rpc-primary",
+            "callsiteAlias": "balance-widget",
+            "route": "anon-nym",
+            "sent": true,
+            "completed": true,
+            "durationMs": 25,
+            "workerVerified": true,
+            "evidence": "SIMULATED"
+          }
+        ]
+      },
+      "expected": [
+        2,
+        2,
+        2,
+        1
+      ]
+    }
+  ]
+}

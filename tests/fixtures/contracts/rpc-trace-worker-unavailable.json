@@ -1,0 +1,23 @@
+{
+  "fixtureVersion": 1,
+  "evidence": "SIMULATED",
+  "description": "Synthetic blocked read when the real worker is unavailable; no direct downgrade.",
+  "contract": "rpcTraceSchema",
+  "expected": "valid",
+  "payload": {
+    "schemaVersion": 1,
+    "readId": "fixture-read-001",
+    "attempt": 1,
+    "endpointId": "fixture-endpoint-001",
+    "chainId": "1",
+    "method": "eth_chainId",
+    "callsite": "fixture.chain-id:1",
+    "route": "blocked",
+    "durationMs": 0,
+    "success": false,
+    "bootstrap": false,
+    "evidence": "SIMULATED",
+    "payloadVisibility": "rpc-endpoint-can-read",
+    "errorCode": "WORKER_UNAVAILABLE"
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "schemaVersion": 1,
+  "inputArtifacts": [
+    {
+      "path": "first10/import-manifest.json",
+      "sha256": "2d2a9d3321f692b884360c41b4dc4d0143d2ecd23688cdaf6eec87c6437f6613"
+    },
+    {
+      "path": "full100/import-manifest.json",
+      "sha256": "38728e8d02c845ab545b0bf83e450b04256bda5bb00b49cf09cb7e080cc85bb6"
+    },
+    {
+      "path": "full100/selected-records.json",
+      "sha256": "4fed832c98adfe2f30d43e84cc69042656a7a0d63ae527bdb7c6a382f204ffeb"
+    },
+    {
+      "path": "rerun100/import-manifest.json",
+      "sha256": "4d8b08ff7bbf4aa91cdf8141af50513d10058500ba406cd63d50bae3da181099"
+    },
+    {
+      "path": "rerun100/selected-records.json",
+      "sha256": "4fed832c98adfe2f30d43e84cc69042656a7a0d63ae527bdb7c6a382f204ffeb"
+    },
+    {
+      "path": "verify100/independent-query.json",
+      "sha256": "147ae7775f6febd5c147a2738bcdff27298884c30b3cd9edee058843e8352b02"
+    },
+    {
+      "path": "full100/source-catalog.json",
+      "sha256": "2180efb0c0b38e76578ebd8d6470d1acbabb7f90463dd4134e7c6d90a692c952"
+    },
+    {
+      "path": "full100/LICENSE.ethereum-lists-chains",
+      "sha256": "1126322e2cc8d165adc4c792eeb195717de2bcc7b39be1ce77959d78e87ef685"
+    }
+  ],
+  "evidence": "OBSERVED_LIVE",
+  "observedAt": "2026-11-06T13:49:22.429Z",
+  "sourceRevision": "e17474286275730fb6b0490b1d7ea1c64a36ed9e",
+  "snapshotSha256": "2180efb0c0b38e76578ebd8d6470d1acbabb7f90463dd4134e7c6d90a692c952",
+  "licenseSha256": "1126322e2cc8d165adc4c792eeb195717de2bcc7b39be1ce77959d78e87ef685",
+  "sourceRetrievedAt": "2026-11-06T13:41:58.596Z",
+  "selectedNetworks": 100,
+  "uniqueRecords": 100,
+  "uniqueEntities": 100,
+  "transactionCount": 10,
+  "first10": {
+    "written": 10,
+    "transactions": 1
+  },
+  "full100": {
+    "written": 90,
+    "reused": 10,
+    "transactions": 9
+  },
+  "rerun100": {
+    "written": 0,
+    "reused": 100,
+    "transactions": 0
+  },
+  "independentQueryFound": 100,
+  "checks": {
+    "sameEntitySetAcrossImportRerunAndKeyfreeQuery": true,
+    "sourceAcquisitionTimeUnchanged": true,
+    "retainedLicenseAndCatalogHashes": true,
+    "sourceAccounting": true,
+    "contentBoundRecordIds": true,
+    "excludesPreflightSamples": true
+  },
+  "limits": "Artifact consistency plus independent live receipt/sample reads. Key-free CLI100-row query evidence checked, not independently repeated for every row by this reviewer. Candidate URLs remain unprobed; source safety/provider trust/product routing are separate gates."
+}

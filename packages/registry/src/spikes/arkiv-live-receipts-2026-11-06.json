@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "observedAt": "2026-11-06T13:11:32.261Z",
+  "evidence": "OBSERVED_LIVE",
+  "chainId": 7794095,
+  "receipts": [
+    {
+      "role": "live-primary-run.json",
+      "txHash": "0xeef2add4106865f02ba8fb7ff4cfa5854c0f572891b2006f1699d2ec49fe540e",
+      "blockNumber": "292410",
+      "status": "success",
+      "from": "0x93d1a42655f2b0bcfa126e3d2a33e4ab60a74ca4",
+      "to": "0x4400000000000000000000000000000000000044",
+      "gasUsed": "191502",
+      "effectiveGasPriceWei": "1000000000",
+      "feeWei": "191502000000000"
+    },
+    {
+      "role": "live-foreign-run.json",
+      "txHash": "0xb85556d824247c60fc4d59597ebab1716d04709276555feeadd91be9c4dce680",
+      "blockNumber": "292445",
+      "status": "success",
+      "from": "0xa518ca2d1a7a3697855ad5075f999115e1551e01",
+      "to": "0x4400000000000000000000000000000000000044",
+      "gasUsed": "181482",
+      "effectiveGasPriceWei": "1000000000",
+      "feeWei": "181482000000000"
+    },
+    {
+      "role": "foreign-funding-journal.json",
+      "txHash": "0xd0efb4c1de9dc55107988a619de624949515ff8b36af32e1b9d4ebc7a15f21cd",
+      "blockNumber": "292431",
+      "status": "success",
+      "from": "0x93d1a42655f2b0bcfa126e3d2a33e4ab60a74ca4",
+      "to": "0xa518ca2d1a7a3697855ad5075f999115e1551e01",
+      "gasUsed": "21000",
+      "effectiveGasPriceWei": "1000000000",
+      "feeWei": "21000000000000"
+    }
+  ],
+  "totalFeeWei": "393984000000000",
+  "internalForeignFundingWei": "100000000000000000",
+  "budgetWei": "1000000000000000000",
+  "scope": "Only public dedicated test accounts and one-hour synthetic sample writes; no inbound funding sender or private wallet data"
+}

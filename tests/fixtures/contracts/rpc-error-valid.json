@@ -1,0 +1,18 @@
+{
+  "fixtureVersion": 1,
+  "evidence": "SIMULATED",
+  "description": "Negative-flow synthetic upstream error; a public failure must not copy its raw message.",
+  "contract": "jsonRpcResponseSchema",
+  "expected": "valid",
+  "payload": {
+    "jsonrpc": "2.0",
+    "id": "fixture-rpc-001",
+    "error": {
+      "code": -32000,
+      "message": "synthetic-upstream-sensitive-sentinel",
+      "data": {
+        "privateDetail": "synthetic-error-data-sentinel"
+      }
+    }
+  }
+}

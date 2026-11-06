@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "runId": "public-run-fixture-001",
+  "evidence": "SIMULATED",
+  "eligibleReads": 2,
+  "protectedReads": 1,
+  "successfulReads": 2,
+  "protectedCoverage": 0.5,
+  "findings": [
+    {
+      "code": "DIRECT_BYPASS",
+      "readId": "read-000002",
+      "callsite": "lab.balance",
+      "message": "A privacy-required read used an ordinary direct RPC route."
+    },
+    {
+      "code": "MISSING_TRACE",
+      "readId": "read-000002",
+      "callsite": "lab.balance",
+      "message": "A measured attempt has no matching transport trace."
+    }
+  ],
+  "scope": {
+    "rpcOrigins": [
+      "https://rpc.example.com"
+    ],
+    "scenarios": [
+      "leak-lab:read"
+    ],
+    "bootstrapExclusions": []
+  }
+}
