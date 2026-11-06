@@ -1,0 +1,274 @@
+{
+  "schemaVersion": 1,
+  "sourceTask": "MN-009",
+  "startedAt": "2026-11-06T16:13:37.148Z",
+  "generatedAt": "2026-11-06T16:14:10.473Z",
+  "evidence": "BLOCKED",
+  "stage": "INCONCLUSIVE_OR_BLOCKED",
+  "failure": "PAIRED_READ_FAILED",
+  "node": "v24.22.2",
+  "browser": "158.0.8127.18",
+  "packages": {
+    "sshBinarySha256": "0d82109d60d32e5ca4007bd39b4abf213ff037fca99491bc2669a6b52051b74c",
+    "sshKnownHostsSha256": "f18ad2187f181de3052fb073724990d41e13ed4732f6c209e34bb98aa7ed4324",
+    "playwright": "1.65.0",
+    "@noble/hashes": "1.8.0",
+    "@anon-rpc/browser-harness": "0.4.0"
+  },
+  "source": {
+    "lab": {
+      "edge.mjs": "bff80407a652e44f5d5e8f09e868130ba04fdd10200006977d8131b4fc03a112",
+      "edge.test.mjs": "fb1f3e70705bb6984ba09cea1901e383ed68e3b4bf40935704c552f20733b9d9",
+      "harness.ts": "aca1da105d5aea8ee9d5ef6060a97f287ce17ed53f7c9494bfb802da0181d09e",
+      "host.html": "f21cf5fd1751d3ce026b3118ef5f68d55349ef77a662a88f02dac5206b6e6f7b",
+      "host.ts": "beca6f51f62ca8e76097256dc066179db8e3ba65b568fd17682f1785747572f4",
+      "index.html": "d650ff49b48c2af03882a474e5a9a2c31be393ba65938444836a3844177e08f6",
+      "lab-driver.test.mjs": "d9a70a7966821e65f9e4d4dbe71b3e759f15775a224b98b2a8f406999aeb272d",
+      "lab-driver.ts": "c94499a2431090d365bc93d3853bd5a5d695ea998069d2c6b68748d59a4f4b1b",
+      "main.ts": "4f48c8af41ce4e309a43d664e447a4d7dd6b797ab5a0a64bf7da8efcc1c20ff1",
+      "proof.mjs": "c6ad5e10d513710b4ede0ffeb735643323c7a48328f109db76fb46250cf069e5",
+      "proof.test.mjs": "682cfc96c873e6f741c0fe3fe87fa8afe0f46924eb319ccd2f8044f06855e4d6",
+      "proxy-edge.mjs": "6702ae029f3ab6926ccabddfadaf42ed6d41e60ef6ac50acd6fecc8f478d67c9",
+      "proxy-edge.test.mjs": "675e0c5955b788ceffc8ded5cabb2c7c92444265a1604371ed103fac1aac50ea",
+      "run.mjs": "0e0b3926d952155b52685ee0c6389f0c3bb2ab3f27839790bedf0c122d9e5de1"
+    },
+    "transport": {
+      "adapters/browser/direct-debug.ts": "ccab431652d18ff2f235ebc9668ccc5cb56ef2219c454e1b6c60d9875d5d8c0b",
+      "adapters/browser/driver.ts": "7b3c72865942c98bfb2df48eaecf906b7d813e8530ede13fa230b456a0d5494a",
+      "adapters/browser/host.ts": "becfc9ebc5113e6586c86423bf6b52d6426ff7c0134ee3c419bf2ffe6d66f677",
+      "adapters/browser/io.ts": "e08e8f01c6c0ff03d6c1afc232e709b315c7f4cf719affdae73c3c2f18788eb8",
+      "adapters/browser/protocol.ts": "b19a7571f18e2bb8e127d50760870f609eb7de8f238dd720c121e54a5e1bb103",
+      "application/transport.ts": "2f9fd82028697aed15c59966884951f149216c721681a8acd347ac06435b3073",
+      "browser.ts": "a21cfc7ecc9172e348f97cc678779c7322df5fdadcb237a39e4af3c986ec3990",
+      "domain/configuration.ts": "a55d2bb7034ff636bd4bf207818f189e9d43d48a79209cf72038da83abe2d293",
+      "domain/results.ts": "c5bcbe375c64b35351b078ba53fc4264a8c24958c9c7968adc513643c6a805e3",
+      "index.ts": "25716d7046c441665624001d631cb3d9d945aa87c84bcfed1241b04f0fec5bd6",
+      "ports/driver.ts": "83894bfd36c16b21c106bf4183ebfbb5d9c4e7bdae4529ad7568c83b4621cc74"
+    },
+    "compiledTransport": {
+      "adapters/browser/direct-debug.js": "a474b237a2da149b41dec3663fc138db5b2b706ef2d73ce7fc4ed22704b5592c",
+      "adapters/browser/driver.js": "2ab4467bd1d98d4611a45bd3c4af921e2156f60873770d5e905187d041251cc9",
+      "adapters/browser/host.js": "3b63ea9c2dea8df0b161c643cdb1228e9b60c139049c8f084653694666b780b5",
+      "adapters/browser/io.js": "a8b0c29322eb1efccd71b792562129b5d5f33c03765c96ab477082f5e86a5037",
+      "adapters/browser/protocol.js": "1ba8d868f92b96f879d8f9a920b3919a0929ca40e3a3f0610e384cf204463841",
+      "application/transport.js": "8a2efba32409c8f7e8b365ef2f13c3c6f3c2182ce6afe773bcd9c9734edeff82",
+      "browser.js": "8048ead49bca5ece0fbde32b839f079436b3010e3b4af00628abaaf9b20f850f",
+      "domain/configuration.js": "637f615a8cc4548ed3b0e68000a7000dbd7085c1f2762df1f5414ed82cca7d1f",
+      "domain/results.js": "7cf3b443a07ea65aa256302372e5041a15e945a9d8ab8a29c0c3a38de68290bb",
+      "index.js": "e251288f91e284c281338250ad818e4444d28eaa7d37de314cf5c285deb4b1c3",
+      "ports/driver.js": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881"
+    },
+    "observer": {
+      "adapters/http/observer.ts": "44f5f4820b8d8142c424b4685cf3c9ca636e469f1b17b9fb9f45277d15386726",
+      "adapters/http/peer.ts": "db082192d2f2d48b9419208a16d241f403b1a59128b53616fc435e502814aee7",
+      "adapters/http/registry.ts": "23c3c574596daa7720ed1b3657e9699e6c4242aa88a012ace1d10e995a58fa2d",
+      "adapters/upstream/dns-resolver.ts": "e85003fdb91e99eb0766f44a04e18906669426c7309c87b7ec869208e045e391",
+      "adapters/upstream/https-reader.ts": "0419f14f7f95052f94ef085f9c2fa0619a2fdee2c1573b36dfc136f8c0f72040",
+      "adapters/upstream/public-address.ts": "b0335ef4b9e435930b9b34fccab5fc91f59c0dbc1d4018d4b4db39dcd479eb3c",
+      "application/get-diagnostics.ts": "485a5892356097accb3ba4732b32114eb04d34017a90f228161d6d975487ce43",
+      "application/observe-read.ts": "5cab5ceb208d1e7d6fdae5c21f770e5318315bd0fb3426b928dc1499aeec421a",
+      "composition/env.ts": "9a2bc93c4b217c8562aec0f892c125840c133ab01697f8b0cd53fe5a6c444d06",
+      "composition/registry.ts": "e20cfac6bb4b65f35bf596f4bf5c1b0f5e1bf8ba40d94b44b133f319023e5107",
+      "composition/server.ts": "10dee16c5d41e9b8bef425a5f067fa31c04ed76b82c54ba5c1a711be19b333ac",
+      "composition/start.ts": "dd221f6d63c40c59c027097ea713f921a2a87a13568d9a01d7ffe274e24f7da5",
+      "domain/diagnostics.ts": "d15b9cbfbde275c7f507378e6cc0ae716d4d02860170b28d51246540e0dca008",
+      "domain/observer-policy.ts": "2209895299832e7ae904901383db4bf64d25bd7ff0642d31b81b09cff31989c5",
+      "domain/ports.ts": "81ad5aad11ed9b7034928930e67baec97dd56ba064d6f27c10b77c9ddde43d7a"
+    },
+    "compiledObserver": {
+      "adapters/http/observer.js": "7cd71132b57c47dc84544b754f3a011fa7627ff7c13dda1e4e2bdda28b9b4b2f",
+      "adapters/http/peer.js": "d72e6ef4cbf4f49b724607f4d3025ff6f3e0e536de909597d0eb394698d223e9",
+      "adapters/http/registry.js": "466fdb8f32821bac6105e162ed0f312995e891cf3a52b84aae3969075076b8c0",
+      "adapters/upstream/dns-resolver.js": "0ec8853615f8c857da91fd68197b9cf5ad55ceaefc8f7763e4987a5a79a41df0",
+      "adapters/upstream/https-reader.js": "62e6756645dc5fc9c7a0a5d90c4bb28ff58e6d2849c7a1ba45170e16daff2ec7",
+      "adapters/upstream/public-address.js": "e2d130abef93fcf1ce2a985a52061c207e0e4078bde68f833547987e1a72622a",
+      "application/get-diagnostics.js": "b6d3c7601f37f0a9e4df80b81179fc72029c86a3678e9f3ae152c1c63572cb9c",
+      "application/observe-read.js": "4902642595f14363e879fa23a2aa8f26e2cee643adc6c4c3726e7114504dd4f1",
+      "composition/env.js": "7a4cde7de4a9cfbd9fe8eec80c3219a374b174a834681d5b3d828c3f5c3eeb3b",
+      "composition/registry.js": "13f26e5a9b44709419379508f382b14fa65933511fb0b2071efb618fb497320a",
+      "composition/server.js": "3cd13f4a6588c1977292a82e1570a308556091d4c46d7d8a05f94547527856d0",
+      "composition/start.js": "a012052e9c532d506fb8e8d50bf95c15ac7607679506724e10e1efcbe7828508",
+      "domain/diagnostics.js": "3fad28881cd1d8679f12194edd5fb5e37a2d1af8504433f913100777478cb8ac",
+      "domain/observer-policy.js": "3cd712b3124ffa6a9b53d90260eac74b91162cbea7750d99f5f9d641356c36b9",
+      "domain/ports.js": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881"
+    },
+    "officialSdkEntrySha256": "5f08648c07da66a08fa61721db2e61eb123766cbbcf52388914920428e86e70d",
+    "entrypointSha256": "6b40c10fc385d8c2ba9d2ece84c38851157c68a00641f9933af61ccaad09b2d2",
+    "lockfileSha256": "524520d2960a9baf77dca1d0512a34543cb9d83a32b7cfebc27db42a806f8224"
+  },
+  "deployment": {
+    "kind": "ephemeral-localhost-run-ssh-proxy-v2",
+    "origin": "https://060d994608a1f5.lhr.life",
+    "sourceMode": "trusted-proxy",
+    "trustedLocalPeer": "loopback-only",
+    "sourceRule": "PROXYv2 connection source delivered through host-pinned SSH; all caller forwarding headers discarded.",
+    "localLogPolicy": "Observer/edge logger disabled; raw tunnel stdout/stderr discarded in memory.",
+    "platformLogs": "localhost.run-managed retention/configuration not verified.",
+    "upstream": "https://ethereum.publicnode.com",
+    "diagnosticShim": {
+      "scope": "single-operator-run-exact-POST-read-endpoint-only",
+      "behavior": "Fill missing application/json content type and fixed registered run ID; reject duplicate/conflicting supplied values; never add a route/case label.",
+      "preserved": "Actual RPC body, wire ID, method, params, result and PROXYv2 source are unchanged.",
+      "reason": "Installed verified Nym/harness stack was observed omitting request headers; the exact downstream cause is unconfirmed.",
+      "hostTrust": "Other local processes are trusted; loopback alone does not authenticate the SSH process."
+    }
+  },
+  "controls": {
+    "localUnauthenticatedDenied": true,
+    "publicDnsReady": true,
+    "publicDnsWaitMs": 55,
+    "directDetectionSelfCheck": true,
+    "publicHealthStatus": 200,
+    "directResponses": [
+      {
+        "role": "direct-baseline",
+        "status": 200,
+        "jsonContentType": true,
+        "corsWildcard": true
+      },
+      {
+        "role": "direct-control",
+        "status": 200,
+        "jsonContentType": true,
+        "corsWildcard": true
+      }
+    ],
+    "workerHttp": [
+      {
+        "status": 502,
+        "jsonContentType": false,
+        "error": null
+      }
+    ],
+    "edgeCounters": {
+      "connections": 2,
+      "acceptedProxy": 2,
+      "rejectedProxy": 0,
+      "sourceRequests": 4,
+      "missingContentTypeFilled": 0,
+      "missingRunHeaderFilled": 0,
+      "labHeaderConflictsDenied": 0,
+      "requestShapes": [
+        {
+          "method": "GET",
+          "route": "health",
+          "contentTypeCount": 0,
+          "jsonContentType": false,
+          "runHeaderCount": 0,
+          "caseHeaderCount": 0,
+          "expectHeaderCount": 0
+        },
+        {
+          "method": "POST",
+          "route": "read",
+          "contentTypeCount": 1,
+          "jsonContentType": true,
+          "runHeaderCount": 1,
+          "caseHeaderCount": 1,
+          "expectHeaderCount": 0
+        },
+        {
+          "method": "POST",
+          "route": "read",
+          "contentTypeCount": 1,
+          "jsonContentType": true,
+          "runHeaderCount": 1,
+          "caseHeaderCount": 1,
+          "expectHeaderCount": 0
+        },
+        {
+          "method": "GET",
+          "route": "diagnostics",
+          "contentTypeCount": 0,
+          "jsonContentType": false,
+          "runHeaderCount": 0,
+          "caseHeaderCount": 0,
+          "expectHeaderCount": 0
+        }
+      ],
+      "http": {
+        "forwarded": 4,
+        "denied": 2,
+        "reasons": {
+          "unauthenticatedHost": 2,
+          "missingSource": 0,
+          "duplicateSource": 0,
+          "invalidSource": 0,
+          "workerSource": 0,
+          "routeOrHeader": 0,
+          "resource": 0
+        },
+        "markers": {
+          "workerHeader": 0,
+          "workerLoop": 0,
+          "workerSentinel": 0,
+          "edgeLoopMarker": 0
+        }
+      }
+    },
+    "pairFailure": "UPSTREAM_UNAVAILABLE",
+    "spoofedForwardingControlSent": true,
+    "directPostCount": 2,
+    "ordinaryProtectedTargetRequests": 0,
+    "resolverResponses": [
+      {
+        "status": 200,
+        "bytes": 18283862,
+        "keccak256": "0xf13a448a8721b9d0b20da3d5b80ffe00bf4c5bb3aae812a38d3d1e3bc81fceb8"
+      }
+    ]
+  },
+  "comparison": {
+    "schemaVersion": 1,
+    "sourceTask": "MN-009",
+    "evidence": "BLOCKED",
+    "verdict": "BLOCKED",
+    "codes": [
+      "RPC_READ_FAILED"
+    ],
+    "paired": null
+  },
+  "shutdown": {
+    "closed": true,
+    "iframeCount": 0,
+    "metadataCleared": true,
+    "postCloseReadRejected": true,
+    "browserContextDestroyed": true,
+    "observerProcessStarted": true,
+    "observerStopped": true,
+    "tunnelProcessStarted": true,
+    "tunnelStopped": true,
+    "edgeStopped": true
+  },
+  "limitations": [
+    "localhost.run is a trusted intermediary and can see source and payload; this is one observed deployment path.",
+    "SSH server identity is pinned to the explicitly supplied known-hosts file; its first enrollment used trust on first use.",
+    "The RPC destination can read the JSON-RPC method and synthetic address payload.",
+    "Two specifier bootstrap reads are non-anonymous and excluded from paired application reads.",
+    "Configured synthetic candidate identity/provenance is not an Arkiv product-use claim.",
+    "Ordinary browser HTTP interception excludes worker WebRTC/KPS and unrelated page/wallet traffic.",
+    "This temporary URL is stopped after the run; recorded evidence is not a persistent public service."
+  ],
+  "warmup": {
+    "evidence": "OBSERVED_LIVE",
+    "scope": "worker-bootstrap-only",
+    "worker": {
+      "network": "nym",
+      "specifier": "0x3aCD9742C68F6d993066Ae25533e09b9e1f60eD0",
+      "workerHash": "0xf13a448a8721b9d0b20da3d5b80ffe00bf4c5bb3aae812a38d3d1e3bc81fceb8",
+      "harnessVersion": "0.4.0",
+      "verification": "harness-ready-after-specifier-lookup",
+      "bootstrap": "NON_ANONYMOUS_SPECIFIER_LOOKUP",
+      "bootstrapCalls": 2,
+      "privacyLabel": "ANONYMIZING_WORKER",
+      "observedAt": "2026-11-06T16:13:52.605Z"
+    },
+    "resolverResponses": [
+      {
+        "status": 200,
+        "bytes": 18283862,
+        "keccak256": "0xf13a448a8721b9d0b20da3d5b80ffe00bf4c5bb3aae812a38d3d1e3bc81fceb8"
+      }
+    ]
+  }
+}

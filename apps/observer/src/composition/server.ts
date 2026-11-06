@@ -1,7 +1,9 @@
+import { randomUUID } from 'node:crypto';
 import Fastify from 'fastify';
 import { makeError } from '@monolith/shared';
 import type { RegistryQuery } from '@monolith/registry';
 import { createObserveRead, requestId, rpcFailure } from '../application/observe-read.js';
+import { createLabRun } from '../application/create-lab-run.js';
 import { DiagnosticsStore } from '../domain/diagnostics.js';
 import { endpointMap } from '../domain/observer-policy.js';
 import type { ObserverConfig, UpstreamReader } from '../domain/ports.js';
@@ -17,6 +19,8 @@ export type ObserverServerOptions = {
   requestsPerMinute?: number;
   maxConcurrent?: number;
   registry?: RegistryQuery;
+  /** Explicit opt-in; allocation conveys no source or anonymity success claim. */
+  publicLabRuns?: boolean;
 };
 
 export function buildServer(options: ObserverServerOptions = {}) {
@@ -28,7 +32,8 @@ export function buildServer(options: ObserverServerOptions = {}) {
     || sourcePolicy.trustedProxies.length > 32 || sourcePolicy.trustedProxies.some((peer) => !normalizePeer(peer))
     || sourcePolicy.mode === 'trusted-proxy' && sourcePolicy.trustedProxies.length === 0
     || !Number.isInteger(requestsPerMinute) || requestsPerMinute < 1 || requestsPerMinute > 10_000
-    || !Number.isInteger(maxConcurrent) || maxConcurrent < 1 || maxConcurrent > 128) throw new Error('Invalid observer configuration.');
+    || !Number.isInteger(maxConcurrent) || maxConcurrent < 1 || maxConcurrent > 128
+    || options.publicLabRuns !== undefined && typeof options.publicLabRuns !== 'boolean') throw new Error('Invalid observer configuration.');
   const endpoints = endpointMap(config.endpoints);
   const nowMs = options.nowMs ?? Date.now;
   const diagnostics = new DiagnosticsStore({ nowMs, scheduleExpiry: (callback, delayMs) => {
@@ -67,6 +72,7 @@ export function buildServer(options: ObserverServerOptions = {}) {
   registerObserver(server, {
     observe: createObserveRead({ endpoints, diagnostics, nowMs, upstream: options.upstream ?? createUpstreamReader() }),
     diagnostics, sourcePolicy, nowMs, requestsPerMinute, maxConcurrent,
+    ...(options.publicLabRuns === true ? { allocateRun: createLabRun({ diagnostics, nowMs, uuid: randomUUID }) } : {}),
   });
   registerRegistry(server, {
     registry: options.registry ?? { query: async () => ({ ok: false, error: makeError('REGISTRY_UNAVAILABLE') }) },
