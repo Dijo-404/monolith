@@ -1,70 +1,79 @@
-# Core release verification
+# Core release evidence candidate
 
-MN-017 is an **offline implementation checkpoint with release acceptance still blocked**. The owner authorized isolated evidence-export validation and clean-clone checks in [the claim](https://github.com/Dijo-404/monolith/issues/17#issuecomment-6692959668). This document records the procedure and remaining evidence requirements; it does not announce a completed release.
+The selected measured core is execution commit `c11dace8107f386e5eceb8356395bfdb23035dd1`, public Site7 and real observer runtime10. Its genuine mounted-presenter observation has four fresh server allocations, thirteen unique wire rows and 248 source/build/SDK input bindings. The [original capture](../evidence/core/2026-11-07/originals/current-core9/browser-live.json), [independent review](../evidence/core/2026-11-07/originals/current-core9/independent-review.json) and [producer redaction/binding audit](../evidence/core/2026-11-07/originals/current-core9/binding-redaction-audit.json) retain the actual scope and times. The frozen C1 evidence candidate `18cf7e87bed3ec9a9b5227b1f91d4cc51f3055c2` passed its recorded clean-clone checks and independent review. The final documentation candidate still requires its own exact-head validation and normal owner acceptance; C1 results do not become checks of a later commit.
 
-The release requires accepted MN-009, MN-012, MN-013, MN-014, MN-015 and MN-016 evidence. At this checkpoint, the actual MN-014 live workflow and the complete MN-016 walkthrough remain outstanding under their existing owners. Recheck [issue #17](https://github.com/Dijo-404/monolith/issues/17) and its dependencies before accepting a release; this document is not live task state. Whitechain, a relayer and payment credentials are outside the core gate.
+MN009/012/013/014/015/016 are merged and accepted. The exporter implementation merged separately in PR65 as a source checkpoint. This new evidence change preserves the current C11 observation and its original report identities; it does not replace older DFB8/5CF7 successes, blocked attempts or simulated software evidence. A later held visual revision has its own owner and is not described as executed by this capture. Any selected later runtime needs fresh source-bound observation before that later release is claimed.
 
-## Offline checkpoint
+## What is preserved
 
-The [exporter](../scripts/export-evidence.ts) validates supported public DTOs and original-byte hashes, then copies validated bytes into a new local bundle. Its [policy](evidence-policy.md) defines supported types, limits, labels and remaining privacy review. There is no automatic source-data projection, anonymity verification, task closure, sponsor submission or release publication.
+The [core proof index](../evidence/core/2026-11-07/core-proof-index.json) records the original storage commit, selected execution source, all copied original hashes, report/server-ID mappings, backend originals and historical worker/observer/Arkiv/import/software references. The source ledger and original records are pinned in commit `631e3fe33575702f84ee5cf5a6acdad896b176c0`. Execution source, storage source and deployment-tool hashes are distinct; no whole-repository equality to the separately frozen backend469 is asserted.
 
-The checkpoint's validation results must name the exact commit or source tree, tool versions, commands and outcomes. A procedure below is not a passing result. Record failures as failures and preserve their logs. Full clean-clone acceptance also needs the genuine core demo and redacted actual evidence; deterministic tests alone do not satisfy it.
+Four supported [report bundles](../evidence/core/2026-11-07/README.md) contain canonical unchanged `/report` values selected from the complete original UI downloads. Their new standalone bytes are explicitly reviewed projections, not the whole downloaded wrappers. Each bundle's manifest exactly matches its original `report_<UUIDv4>` identity. Server `run-<UUIDv4>` allocations remain separately mapped in the [projection provenance](../evidence/core/2026-11-07/report-projection-provenance.json). No ID, count, finding, scope, label or original observation time was rewritten. The [eight actual offline verify/export operations](../evidence/core/2026-11-07/export-operations.json) preserve the exported bytes exactly.
 
-## Clean-clone procedure
+| Case | Useful reads | Protected credit | Meaning |
+| --- | ---: | ---: | --- |
+| private | 2/2 | 0/2 | Useful, with no paired-source credit |
+| compare | 3/3 | 2/3 | The explicit direct control remains unprotected |
+| leak | 4/4 | 2/4 | The intentional direct bypass is detected |
+| repair | 4/4 | 3/4 | A fresh same-seed route-only repair passes the bounded checks |
 
-Start from the reviewed commit after it exists in Git. Use a new destination that does not already contain files. A local clone avoids contacting GitHub or the active runtime; `--no-local` avoids reusing the source repository's object files through hardlinks.
+The leak remains a genuinely observed privacy failure. A successful test of that expected failure does not relabel the leaky fixture private. Metadata envelopes, screenshots, SDK/worker proofs, import journals and diagnostics remain original indexed records outside the four supported DTOs. Missing observer durations were not invented, and empty metadata diagnostics are not counted as paired application proof. Follow [the evidence policy](evidence-policy.md) for validation limits.
+
+## Offline reproduction from the exact candidate
+
+Use Node24.22.2 and pnpm12.18.0. The PR and attached validation report must name the exact candidate commit and actual command outcomes. Clone only committed source; do not copy `.env`, runtime/status files, private identity or credential files.
 
 ```sh
-git rev-parse HEAD
-git clone --no-local . /tmp/monolith-core-clean
-cd /tmp/monolith-core-clean
+git clone --no-local /path/to/reviewed/source /tmp/monolith-final-clean
+cd /tmp/monolith-final-clean
+git checkout --detach <reviewed-candidate-commit>
 git rev-parse HEAD
 git status --short
-node --version
-pnpm --version
-pnpm install --frozen-lockfile --offline
+pnpm install --frozen-lockfile --offline --store-dir /home/dj/.local/share/pnpm/store --package-import-method copy
 pnpm check
 pnpm exec tsc -p scripts/tsconfig.evidence.json
 pnpm exec tsx --tsconfig scripts/tsconfig.evidence.json --test scripts/export-evidence.test.ts
-git status --short
 ```
 
-Run this from the intended source worktree. Confirm the two commit IDs match; otherwise stop and check out the reviewed commit in the clone before validation. Use Node 24.22.2 and pnpm 12.18.0. The offline package store must already contain the lockfile's pinned packages. Missing cached dependencies are an installation blocker, not permission to report an offline PASS after a network download.
+The explicit store is this validation host's populated cache. Another host needs the same lockfile's cached packages or an explicitly separate dependency-install step; a failed offline install is not an offline PASS. The validation execution uses a minimal environment and `/dev/null` npm user configuration. Manifests and lockfile remain unchanged. Root Vitest excludes `scripts/`, so the dedicated exporter type/test commands remain required.
 
-When the clone is on another filesystem, pnpm may select a different, empty store. Keep the failed offline result and explicitly select the already populated store with copy imports before retrying. For example, on this validation host the command is `pnpm install --frozen-lockfile --offline --store-dir /home/dj/.local/share/pnpm/store --package-import-method copy`. Use the actual populated store on another host; this option does not download missing packages.
+Validate each retained report plan against its exported DTO directory with the actual current UTC clock, for example:
 
-No `.env`, signer, Arkiv access key, Whitechain account or live observer service is required for these commands. Do not copy credentials or untracked runtime files into the clone. `pnpm check` covers the workspace lint/type/test/build commands; run the dedicated exporter type/test commands as well because the root Vitest pattern excludes `scripts/`.
+```sh
+pnpm exec tsx --tsconfig scripts/tsconfig.evidence.json scripts/export-evidence.ts --verify --plan evidence/core/2026-11-07/plans/repair.plan.json --input evidence/core/2026-11-07/reports/repair --now <actual-UTC-ISO>
+```
 
-The tests use temporary synthetic inputs. They must preserve the `SIMULATED` label, verify original-byte export and reject unsafe paths, symlinks, unexpected fields, label/hash/identity/time mismatches, sensitive content and invalid output destinations. No test output is production release evidence. See [the policy commands](evidence-policy.md#commands) for verify-only and local-export usage.
+Repeat for private/compare/leak/repair. The CLI validates supported shape, exact identity/time/labels, original-byte hashes and its configured redaction checks. It cannot establish live truth, complete core-proof coverage, universal anonymity or eligibility. Packaging/validation time never renews an old registry generation or observation. Clean-clone tests use labelled synthetic inputs and make no new live-evidence claim.
 
-## Evidence required for acceptance
+To reproduce the original Site7 build, use a separate clean checkout of its recorded execution commit C11. Do not rebuild a later documentation candidate or current main and label its assets as the original Site7 output. Keep the final-candidate checkout and its validation results separate:
 
-| Required proof | What the reviewer needs |
-| --- | --- |
-| Real worker and paired observer | The selected verified Tor/Nym worker, actual useful read, explicitly consented direct control, independent trusted source comparison, time and retained artifacts. Passthrough and mock success provide no protected credit. |
-| Registry use | Actual licensed import and public query, publisher/source/expiry evidence, admitted endpoint selection and the protected chain-ID probe used by the application. A manifest is discovery metadata. |
-| Leak and repair | A useful read that independently fails privacy after the injected bypass, followed by a fresh rerun of the same intent after the reviewed repair. Preserve the original failure and the functional result. |
-| Fail-closed behavior | Worker outage, expired/untrusted registry or wrong chain blocks required reads without an ordinary HTTP fallback. Inventory attempted and blocked reads truthfully. |
-| Public export | Reviewed redacted bytes, source references, original-byte hashes, coherent times/labels and the verification manifest; no private keys, raw IPs, private wallet/order data or stable user identifiers. |
-| Reproduction | Exact clean-clone commit, tool versions and command outputs, plus instructions that reproduce the actual core demo without conditional payment credentials. |
+```sh
+git clone --no-local /path/to/reviewed/source /tmp/monolith-site7-source
+cd /tmp/monolith-site7-source
+git checkout --detach c11dace8107f386e5eceb8356395bfdb23035dd1
+pnpm install --frozen-lockfile --offline --store-dir /home/dj/.local/share/pnpm/store --package-import-method copy
+pnpm --filter './packages/**' -r build
+MONOLITH_PUBLIC_OBSERVER_URL=https://d06045ae660681.lhr.life pnpm --filter @monolith/dashboard build
+```
 
-Export only supported, reviewed public DTOs using [the evidence policy](evidence-policy.md). A successful `--verify` or `--export` does not prove a bundle includes every required core artifact. Worker/independent browser/Arkiv source artifacts outside the first exporter's supported DTOs still need their separate original references and review. Do not discard them or force them into an incompatible DTO.
+Compare the nine original Vite output hashes with the retained Site7 provenance. Later transport, registry, CLI, branding or UI changes have separate software checks and are not retrospectively observed by this capture. This is build reproduction, not a new SDK run. The original real workflow already binds the selected runtime inputs. Instructions for a further real run and the bounded no-payment demo remain in [the core demo guide](demo-core.md); live observation must be deliberately source-frozen and coordinated with the runtime owner.
 
-Keep report identities distinct from server allocations. A supported privacy report with an original `report_<UUIDv4>` ID belongs in a bundle with that exact ID; an observer's `run-<UUIDv4>` belongs in a separate matching bundle. If the original UI download wraps the public DTO, use only the separately reviewed [structural projection procedure](evidence-policy.md#reviewing-a-nested-privacy-report). Preserve the complete original wrapper, capture hash and `/report` pointer in the original-proof index, with the exact server-run/report-ID mapping and projected-byte hash. Do not rewrite IDs, fabricate missing observer durations, relabel a measured failure or count a metadata-only empty observer DTO as paired application proof.
+## Publication, source and remaining limits
 
-Privacy reporting must disclose the measured read denominator, retries, injected bypass, unexplained traffic and bootstrap exclusions. Zero eligible reads is `null` coverage and cannot pass functional acceptance. The destination continues to see RPC payloads, and worker bootstrap is separately disclosed as non-anonymous. A recorded screenshot or report must show its observation time and scope.
+The [Site7 native receipt](../evidence/core/2026-11-07/originals/site7/deployment.json), [input audit](../evidence/core/2026-11-07/originals/site7/input-audit.json), [actual HTTPS verification](../evidence/core/2026-11-07/originals/site7/static-verification.json) and [controlled fault/layout result](../evidence/core/2026-11-07/originals/site7/browser-fault/browser-deployed.json) are preserved unchanged. Authored asset hashes are separate from modified served-HTML hashes and the pinned hosting addition. Local gzip/tar hashes and returned opaque service-container metadata are separate; service-container byte identity was not independently retrieved or asserted. The injected worker-host fault grants no real-worker credit.
 
-## EF and Arkiv submission checklist
+GitHub repository metadata was observed PUBLIC at `2026-11-06T22:34:11Z`; earlier original records retain their earlier recorded visibility. Public source availability does not establish participant or sponsor eligibility. The README status/link correction is a documentation-only continuation by the existing MN017 owner under the recorded MN017/MN083 handoff. It preserves accepted CROPS/Arkiv/AI/track/npm material and deferred human-contribution details. Every C1 original, projection and bundle remains unchanged; MN017 and MN023 acceptance remain pending until their normal owner criteria are accepted.
 
-These are review items, not qualification claims or completed checks. Confirm current rules, partner selections and the exact cutoff in the participant dashboard before submission. This offline checkpoint neither opens that dashboard nor verifies eligibility or a deadline.
+Hosting/security bootstrap, its fetched challenge runtime and worker bootstrap are non-anonymous and outside transport verification. Destinations see RPC payloads. Source comparison is bounded to the trusted provider, verified worker, chosen endpoint and observation window. The free backend depends on this workstation and provider; process caps and passive health checks do not guarantee uptime, recovery or permanent hostname retention. Historical controls and failed routes remain named evidence rather than erased or explained without proof.
 
-- [ ] Default application RPC reads use the real verified Anon-RPC worker or fail closed; the explicit direct control is labelled and consented.
-- [ ] The genuine paired comparison, useful fail/repair rerun and independent egress inventory support the privacy claim.
-- [ ] Worker version/integrity, non-anonymous bootstrap and residual payload/correlation limits are stated.
-- [ ] Actual Arkiv import/query and application route selection have accepted source, publisher, expiry and entity evidence.
-- [ ] Dataset licensing, importer rerun, independent consumer and the required [Arkiv documents](../arkiv) match the actual accepted work.
-- [ ] README instructions, the demo and all public artifacts describe current behavior and unresolved limits accurately.
-- [ ] The clean-clone result and public bundle have been reviewed against every core requirement.
-- [ ] The participant dashboard's current partner choices, eligibility and exact submission cutoff are checked by the owner.
+## Submission checklist
 
-Keep MN-017 open until the required implementation is merged and its full evidence is accepted. A draft PR, an offline test result or an exported manifest alone does not make MN-027/MN-028 or any other downstream gate ready. Follow [CONTRIBUTING.md](../CONTRIBUTING.md#review-and-merge) for the final handoff.
+Use the [official Mumbai information](https://ethglobal.com/events/mumbai/info/) and [prize requirements](https://ethglobal.com/events/mumbai/prizes/) plus the participant dashboard for the current deadline, registration, eligibility and selected partner tracks. The core evidence demonstrates the privacy lab and actual Arkiv discovery/import/query/selection; configuration, merged code, mocks and metadata alone do not establish sponsor qualification.
+
+- Confirm dashboard eligibility, permitted track selections and exact cutoff.
+- Review the [actual Arkiv evidence and provenance](../arkiv/why-arkiv.md) and [registry reproduction](registry-setup.md).
+- Provide accurate human-contribution and AI-assistance/spec/prompt disclosure without invented participant work.
+- Complete the required qualifying video and submission forms; do not represent uncompleted items as done.
+- Describe Uniswap/Whitechain development and any unfinished runtime requirements according to their own current task/evidence records. They are not inferred completed from this core package.
+
+Normal review means ready for the owner. MN017 closes only after its new PR is merged and its complete bounded release criteria are accepted; no task closure, form submission or sponsor qualification follows automatically from this document.

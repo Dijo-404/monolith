@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "scope": "STATIC_PUBLICATION_INPUT_AUDIT",
+  "passed": true,
+  "generatedAt": "2026-11-06T22:13:00.538Z",
+  "sourceCommit": "c11dace8107f386e5eceb8356395bfdb23035dd1",
+  "observerOrigin": "https://d06045ae660681.lhr.life",
+  "staticFiles": 10,
+  "uiDistEqualFiles": 9,
+  "retainedNotices": 26,
+  "totalRegularFilesScanned": 39,
+  "actualServerCredentialConfigured": true,
+  "credentialBytesExposed": false,
+  "privateSourceArchivePresent": false,
+  "provenanceSha256": "4299c567113cf682465fe8ee3fb5e1c86fff72789a5c36da39f7ade1e8082418",
+  "limitations": [
+    "Input audit only. New current-core guard requires fresh deployed capture; original DFB remains historical."
+  ]
+}

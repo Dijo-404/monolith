@@ -1,0 +1,192 @@
+{
+  "schemaVersion": 1,
+  "scope": "ORIGINAL_BYTES_AND_SEPARATELY_IDENTIFIED_RETAINED_OR_DERIVED_AUDITS",
+  "captureExecutionSourceCommit": "c11dace8107f386e5eceb8356395bfdb23035dd1",
+  "sourceTaskAsRecorded": "MN-014",
+  "rootAuditPassed": true,
+  "actualCredentialBytesScannedByThisCopy": false,
+  "files": [
+    {
+      "path": "evidence/core/2026-11-07/originals/current-core9/browser-live.json",
+      "sha256": "d2b50ee50a6e1c366ac84e829dff440e727873dcc1ea04f007bd96a8ecda74d3",
+      "bytes": 51817,
+      "recordKind": "UNCHANGED_ORIGINAL_CAPTURE",
+      "producerSourcePath": "/tmp/monolith-current-core-deployed-attempt9-20261107/browser-live.json"
+    },
+    {
+      "path": "evidence/core/2026-11-07/originals/current-core9/compare-report.json",
+      "sha256": "4ca442af38d44ac5e8877ce33de3093d86b5e7586f284a58cba6bbc65e47cb61",
+      "bytes": 6417,
+      "recordKind": "UNCHANGED_ORIGINAL_CAPTURE",
+      "producerSourcePath": "/tmp/monolith-current-core-deployed-attempt9-20261107/compare-report.json"
+    },
+    {
+      "path": "evidence/core/2026-11-07/originals/current-core9/compare.png",
+      "sha256": "4a8f8950103ac2ed7b04133c1ca44c92d75bd9c379953e940921f7c63311d142",
+      "bytes": 850634,
+      "recordKind": "UNCHANGED_ORIGINAL_CAPTURE",
+      "producerSourcePath": "/tmp/monolith-current-core-deployed-attempt9-20261107/compare.png"
+    },
+    {
+      "path": "evidence/core/2026-11-07/originals/current-core9/leak-report.json",
+      "sha256": "5280bdbd84b48642d392110d68b03c90970e5049e2cb19528c074b2b9c8671a1",
+      "bytes": 8602,
+      "recordKind": "UNCHANGED_ORIGINAL_CAPTURE",
+      "producerSourcePath": "/tmp/monolith-current-core-deployed-attempt9-20261107/leak-report.json"
+    },
+    {
+      "path": "evidence/core/2026-11-07/originals/current-core9/leak.png",
+      "sha256": "74d27dd1530c805c15b082b11bab77f251f47b22bcabee0762e066f6cec5541e",
+      "bytes": 889217,
+      "recordKind": "UNCHANGED_ORIGINAL_CAPTURE",
+      "producerSourcePath": "/tmp/monolith-current-core-deployed-attempt9-20261107/leak.png"
+    },
+    {
+      "path": "evidence/core/2026-11-07/originals/current-core9/private-report.json",
+      "sha256": "957f33be68c2decac78f58ed83976ad98e416d51e3d83d0cb7b1d830a9965be9",
+      "bytes": 6858,
+      "recordKind": "UNCHANGED_ORIGINAL_CAPTURE",
+      "producerSourcePath": "/tmp/monolith-current-core-deployed-attempt9-20261107/private-report.json"
+    },
+    {
+      "path": "evidence/core/2026-11-07/originals/current-core9/private.png",
+      "sha256": "253a0ae42dee3871beee0e78e94c89a6be4feed857772964104ce5533e1cdbf7",
+      "bytes": 851632,
+      "recordKind": "UNCHANGED_ORIGINAL_CAPTURE",
+      "producerSourcePath": "/tmp/monolith-current-core-deployed-attempt9-20261107/private.png"
+    },
+    {
+      "path": "evidence/core/2026-11-07/originals/current-core9/repair-320.png",
+      "sha256": "c07c7d8e8a3a8c9fd802c5493be9669b114344f777b7950e15a0ef3aebb4ba27",
+      "bytes": 476502,
+      "recordKind": "UNCHANGED_ORIGINAL_CAPTURE",
+      "producerSourcePath": "/tmp/monolith-current-core-deployed-attempt9-20261107/repair-320.png"
+    },
+    {
+      "path": "evidence/core/2026-11-07/originals/current-core9/repair-390.png",
+      "sha256": "94043cacefe4ef2da74e4419f2d95a42099e72b66cd7bab0b67a3098546d5952",
+      "bytes": 479755,
+      "recordKind": "UNCHANGED_ORIGINAL_CAPTURE",
+      "producerSourcePath": "/tmp/monolith-current-core-deployed-attempt9-20261107/repair-390.png"
+    },
+    {
+      "path": "evidence/core/2026-11-07/originals/current-core9/repair-report.json",
+      "sha256": "f4f93b0353717c5ec6ca89dcf9073a0425094d9cf6fd58ba27af16c763cfaabf",
+      "bytes": 7957,
+      "recordKind": "UNCHANGED_ORIGINAL_CAPTURE",
+      "producerSourcePath": "/tmp/monolith-current-core-deployed-attempt9-20261107/repair-report.json"
+    },
+    {
+      "path": "evidence/core/2026-11-07/originals/current-core9/repair.png",
+      "sha256": "cac4d070cc549d6e8e3cb56bc199242d07da5e01ada44565519e4a6e1735b82b",
+      "bytes": 873132,
+      "recordKind": "UNCHANGED_ORIGINAL_CAPTURE",
+      "producerSourcePath": "/tmp/monolith-current-core-deployed-attempt9-20261107/repair.png"
+    },
+    {
+      "path": "evidence/core/2026-11-07/originals/current-core9/independent-review.json",
+      "sha256": "70f53af17cb48b412968d0d1be22e7c83d5090fcc76c959034a7f075fc9c16b5",
+      "bytes": 2490,
+      "recordKind": "UNCHANGED_RETAINED_AUDIT",
+      "producerSourcePath": "/tmp/monolith-current-core-attempt9-independent-audit-20261107.json"
+    },
+    {
+      "path": "evidence/core/2026-11-07/originals/current-core9/binding-redaction-audit.json",
+      "sha256": "a50f16d1e546e028235b85a8c364d21eb1db3fb3898ba0385e0eb4016f0a6dc9",
+      "bytes": 2639,
+      "recordKind": "UNCHANGED_RETAINED_AUDIT",
+      "producerSourcePath": "/tmp/monolith-current-core-attempt9-binding-redaction-audit-20261107.json"
+    },
+    {
+      "path": "evidence/core/2026-11-07/originals/current-core9/pre-capture-inputs.json",
+      "sha256": "6e4843a4f1371df4336646448dc985e4cfa1af2944932f9d81c40570dd811b40",
+      "bytes": 30679,
+      "recordKind": "UNCHANGED_RETAINED_AUDIT",
+      "producerSourcePath": "/tmp/monolith-current-core-c11-pre-capture-inputs-20261107.json"
+    },
+    {
+      "path": "evidence/core/2026-11-07/originals/site7/deployment.json",
+      "sha256": "4d609ca7b070494ba5c5550155a888a745dacb26bccca6cd307de919425f1a7f",
+      "bytes": 2273,
+      "recordKind": "UNCHANGED_RETAINED_PUBLICATION_RECORD",
+      "producerSourcePath": "/tmp/monolith-sites-deployment-20261107-v7.json"
+    },
+    {
+      "path": "evidence/core/2026-11-07/originals/site7/input-audit.json",
+      "sha256": "c11d9ecc06f7267a2d9e31138bd5367fb8836123a34a062d4bf61316dbfc9c6c",
+      "bytes": 701,
+      "recordKind": "UNCHANGED_RETAINED_PUBLICATION_RECORD",
+      "producerSourcePath": "/tmp/monolith-static-publication-preflight-20261107-attempt8.json"
+    },
+    {
+      "path": "evidence/core/2026-11-07/originals/site7/static-verification.json",
+      "sha256": "ae1f7e25739520c9a3655b7d701c5ee491ffee49015ec65ca3dd7ae2c062bb32",
+      "bytes": 7649,
+      "recordKind": "UNCHANGED_RETAINED_PUBLICATION_RECORD",
+      "producerSourcePath": "/tmp/monolith-static-verification-20261107-attempt8.json"
+    },
+    {
+      "path": "evidence/core/2026-11-07/originals/site7/provenance.json",
+      "sha256": "4299c567113cf682465fe8ee3fb5e1c86fff72789a5c36da39f7ade1e8082418",
+      "bytes": 7793,
+      "recordKind": "UNCHANGED_RETAINED_PUBLICATION_RECORD",
+      "producerSourcePath": "/tmp/monolith-release-snapshot-20261107-attempt8/provenance.json"
+    },
+    {
+      "path": "evidence/core/2026-11-07/originals/site7/browser-fault/browser-deployed.json",
+      "sha256": "dce5e28ca266d71e85a1f90d45e9181f35d40d1ca3c713905805a9e5f6fe2af6",
+      "bytes": 2894,
+      "recordKind": "UNCHANGED_RETAINED_CONTROLLED_FAULT",
+      "producerSourcePath": "/tmp/monolith-deployed-browser-fault-20261107-attempt4/browser-deployed.json"
+    },
+    {
+      "path": "evidence/core/2026-11-07/originals/site7/browser-fault/published-1440.png",
+      "sha256": "ac66bb663dda283656efcf98e9a6d7192b03b6359b91bfcd685fd7d72ee16e27",
+      "bytes": 726121,
+      "recordKind": "UNCHANGED_RETAINED_CONTROLLED_FAULT",
+      "producerSourcePath": "/tmp/monolith-deployed-browser-fault-20261107-attempt4/published-1440.png"
+    },
+    {
+      "path": "evidence/core/2026-11-07/originals/site7/browser-fault/published-320.png",
+      "sha256": "84a606ab0fed1983e4adcd8839db6350f24b8c7b6120c4be09d81326704096c0",
+      "bytes": 359187,
+      "recordKind": "UNCHANGED_RETAINED_CONTROLLED_FAULT",
+      "producerSourcePath": "/tmp/monolith-deployed-browser-fault-20261107-attempt4/published-320.png"
+    },
+    {
+      "path": "evidence/core/2026-11-07/originals/site7/browser-fault/published-390.png",
+      "sha256": "575045302c031be8d2e662b58cc98efb2cec8f1e8108c1d3c932a666dafc07e9",
+      "bytes": 351876,
+      "recordKind": "UNCHANGED_RETAINED_CONTROLLED_FAULT",
+      "producerSourcePath": "/tmp/monolith-deployed-browser-fault-20261107-attempt4/published-390.png"
+    },
+    {
+      "path": "evidence/core/2026-11-07/originals/site7/browser-fault/published-webgl-fallback.png",
+      "sha256": "c6d0f589ac74400bb28ae0446427e283183595a8e86e82492c9b3563026a88b0",
+      "bytes": 340110,
+      "recordKind": "UNCHANGED_RETAINED_CONTROLLED_FAULT",
+      "producerSourcePath": "/tmp/monolith-deployed-browser-fault-20261107-attempt4/published-webgl-fallback.png"
+    },
+    {
+      "path": "evidence/core/2026-11-07/originals/site7/browser-fault/published-worker-unavailable.png",
+      "sha256": "063b1592bbb05c4c703f8b98f63239bdf420d45c3fc1049ce7732af7fdb69dc9",
+      "bytes": 759258,
+      "recordKind": "UNCHANGED_RETAINED_CONTROLLED_FAULT",
+      "producerSourcePath": "/tmp/monolith-deployed-browser-fault-20261107-attempt4/published-worker-unavailable.png"
+    },
+    {
+      "path": "evidence/core/2026-11-07/originals/site7/archive-local-audit.json",
+      "sha256": "53dc579803250cef3172430af1f3a9c4b58a78a796c52156f6b6abbc78f05131",
+      "bytes": 1318,
+      "recordKind": "DERIVED_AUDIT_NOT_ORIGINAL_RECEIPT",
+      "producerSourcePath": null
+    },
+    {
+      "path": "evidence/core/2026-11-07/originals/site7/root-archive-local-audit.json",
+      "sha256": "335e31f7af339e865c57f507e5da7c99e7fd980a0d8144fdbae4c41443481261",
+      "bytes": 1846,
+      "recordKind": "UNCHANGED_RETAINED_ROOT_ARCHIVE_AUDIT",
+      "producerSourcePath": "/tmp/monolith-site7-archive-local-audit-20261107.json"
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "scope": "LOCAL_ARCHIVE_AND_RETURNED_STORAGE_METADATA",
+  "generatedAt": "2026-11-06T22:30:06.870114+00:00",
+  "localArchive": {
+    "path": "/tmp/monolith-release-static-20261107-attempt8.tar.gz",
+    "bytes": 244282,
+    "sha256": "6f7d80bbeff55474e2cd7d00f60e0a65ff1c5656a58f9b4658cbe2a973fe2f83",
+    "decompressedTarBytes": 686080,
+    "decompressedTarSha256": "65cfeeb8a553d5f3deb2422cb6c53d43f9e4d4a40bbb620b43c3650f67e202b3",
+    "regularFileCount": 11,
+    "snapshotFilesByteVerified": [
+      "dist/assets/app-Cr7RE_ZT.js",
+      "dist/assets/workerHost-BKrclfgn.js",
+      "dist/assets/browser-BV4R2-sQ.js",
+      "dist/assets/app-CICXmcEX.css",
+      "dist/assets/fragment-mono-latin-yxdJ5AmL.woff2",
+      "dist/assets/wix-madefor-display-latin-Blzrepd3.woff2",
+      "dist/assets/wix-madefor-text-latin-M4ts_BV7.woff2",
+      "dist/assets/worker-host.html",
+      "dist/assets/THIRD-PARTY-NOTICES.txt",
+      "dist/index.html"
+    ]
+  },
+  "nativeSavedVersionId": "appgprj_6aedf7106c2081919627f07802438881~appgver_00dc74da24ac8191b04f62674a03d373",
+  "nativeReturnedStorageMetadata": {
+    "archive_format": "tar",
+    "sediment_file_id": "file_00000000d6608208a180710933c64d31",
+    "content_hash": "sha256:1be788a86f44a66c302d4148faa5ba5646f26ab86197760582c1c4c83b7f4268",
+    "size_bytes": 686080,
+    "file_count": 11
+  },
+  "serviceObjectRetrieved": false,
+  "containerByteIdentityVerified": false,
+  "limitations": [
+    "The service storage object was not independently retrieved and container identity is unverified; local and returned hashes are recorded separately.",
+    "All ten authored distribution files match the retained snapshot exactly. The extra regular file is the known Sites project hosting configuration. Actual served authored-file bytes are verified separately over HTTPS."
+  ]
+}

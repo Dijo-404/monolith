@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "runId": "report_3833d341-b412-441f-915d-14d2421322a3",
+  "generatedAt": "2026-11-06T22:32:19.864Z",
+  "evidence": "OBSERVED_LIVE",
+  "artifacts": [
+    {
+      "path": "privacy-report.json",
+      "sha256": "c28ab7f612ce69fff62011b469df983eeb44cd4a6c8bdec16c903b045f9b66b1",
+      "generatedAt": "2026-11-06T22:19:32.069Z",
+      "evidence": "OBSERVED_LIVE",
+      "sourceTask": "MN-014"
+    }
+  ]
+}

@@ -1,0 +1,881 @@
+{
+  "schemaVersion": 1,
+  "scope": "CORE_PRIVACY_REGRESSION_LAB_ORIGINAL_PROOF_INDEX_NOT_A_VERIFICATION_MANIFEST",
+  "generatedAt": "2026-11-06T22:37:58.371Z",
+  "acceptedBaseCommit": "bd43ff315aa1d98552a7f117f91b4afb56adefd4",
+  "originalStorageCommit": "631e3fe33575702f84ee5cf5a6acdad896b176c0",
+  "selectedObservation": {
+    "executionSourceCommit": "c11dace8107f386e5eceb8356395bfdb23035dd1",
+    "sourceTaskAsRecorded": "MN-014",
+    "releaseTask": "MN-017",
+    "mountedWalkthroughAcceptedTask": "MN-016",
+    "capturePath": "evidence/core/2026-11-07/originals/current-core9/browser-live.json",
+    "captureSha256": "d2b50ee50a6e1c366ac84e829dff440e727873dcc1ea04f007bd96a8ecda74d3",
+    "sourceInputs": 248,
+    "freshRuns": 4,
+    "uniqueWireRows": 13,
+    "observationStartedAt": "2026-11-06T22:17:50.259Z",
+    "observationGeneratedAt": "2026-11-06T22:19:38.859Z",
+    "siteOrigin": "https://monolith-privacy-lab.madhanxdev.chatgpt.site",
+    "observerOrigin": "https://d06045ae660681.lhr.life",
+    "rootReviewPath": "evidence/core/2026-11-07/originals/current-core9/independent-review.json",
+    "producerReviewPath": "evidence/core/2026-11-07/originals/current-core9/binding-redaction-audit.json"
+  },
+  "supportedSingletonProjections": [
+    {
+      "mode": "private",
+      "sourceTaskAsRecorded": "MN-014",
+      "executionSourceCommit": "c11dace8107f386e5eceb8356395bfdb23035dd1",
+      "originalStorageCommit": "631e3fe33575702f84ee5cf5a6acdad896b176c0",
+      "sourcePath": "evidence/core/2026-11-07/originals/current-core9/private-report.json",
+      "sourceSha256": "957f33be68c2decac78f58ed83976ad98e416d51e3d83d0cb7b1d830a9965be9",
+      "jsonPointer": "/report",
+      "sourceObservedAt": "2026-11-06T22:18:23.068Z",
+      "capturePath": "evidence/core/2026-11-07/originals/current-core9/browser-live.json",
+      "captureSha256": "d2b50ee50a6e1c366ac84e829dff440e727873dcc1ea04f007bd96a8ecda74d3",
+      "captureCaseIndex": 0,
+      "serverRunId": "run-7199c399-edf3-4dc8-af6e-d0c0ced73299",
+      "reportId": "report_1e5ca2c9-9ce8-4617-a744-91877e80495d",
+      "projectionPath": "evidence/core/2026-11-07/reports/private/privacy-report.json",
+      "projectionSha256": "a80f98954810fdefb84207cdc42e0b0b7e5d213614c71226aa6942734a084b38",
+      "projectionBytes": 1466,
+      "manifestPath": "evidence/core/2026-11-07/reports/private/verification-manifest.json",
+      "planPath": "evidence/core/2026-11-07/plans/private.plan.json",
+      "evidenceAsRecorded": "OBSERVED_LIVE",
+      "eligibleReads": 2,
+      "protectedReads": 0,
+      "successfulReads": 2,
+      "protectedCoverage": 0
+    },
+    {
+      "mode": "compare",
+      "sourceTaskAsRecorded": "MN-014",
+      "executionSourceCommit": "c11dace8107f386e5eceb8356395bfdb23035dd1",
+      "originalStorageCommit": "631e3fe33575702f84ee5cf5a6acdad896b176c0",
+      "sourcePath": "evidence/core/2026-11-07/originals/current-core9/compare-report.json",
+      "sourceSha256": "4ca442af38d44ac5e8877ce33de3093d86b5e7586f284a58cba6bbc65e47cb61",
+      "jsonPointer": "/report",
+      "sourceObservedAt": "2026-11-06T22:18:44.355Z",
+      "capturePath": "evidence/core/2026-11-07/originals/current-core9/browser-live.json",
+      "captureSha256": "d2b50ee50a6e1c366ac84e829dff440e727873dcc1ea04f007bd96a8ecda74d3",
+      "captureCaseIndex": 1,
+      "serverRunId": "run-b9ab9914-8029-46ab-8ea6-36332b639ba3",
+      "reportId": "report_270e3f38-1a7e-425e-af9e-c4ce46564bee",
+      "projectionPath": "evidence/core/2026-11-07/reports/compare/privacy-report.json",
+      "projectionSha256": "b13b6b519c646c8ef8fd3ddd1f9e1de192317bfe3fbd08706580966532294ee6",
+      "projectionBytes": 770,
+      "manifestPath": "evidence/core/2026-11-07/reports/compare/verification-manifest.json",
+      "planPath": "evidence/core/2026-11-07/plans/compare.plan.json",
+      "evidenceAsRecorded": "OBSERVED_LIVE",
+      "eligibleReads": 3,
+      "protectedReads": 2,
+      "successfulReads": 3,
+      "protectedCoverage": 0.6666666666666666
+    },
+    {
+      "mode": "leak",
+      "sourceTaskAsRecorded": "MN-014",
+      "executionSourceCommit": "c11dace8107f386e5eceb8356395bfdb23035dd1",
+      "originalStorageCommit": "631e3fe33575702f84ee5cf5a6acdad896b176c0",
+      "sourcePath": "evidence/core/2026-11-07/originals/current-core9/leak-report.json",
+      "sourceSha256": "5280bdbd84b48642d392110d68b03c90970e5049e2cb19528c074b2b9c8671a1",
+      "jsonPointer": "/report",
+      "sourceObservedAt": "2026-11-06T22:19:06.895Z",
+      "capturePath": "evidence/core/2026-11-07/originals/current-core9/browser-live.json",
+      "captureSha256": "d2b50ee50a6e1c366ac84e829dff440e727873dcc1ea04f007bd96a8ecda74d3",
+      "captureCaseIndex": 2,
+      "serverRunId": "run-d9ef1361-60cb-4eca-ac43-cf8d99111bae",
+      "reportId": "report_48e717f6-8ce9-4cb1-bd97-c99b8cfe3147",
+      "projectionPath": "evidence/core/2026-11-07/reports/leak/privacy-report.json",
+      "projectionSha256": "aeb38bc54fe9d1f32509c1a3b723b3b348b305e75c2a604392416e05ac328419",
+      "projectionBytes": 1140,
+      "manifestPath": "evidence/core/2026-11-07/reports/leak/verification-manifest.json",
+      "planPath": "evidence/core/2026-11-07/plans/leak.plan.json",
+      "evidenceAsRecorded": "OBSERVED_LIVE",
+      "eligibleReads": 4,
+      "protectedReads": 2,
+      "successfulReads": 4,
+      "protectedCoverage": 0.5
+    },
+    {
+      "mode": "repair",
+      "sourceTaskAsRecorded": "MN-014",
+      "executionSourceCommit": "c11dace8107f386e5eceb8356395bfdb23035dd1",
+      "originalStorageCommit": "631e3fe33575702f84ee5cf5a6acdad896b176c0",
+      "sourcePath": "evidence/core/2026-11-07/originals/current-core9/repair-report.json",
+      "sourceSha256": "f4f93b0353717c5ec6ca89dcf9073a0425094d9cf6fd58ba27af16c763cfaabf",
+      "jsonPointer": "/report",
+      "sourceObservedAt": "2026-11-06T22:19:32.069Z",
+      "capturePath": "evidence/core/2026-11-07/originals/current-core9/browser-live.json",
+      "captureSha256": "d2b50ee50a6e1c366ac84e829dff440e727873dcc1ea04f007bd96a8ecda74d3",
+      "captureCaseIndex": 3,
+      "serverRunId": "run-8ee30be1-5d9f-40d2-a440-352952a7b5ea",
+      "reportId": "report_3833d341-b412-441f-915d-14d2421322a3",
+      "projectionPath": "evidence/core/2026-11-07/reports/repair/privacy-report.json",
+      "projectionSha256": "c28ab7f612ce69fff62011b469df983eeb44cd4a6c8bdec16c903b045f9b66b1",
+      "projectionBytes": 756,
+      "manifestPath": "evidence/core/2026-11-07/reports/repair/verification-manifest.json",
+      "planPath": "evidence/core/2026-11-07/plans/repair.plan.json",
+      "evidenceAsRecorded": "OBSERVED_LIVE",
+      "eligibleReads": 4,
+      "protectedReads": 3,
+      "successfulReads": 4,
+      "protectedCoverage": 0.75
+    }
+  ],
+  "unchangedSelectedOriginals": [
+    {
+      "path": "evidence/core/2026-11-07/originals/current-core9/browser-live.json",
+      "sha256": "d2b50ee50a6e1c366ac84e829dff440e727873dcc1ea04f007bd96a8ecda74d3",
+      "bytes": 51817,
+      "recordKind": "UNCHANGED_ORIGINAL_CAPTURE",
+      "producerSourcePath": "/tmp/monolith-current-core-deployed-attempt9-20261107/browser-live.json"
+    },
+    {
+      "path": "evidence/core/2026-11-07/originals/current-core9/compare-report.json",
+      "sha256": "4ca442af38d44ac5e8877ce33de3093d86b5e7586f284a58cba6bbc65e47cb61",
+      "bytes": 6417,
+      "recordKind": "UNCHANGED_ORIGINAL_CAPTURE",
+      "producerSourcePath": "/tmp/monolith-current-core-deployed-attempt9-20261107/compare-report.json"
+    },
+    {
+      "path": "evidence/core/2026-11-07/originals/current-core9/compare.png",
+      "sha256": "4a8f8950103ac2ed7b04133c1ca44c92d75bd9c379953e940921f7c63311d142",
+      "bytes": 850634,
+      "recordKind": "UNCHANGED_ORIGINAL_CAPTURE",
+      "producerSourcePath": "/tmp/monolith-current-core-deployed-attempt9-20261107/compare.png"
+    },
+    {
+      "path": "evidence/core/2026-11-07/originals/current-core9/leak-report.json",
+      "sha256": "5280bdbd84b48642d392110d68b03c90970e5049e2cb19528c074b2b9c8671a1",
+      "bytes": 8602,
+      "recordKind": "UNCHANGED_ORIGINAL_CAPTURE",
+      "producerSourcePath": "/tmp/monolith-current-core-deployed-attempt9-20261107/leak-report.json"
+    },
+    {
+      "path": "evidence/core/2026-11-07/originals/current-core9/leak.png",
+      "sha256": "74d27dd1530c805c15b082b11bab77f251f47b22bcabee0762e066f6cec5541e",
+      "bytes": 889217,
+      "recordKind": "UNCHANGED_ORIGINAL_CAPTURE",
+      "producerSourcePath": "/tmp/monolith-current-core-deployed-attempt9-20261107/leak.png"
+    },
+    {
+      "path": "evidence/core/2026-11-07/originals/current-core9/private-report.json",
+      "sha256": "957f33be68c2decac78f58ed83976ad98e416d51e3d83d0cb7b1d830a9965be9",
+      "bytes": 6858,
+      "recordKind": "UNCHANGED_ORIGINAL_CAPTURE",
+      "producerSourcePath": "/tmp/monolith-current-core-deployed-attempt9-20261107/private-report.json"
+    },
+    {
+      "path": "evidence/core/2026-11-07/originals/current-core9/private.png",
+      "sha256": "253a0ae42dee3871beee0e78e94c89a6be4feed857772964104ce5533e1cdbf7",
+      "bytes": 851632,
+      "recordKind": "UNCHANGED_ORIGINAL_CAPTURE",
+      "producerSourcePath": "/tmp/monolith-current-core-deployed-attempt9-20261107/private.png"
+    },
+    {
+      "path": "evidence/core/2026-11-07/originals/current-core9/repair-320.png",
+      "sha256": "c07c7d8e8a3a8c9fd802c5493be9669b114344f777b7950e15a0ef3aebb4ba27",
+      "bytes": 476502,
+      "recordKind": "UNCHANGED_ORIGINAL_CAPTURE",
+      "producerSourcePath": "/tmp/monolith-current-core-deployed-attempt9-20261107/repair-320.png"
+    },
+    {
+      "path": "evidence/core/2026-11-07/originals/current-core9/repair-390.png",
+      "sha256": "94043cacefe4ef2da74e4419f2d95a42099e72b66cd7bab0b67a3098546d5952",
+      "bytes": 479755,
+      "recordKind": "UNCHANGED_ORIGINAL_CAPTURE",
+      "producerSourcePath": "/tmp/monolith-current-core-deployed-attempt9-20261107/repair-390.png"
+    },
+    {
+      "path": "evidence/core/2026-11-07/originals/current-core9/repair-report.json",
+      "sha256": "f4f93b0353717c5ec6ca89dcf9073a0425094d9cf6fd58ba27af16c763cfaabf",
+      "bytes": 7957,
+      "recordKind": "UNCHANGED_ORIGINAL_CAPTURE",
+      "producerSourcePath": "/tmp/monolith-current-core-deployed-attempt9-20261107/repair-report.json"
+    },
+    {
+      "path": "evidence/core/2026-11-07/originals/current-core9/repair.png",
+      "sha256": "cac4d070cc549d6e8e3cb56bc199242d07da5e01ada44565519e4a6e1735b82b",
+      "bytes": 873132,
+      "recordKind": "UNCHANGED_ORIGINAL_CAPTURE",
+      "producerSourcePath": "/tmp/monolith-current-core-deployed-attempt9-20261107/repair.png"
+    },
+    {
+      "path": "evidence/core/2026-11-07/originals/current-core9/independent-review.json",
+      "sha256": "70f53af17cb48b412968d0d1be22e7c83d5090fcc76c959034a7f075fc9c16b5",
+      "bytes": 2490,
+      "recordKind": "UNCHANGED_RETAINED_AUDIT",
+      "producerSourcePath": "/tmp/monolith-current-core-attempt9-independent-audit-20261107.json"
+    },
+    {
+      "path": "evidence/core/2026-11-07/originals/current-core9/binding-redaction-audit.json",
+      "sha256": "a50f16d1e546e028235b85a8c364d21eb1db3fb3898ba0385e0eb4016f0a6dc9",
+      "bytes": 2639,
+      "recordKind": "UNCHANGED_RETAINED_AUDIT",
+      "producerSourcePath": "/tmp/monolith-current-core-attempt9-binding-redaction-audit-20261107.json"
+    },
+    {
+      "path": "evidence/core/2026-11-07/originals/current-core9/pre-capture-inputs.json",
+      "sha256": "6e4843a4f1371df4336646448dc985e4cfa1af2944932f9d81c40570dd811b40",
+      "bytes": 30679,
+      "recordKind": "UNCHANGED_RETAINED_AUDIT",
+      "producerSourcePath": "/tmp/monolith-current-core-c11-pre-capture-inputs-20261107.json"
+    },
+    {
+      "path": "evidence/core/2026-11-07/originals/site7/deployment.json",
+      "sha256": "4d609ca7b070494ba5c5550155a888a745dacb26bccca6cd307de919425f1a7f",
+      "bytes": 2273,
+      "recordKind": "UNCHANGED_RETAINED_PUBLICATION_RECORD",
+      "producerSourcePath": "/tmp/monolith-sites-deployment-20261107-v7.json"
+    },
+    {
+      "path": "evidence/core/2026-11-07/originals/site7/input-audit.json",
+      "sha256": "c11d9ecc06f7267a2d9e31138bd5367fb8836123a34a062d4bf61316dbfc9c6c",
+      "bytes": 701,
+      "recordKind": "UNCHANGED_RETAINED_PUBLICATION_RECORD",
+      "producerSourcePath": "/tmp/monolith-static-publication-preflight-20261107-attempt8.json"
+    },
+    {
+      "path": "evidence/core/2026-11-07/originals/site7/static-verification.json",
+      "sha256": "ae1f7e25739520c9a3655b7d701c5ee491ffee49015ec65ca3dd7ae2c062bb32",
+      "bytes": 7649,
+      "recordKind": "UNCHANGED_RETAINED_PUBLICATION_RECORD",
+      "producerSourcePath": "/tmp/monolith-static-verification-20261107-attempt8.json"
+    },
+    {
+      "path": "evidence/core/2026-11-07/originals/site7/provenance.json",
+      "sha256": "4299c567113cf682465fe8ee3fb5e1c86fff72789a5c36da39f7ade1e8082418",
+      "bytes": 7793,
+      "recordKind": "UNCHANGED_RETAINED_PUBLICATION_RECORD",
+      "producerSourcePath": "/tmp/monolith-release-snapshot-20261107-attempt8/provenance.json"
+    },
+    {
+      "path": "evidence/core/2026-11-07/originals/site7/browser-fault/browser-deployed.json",
+      "sha256": "dce5e28ca266d71e85a1f90d45e9181f35d40d1ca3c713905805a9e5f6fe2af6",
+      "bytes": 2894,
+      "recordKind": "UNCHANGED_RETAINED_CONTROLLED_FAULT",
+      "producerSourcePath": "/tmp/monolith-deployed-browser-fault-20261107-attempt4/browser-deployed.json"
+    },
+    {
+      "path": "evidence/core/2026-11-07/originals/site7/browser-fault/published-1440.png",
+      "sha256": "ac66bb663dda283656efcf98e9a6d7192b03b6359b91bfcd685fd7d72ee16e27",
+      "bytes": 726121,
+      "recordKind": "UNCHANGED_RETAINED_CONTROLLED_FAULT",
+      "producerSourcePath": "/tmp/monolith-deployed-browser-fault-20261107-attempt4/published-1440.png"
+    },
+    {
+      "path": "evidence/core/2026-11-07/originals/site7/browser-fault/published-320.png",
+      "sha256": "84a606ab0fed1983e4adcd8839db6350f24b8c7b6120c4be09d81326704096c0",
+      "bytes": 359187,
+      "recordKind": "UNCHANGED_RETAINED_CONTROLLED_FAULT",
+      "producerSourcePath": "/tmp/monolith-deployed-browser-fault-20261107-attempt4/published-320.png"
+    },
+    {
+      "path": "evidence/core/2026-11-07/originals/site7/browser-fault/published-390.png",
+      "sha256": "575045302c031be8d2e662b58cc98efb2cec8f1e8108c1d3c932a666dafc07e9",
+      "bytes": 351876,
+      "recordKind": "UNCHANGED_RETAINED_CONTROLLED_FAULT",
+      "producerSourcePath": "/tmp/monolith-deployed-browser-fault-20261107-attempt4/published-390.png"
+    },
+    {
+      "path": "evidence/core/2026-11-07/originals/site7/browser-fault/published-webgl-fallback.png",
+      "sha256": "c6d0f589ac74400bb28ae0446427e283183595a8e86e82492c9b3563026a88b0",
+      "bytes": 340110,
+      "recordKind": "UNCHANGED_RETAINED_CONTROLLED_FAULT",
+      "producerSourcePath": "/tmp/monolith-deployed-browser-fault-20261107-attempt4/published-webgl-fallback.png"
+    },
+    {
+      "path": "evidence/core/2026-11-07/originals/site7/browser-fault/published-worker-unavailable.png",
+      "sha256": "063b1592bbb05c4c703f8b98f63239bdf420d45c3fc1049ce7732af7fdb69dc9",
+      "bytes": 759258,
+      "recordKind": "UNCHANGED_RETAINED_CONTROLLED_FAULT",
+      "producerSourcePath": "/tmp/monolith-deployed-browser-fault-20261107-attempt4/published-worker-unavailable.png"
+    },
+    {
+      "path": "evidence/core/2026-11-07/originals/site7/archive-local-audit.json",
+      "sha256": "53dc579803250cef3172430af1f3a9c4b58a78a796c52156f6b6abbc78f05131",
+      "bytes": 1318,
+      "recordKind": "DERIVED_AUDIT_NOT_ORIGINAL_RECEIPT",
+      "producerSourcePath": null
+    },
+    {
+      "path": "evidence/core/2026-11-07/originals/site7/root-archive-local-audit.json",
+      "sha256": "335e31f7af339e865c57f507e5da7c99e7fd980a0d8144fdbae4c41443481261",
+      "bytes": 1846,
+      "recordKind": "UNCHANGED_RETAINED_ROOT_ARCHIVE_AUDIT",
+      "producerSourcePath": "/tmp/monolith-site7-archive-local-audit-20261107.json"
+    }
+  ],
+  "backendOriginalReferences": [
+    {
+      "originalFileStorageCommit": "bd43ff315aa1d98552a7f117f91b4afb56adefd4",
+      "path": "tests/e2e/break-fix/observed-live/2026-11-07/backend-runtime-10/source-bindings.json",
+      "sha256": "2193e42808c2091cf0c7bea9096ef658626c68dd2b84855371ca88fd1acf7ce0",
+      "bytes": 21830,
+      "labelFieldsAsRecorded": {
+        "status": "FROZEN_INPUTS_FOR_ACTUAL_REGISTERED_RUNTIME_NO_REUSED_LIVE_PROOF"
+      }
+    },
+    {
+      "originalFileStorageCommit": "bd43ff315aa1d98552a7f117f91b4afb56adefd4",
+      "path": "tests/e2e/break-fix/observed-live/2026-11-07/backend-runtime-10/public-metadata.json",
+      "sha256": "81487e2a71efbce6faa21c89d591efc291016907d581a673c91e919fbe625e27",
+      "bytes": 3597,
+      "labelFieldsAsRecorded": {
+        "evidence": "OBSERVED_LIVE",
+        "passed": true
+      }
+    },
+    {
+      "originalFileStorageCommit": "bd43ff315aa1d98552a7f117f91b4afb56adefd4",
+      "path": "tests/e2e/break-fix/observed-live/2026-11-07/backend-runtime-10/pre-capture-health.json",
+      "sha256": "015935ebc1bf1521d8b329e9cdbf18134853b235a4a7ac11107aed1af34d0303",
+      "bytes": 580,
+      "labelFieldsAsRecorded": {
+        "status": 200,
+        "passed": true
+      }
+    }
+  ],
+  "historicalOriginalReferences": [
+    {
+      "use": "HISTORICAL_ORIGINAL_AS_RECORDED",
+      "originalFileStorageCommit": "aea641643b48c019a04343bd4b212b9c74870f95",
+      "path": "tests/privacy/live-observer/observed-localhost-run-final-2026-11-06.json",
+      "sha256": "d31ca69e8a334f0190fb424c4a7f873f82e1f0cc8d3d426eab0ac930b8c285b0",
+      "bytes": 20975,
+      "labelFieldsAsRecorded": {
+        "evidence": "OBSERVED_LIVE"
+      }
+    },
+    {
+      "use": "HISTORICAL_ORIGINAL_AS_RECORDED",
+      "originalFileStorageCommit": "aea641643b48c019a04343bd4b212b9c74870f95",
+      "path": "apps/dashboard/src/spikes/anon/post-foundation-nym-2026-11-06.json",
+      "sha256": "6221bdb015838bb0844326c7eca286870a6402e651db95d00ae8eacc29cdb177",
+      "bytes": 6154,
+      "labelFieldsAsRecorded": {}
+    },
+    {
+      "use": "HISTORICAL_ORIGINAL_AS_RECORDED",
+      "originalFileStorageCommit": "aea641643b48c019a04343bd4b212b9c74870f95",
+      "path": "packages/transport/test/live/observed-live-2026-11-06.json",
+      "sha256": "0169cfe201fca1f069d9eb5091cf88b8cdb6100063c3d3df4e3a2ab44e51c38f",
+      "bytes": 7995,
+      "labelFieldsAsRecorded": {
+        "evidence": "OBSERVED_LIVE"
+      }
+    },
+    {
+      "use": "HISTORICAL_ORIGINAL_AS_RECORDED",
+      "originalFileStorageCommit": "aea641643b48c019a04343bd4b212b9c74870f95",
+      "path": "packages/transport/test/live/observed-retry-trace-2026-11-06.json",
+      "sha256": "bd0e4bcfacc10e531ea9f886ee0771f8cff77113ef0756bbd4f1770353b14a63",
+      "bytes": 7994,
+      "labelFieldsAsRecorded": {
+        "evidence": "OBSERVED_LIVE"
+      }
+    },
+    {
+      "use": "HISTORICAL_ORIGINAL_AS_RECORDED",
+      "originalFileStorageCommit": "aea641643b48c019a04343bd4b212b9c74870f95",
+      "path": "packages/transport/test/live/observed-blocked-2026-11-06.json",
+      "sha256": "8eaa63c626a1d5cd2584222b35919e4976ac8277d730fe08fac7dc45b59c27cc",
+      "bytes": 6219,
+      "labelFieldsAsRecorded": {
+        "evidence": "BLOCKED"
+      }
+    },
+    {
+      "use": "HISTORICAL_ORIGINAL_AS_RECORDED",
+      "originalFileStorageCommit": "aea641643b48c019a04343bd4b212b9c74870f95",
+      "path": "packages/transport/test/live/observed-blocked-retry-2026-11-06.json",
+      "sha256": "dd66b9ee0335e9b361f92dd8d0f706ca20ceaa3b5117574da00d8820decf79fb",
+      "bytes": 7873,
+      "labelFieldsAsRecorded": {
+        "evidence": "BLOCKED"
+      }
+    },
+    {
+      "use": "HISTORICAL_ORIGINAL_AS_RECORDED",
+      "originalFileStorageCommit": "aea641643b48c019a04343bd4b212b9c74870f95",
+      "path": "tests/e2e/registry-routing/live/observed-live-2026-11-06.json",
+      "sha256": "d6c847bc79fa7b0e8efc74aa5ec6926e63d42efeea193d8db71b1043d7cbb28a",
+      "bytes": 26768,
+      "labelFieldsAsRecorded": {
+        "evidence": "OBSERVED_LIVE"
+      }
+    },
+    {
+      "use": "HISTORICAL_ORIGINAL_AS_RECORDED",
+      "originalFileStorageCommit": "aea641643b48c019a04343bd4b212b9c74870f95",
+      "path": "packages/registry/test/reader/observed-api-2026-11-06.json",
+      "sha256": "f75be96cba40beadab76ca57d43c001f7c02e2841d33052d4fd1cbd037d1521b",
+      "bytes": 10980,
+      "labelFieldsAsRecorded": {
+        "evidence": "OBSERVED_LIVE"
+      }
+    },
+    {
+      "use": "HISTORICAL_ORIGINAL_AS_RECORDED",
+      "originalFileStorageCommit": "aea641643b48c019a04343bd4b212b9c74870f95",
+      "path": "packages/registry/test/importer/observed-live-2026-11-06/import-full100.json",
+      "sha256": "38728e8d02c845ab545b0bf83e450b04256bda5bb00b49cf09cb7e080cc85bb6",
+      "bytes": 53133,
+      "labelFieldsAsRecorded": {
+        "status": "COMPLETE"
+      }
+    },
+    {
+      "use": "HISTORICAL_ORIGINAL_AS_RECORDED",
+      "originalFileStorageCommit": "aea641643b48c019a04343bd4b212b9c74870f95",
+      "path": "packages/registry/test/importer/observed-live-2026-11-06/independent-query.json",
+      "sha256": "147ae7775f6febd5c147a2738bcdff27298884c30b3cd9edee058843e8352b02",
+      "bytes": 43541,
+      "labelFieldsAsRecorded": {
+        "evidence": "OBSERVED_LIVE"
+      }
+    },
+    {
+      "use": "HISTORICAL_ORIGINAL_AS_RECORDED",
+      "originalFileStorageCommit": "aea641643b48c019a04343bd4b212b9c74870f95",
+      "path": "packages/registry/test/importer/observed-live-2026-11-06/receipt-evidence.json",
+      "sha256": "995f6b60fe278e6101664ac4b963a9d539c0c693e5bb41d7e1848301bd14bd97",
+      "bytes": 28848,
+      "labelFieldsAsRecorded": {
+        "evidence": "OBSERVED_LIVE"
+      }
+    },
+    {
+      "use": "HISTORICAL_ORIGINAL_AS_RECORDED",
+      "originalFileStorageCommit": "aea641643b48c019a04343bd4b212b9c74870f95",
+      "path": "packages/registry/test/importer/observed-live-2026-11-06/rerun100.json",
+      "sha256": "4d8b08ff7bbf4aa91cdf8141af50513d10058500ba406cd63d50bae3da181099",
+      "bytes": 47283,
+      "labelFieldsAsRecorded": {
+        "status": "COMPLETE"
+      }
+    },
+    {
+      "use": "HISTORICAL_ORIGINAL_AS_RECORDED",
+      "originalFileStorageCommit": "aea641643b48c019a04343bd4b212b9c74870f95",
+      "path": "packages/registry/test/importer/observed-live-2026-11-06/source-catalog.json",
+      "sha256": "2180efb0c0b38e76578ebd8d6470d1acbabb7f90463dd4134e7c6d90a692c952",
+      "bytes": 370954,
+      "labelFieldsAsRecorded": {}
+    },
+    {
+      "use": "HISTORICAL_ORIGINAL_AS_RECORDED",
+      "originalFileStorageCommit": "aea641643b48c019a04343bd4b212b9c74870f95",
+      "path": "packages/registry/test/importer/observed-live-2026-11-06/artifact-consistency.json",
+      "sha256": "ed3e2a552c06306cbd11f02c4d1d815cb5cccef27178a36d96795f63e6a332fd",
+      "bytes": 2471,
+      "labelFieldsAsRecorded": {
+        "evidence": "OBSERVED_LIVE"
+      }
+    },
+    {
+      "use": "HISTORICAL_ORIGINAL_AS_RECORDED",
+      "originalFileStorageCommit": "aea641643b48c019a04343bd4b212b9c74870f95",
+      "path": "tests/e2e/privacy/recorded-simulated/leak-2026-11-06.json",
+      "sha256": "aa8730a13948dd6a8c9ef816fa41569568059252dfb434ed2c45b7fbaef87ce2",
+      "bytes": 14173,
+      "labelFieldsAsRecorded": {
+        "evidence": "SIMULATED",
+        "passed": false
+      }
+    },
+    {
+      "use": "HISTORICAL_ORIGINAL_AS_RECORDED",
+      "originalFileStorageCommit": "aea641643b48c019a04343bd4b212b9c74870f95",
+      "path": "tests/e2e/privacy/recorded-simulated/fixed-2026-11-06.json",
+      "sha256": "b4ca0936775f1d4224cdb6b170a9ede3a45fb9b0f8c5270a8d27dd6d8adce7a1",
+      "bytes": 13061,
+      "labelFieldsAsRecorded": {
+        "evidence": "SIMULATED",
+        "passed": true
+      }
+    },
+    {
+      "use": "HISTORICAL_ORIGINAL_AS_RECORDED",
+      "originalFileStorageCommit": "aea641643b48c019a04343bd4b212b9c74870f95",
+      "path": "tests/e2e/privacy/recorded-simulated/matrix-2026-11-06.json",
+      "sha256": "ac088a3d45d1cab69d70a08de7c25cc39ca6ec08d7fef0a5900bf7fed20ef708",
+      "bytes": 34018,
+      "labelFieldsAsRecorded": {
+        "evidence": "SIMULATED",
+        "passed": true
+      }
+    },
+    {
+      "use": "HISTORICAL_ORIGINAL_AS_RECORDED",
+      "originalFileStorageCommit": "5cf16137d60bd2d274a4eb3b2fe078765d0ecc70",
+      "path": "tests/e2e/lab-ui/observed-live/2026-11-07/attempt-5/private-report.json",
+      "sha256": "5fa5e78145b2911dc68e8e6e15c5c524ed9825d1c3ff5768847f55b62419140f",
+      "bytes": 6904,
+      "labelFieldsAsRecorded": {}
+    },
+    {
+      "use": "HISTORICAL_ORIGINAL_AS_RECORDED",
+      "originalFileStorageCommit": "5cf16137d60bd2d274a4eb3b2fe078765d0ecc70",
+      "path": "tests/e2e/lab-ui/observed-live/2026-11-07/attempt-5/compare-report.json",
+      "sha256": "2844cbd9f458eed28e7a790a0bbc797dfc1869c5a436effd13c762752eabf409",
+      "bytes": 6441,
+      "labelFieldsAsRecorded": {}
+    },
+    {
+      "use": "HISTORICAL_ORIGINAL_AS_RECORDED",
+      "originalFileStorageCommit": "5cf16137d60bd2d274a4eb3b2fe078765d0ecc70",
+      "path": "tests/e2e/lab-ui/observed-live/2026-11-07/attempt-5/leak-report.json",
+      "sha256": "aa1303a47fb30fa411b80700948eaa63cab880acb860be39ac8f7d06427ab119",
+      "bytes": 8658,
+      "labelFieldsAsRecorded": {}
+    },
+    {
+      "use": "HISTORICAL_ORIGINAL_AS_RECORDED",
+      "originalFileStorageCommit": "5cf16137d60bd2d274a4eb3b2fe078765d0ecc70",
+      "path": "tests/e2e/lab-ui/observed-live/2026-11-07/attempt-5/repair-report.json",
+      "sha256": "ead0976a33cfc6bab16c79557eb57c41ee8cc97999c2b8ac33cbdcd66eec2d5a",
+      "bytes": 7936,
+      "labelFieldsAsRecorded": {}
+    },
+    {
+      "use": "HISTORICAL_ORIGINAL_AS_RECORDED",
+      "originalFileStorageCommit": "5cf16137d60bd2d274a4eb3b2fe078765d0ecc70",
+      "path": "tests/e2e/lab-ui/observed-live/2026-11-07/attempt-5/browser-live.json",
+      "sha256": "deb812bc3cff570fa999eefcb8061555f1d2c45b5e60045313f0241f331a687b",
+      "bytes": 45474,
+      "labelFieldsAsRecorded": {
+        "evidence": "OBSERVED_LIVE",
+        "passed": true
+      }
+    },
+    {
+      "use": "HISTORICAL_ORIGINAL_AS_RECORDED",
+      "originalFileStorageCommit": "33b1230d7de64294e50783d2c483d5b1fb84913f",
+      "path": "deploy/observer/evidence/2026-11-07/runtime-bindings.json",
+      "sha256": "45118e0faf8a1ec5f92d57e0869e11825ce5bfa52eae6ca0c9451cd4cd114cd4",
+      "bytes": 21270,
+      "labelFieldsAsRecorded": {
+        "status": "FROZEN_INPUTS_FOR_ACTUAL_RUNTIME"
+      }
+    },
+    {
+      "use": "HISTORICAL_ORIGINAL_AS_RECORDED",
+      "originalFileStorageCommit": "33b1230d7de64294e50783d2c483d5b1fb84913f",
+      "path": "deploy/observer/evidence/2026-11-07/public-metadata.json",
+      "sha256": "d273e2626c57f30fbdecd29afa9f6fb4975f851df3f7128c36e00bd99227aebe",
+      "bytes": 3369,
+      "labelFieldsAsRecorded": {
+        "evidence": "OBSERVED_LIVE"
+      }
+    },
+    {
+      "use": "HISTORICAL_SITE4_SOURCE5CF",
+      "originalFileStorageCommit": "bd43ff315aa1d98552a7f117f91b4afb56adefd4",
+      "path": "tests/e2e/lab-ui/deployed-live/2026-11-07/attempt-7/browser-live.json",
+      "sha256": "70a0cff9a52394c66754f62280ae9981068f70a2aaddccdad8a53a30ca5cfc7c",
+      "bytes": 50637,
+      "labelFieldsAsRecorded": {
+        "evidence": "OBSERVED_LIVE",
+        "passed": true
+      }
+    },
+    {
+      "use": "HISTORICAL_SITE4_SOURCE5CF",
+      "originalFileStorageCommit": "bd43ff315aa1d98552a7f117f91b4afb56adefd4",
+      "path": "tests/e2e/lab-ui/deployed-live/2026-11-07/attempt-7/compare-report.json",
+      "sha256": "e4bd9a819ff80f0933fda9498a97c765136f9c1f9f1d1312217738065f846575",
+      "bytes": 6441,
+      "labelFieldsAsRecorded": {}
+    },
+    {
+      "use": "HISTORICAL_SITE4_SOURCE5CF",
+      "originalFileStorageCommit": "bd43ff315aa1d98552a7f117f91b4afb56adefd4",
+      "path": "tests/e2e/lab-ui/deployed-live/2026-11-07/attempt-7/compare.png",
+      "sha256": "1241e157cd82d8e4d02e266b714d752e97b884a6a33a1e539dc97bc8c26536ce",
+      "bytes": 765344,
+      "labelFieldsAsRecorded": {}
+    },
+    {
+      "use": "HISTORICAL_SITE4_SOURCE5CF",
+      "originalFileStorageCommit": "bd43ff315aa1d98552a7f117f91b4afb56adefd4",
+      "path": "tests/e2e/lab-ui/deployed-live/2026-11-07/attempt-7/leak-report.json",
+      "sha256": "1754697f55cdeeb084b4ceff5ac5c823c69eaacd09957d8531cbe7b2a57e8007",
+      "bytes": 8630,
+      "labelFieldsAsRecorded": {}
+    },
+    {
+      "use": "HISTORICAL_SITE4_SOURCE5CF",
+      "originalFileStorageCommit": "bd43ff315aa1d98552a7f117f91b4afb56adefd4",
+      "path": "tests/e2e/lab-ui/deployed-live/2026-11-07/attempt-7/leak.png",
+      "sha256": "dbe8173e9c0da7d879906ee53abd4eaa22ddd89260a41b63584a8e51120cfd09",
+      "bytes": 789359,
+      "labelFieldsAsRecorded": {}
+    },
+    {
+      "use": "HISTORICAL_SITE4_SOURCE5CF",
+      "originalFileStorageCommit": "bd43ff315aa1d98552a7f117f91b4afb56adefd4",
+      "path": "tests/e2e/lab-ui/deployed-live/2026-11-07/attempt-7/private-report.json",
+      "sha256": "a687a3a61d08c2ecff359bd94910bff383d7d5962bd661e93b5508306dfeccc2",
+      "bytes": 6904,
+      "labelFieldsAsRecorded": {}
+    },
+    {
+      "use": "HISTORICAL_SITE4_SOURCE5CF",
+      "originalFileStorageCommit": "bd43ff315aa1d98552a7f117f91b4afb56adefd4",
+      "path": "tests/e2e/lab-ui/deployed-live/2026-11-07/attempt-7/private.png",
+      "sha256": "71099139b79e6caa387c41d8495473e81edc0e509939a458f7acc49508700289",
+      "bytes": 764406,
+      "labelFieldsAsRecorded": {}
+    },
+    {
+      "use": "HISTORICAL_SITE4_SOURCE5CF",
+      "originalFileStorageCommit": "bd43ff315aa1d98552a7f117f91b4afb56adefd4",
+      "path": "tests/e2e/lab-ui/deployed-live/2026-11-07/attempt-7/repair-320.png",
+      "sha256": "64401b26a1ea834b3841f76a85c0ddabdacf0b62b0de9adc712604e9121c33ba",
+      "bytes": 393237,
+      "labelFieldsAsRecorded": {}
+    },
+    {
+      "use": "HISTORICAL_SITE4_SOURCE5CF",
+      "originalFileStorageCommit": "bd43ff315aa1d98552a7f117f91b4afb56adefd4",
+      "path": "tests/e2e/lab-ui/deployed-live/2026-11-07/attempt-7/repair-390.png",
+      "sha256": "8ff12639f09891038c1cab884259cbe390cc0988994e404c33e3d932b04ad6e0",
+      "bytes": 393988,
+      "labelFieldsAsRecorded": {}
+    },
+    {
+      "use": "HISTORICAL_SITE4_SOURCE5CF",
+      "originalFileStorageCommit": "bd43ff315aa1d98552a7f117f91b4afb56adefd4",
+      "path": "tests/e2e/lab-ui/deployed-live/2026-11-07/attempt-7/repair-report.json",
+      "sha256": "f162929960b17f944b2a409baeba3c5a22930f04ec6d513186bc6446cf8387d1",
+      "bytes": 7929,
+      "labelFieldsAsRecorded": {}
+    },
+    {
+      "use": "HISTORICAL_SITE4_SOURCE5CF",
+      "originalFileStorageCommit": "bd43ff315aa1d98552a7f117f91b4afb56adefd4",
+      "path": "tests/e2e/lab-ui/deployed-live/2026-11-07/attempt-7/repair.png",
+      "sha256": "22120397dd29801166d4a706d546e25765609055a171413973141a9c3adc450d",
+      "bytes": 776641,
+      "labelFieldsAsRecorded": {}
+    },
+    {
+      "use": "HISTORICAL_SITE6_SOURCE_DFB",
+      "originalFileStorageCommit": "bd43ff315aa1d98552a7f117f91b4afb56adefd4",
+      "path": "tests/e2e/break-fix/observed-live/2026-11-07/README.md",
+      "sha256": "ec32946daca5ab015c84bf75e25c989e8d60253006475efb0875182f1ac107f3",
+      "bytes": 6417,
+      "labelFieldsAsRecorded": {}
+    },
+    {
+      "use": "HISTORICAL_SITE6_SOURCE_DFB",
+      "originalFileStorageCommit": "bd43ff315aa1d98552a7f117f91b4afb56adefd4",
+      "path": "tests/e2e/break-fix/observed-live/2026-11-07/attempt-8/browser-live.json",
+      "sha256": "d8685e097e487b50148e513777c4288aa9681a6fc8d3c1e1a68cca5ecb5f9ef2",
+      "bytes": 51566,
+      "labelFieldsAsRecorded": {
+        "evidence": "OBSERVED_LIVE",
+        "passed": true
+      }
+    },
+    {
+      "use": "HISTORICAL_SITE6_SOURCE_DFB",
+      "originalFileStorageCommit": "bd43ff315aa1d98552a7f117f91b4afb56adefd4",
+      "path": "tests/e2e/break-fix/observed-live/2026-11-07/attempt-8/compare-report.json",
+      "sha256": "8bee2a7d9d9142eb470c4928271952f0131733873b2e38829ed3ed56a1e92922",
+      "bytes": 6415,
+      "labelFieldsAsRecorded": {}
+    },
+    {
+      "use": "HISTORICAL_SITE6_SOURCE_DFB",
+      "originalFileStorageCommit": "bd43ff315aa1d98552a7f117f91b4afb56adefd4",
+      "path": "tests/e2e/break-fix/observed-live/2026-11-07/attempt-8/compare.png",
+      "sha256": "62731d10fdf8e038145ff4de94da054a8873f670373bf072fd6e73d6b05e6232",
+      "bytes": 850326,
+      "labelFieldsAsRecorded": {}
+    },
+    {
+      "use": "HISTORICAL_SITE6_SOURCE_DFB",
+      "originalFileStorageCommit": "bd43ff315aa1d98552a7f117f91b4afb56adefd4",
+      "path": "tests/e2e/break-fix/observed-live/2026-11-07/attempt-8/leak-report.json",
+      "sha256": "b5bb2591f7b5496e0796cb479e533b46b5706474d41dbda9323cd33fcf53550b",
+      "bytes": 8634,
+      "labelFieldsAsRecorded": {}
+    },
+    {
+      "use": "HISTORICAL_SITE6_SOURCE_DFB",
+      "originalFileStorageCommit": "bd43ff315aa1d98552a7f117f91b4afb56adefd4",
+      "path": "tests/e2e/break-fix/observed-live/2026-11-07/attempt-8/leak.png",
+      "sha256": "6ef467d835ebfd96e0bab474e81ede3a1519a4a76261bbd666df6d46ee62a1e7",
+      "bytes": 889802,
+      "labelFieldsAsRecorded": {}
+    },
+    {
+      "use": "HISTORICAL_SITE6_SOURCE_DFB",
+      "originalFileStorageCommit": "bd43ff315aa1d98552a7f117f91b4afb56adefd4",
+      "path": "tests/e2e/break-fix/observed-live/2026-11-07/attempt-8/private-report.json",
+      "sha256": "3507f6255861694af6ea21d4c23d767cc11ca687838ddddd26dc958621265964",
+      "bytes": 6876,
+      "labelFieldsAsRecorded": {}
+    },
+    {
+      "use": "HISTORICAL_SITE6_SOURCE_DFB",
+      "originalFileStorageCommit": "bd43ff315aa1d98552a7f117f91b4afb56adefd4",
+      "path": "tests/e2e/break-fix/observed-live/2026-11-07/attempt-8/private.png",
+      "sha256": "6d4b6f0123b9dd9efe83bfaa5327528a79a06dd1036537e69830aa538ee46c34",
+      "bytes": 851403,
+      "labelFieldsAsRecorded": {}
+    },
+    {
+      "use": "HISTORICAL_SITE6_SOURCE_DFB",
+      "originalFileStorageCommit": "bd43ff315aa1d98552a7f117f91b4afb56adefd4",
+      "path": "tests/e2e/break-fix/observed-live/2026-11-07/attempt-8/repair-320.png",
+      "sha256": "2145f13b83411dccf6e3a7573fbd498b92b6d9f8649266877cb5d1aac49d2799",
+      "bytes": 484022,
+      "labelFieldsAsRecorded": {}
+    },
+    {
+      "use": "HISTORICAL_SITE6_SOURCE_DFB",
+      "originalFileStorageCommit": "bd43ff315aa1d98552a7f117f91b4afb56adefd4",
+      "path": "tests/e2e/break-fix/observed-live/2026-11-07/attempt-8/repair-390.png",
+      "sha256": "acf5c9aef13111438c095e0d49c895f6039ffa729928a706e78d3f71d7fb18d8",
+      "bytes": 481100,
+      "labelFieldsAsRecorded": {}
+    },
+    {
+      "use": "HISTORICAL_SITE6_SOURCE_DFB",
+      "originalFileStorageCommit": "bd43ff315aa1d98552a7f117f91b4afb56adefd4",
+      "path": "tests/e2e/break-fix/observed-live/2026-11-07/attempt-8/repair-report.json",
+      "sha256": "b4d0bee8590f7d58678ca651cdc43deed721adcf7c96d6500333317d1acc1105",
+      "bytes": 7957,
+      "labelFieldsAsRecorded": {}
+    },
+    {
+      "use": "HISTORICAL_SITE6_SOURCE_DFB",
+      "originalFileStorageCommit": "bd43ff315aa1d98552a7f117f91b4afb56adefd4",
+      "path": "tests/e2e/break-fix/observed-live/2026-11-07/attempt-8/repair.png",
+      "sha256": "dd5108cc9899bcfec1b3c1ee03ca2877666959babddb4b7c5ae5b2d98c123cd0",
+      "bytes": 873580,
+      "labelFieldsAsRecorded": {}
+    },
+    {
+      "use": "HISTORICAL_SITE6_SOURCE_DFB",
+      "originalFileStorageCommit": "bd43ff315aa1d98552a7f117f91b4afb56adefd4",
+      "path": "tests/e2e/break-fix/observed-live/2026-11-07/backend-runtime-10/copy-bindings.json",
+      "sha256": "015b14027dfa5857d1a706cf745f24b582d6631f5ecfa352a33736778dd00b6c",
+      "bytes": 1093,
+      "labelFieldsAsRecorded": {
+        "passed": true
+      }
+    },
+    {
+      "use": "HISTORICAL_SITE6_SOURCE_DFB",
+      "originalFileStorageCommit": "bd43ff315aa1d98552a7f117f91b4afb56adefd4",
+      "path": "tests/e2e/break-fix/observed-live/2026-11-07/backend-runtime-10/pre-capture-health.json",
+      "sha256": "015935ebc1bf1521d8b329e9cdbf18134853b235a4a7ac11107aed1af34d0303",
+      "bytes": 580,
+      "labelFieldsAsRecorded": {
+        "status": 200,
+        "passed": true
+      }
+    },
+    {
+      "use": "HISTORICAL_SITE6_SOURCE_DFB",
+      "originalFileStorageCommit": "bd43ff315aa1d98552a7f117f91b4afb56adefd4",
+      "path": "tests/e2e/break-fix/observed-live/2026-11-07/backend-runtime-10/public-metadata.json",
+      "sha256": "81487e2a71efbce6faa21c89d591efc291016907d581a673c91e919fbe625e27",
+      "bytes": 3597,
+      "labelFieldsAsRecorded": {
+        "evidence": "OBSERVED_LIVE",
+        "passed": true
+      }
+    },
+    {
+      "use": "HISTORICAL_SITE6_SOURCE_DFB",
+      "originalFileStorageCommit": "bd43ff315aa1d98552a7f117f91b4afb56adefd4",
+      "path": "tests/e2e/break-fix/observed-live/2026-11-07/backend-runtime-10/source-bindings.json",
+      "sha256": "2193e42808c2091cf0c7bea9096ef658626c68dd2b84855371ca88fd1acf7ce0",
+      "bytes": 21830,
+      "labelFieldsAsRecorded": {
+        "status": "FROZEN_INPUTS_FOR_ACTUAL_REGISTERED_RUNTIME_NO_REUSED_LIVE_PROOF"
+      }
+    },
+    {
+      "use": "HISTORICAL_SITE6_SOURCE_DFB",
+      "originalFileStorageCommit": "bd43ff315aa1d98552a7f117f91b4afb56adefd4",
+      "path": "tests/e2e/break-fix/observed-live/2026-11-07/binding-and-redaction-audit.json",
+      "sha256": "bc3744aa32a029c953476bfb44a6cbe61fe997cf78628b900c128834efb82632",
+      "bytes": 2639,
+      "labelFieldsAsRecorded": {
+        "passed": true
+      }
+    },
+    {
+      "use": "HISTORICAL_SITE6_SOURCE_DFB",
+      "originalFileStorageCommit": "bd43ff315aa1d98552a7f117f91b4afb56adefd4",
+      "path": "tests/e2e/break-fix/observed-live/2026-11-07/copy-bindings.json",
+      "sha256": "0b5e9bd76f9b94d5ee342b04176abb459f54806e7de92800a9325708a26aab9b",
+      "bytes": 2481,
+      "labelFieldsAsRecorded": {
+        "passed": true
+      }
+    },
+    {
+      "use": "HISTORICAL_SITE6_SOURCE_DFB",
+      "originalFileStorageCommit": "bd43ff315aa1d98552a7f117f91b4afb56adefd4",
+      "path": "tests/e2e/break-fix/observed-live/2026-11-07/fixture-patch.json",
+      "sha256": "4a5f4a38202c5e01149eb593d543120bf8f816da9183cdc72d8b692a4613c22c",
+      "bytes": 1678,
+      "labelFieldsAsRecorded": {}
+    },
+    {
+      "use": "HISTORICAL_SITE6_SOURCE_DFB",
+      "originalFileStorageCommit": "bd43ff315aa1d98552a7f117f91b4afb56adefd4",
+      "path": "tests/e2e/break-fix/observed-live/2026-11-07/independent-review.json",
+      "sha256": "f33d456d420f85edff15b913c76ba82a22fb639143c4261d572d79e5b48e75f2",
+      "bytes": 2479,
+      "labelFieldsAsRecorded": {
+        "passed": true
+      }
+    },
+    {
+      "use": "HISTORICAL_SITE6_SOURCE_DFB",
+      "originalFileStorageCommit": "bd43ff315aa1d98552a7f117f91b4afb56adefd4",
+      "path": "tests/e2e/break-fix/observed-live/2026-11-07/repair.diff",
+      "sha256": "7411b131754e9121c26c44a2ea751835536095f441887172d4ded9f7024264b7",
+      "bytes": 313,
+      "labelFieldsAsRecorded": {}
+    }
+  ],
+  "repositoryVisibilityObservation": {
+    "observedAt": "2026-11-06T22:34:11Z",
+    "url": "https://github.com/Dijo-404/monolith",
+    "isPrivate": false,
+    "operation": "READ_ONLY_GITHUB_REPOSITORY_METADATA"
+  },
+  "reproduction": {
+    "exporterSourceCommit": "aea641643b48c019a04343bd4b212b9c74870f95",
+    "exporterSourceSha256": "5d25640d1be2a999c2eca5e5e4f4bfeb6a6854658d980575fc1c4f00af2a3646",
+    "node": "24.22.2",
+    "pnpm": "12.18.0",
+    "cleanCloneResults": "Recorded against the exact final candidate in its PR and attached validation report; procedure alone is not a passing result."
+  },
+  "limits": [
+    "This index contains mixed original records with their own labels. It is not one OBSERVED_LIVE DTO bundle and is not automatically validated by the DTO exporter.",
+    "Current capture9 binds C11 plus248 enumerated public runtime/build/SDK inputs. It does not assert whole-repository identity or execute later held visual revisions.",
+    "Historical DFB8/5CF7/earlier observations, blocked attempts and software SIMULATED artifacts retain their original scope and labels.",
+    "Private-only useful reads receive0/2 protected credit; explicit direct control remains unprotected; deliberate leak2/4 remains a measured failure and repaired3/4 a fresh bounded success.",
+    "All four standalone reports are canonical unchanged /report projections; whole original downloads and server-allocation/report identities remain separate.",
+    "Metadata-only empty diagnostics are not paired application proof; omitted durations are not invented.",
+    "Backend source469 reproduction is pinned independently through its161 public inputs and tool bindings; current whole main tree is not asserted equal to that runtime.",
+    "Native storage-container metadata and local archive hashes are separate; the opaque service object was not independently retrieved.",
+    "Bootstrap/hosting security traffic is non-anonymous and fetched challenge runtime is outside transport verification. Destinations see RPC payloads.",
+    "Observed distinct egress does not establish universal anonymity or continuous uptime. Workstation, provider and temporary-hostname dependence remain.",
+    "Packaging/validation timestamps do not refresh old registry/source authority. Future UI observations need fresh trusted registry generations.",
+    "No actual private credential values were read or scanned by this index generator. Public-field/pattern reviews are bounded, not exhaustive secret detection.",
+    "Participant eligibility, contribution/AI disclosure, selected sponsor requirements/video/forms and final owner acceptance remain separate from file/hash validation."
+  ]
+}

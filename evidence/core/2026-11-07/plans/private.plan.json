@@ -1,0 +1,20 @@
+{
+  "manifest": {
+    "schemaVersion": 1,
+    "runId": "report_1e5ca2c9-9ce8-4617-a744-91877e80495d",
+    "generatedAt": "2026-11-06T22:32:19.864Z",
+    "evidence": "OBSERVED_LIVE",
+    "artifacts": [
+      {
+        "path": "privacy-report.json",
+        "sha256": "a80f98954810fdefb84207cdc42e0b0b7e5d213614c71226aa6942734a084b38",
+        "generatedAt": "2026-11-06T22:18:23.068Z",
+        "evidence": "OBSERVED_LIVE",
+        "sourceTask": "MN-014"
+      }
+    ]
+  },
+  "kinds": {
+    "privacy-report.json": "privacy-report"
+  }
+}

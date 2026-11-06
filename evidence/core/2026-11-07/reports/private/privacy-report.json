@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "runId": "report_1e5ca2c9-9ce8-4617-a744-91877e80495d",
+  "evidence": "OBSERVED_LIVE",
+  "eligibleReads": 2,
+  "protectedReads": 0,
+  "successfulReads": 2,
+  "protectedCoverage": 0,
+  "findings": [
+    {
+      "code": "CAPTURE_INCOMPLETE",
+      "callsite": "analysis.scope",
+      "message": "Independent capture is incomplete; protection is unresolved."
+    },
+    {
+      "code": "ROUTE_CONFLICT",
+      "readId": "read-000001",
+      "callsite": "Protected balance read",
+      "message": "The measured route or completion disagrees with the trace."
+    },
+    {
+      "code": "UNKNOWN_ROUTE",
+      "readId": "read-000001",
+      "callsite": "Protected balance read",
+      "message": "The measured network route is unknown."
+    },
+    {
+      "code": "ROUTE_CONFLICT",
+      "readId": "read-000002",
+      "callsite": "Protected chain check",
+      "message": "The measured route or completion disagrees with the trace."
+    },
+    {
+      "code": "UNKNOWN_ROUTE",
+      "readId": "read-000002",
+      "callsite": "Protected chain check",
+      "message": "The measured network route is unknown."
+    }
+  ],
+  "scope": {
+    "rpcOrigins": [
+      "https://d06045ae660681.lhr.life",
+      "https://ethereum.publicnode.com"
+    ],
+    "scenarios": [
+      "Monolith Leak Lab:Live privacy regression"
+    ],
+    "bootstrapExclusions": [
+      "Non-anonymous worker hash lookup",
+      "Non-anonymous worker resolver lookup"
+    ]
+  }
+}
