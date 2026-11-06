@@ -1,0 +1,12 @@
+{
+  "fixtureVersion": 1,
+  "evidence": "SIMULATED",
+  "description": "Synthetic fixed safe error for a worker outage; no upstream data is disclosed.",
+  "contract": "safeErrorSchema",
+  "expected": "valid",
+  "payload": {
+    "code": "WORKER_UNAVAILABLE",
+    "message": "The anonymity worker is unavailable.",
+    "retryable": true
+  }
+}

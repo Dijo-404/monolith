@@ -1,0 +1,15 @@
+{
+  "fixtureVersion": 1,
+  "evidence": "SIMULATED",
+  "description": "Negative test: write methods are not accepted by the read-only request contract.",
+  "contract": "jsonRpcRequestSchema",
+  "expected": "invalid",
+  "payload": {
+    "jsonrpc": "2.0",
+    "id": "fixture-rpc-001",
+    "method": "eth_sendRawTransaction",
+    "params": [
+      "synthetic-not-a-transaction"
+    ]
+  }
+}

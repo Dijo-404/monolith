@@ -1,0 +1,12 @@
+{
+  "fixtureVersion": 1,
+  "evidence": "SIMULATED",
+  "description": "Negative test: a caller-supplied sensitive message cannot replace a fixed safe error.",
+  "contract": "safeErrorSchema",
+  "expected": "invalid",
+  "payload": {
+    "code": "WORKER_UNAVAILABLE",
+    "message": "synthetic-sensitive-private-error-sentinel",
+    "retryable": true
+  }
+}

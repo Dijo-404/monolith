@@ -1,0 +1,19 @@
+{
+  "fixtureVersion": 1,
+  "evidence": "SIMULATED",
+  "description": "Synthetic privacy-required policy with no direct debug route.",
+  "contract": "routePolicySchema",
+  "expected": "valid",
+  "payload": {
+    "privacyRequired": true,
+    "allowedChains": [
+      "1"
+    ],
+    "allowedMethods": [
+      "eth_chainId",
+      "eth_getBalance"
+    ],
+    "allowDirectDebugControl": false,
+    "failClosed": true
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "fixtureVersion": 1,
+  "evidence": "SIMULATED",
+  "description": "Synthetic redacted observer output; unknown source class does not claim an anonymous path.",
+  "contract": "observerRunSchema",
+  "expected": "valid",
+  "payload": {
+    "schemaVersion": 1,
+    "runId": "fixture-run-001",
+    "expiresAt": "2030-01-01T00:05:00Z",
+    "observations": [
+      {
+        "rpcId": "fixture-rpc-001",
+        "method": "eth_chainId",
+        "addressPresent": false,
+        "sourceClass": "unknown",
+        "durationMs": 25,
+        "success": true
+      }
+    ]
+  }
+}

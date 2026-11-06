@@ -1,0 +1,15 @@
+{
+  "fixtureVersion": 1,
+  "evidence": "SIMULATED",
+  "description": "Negative test: external RPC hex IDs must be normalized before entering the shared DTO.",
+  "contract": "readRequestSchema",
+  "expected": "invalid",
+  "payload": {
+    "readId": "fixture-read-001",
+    "endpointId": "fixture-endpoint-001",
+    "chainId": "0x1",
+    "method": "eth_chainId",
+    "params": [],
+    "callsite": "fixture.chain-id:1"
+  }
+}

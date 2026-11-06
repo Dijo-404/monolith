@@ -1,0 +1,8 @@
+{
+  "fixtureVersion": 1,
+  "evidence": "SIMULATED",
+  "description": "Synthetic unavailable-network state uses the explicit BLOCKED state.",
+  "contract": "workerStateSchema",
+  "expected": "valid",
+  "payload": "BLOCKED"
+}
