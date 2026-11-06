@@ -4,13 +4,33 @@ import { chmod, cp, lstat, mkdir, mkdtemp, readFile, rm, symlink, writeFile } fr
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { afterEach, describe, test } from 'vitest';
+import { afterEach, beforeAll, describe, test } from 'vitest';
 import { applyCandidate, closeSession, createSession, verifyBindings } from '../../../scripts/agent-harness/controller.mjs';
 import { APP_PATH, APPROVED_PATCH, ORIGINAL_APP, REPAIRED_APP, TRUSTED_PATHS } from '../../../scripts/agent-harness/policy.mjs';
 import { cliCheck, executeTrial, verifyEvidenceBundle } from '../../../scripts/agent-harness/runner.mjs';
 
 const repository = fileURLToPath(new URL('../../../', import.meta.url));
 const temporaryDirectories = [];
+let cliBundle;
+
+beforeAll(async () => {
+  // The portable CLI suite rebuilds its shared dist concurrently. Use the same
+  // production builder in a private package, then retain its standalone bytes.
+  const packageRoot = join(repository, 'packages/cli');
+  const buildDirectory = await mkdtemp(join(tmpdir(), 'monolith-agent-cli-build-'));
+  try {
+    for (const path of ['build.mjs', 'package.json', 'src']) {
+      await cp(join(packageRoot, path), join(buildDirectory, path), { recursive: true });
+    }
+    await symlink(join(packageRoot, 'node_modules'), join(buildDirectory, 'node_modules'), 'dir');
+    const built = spawnSync(process.execPath, ['build.mjs'], {
+      cwd: buildDirectory, encoding: 'utf8', timeout: 20_000,
+    });
+    assert.equal(built.error, undefined);
+    assert.equal(built.status, 0, built.stderr || built.stdout);
+    cliBundle = await readFile(join(buildDirectory, 'dist/monolith.mjs'));
+  } finally { await rm(buildDirectory, { recursive: true, force: true }); }
+}, 30_000);
 
 async function temporaryDirectory() {
   const directory = await mkdtemp(join(tmpdir(), 'monolith-agent-harness-test-'));
@@ -29,9 +49,8 @@ async function fixtureRepository() {
     }
   }
   await writeFile(join(directory, APP_PATH), ORIGINAL_APP);
-  // The CLI is a standalone bundle. Copy actual built bytes so integration tests
-  // exercise its public command without snapshotting a concurrently edited tree.
-  await cp(join(repository, 'packages/cli/dist/monolith.mjs'), join(directory, 'packages/cli/dist/monolith.mjs'));
+  // Every fixture exercises the public command without reading shared dist.
+  await writeFile(join(directory, 'packages/cli/dist/monolith.mjs'), cliBundle);
   return directory;
 }
 
