@@ -23,7 +23,7 @@ describe('observer scaffold', () => {
     });
   });
 
-  it.each(['/api/observer/read', '/api/checkout/submit', '/unknown'])(
+  it.each(['/api/checkout/submit', '/unknown'])(
     'does not expose an unimplemented route at %s',
     async (url) => {
       const server = buildServer();
@@ -38,4 +38,13 @@ describe('observer scaffold', () => {
       expect(response.statusCode).toBe(404);
     },
   );
+
+  it('denies forwarding when no operator endpoints are configured', async () => {
+    const server = buildServer();
+    servers.push(server);
+    const response = await server.inject({ method: 'POST', url: '/api/observer/read?endpointId=unconfigured',
+      payload: { jsonrpc: '2.0', id: 'synthetic', method: 'eth_chainId', params: [] } });
+    expect(response.statusCode).toBe(403);
+    expect(response.json()).toMatchObject({ jsonrpc: '2.0', id: 'synthetic', error: { code: -32000 } });
+  });
 });
