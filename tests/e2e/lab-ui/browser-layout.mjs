@@ -66,7 +66,8 @@ const open = async (options = {}, fallback = false) => {
   page.on('pageerror', () => errors.push('PAGE_ERROR'));
   await page.goto(origin.href);
   await page.getByRole('heading', { name: 'Monolith live privacy lab' }).waitFor();
-  await page.locator('.stage').waitFor();
+  await page.getByRole('heading', { name: 'Follow a request', exact: true }).waitFor();
+  assert.equal(await page.locator('canvas').count(), 0);
   return page;
 };
 const screenshot = async (page, name) => {
@@ -99,9 +100,13 @@ try {
   assert.equal(await reduced.evaluate(() => matchMedia('(prefers-reduced-motion: reduce)').matches), true);
   checks.push({ name: 'reduced-motion', passed: true });
   const fallback = await open({ viewport: { width: 1440, height: 1000 } }, true);
-  assert.equal(await fallback.locator('.stage').getAttribute('data-webgl'), 'off');
-  await screenshot(fallback, 'fallback-initial.png');
-  checks.push({ name: 'webgl-unavailable-fallback', passed: true });
+  await fallback.getByRole('button', { name: 'Direct path', exact: true }).click();
+  assert.equal(await fallback.getByRole('button', { name: 'Direct path', exact: true }).getAttribute('aria-pressed'), 'true');
+  await fallback.getByRole('button', { name: 'Private path', exact: true }).click();
+  assert.equal(await fallback.getByRole('button', { name: 'Private path', exact: true }).getAttribute('aria-pressed'), 'true');
+  assert.equal(await fallback.locator('canvas').count(), 0);
+  await screenshot(fallback, 'no-webgl-required.png');
+  checks.push({ name: 'interactive-explorer-without-webgl', passed: true });
 
   await page.goto(new URL('/?mode=simulated', origin).href);
   await page.getByText('Simulated data', { exact: true }).waitFor();

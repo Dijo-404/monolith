@@ -10,7 +10,7 @@ web
 
 ## Users
 
-- **ETHGlobal judges** watching the four-minute live demo, usually on a projector in a dim hall. They must understand the one comparison (direct read vs Anon-RPC read, and what the endpoint still sees) within about 15 seconds.
+- **ETHGlobal judges** watching the live demo, including on a projector in a lit room. They must understand the one comparison (direct read vs Anon-RPC read, and what the endpoint still sees) within about 15 seconds.
 - **Web3 checkout and wallet engineers** who run the lab locally to see which of their JSON-RPC reads are protected, catch direct-RPC regressions, and export evidence.
 - **Privacy and application-security reviewers** who need reproducible, honestly labelled artifacts rather than a privacy score.
 
@@ -24,7 +24,7 @@ Route-coverage contracts plus adversarial, replayable privacy tests: a privacy-r
 
 ## Operating Context
 
-- Guided four-step lab: direct comparison, private routing, a bypass and repair, and a worker outage. Route cards and an interactive stage lead into detailed checks, worker state, registry provenance and activity.
+- The default live lab has four steps: private read, explicit source comparison, intentional bypass, and repair/rerun. The separately labelled offline walkthrough includes a worker-outage scenario. A light request explorer explains each boundary; separate result cards lead into actual read details, checks, worker state, registry provenance and activity.
 - Demo arc (docs/idea.md §15): direct read exposed → private read via worker with Arkiv-selected endpoint → reveal residual payload exposure and bootstrap note → inject leak, test fails → sandbox repair, rerun passes → optional Whitechain checkout → report.
 - Browser-only Anon-RPC harness; worker bootstrap is slow and observable as BOOTSTRAPPING / READY / DEGRADED / BLOCKED / CLOSED.
 
@@ -36,19 +36,22 @@ Route-coverage contracts plus adversarial, replayable privacy tests: a privacy-r
 - Passthrough is labelled NOT_ANONYMIZED and earns no protected credit.
 - Coverage shows its denominator and scope and exists only for a measured run; zero eligible reads is "unavailable", never 100 percent.
 - Whitechain checkout is conditional (MN-018–MN-022) and stays disabled until its gates pass; the payment path is never depicted as anonymous.
-- The browser bundle receives only `MONOLITH_PUBLIC_OBSERVER_URL`. No third-party requests from the page (fonts are self-hosted).
-- MN-014 owns connecting the accepted observer/registry/transport composition to this shell. MN-006 is an offline fixture demonstration, including its routing and repair controls.
+- The browser bundle receives only `MONOLITH_PUBLIC_OBSERVER_URL`. Fonts are self-hosted. The request explorer sends no requests; the live lab's explicit run actions retain their existing network behavior.
+- The accepted MN-014 composition connects the observer/registry/transport to the default live view. `?mode=simulated` opens the MN-006 offline fixture walkthrough. Switching modes is explicit. Live network mode names the selected mode; individual result badges establish the actual provenance of a run.
+- Private/Direct buttons in the request explorer change a local explanation, not the privacy policy or network route. Clickable stops, Previous/Next, balance/receipt examples and expandable fields send nothing. The worker-status strip reflects caller state separately; actual read metadata and observer evidence belong in the result cards.
 
 ## Brand Commitments
 
 - Name: Monolith (`monolith`, `@monolith/*`). Tagline: "Break your checkout's privacy. Fix the leak. Prove the payment still works."
-- The owner requested a light Phantom-inspired redesign: lavender-grey ground, white cards, restrained purple actions and a contained dark WebGL route stage. Original Monolith geometry and mark; no other product's mascot.
+- The current owner direction is a clean light interface for projector readability: lavender-grey ground, white surfaces, restrained purple actions and a DOM/SVG request explorer. The owner explicitly rejected and removed the complete dark 3D card, superseding both earlier stage revisions. Preserve the original Monolith mark; copy no other product's mascot or assets.
 - Self-hosted Wix Madefor Text/Display and Fragment Mono, with their OFL notices beside the font assets.
 
 ## Evidence on Hand
 
-- This shell uses local `SIMULATED` scenarios and authored timing; no page control dispatches an RPC request. Coverage stays unmeasured and payment stays disabled.
-- Other accepted tasks have real worker and Arkiv evidence; those records are not inputs to this shell and do not upgrade its displayed states to live. The genuine paired-source gate is still separate.
+- The offline walkthrough uses local `SIMULATED` scenarios and authored timing; its controls dispatch no blockchain requests. Coverage stays unmeasured and payment stays disabled there.
+- The default live view receives actual controller results and independent observer receipts. Fresh configuration starts `UNTESTED`; missing required configuration blocks execution. A successful worker alone does not establish the paired source comparison.
+- MN-014's named deployed workflow was separately accepted on issue #14. The presentation follow-up #86 verifies browser usability and offline behavior; its screenshots and fixture journeys provide no new live anonymity, registry, payment or sponsor-eligibility evidence.
+- Both dark-stage presentation reviews are historical after the owner's rejection. Their software results remain attached to their named builds; they do not approve the replacement explorer. Its review is recorded separately without upgrading local explanations into network evidence.
 
 ## Product Principles
 
@@ -60,4 +63,4 @@ Route-coverage contracts plus adversarial, replayable privacy tests: a privacy-r
 
 ## Accessibility & Inclusion
 
-WCAG 2.2 AA: keyboard operation of every control, visible focus, text alternatives for the WebGL stage (state is always readable in the HUD panels), state never conveyed by colour alone, and `prefers-reduced-motion` respected.
+WCAG 2.2 AA is the accessibility target: keyboard-operable route and stop buttons, visible focus, named native selects/disclosures, polite selected-stop updates, state conveyed by words as well as colour, and `prefers-reduced-motion` respected. Mobile lays the route stops vertically. The explorer uses ordinary DOM and SVG icons, with no GPU, parallax or moving packet scene.

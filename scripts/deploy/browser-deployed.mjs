@@ -85,9 +85,14 @@ try {
     artifact.layouts.push({ width, passed: true });
   }
   const fallback = await open(true);
-  await fallback.locator('.stage[data-webgl="off"]').waitFor();
-  await screenshot(fallback, 'published-webgl-fallback.png');
-  artifact.layouts.push({ webglForcedUnavailable: true, passed: true });
+  await fallback.getByRole('heading', { name: 'Follow a request', exact: true }).waitFor();
+  await fallback.getByRole('button', { name: 'Direct path', exact: true }).click();
+  assert.equal(await fallback.getByRole('button', { name: 'Direct path', exact: true }).getAttribute('aria-pressed'), 'true');
+  await fallback.getByRole('button', { name: 'Private path', exact: true }).click();
+  assert.equal(await fallback.getByRole('button', { name: 'Private path', exact: true }).getAttribute('aria-pressed'), 'true');
+  assert.equal(await fallback.locator('canvas').count(), 0);
+  await screenshot(fallback, 'published-no-webgl-required.png');
+  artifact.layouts.push({ webglForcedUnavailable: true, requestExplorer: true, noCanvas: true, passed: true });
   // Confirm the external-request guard can actually observe a direct send, then reset its counter.
   await page.evaluate(async (url) => { try { await fetch(url, { method: 'POST', body: '{}' }); } catch { /* Expected interception. */ } },
     `${observer}/api/observer/read?endpointId=lab_optimism`);

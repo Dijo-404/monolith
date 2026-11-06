@@ -24,25 +24,25 @@
   color-scheme: light;
 
   /* Ground and surfaces: soft lavender-grey page, white cards */
-  --bg: #f3f2f8;
-  --bg-deep: #e9e7f2;
+  --bg: #f1effa;
+  --bg-deep: #e4dff3;
   --surface: #ffffff;
-  --surface-2: #f7f6fb;
-  --line: #e6e4ee;
-  --line-strong: #d5d2e0;
+  --surface-2: #f6f4fc;
+  --line: #e2deee;
+  --line-strong: #cbc4df;
 
   /* Ink */
-  --ink: #17141f;
-  --ink-2: #4b4759;
-  --ink-3: #6c687d;
+  --ink: #242033;
+  --ink-2: #504860;
+  --ink-3: #696079;
 
   /* One accent: the protected route */
-  --accent: #b9c3ff;
-  --accent-hover: #a9b5ff;
-  --accent-press: #9aa8fb;
-  --accent-ink: #12173f;
-  --protected: #3f53d0;
-  --protected-soft: #eceffe;
+  --accent: #c8b9f9;
+  --accent-hover: #bba7f4;
+  --accent-press: #ae97ec;
+  --accent-ink: #302149;
+  --protected: #6542b3;
+  --protected-soft: #eee8fb;
 
   /* Meaning colours, used only for their meaning */
   --exposed: #c9372f;
@@ -53,11 +53,12 @@
   --sim-dot: #e0a33b;
 
   /* The stage card */
-  --stage: #0d0b16;
-  --stage-ink: #ece9f6;
-  --stage-ink-2: rgb(236 233 246 / 0.64);
-  --stage-anon: #a3b6ff;
-  --stage-direct: #ff7a6b;
+  --stage: #171326;
+  --stage-ink: #f4efff;
+  --stage-ink-2: #c7bedb;
+  --stage-anon: #c5b5ff;
+  --stage-direct: #ffa393;
+  --text-muted: var(--ink-2);
 
   --font-display: 'Wix Madefor Display', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-text: 'Wix Madefor Text', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;

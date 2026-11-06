@@ -1,257 +1,206 @@
-import { useEffect, useRef, useState, type ReactNode, type RefObject } from 'react';
-import { StageFallback } from './StageFallback.js';
-import {
-  StageRenderer,
-  type AnchorPositions,
-  type StageFlight,
-  type StageInsets,
-  type StageScene,
-} from './renderer.js';
-import type { AnchorId } from './scene-layout.js';
+import { useId, useState, type ReactNode, type RefObject } from 'react';
+import { Icon, type IconName } from '../Icon.js';
+import type { StageFlight, StageInsets, StageScene } from './renderer.js';
 
 export type StageTarget = 'transport' | 'endpoint';
 
 export interface StageProps {
   readonly scene: StageScene;
+  /** Retained for callers; examples never play back or infer actual request traffic. */
   readonly flights: readonly StageFlight[];
   readonly reducedMotion: boolean;
-  /** HUD elements that may sit over the stage; the scene is framed in the space they leave. */
   readonly overlays?: ReadonlyArray<RefObject<HTMLElement | null>>;
-  /** Optional element joined to the slab by a leader line when both are visible. */
   readonly plaque?: RefObject<HTMLElement | null>;
-  /** Fixed margins (CSS px) kept clear of the scene when no overlays are given. */
   readonly frame?: StageInsets;
   readonly onSelect: (target: StageTarget) => void;
   readonly children?: ReactNode;
   readonly live?: boolean;
 }
 
-function detectWebGL2(): boolean {
-  if (typeof document === 'undefined') return false;
-  try {
-    const gl = document.createElement('canvas').getContext('webgl2');
-    gl?.getExtension('WEBGL_lose_context')?.loseContext();
-    return gl !== null;
-  } catch {
-    return false;
-  }
+type ExplanationRoute = 'private' | 'direct';
+type StopId = 'app' | 'policy' | 'worker' | 'endpoint';
+type ExampleMethod = 'balance' | 'receipt';
+
+interface Stop {
+  readonly id: StopId;
+  readonly label: string;
+  readonly detail: string;
+  readonly icon: IconName;
 }
 
-const NO_OVERLAYS: ReadonlyArray<RefObject<HTMLElement | null>> = [];
-const CARD_FRAME: StageInsets = { top: 52, right: 20, bottom: 48, left: 20 };
-
-function measureInsets(stage: HTMLElement, overlays: ReadonlyArray<RefObject<HTMLElement | null>>): StageInsets {
-  const s = stage.getBoundingClientRect();
-  const insets = { top: 0, right: 0, bottom: 0, left: 0 };
-  for (const ref of overlays) {
-    const el = ref.current;
-    if (el === null) continue;
-    const r = el.getBoundingClientRect();
-    const overlaps = r.right > s.left && r.left < s.right && r.bottom > s.top && r.top < s.bottom;
-    if (!overlaps || r.width === 0 || r.height === 0) continue;
-    // Wide overlays bound the frame vertically, narrow ones horizontally; their centre picks the side.
-    const wide = r.width > s.width * 0.6;
-    const centred = Math.abs(r.left + r.width / 2 - (s.left + s.width / 2)) < s.width * 0.15;
-    if (wide || centred) {
-      if (r.top + r.height / 2 < s.top + s.height / 2) insets.top = Math.max(insets.top, r.bottom - s.top);
-      else insets.bottom = Math.max(insets.bottom, s.bottom - r.top);
-    } else if (r.left + r.width / 2 < s.left + s.width / 2) {
-      insets.left = Math.max(insets.left, r.right - s.left);
-    } else {
-      insets.right = Math.max(insets.right, s.right - r.left);
-    }
-  }
-  return insets;
-}
-
-type LabelSpec = {
-  readonly id: AnchorId;
-  readonly text: string;
-  /** Shorter text for narrow stages; omitted labels are hidden there. */
-  readonly short?: string;
-  readonly tone: 'anon' | 'leak' | 'public' | 'steel' | 'neutral' | 'degraded';
-  readonly target?: StageTarget;
-  readonly minor?: boolean;
-  readonly align?: 'center' | 'start' | 'end';
+const STOPS: Record<StopId, Stop> = {
+  app: { id: 'app', label: 'Your app', detail: 'Creates the request', icon: 'bolt' },
+  policy: { id: 'policy', label: 'Monolith policy', detail: 'Checks the route', icon: 'shield' },
+  worker: { id: 'worker', label: 'Private worker', detail: 'Routes the read', icon: 'lock' },
+  endpoint: { id: 'endpoint', label: 'RPC endpoint', detail: 'Reads the payload', icon: 'eye' },
 };
 
-function labelsFor(scene: StageScene, live: boolean): LabelSpec[] {
-  const offline = scene.workerState === 'BLOCKED' || scene.workerState === 'CLOSED';
-  const labels: LabelSpec[] = [
-    { id: 'client', text: 'Your browser', short: 'Your browser', tone: 'neutral', target: 'transport' },
-    { id: 'endpoint', text: 'RPC endpoint', short: 'RPC endpoint', tone: 'neutral', target: 'endpoint', align: 'end' },
-    {
-      id: 'lane-direct',
-      text: scene.privateMode ? 'Direct route' : 'Direct route · in use',
-      tone: 'leak',
-    },
-  ];
-  if (scene.passthrough) {
-    labels.push({ id: 'worker', text: 'Passthrough · not anonymized', short: 'Passthrough', tone: 'neutral', target: 'transport' });
-  } else {
-    labels.push({
-      id: 'lane-anon',
-      text: offline ? 'Private route · offline' : live ? 'Private route · Nym worker' : 'Private route · three relays',
-      tone: 'anon',
-    });
+const PRIVATE_STOPS: readonly StopId[] = ['app', 'policy', 'worker', 'endpoint'];
+const DIRECT_STOPS: readonly StopId[] = ['app', 'endpoint'];
+
+const WORKER_WORDS: Record<StageScene['workerState'], string> = {
+  BOOTSTRAPPING: 'Starting',
+  READY: 'Ready',
+  DEGRADED: 'Degraded',
+  BLOCKED: 'Blocked',
+  CLOSED: 'Closed',
+};
+
+const EXAMPLE_ADDRESS = `0x${'0'.repeat(40)}`;
+const EXAMPLE_HASH = `0x${'0'.repeat(64)}`;
+
+function explain(stop: StopId, route: ExplanationRoute, method: ExampleMethod, scene: StageScene) {
+  const receipt = method === 'receipt';
+  const identifier = receipt ? 'transaction hash' : 'wallet address';
+  const rpcMethod = receipt ? 'eth_getTransactionReceipt' : 'eth_getBalance';
+  switch (stop) {
+    case 'app':
+      return {
+        title: 'Your app creates the question.',
+        body: `A ${receipt ? 'receipt lookup' : 'balance lookup'} includes a ${identifier} in its JSON-RPC request. Routing changes how that request travels; it does not remove its parameters.`,
+        facts: [
+          ['Request contains', `Method + ${identifier}`],
+          ['Next stop', route === 'private' ? 'Monolith checks the privacy policy.' : 'The app connects directly to the endpoint.'],
+        ],
+        target: 'transport' as const,
+      };
+    case 'policy':
+      return {
+        title: 'Check privacy before a read leaves.',
+        body: 'When privacy is required, ordinary reads must use a verified private worker and a trusted endpoint. If those checks fail, Monolith blocks the read.',
+        facts: [
+          ['Required boundary', 'Verified worker + trusted endpoint'],
+          ['On failure', 'Blocked, with no direct fallback'],
+        ],
+        target: 'transport' as const,
+      };
+    case 'worker':
+      return {
+        title: 'Change the network path.',
+        body: 'The private worker routes the request through its network. The destination still receives the method and parameters. Worker bootstrap is a separate, non-anonymous contact.',
+        facts: [
+          ['Worker state', scene.passthrough ? 'Passthrough · not anonymized' : WORKER_WORDS[scene.workerState]],
+          ['Request body', `${rpcMethod} + ${identifier} remain readable.`],
+        ],
+        target: 'transport' as const,
+      };
+    case 'endpoint':
+      return {
+        title: route === 'private' ? 'The endpoint still sees the question.' : 'A direct endpoint sees more.',
+        body: route === 'private'
+          ? 'A private route is intended to separate the app’s network source from the read. It does not hide the request body. Verify the source difference with a real comparison.'
+          : 'A direct read can associate its network source with the method and supplied identifier. This explanation does not send a direct read.',
+        facts: [
+          ['Method', `${rpcMethod} is readable.`],
+          [receipt ? 'Transaction hash' : 'Wallet address', 'Visible in the request body'],
+          ['Network source', route === 'private' ? 'A different origin must be independently verified.' : 'The app’s direct network source'],
+        ],
+        target: 'endpoint' as const,
+      };
   }
-  if (scene.leakInjected) labels.push({ id: 'widget', text: 'Leaky checkout widget', short: 'Leaky widget', tone: 'leak' });
-  if (scene.workerState === 'BOOTSTRAPPING') {
-    labels.push({ id: 'bootstrap', text: 'Bootstrap lookup · not anonymous', tone: 'leak', minor: true, align: 'start' });
-  }
-  return labels;
 }
 
-export function Stage({
-  scene,
-  flights,
-  reducedMotion,
-  overlays = NO_OVERLAYS,
-  plaque,
-  frame = CARD_FRAME,
-  onSelect,
-  children,
-  live = false,
-}: StageProps) {
-  const rootRef = useRef<HTMLDivElement>(null);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const rendererRef = useRef<StageRenderer | null>(null);
-  const labelRefs = useRef(new Map<AnchorId, HTMLElement>());
-  const leaderRef = useRef<SVGPathElement>(null);
-  const [supported] = useState(detectWebGL2);
-  const [failed, setFailed] = useState(false);
-  const webgl = supported && !failed;
+/** A local, accessible explanation. It never dispatches reads or changes routing policy. */
+export function Stage({ scene, onSelect, children }: StageProps) {
+  const [route, setRoute] = useState<ExplanationRoute>('private');
+  const [selected, setSelected] = useState<StopId>('endpoint');
+  const [method, setMethod] = useState<ExampleMethod>('balance');
+  const instance = useId();
+  const titleId = `${instance}-title`;
+  const disclosureId = `${instance}-disclosure`;
+  const inspectorId = `${instance}-inspector`;
+  const methodId = `${instance}-method`;
+  const methodNoteId = `${instance}-method-note`;
+  const stops = route === 'private' ? PRIVATE_STOPS : DIRECT_STOPS;
+  const index = Math.max(0, stops.indexOf(selected));
+  const explanation = explain(selected, route, method, scene);
+  const rpcMethod = method === 'receipt' ? 'eth_getTransactionReceipt' : 'eth_getBalance';
 
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    const root = rootRef.current;
-    if (!webgl || canvas === null || root === null) return;
-    const renderer = StageRenderer.create(canvas);
-    if (renderer === null) {
-      const frame = requestAnimationFrame(() => setFailed(true));
-      return () => cancelAnimationFrame(frame);
-    }
-    rendererRef.current = renderer;
-    const labels = labelRefs.current;
-    renderer.setAnchorListener((anchors: AnchorPositions) => {
-      for (const [id, el] of labels) {
-        const a = anchors[id];
-        if (a === undefined) continue;
-        const align = el.dataset['align'];
-        const shift = align === 'end' ? '-100%' : align === 'start' ? '0%' : '-50%';
-        el.style.transform = `translate3d(${a.x.toFixed(1)}px, ${a.y.toFixed(1)}px, 0) translate(${shift}, -50%)`;
-        el.dataset['visible'] = a.visible ? 'true' : 'false';
-      }
-      const leader = leaderRef.current;
-      const face = anchors['endpoint-face'];
-      const target = plaque?.current ?? null;
-      if (leader !== null && face !== undefined && target !== null) {
-        const s = root.getBoundingClientRect();
-        const r = target.getBoundingClientRect();
-        const inside = r.left > s.left && r.left < s.right && r.top > s.top && r.top < s.bottom;
-        if (!inside) {
-          leader.setAttribute('d', '');
-          return;
-        }
-        const x0 = r.left - s.left;
-        const y0 = r.top - s.top + 28;
-        const xm = x0 - 28;
-        leader.setAttribute('d', `M ${x0} ${y0} H ${xm} L ${face.x.toFixed(1)} ${face.y.toFixed(1)}`);
-      }
-    });
-
-    const updateInsets = () => renderer.setInsets(overlays.length > 0 ? measureInsets(root, overlays) : frame);
-    const resize = new ResizeObserver(updateInsets);
-    resize.observe(root);
-    for (const ref of overlays) if (ref.current !== null) resize.observe(ref.current);
-    updateInsets();
-
-    const visibility = new IntersectionObserver(([entry]) => {
-      if (entry?.isIntersecting) renderer.start();
-      else renderer.stop();
-    });
-    visibility.observe(root);
-    renderer.start();
-
-    return () => {
-      visibility.disconnect();
-      resize.disconnect();
-      renderer.dispose();
-      rendererRef.current = null;
-    };
-  }, [webgl, overlays, plaque, frame]);
-
-  useEffect(() => {
-    rendererRef.current?.setScene(scene);
-  }, [scene, webgl]);
-
-  useEffect(() => {
-    rendererRef.current?.setFlights(flights);
-  }, [flights, webgl]);
-
-  useEffect(() => {
-    rendererRef.current?.setReducedMotion(reducedMotion);
-  }, [reducedMotion, webgl]);
-
-  const labels = labelsFor(scene, live);
+  const selectRoute = (next: ExplanationRoute) => {
+    setRoute(next);
+    if (next === 'direct' && selected !== 'app' && selected !== 'endpoint') setSelected('endpoint');
+  };
 
   return (
-    <div ref={rootRef} className="stage" data-webgl={webgl ? 'on' : 'off'}>
-      {webgl ? (
-        <>
-          <canvas
-            ref={canvasRef}
-            className="stage__canvas"
-            role="img"
-            aria-label={live
-              ? 'Illustrative network paths. Actual read outcomes and observer receipts are listed below; the drawing is not a measured hop count.'
-              : 'Simulated routes from your browser to the RPC endpoint, through Anon-RPC or directly. Readable route cards and worker panels describe the same state.'}
-          />
-          <svg className="stage__leaders" aria-hidden="true">
-            <path ref={leaderRef} d="" />
-          </svg>
-          <div className="stage__labels">
-            {labels.map((label) => {
-              const register = (el: HTMLElement | null) => {
-                if (el === null) labelRefs.current.delete(label.id);
-                else labelRefs.current.set(label.id, el);
-              };
-              const className = `stage-label stage-label--${label.tone}${label.minor ? ' stage-label--minor' : ''}${label.short === undefined ? ' stage-label--wide-only' : ''}`;
-              const text = (
-                <>
-                  <span className="stage-label__long">{label.text}</span>
-                  {label.short !== undefined && <span className="stage-label__short">{label.short}</span>}
-                </>
-              );
-              if (label.target !== undefined) {
-                const target = label.target;
-                return (
-                  <button
-                    key={label.id}
-                    ref={register}
-                    type="button"
-                    className={`${className} stage-label--action`}
-                    data-align={label.align ?? 'center'}
-                    onClick={() => onSelect(target)}
-                  >
-                    <span className="stage-label__dot" aria-hidden="true" />
-                    {text}
-                  </button>
-                );
-              }
-              return (
-                <span key={label.id} ref={register} className={className} data-align={label.align ?? 'center'} aria-hidden="true">
-                  <span className="stage-label__dot" />
-                  {text}
-                </span>
-              );
-            })}
+    <section className="request-explorer" data-route={route} aria-labelledby={titleId} aria-describedby={disclosureId}>
+      <header className="request-explorer__head">
+        <div>
+          <h2 id={titleId}>Follow a request</h2>
+          <p>Select a route, then a stop. See what changes and what stays visible.</p>
+        </div>
+        <p id={disclosureId} className="request-explorer__disclosure"><Icon name="info" size={16} />Example only · no requests sent</p>
+      </header>
+
+      <div className="request-explorer__routes" role="group" aria-label="Route explanations">
+        <button type="button" className="request-explorer__route" aria-pressed={route === 'private'} onClick={() => selectRoute('private')}>
+          <Icon name="shield" size={18} /><span>Private path</span>
+        </button>
+        <button type="button" className="request-explorer__route" aria-pressed={route === 'direct'} onClick={() => selectRoute('direct')}>
+          <Icon name="eye" size={18} /><span>Direct path</span>
+        </button>
+      </div>
+
+      <div className="request-explorer__map-wrap">
+        <ol className="request-explorer__map" aria-label={`${route === 'private' ? 'Private' : 'Direct'} route, example only`}>
+          {stops.map((stopId, stopIndex) => {
+            const stop = STOPS[stopId];
+            return <li className="request-explorer__map-item" key={stopId}>
+              <button type="button" className="request-explorer__stop" data-stop={stopId} data-selected={selected === stopId}
+                aria-pressed={selected === stopId} aria-controls={inspectorId} onClick={() => setSelected(stopId)}>
+                <span className="request-explorer__stop-icon"><Icon name={stop.icon} size={22} /></span>
+                <span className="request-explorer__stop-name">{stop.label}</span>
+                <span className="request-explorer__stop-detail">{stop.detail}</span>
+              </button>
+              {stopIndex < stops.length - 1 && <span className="request-explorer__connector" aria-hidden="true"><Icon name="arrow-right" size={20} /></span>}
+            </li>;
+          })}
+        </ol>
+        <p className="request-explorer__map-note">{route === 'private'
+          ? 'The policy requires a verified worker. Its network hops are not shown here.'
+          : 'The direct route skips the private worker. Selecting it here only changes this explanation.'}</p>
+      </div>
+
+      <section id={inspectorId} className="request-explorer__inspector" aria-label="Selected stop explanation">
+        <div className="request-explorer__inspector-copy" aria-live="polite" aria-atomic="true">
+          <div className="request-explorer__inspector-heading"><Icon name={STOPS[selected].icon} size={20} /><h3>{explanation.title}</h3></div>
+          <p className="request-explorer__body">{explanation.body}</p>
+          <dl className="request-explorer__facts">{explanation.facts.map(([label, detail]) =>
+            <div key={label}><dt>{label}</dt><dd>{detail}</dd></div>)}</dl>
+        </div>
+      </section>
+
+      <div className="request-explorer__example">
+        <div className="request-explorer__example-control"><label htmlFor={methodId}>Example request</label>
+          <select id={methodId} value={method} aria-describedby={methodNoteId} onChange={(event) => setMethod(event.target.value as ExampleMethod)}>
+            <option value="balance">Balance lookup</option><option value="receipt">Receipt lookup</option>
+          </select>
+        </div>
+        <p id={methodNoteId} className="request-explorer__note">Changing the example sends nothing.</p>
+        <details className="request-explorer__fields">
+          <summary><span>Show example fields</span><Icon name="arrow-down" size={17} /></summary>
+          <div className="request-explorer__fields-body">
+            <p>These zeroed values are examples, never sent.</p>
+            <dl className="request-explorer__field-list">
+              <div><dt>Method</dt><dd><code>{rpcMethod}</code></dd></div>
+              <div><dt>{method === 'receipt' ? 'Transaction hash' : 'Wallet address'}</dt><dd><code>{method === 'receipt' ? EXAMPLE_HASH : EXAMPLE_ADDRESS}</code></dd></div>
+              {method === 'balance' && <div><dt>Block tag</dt><dd><code>latest</code></dd></div>}
+            </dl>
           </div>
-        </>
-      ) : (
-        <StageFallback scene={scene} flights={flights} onSelect={onSelect} live={live} />
-      )}
+        </details>
+      </div>
+
+      <footer className="request-explorer__footer">
+        <div className="request-explorer__step-nav" role="group" aria-label="Move between example stops">
+          <button type="button" className="request-explorer__previous" disabled={index === 0} onClick={() => setSelected(stops[index - 1] ?? 'app')}>Previous stop</button>
+          <span className="request-explorer__step-position">{index + 1} of {stops.length}</span>
+          <button type="button" className="request-explorer__next" disabled={index === stops.length - 1} onClick={() => setSelected(stops[index + 1] ?? 'endpoint')}>Next stop<Icon name="arrow-right" size={16} /></button>
+        </div>
+        <a className="request-explorer__results-link" href="#route-results">See run results<Icon name="arrow-down" size={16} /></a>
+        <button type="button" className="request-explorer__details-link" onClick={() => onSelect(explanation.target)}>
+          {explanation.target === 'transport' ? 'View transport details' : 'View endpoint details'}<Icon name="arrow-down" size={16} />
+        </button>
+      </footer>
       {children}
-    </div>
+    </section>
   );
 }

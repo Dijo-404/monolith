@@ -4,6 +4,7 @@ import { Header } from '../../components/Header.js';
 import { Icon } from '../../components/Icon.js';
 import { Tag } from '../../components/Tag.js';
 import { Stage } from '../../components/stage/Stage.js';
+import { ReadInspector } from '../../components/ReadInspector.js';
 import type { StageScene } from '../../components/stage/renderer.js';
 import { usePrefersReducedMotion } from '../../app/use-lab.js';
 import type { LiveMode, LiveSnapshot, LiveWireRead } from './live-types.js';
@@ -87,12 +88,15 @@ function SourceComparison({ state }: { state: LiveSnapshot }) {
   const confirmed = state.correlation?.sourceComparison === 'confirmed';
   const directConfirmed = direct && state.correlation?.exactInventory
     && state.correlation.diagnostics?.observations.find((row) => row.rpcId === direct.rpcId)?.sourceClass === 'baseline';
-  return <div className="compare" aria-label="Independent observed network sources">
+  return <div id="route-results" className="compare" aria-label="Independent observed network sources">
     <article className={`route-card route-card--direct${direct ? '' : ' is-empty'}`}>
       <header className="route-card__head"><span className="dot dot--exposed" />Direct control</header>
       <p className="route-card__label">The observer saw</p>
       <p className="route-card__value">{directConfirmed ? 'Your direct baseline' : direct ? 'Source inconclusive' : 'Not compared yet'}</p>
       <p className="route-card__meta">{direct ? 'eth_getBalance · synthetic address readable' : 'Only sent by an explicit comparison action.'}</p>
+      {direct && <ReadInspector method={direct.method} route="Direct control" evidence={direct.evidence}
+        outcome={direct.success ? 'Returned' : 'Failed'} durationMs={direct.completedAt ? direct.durationMs : null}
+        readId={direct.logicalReadId} callsite={direct.trace?.callsite} />}
     </article>
     <article className={`route-card route-card--anon${protectedRead ? '' : ' is-empty'}`}>
       <header className="route-card__head"><span className="dot dot--protected" />Through Nym</header>
@@ -100,6 +104,10 @@ function SourceComparison({ state }: { state: LiveSnapshot }) {
       <p className="route-card__value">{confirmed ? 'A different network source' : state.correlation?.sourceComparison === 'inconclusive'
         ? 'Source comparison inconclusive' : protectedRead ? 'Source comparison not run' : 'No read recorded'}</p>
       <p className="route-card__meta">{protectedRead ? 'eth_getBalance · payload still readable' : 'Private reads use the worker or fail closed.'}</p>
+      {protectedRead && <ReadInspector method={protectedRead.method} route={protectedRead.trace?.route ?? 'Unrecorded'}
+        evidence={protectedRead.evidence} outcome={protectedRead.success ? 'Returned' : 'Failed'}
+        durationMs={protectedRead.completedAt ? protectedRead.durationMs : null}
+        readId={protectedRead.logicalReadId} callsite={protectedRead.trace?.callsite} />}
     </article>
   </div>;
 }
@@ -211,13 +219,14 @@ export function LiveLabApp({ observerUrl }: { observerUrl: string }) {
       <section id="demo" className="hero" aria-label="Live privacy lab">
         <LiveGuide state={state} active={active} onSelect={setActive} onRun={(mode) => void controller.run(mode)} />
         <div className="stage-col">
-          <section className="stage-card" aria-label="Illustrative live route stage">
+          <section className="request-workspace" aria-label="Interactive request explanation">
             <Stage scene={scene} flights={[]} reducedMotion={reducedMotion} live onSelect={(target) =>
               document.getElementById(target === 'transport' ? 'transport' : 'registry-title')?.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'center' })} />
-            <p className="hud hud--tl"><span className={`dot dot--state-${state.workerState.toLowerCase()}`} />Nym transport<strong>{state.worker ? 'Worker ready' : state.busy ? 'Starting' : 'Not started'}</strong></p>
-            <p className="hud hud--tr">{state.selection?.endpoint.chainName ?? 'Trusted endpoint pending'}</p>
-            <p className="hud hud--bl">Illustrative paths · hop count is not measured</p>
-            <p className="hud hud--br">{state.observedAt ? 'Recorded live run' : 'Awaiting a run'}</p>
+            <p className="request-workspace__status"><span className={`dot dot--state-${state.workerState.toLowerCase()}`} aria-hidden="true" />
+              Nym transport <strong>{state.worker ? 'Worker ready' : state.busy ? 'Starting' : 'Not started'}</strong>
+              <span className="request-workspace__context">{state.selection?.endpoint.chainName ?? 'Trusted endpoint pending'}</span>
+              <span className="request-workspace__mode">{state.observedAt ? 'Recorded live run' : 'Awaiting a run'}</span>
+            </p>
           </section>
           <SourceComparison state={state} />
         </div>

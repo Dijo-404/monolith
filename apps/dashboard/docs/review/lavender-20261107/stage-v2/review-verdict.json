@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "sourceTask": "#86",
+  "reason": "The owner rejected the first stage screenshot and requested stronger 3D forms, better transitions and a clean design using the original reference sites.",
+  "reviewer": "stage_art_direction_review",
+  "freshFullReview": true,
+  "initialDisposition": "fix-and-recapture",
+  "finalDisposition": "scoped-ship",
+  "findings": [
+    { "finding": "320px fallback clipping", "score": "resolved" },
+    { "finding": "Tablet status overlaps the view controls", "score": "resolved" },
+    { "finding": "320px bootstrap disclosure overlaps endpoint/relay labels", "score": "resolved" },
+    { "finding": "Settled screenshots do not prove intermediate pose continuity", "score": "resolved-by-native-frame-capture" }
+  ],
+  "reviewedCheckpoint": {
+    "app": "app-CMqRLn7b.js",
+    "css": "app-DBCLKKsN.css",
+    "nativeResultSha256": "7638ff0fd77b6b0b21e17128ee2b7e67a712417e76ec541c64b08ad24e09e12f"
+  },
+  "integrationComparison": {
+    "acceptedMain": "cf13a9d",
+    "branchMergeBaseAtAudit": "1370a99c095499b68afe634559a87bef9c9dae74",
+    "auditMode": "Working-tree SHA-256 comparison before committing the new stage; not a claim that uncommitted stage files already existed as Git blobs in the merge commit.",
+    "reviewedExistingSourceFiles": 52,
+    "matchingFiles": 52,
+    "missingOrChangedFiles": 0,
+    "addedUnusedDashboardModules": ["features/providers/controller.ts", "features/quote/fixed-quote.ts"]
+  },
+  "finalAssembledEvidence": {
+    "index": "evidence-index.json",
+    "indexSha256": "aefdb2adeefe237653aacda7c0e81aac7533680eeaa5c139876555130159d240",
+    "app": "app-Dw5fWw7-.js",
+    "css": "app-DBCLKKsN.css",
+    "sourceFiles": 54,
+    "distFiles": 9,
+    "stageChecks": 13,
+    "userJourneys": 26
+  },
+  "limits": [
+    "The review establishes the scoped forms, three responsive corrections and fixture pose evidence, not user aesthetic acceptance.",
+    "The reviewer inspected source and captures; root and the browser-validation agent own actual workflow execution and final assembled-build acceptance.",
+    "All fixture reads remain SIMULATED. No new live RPC, anonymity, payment or sponsor acceptance is claimed."
+  ]
+}

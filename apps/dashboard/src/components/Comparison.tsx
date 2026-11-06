@@ -1,4 +1,5 @@
 import type { ReadRow } from '../app/lab-model.js';
+import { ReadInspector } from './ReadInspector.js';
 
 function RouteCard({
   route,
@@ -37,6 +38,8 @@ function RouteCard({
           </>
         )}
       </p>
+      {read && <ReadInspector method={read.method} route={read.route} evidence={read.evidence}
+        outcome={read.outcome} durationMs={read.durationMs} readId={read.id} callsite={read.callsite} />}
     </article>
   );
 }
@@ -44,7 +47,7 @@ function RouteCard({
 /** The one comparison the lab exists to show: same request, different origin. */
 export function Comparison({ direct, anon }: { readonly direct: ReadRow | null; readonly anon: ReadRow | null }) {
   return (
-    <div className="compare" aria-label="What the RPC endpoint saw">
+    <div id="route-results" className="compare" aria-label="What the RPC endpoint saw">
       <RouteCard route="direct" read={direct} empty="Step 1 sends one." />
       <RouteCard route="anon" read={anon} empty="Step 2 sends one." />
     </div>

@@ -1,0 +1,48 @@
+[
+  {
+    "label": "immediate-resize",
+    "innerWidth": 390,
+    "scrollWidth": 421,
+    "wide": [
+      {
+        "tag": "SPAN",
+        "class": "request-explorer__connector",
+        "right": 421,
+        "width": 198,
+        "text": ""
+      },
+      {
+        "tag": "SPAN",
+        "class": "request-explorer__connector",
+        "right": 421,
+        "width": 198,
+        "text": ""
+      },
+      {
+        "tag": "SPAN",
+        "class": "request-explorer__connector",
+        "right": 421,
+        "width": 198,
+        "text": ""
+      }
+    ]
+  },
+  {
+    "label": "two-frames-after-resize",
+    "innerWidth": 390,
+    "scrollWidth": 390,
+    "wide": []
+  },
+  {
+    "label": "150ms-after-resize",
+    "innerWidth": 390,
+    "scrollWidth": 390,
+    "wide": []
+  },
+  {
+    "label": "fresh-390",
+    "innerWidth": 390,
+    "scrollWidth": 390,
+    "wide": []
+  }
+]
