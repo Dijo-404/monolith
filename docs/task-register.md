@@ -40,6 +40,8 @@ Read [the plan](plan.md), [architecture](architecture.md), [contracts](contracts
 
 Only MN-001 starts ready. Promote downstream tasks after prerequisite merges **and** accepted evidence. MN-017 is the core release; MN-018 through MN-022 are conditional and never block it.
 
+MN-017 additionally owns `scripts/export-evidence.test.ts` and `scripts/tsconfig.evidence.json` for focused exporter validation, as coordinated in [issue #17](https://github.com/Dijo-404/monolith/issues/17#issuecomment-6692959668). These paths synchronize the existing offline validation scope; MN-014/MN-016 acceptance, genuine release exports and clean-clone evidence remain required.
+
 MN-023 was added for the owner-requested overnight no-cost deployment. Its preparation depends only on the accepted foundation; publication does not waive MN-017 or any live-evidence gate. MN-006's additional UI entrypoint, test and design paths were coordinated on issue #6 for the explicitly authorized takeover.
 
 MN-024 fixes the public demo lifecycle: startup-only operator runs expire after five minutes and cannot share a visitor baseline. It adds bounded opt-in allocation and preserves existing defaults plus MN-009's source-proof gate.
