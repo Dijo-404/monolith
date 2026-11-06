@@ -885,5 +885,49 @@
     ],
     "gate": "MN-001 and MN-002 accepted for independent deployment preparation; final product publication preserves all outstanding application/live-evidence acceptance gates.",
     "conditional": false
+  },
+  {
+    "id": "MN-024",
+    "title": "Allocate fresh bounded public synthetic observer runs",
+    "lane": "C",
+    "phase": "integration",
+    "priority": "P0",
+    "estimate": "1–2 hours",
+    "branch": "feat/mn-024-public-lab-runs",
+    "depends_on": [
+      "MN-001",
+      "MN-002",
+      "MN-004"
+    ],
+    "paths": [
+      "apps/observer/src/adapters/http/observer.ts",
+      "apps/observer/src/application/create-lab-run.ts",
+      "apps/observer/src/composition/server.ts",
+      "apps/observer/src/composition/env.ts",
+      "apps/observer/src/composition/start.ts",
+      "apps/observer/test/**",
+      "packages/shared/src/observer-lab.ts",
+      "packages/shared/src/index.ts",
+      "packages/shared/test/**",
+      "docs/observer.md",
+      "docs/contracts.md"
+    ],
+    "scope": [
+      "Add explicitly opt-in, default-disabled allocation of fresh bounded server-generated synthetic observer runs.",
+      "Export a strict additive shared allocation DTO and describe the HTTP boundary without changing existing v1 meanings.",
+      "Preserve source trust, read-only RPC policy, data retention and all existing default behavior."
+    ],
+    "acceptance": [
+      "Clients cannot choose run/baseline IDs, upstreams, source claims or payloads through allocation.",
+      "Allocation rate, active runs, lifetime, body shape and observation resources are bounded; runs remain isolated and expired baseline sources are erased.",
+      "No credentials or private source/payload data enter public logs or exports; allocation carries no anonymity success claim.",
+      "Disabled and operator-registered deployments remain compatible; tests cover configuration, abuse, expiry, isolation and HTTP/schema boundaries."
+    ],
+    "evidence": [
+      "Current lint/type/test/build results",
+      "HTTP allocation/expiry/isolation and abuse-boundary test output"
+    ],
+    "gate": "MN-001, MN-002 and MN-004 accepted; coordinate with active MN-009 owner without editing its live-proof paths or changing its unresolved source gate.",
+    "conditional": false
   }
 ]

@@ -31,7 +31,10 @@ Read [the plan](plan.md), [architecture](architecture.md), [contracts](contracts
 | MN-021 | [#21 Prove protected browser checkout with real sponsored USDT settlement](https://github.com/Dijo-404/monolith/issues/21) | D | conditional (optional) | [MN-014](https://github.com/Dijo-404/monolith/issues/14), [MN-020](https://github.com/Dijo-404/monolith/issues/20) | `feat/mn-021-protected-checkout` |
 | MN-022 | [#22 Package the optional Whitechain evidence and final demo](https://github.com/Dijo-404/monolith/issues/22) | C | release (optional) | [MN-017](https://github.com/Dijo-404/monolith/issues/17), [MN-021](https://github.com/Dijo-404/monolith/issues/21) | `feat/mn-022-whitechain-release` |
 | MN-023 | [#36 Prepare no-cost deployment and overnight release hosting](https://github.com/Dijo-404/monolith/issues/36) | C | release | [MN-001](https://github.com/Dijo-404/monolith/issues/1), [MN-002](https://github.com/Dijo-404/monolith/issues/2) | `feat/mn-023-no-cost-deployment` |
+| MN-024 | [#38 Allocate fresh bounded public synthetic observer runs](https://github.com/Dijo-404/monolith/issues/38) | C | integration | [MN-001](https://github.com/Dijo-404/monolith/issues/1), [MN-002](https://github.com/Dijo-404/monolith/issues/2), [MN-004](https://github.com/Dijo-404/monolith/issues/4) | `feat/mn-024-public-lab-runs` |
 
 Only MN-001 starts ready. Promote downstream tasks after prerequisite merges **and** accepted evidence. MN-017 is the core release; MN-018 through MN-022 are conditional and never block it.
 
 MN-023 was added for the owner-requested overnight no-cost deployment. Its preparation depends only on the accepted foundation; publication does not waive MN-017 or any live-evidence gate. MN-006's additional UI entrypoint, test and design paths were coordinated on issue #6 for the explicitly authorized takeover.
+
+MN-024 fixes the public demo lifecycle: startup-only operator runs expire after five minutes and cannot share a visitor baseline. It adds bounded opt-in allocation and preserves existing defaults plus MN-009's source-proof gate.
