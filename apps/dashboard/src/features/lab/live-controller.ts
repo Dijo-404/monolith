@@ -173,7 +173,7 @@ export function createLiveLabController(ports: LiveLabPorts) {
             allowDirectDebugControl: false, failClosed: true },
           trustedPublishers: LIVE_REGISTRY_POLICY.trustedPublishers,
           approvedOrigins: LIVE_REGISTRY_POLICY.approvedOrigins, allowedCallsites: ['lab.balance', 'lab.widget'],
-          initializationTimeoutMs: 5_000, requestTimeoutMs: 25_000, validationTtlMs: 20_000,
+          initializationTimeoutMs: 5_000, requestTimeoutMs: 25_000, validationTtlMs: 60_000,
         },
       });
       activeContext = { role: 'probe', logicalReadId: null };

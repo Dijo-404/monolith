@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "sourceTask": "MN-025",
+  "scope": "ONE_BOUNDED_PUBLIC_HEALTH_ONLY_CONTINUITY_CHECK_NO_TARGET_RPC",
+  "observedAt": "2026-11-06T20:42:01.474Z",
+  "origin": "https://e964181cf62d29.lhr.life",
+  "sshAuthenticationMode": "dedicated-key",
+  "elapsedSinceRuntimeStartMs": 180459,
+  "unit": {
+    "ActiveState": "active",
+    "SubState": "running",
+    "RuntimeMaxUSec": "12h",
+    "MainPID": "63956",
+    "ControlGroup": "/user.slice/user-1000.slice/user@1000.service/app.slice/monolith-public-observer-mn025-20261107-8.service"
+  },
+  "status": 200,
+  "configured": true,
+  "passed": true
+}
