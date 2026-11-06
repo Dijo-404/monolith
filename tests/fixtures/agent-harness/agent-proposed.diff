@@ -1,0 +1,9 @@
+--- a/examples/agent-harness/app.mjs
++++ b/examples/agent-harness/app.mjs
+@@ -3,5 +3,5 @@
+ export async function readBalance({ privateRead, regressionRead }) {
+   void privateRead;
+   void regressionRead;
+-  return regressionRead();
++  return privateRead();
+ }
