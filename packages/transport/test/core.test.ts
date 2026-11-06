@@ -345,6 +345,27 @@ describe('SIMULATED request, response and retry boundaries', () => {
     },
   );
 
+  it('keeps a blocked retry distinct when validation expires after a retryable failure', async () => {
+    const traces: RpcTrace[] = [];
+    let advance: (milliseconds: number) => void = () => undefined;
+    const f = fixture({ maxAttempts: 2, validationTtlMs: 1, traceSink: { emit: (event) => {
+      traces.push(event);
+      if (event.readId === 'read_00000001' && event.errorCode === 'RATE_LIMITED') advance(2);
+    } } });
+    advance = f.advance;
+    await f.ready();
+    f.driver.handler = async () => failed('RATE_LIMITED');
+
+    expect(await f.transport.read(request())).toEqual(failed('ENDPOINT_REJECTED'));
+    // The expired retry is blocked before egress, but still needs its own correlation key.
+    expect(f.driver.calls).toHaveLength(2); // protected chain probe + the first app attempt
+    const reads = traces.filter((event) => event.readId === 'read_00000001');
+    expect(reads.map((event) => event.attempt)).toEqual([1, 2]);
+    expect(reads[0]).toMatchObject({ route: 'anon-nym', errorCode: 'RATE_LIMITED' });
+    expect(reads[1]).toMatchObject({ route: 'blocked', errorCode: 'ENDPOINT_REJECTED' });
+    await f.transport.close();
+  });
+
   it('enforces real deadlines even when a simulated driver ignores abort', async () => {
     vi.useFakeTimers();
     const f = fixture({ requestTimeoutMs: 5, maxAttempts: 2 }); await f.ready();

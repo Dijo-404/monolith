@@ -60,9 +60,9 @@ export function createMonolithTransport(options: TransportOptions): MonolithTran
     // A reporting callback cannot select a different route or export an upstream exception.
     try { traceSink.emit(event); } catch { /* The sink owns its own delivery/retention policy. */ }
   };
-  const blocked = <T>(request: ReadRequest, code: ErrorCode): Result<T> => {
+  const blocked = <T>(request: ReadRequest, code: ErrorCode, attempt = 1): Result<T> => {
     const result = failure<T>(code);
-    trace(request, 1, now(), result, true);
+    trace(request, attempt, now(), result, true);
     return result;
   };
 
@@ -124,9 +124,9 @@ export function createMonolithTransport(options: TransportOptions): MonolithTran
     validateCurrent: () => ErrorCode | undefined,
   ): Promise<Result<JsonValue>> {
     for (let attempt = 1; attempt <= configuration.maxAttempts; attempt++) {
-      if (!available() || expectedGeneration !== generation) return blocked(request, 'WORKER_UNAVAILABLE');
+      if (!available() || expectedGeneration !== generation) return blocked(request, 'WORKER_UNAVAILABLE', attempt);
       const invalid = validateCurrent();
-      if (invalid) return blocked(request, invalid);
+      if (invalid) return blocked(request, invalid, attempt);
       const startedAt = now();
       const rpc: JsonRpcRequest = { jsonrpc: '2.0', id: nextId('rpc'), method: request.method, params: request.params };
       const exchanged = await bounded((signal) => driver.exchange(candidate.rpcUrl, rpc, signal), configuration.requestTimeoutMs);

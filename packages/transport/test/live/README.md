@@ -101,6 +101,49 @@ fallback occurred. These artifacts contain their earlier source snapshots; the
 failure's network cause remains unresolved. The later alternate target was selected
 explicitly in a separate run, rather than used as an automatic retry destination.
 
-The successful artifact records current transport source and compiled-module hashes
+The successful artifact records its transport source and compiled-module hashes
 for review. This evidence proves the exercised package read and boundary controls;
 the limitations above, including untested paired source-class proof, still apply.
+
+## Retry trace correction and fresh package proof
+
+A retry can be denied before egress if endpoint validation expires after a retryable
+failure. The blocked trace now retains that retry's current attempt index instead of
+reusing attempt 1. A **SIMULATED** public-factory regression advances the explicit
+clock when the first `RATE_LIMITED` trace is emitted. It verifies that only the first
+app attempt reaches the driver, while the failure and the later blocked retry carry
+distinct `(readId, attempt)` keys: attempts 1 and 2. This prevents a false conflicting
+duplicate in the privacy analyzer without changing the fixed route or fail-closed policy.
+
+After that source correction, the compiled public package was exercised again:
+
+```sh
+PATH=/tmp/monolith-node24/node-v24.22.2-linux-x64/bin:/tmp/monolith-pnpm/node_modules/.bin:$PATH MONOLITH_BROWSER_TOOLS=/tmp/monolith-anon-xEX2ji node packages/transport/test/live/run.mjs --target ethereum-main --output /tmp/monolith-mn007-retry-trace-live-2026-11-06.json
+```
+
+The [unchanged generated observation](observed-retry-trace-2026-11-06.json) started at
+`2026-11-06T13:32:14.136Z` and finished at `2026-11-06T13:32:33.149Z`, with Node
+24.22.2 and Chromium 158.0.8127.18. The protected chain probe returned `0x1` in
+6,188 ms and the app read returned `0x1` in 666 ms, each on attempt 1. Total package
+lifecycle time was 17,973 ms. The actual 18,283,862-byte resolver reply matched the
+same captured Nym hash shown above. The direct-interception control passed, only
+two exact disclosed bootstrap requests used ordinary target HTTP, and zero ordinary
+app-target requests were observed. Repeated close left state `CLOSED`, zero frames,
+cleared metadata and a denied future read; the browser context was destroyed.
+
+The new artifact binds all 11 source files, 11 compiled modules and the lockfile to
+this run; each digest was checked before copying its actual bytes into the repository.
+The separate pending-resolver disposal control remains explicitly `SIMULATED`.
+Earlier live and blocked observations are retained unchanged. Candidate provenance
+remains synthetic local configuration. This successful read does not exercise the
+offline retry-expiry case, a live redirect server, paired observer source classes,
+Arkiv product use or application-wide protection; those limits remain unchanged.
+
+After merging accepted main `c641786` (the privacy analyzer), the pinned Node
+24.22.2 / pnpm 12.18.0 frozen install and full `pnpm check` passed: lint, all
+source/public-consumer typechecks, **587 tests in 14 files**, and production builds.
+The [retry-expiry regression](../core.test.ts) first reproduced duplicate attempts
+`[1, 1]` before the correction and now passes with `[1, 2]`; all 54 transport core
+tests pass. Source, compiled-module and lockfile digests still match the fresh live
+observation after that merge and rebuild. No SDK, dependency, export or lockfile
+change was needed for this correction.
