@@ -245,7 +245,10 @@
     ],
     "paths": [
       "packages/transport/src/**",
-      "packages/transport/test/**"
+      "packages/transport/test/**",
+      "packages/transport/package.json",
+      "packages/transport/tsconfig*.json",
+      "pnpm-lock.yaml"
     ],
     "scope": [
       "Wrap the official worker behind the frozen browser transport port with explicit initialize/read/close lifecycle.",
