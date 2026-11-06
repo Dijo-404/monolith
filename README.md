@@ -21,7 +21,7 @@
 </p>
 
 > [!NOTE]
-> **Development preview.** The default dashboard is wired for live reads through a verified Nym worker. It makes no API or RPC requests on page load; run actions block before worker bootstrap with the example local configuration. The separate `?mode=simulated` walkthrough uses local fixtures. A local CLI/TUI is available from source; npm publication, final public-workflow evidence and core release acceptance remain pending. Payments are disabled.
+> **Development preview.** The default dashboard is wired for live reads through a verified Nym worker. It makes no API or RPC requests on page load; run actions block before worker bootstrap with the example local configuration. The separate `?mode=simulated` walkthrough uses local fixtures. The CLI/TUI is available from source and on npm as `@dijo-404/monolith-cli` **0.1.0**; final public-workflow evidence and core release acceptance remain pending. Payments are disabled.
 
 ## Overview
 
@@ -46,7 +46,7 @@ Snapshot: **7 November 2026 (IST)**. GitHub issues hold live acceptance status.
 | **Protected reads** | Fail-closed transport and a [recorded real Nym/direct source comparison](docs/preflight/observer.md) from 6 November | Recheck worker and backend availability for each new run |
 | **Arkiv registry** | [100 distinct networks / 100 entities imported and independently queried](arkiv/data-quality.md), with publisher, provenance and expiry checks | Imported endpoints remain candidates; the import did not test their health or chain IDs |
 | **Dashboard** | Live Nym/registry/observer composition, explicit synthetic direct controls and a separate simulated walkthrough | [Accepted public workflow](https://github.com/Dijo-404/monolith/issues/14) and [complete leak/repair walkthrough](https://github.com/Dijo-404/monolith/issues/16) |
-| **CLI/TUI** | Merged source package, local analysis, JSON output and terminal menu | [npm publication and release acceptance](https://github.com/Dijo-404/monolith/issues/50) |
+| **CLI/TUI** | Published `@dijo-404/monolith-cli` **0.1.0**, local analysis, JSON output and terminal menu | [Core release acceptance](https://github.com/Dijo-404/monolith/issues/17) |
 | **Deployment** | Static packaging/verification and reusable temporary observer tooling | [Final hosted dashboard checks](https://github.com/Dijo-404/monolith/issues/36) and [public-backend acceptance](https://github.com/Dijo-404/monolith/issues/40) |
 | **New integrations** | Tracked work for [Uniswap quote privacy tests](https://github.com/Dijo-404/monolith/issues/55) and [protected provider selection](https://github.com/Dijo-404/monolith/issues/56) | Integrated UI/backend behavior and live evidence; neither is a completed product feature |
 | **Whitechain tracks** | Activated [Scale, Operate and Tokenize completion plan](docs/track-completion-plan.md#whitechain-shared-work) | Finish protected sponsored checkout, reusable merchant integration, asset lifecycle and track demonstrations |
@@ -130,7 +130,7 @@ The check above uses a **SIMULATED** fixture. `check` analyzes local captured me
 
 Use `--json` for automation. A `check` exits **0** only for a nonempty input passing privacy and useful-read checks, **1** for a failed check and **2** for invalid or unavailable input. Local files remain unverified caller input; the CLI does not authenticate captures or establish live privacy. Protected reads run through the browser worker.
 
-The package is prepared as `@monolith/cli` **0.1.0**; npm publication and name availability remain unverified. See the [CLI guide](docs/cli.md) for local tarball installation, report format, CI behavior and release limits.
+The published package is [`@dijo-404/monolith-cli` **0.1.0**](https://www.npmjs.com/package/@dijo-404/monolith-cli). The internal workspace package remains `@monolith/cli`. See the [CLI guide](docs/cli.md) for installation, report format, CI behavior and release limits.
 
 ### Commands
 
@@ -330,7 +330,7 @@ AI coding assistants contributed planning, implementation, tests, documentation 
 - [ ] Accepted public dashboard workflow and reusable-backend evidence
 - [ ] Reproducible live leak, repair and rerun walkthrough
 - [ ] Accepted core evidence bundle and clean-clone release
-- [ ] Owner-approved npm CLI publication
+- [x] Owner-approved npm CLI publication as `@dijo-404/monolith-cli` **0.1.0**
 - [ ] Real protected Uniswap quote with bypass detection and useful repair
 - [ ] Protected endpoint diagnostics and explicit provider selection
 - [ ] Whitechain protected sponsored-USDT checkout and Scale demonstration
