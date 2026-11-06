@@ -3,7 +3,17 @@
 This explicit composition starts the existing observer with fresh synthetic run
 allocation enabled. Its ordinary registry API queries the accepted public Arkiv
 reader. Its only upstream mapping is `lab_optimism` → chain `10` →
-`https://mainnet.optimism.io/`. No account or signing key is used.
+`https://mainnet.optimism.io/`. No transaction signing key is used.
+
+Only this public lab opts into a 120-second registry-generation lifetime; the
+normal reader's 30-second default is unchanged. Actual storage, publisher,
+current-block and DNS checks still run on each query, and the publisher's true
+content deadline clamps every generated window. Existing received generations
+are never retimestamped or extended. This explicit policy covers measured worker
+latency and the lab's bounded operations. The separately configured browser lab
+uses a 60-second chain-probe validation lifetime and still checks authority before
+and after each asynchronous exchange. Historical blocked attempts using the
+30-second policy remain blocked.
 
 Build with the repository's pinned Node 24.22.2 and pnpm 12.18.0, then run:
 
@@ -14,13 +24,33 @@ Build with the repository's pinned Node 24.22.2 and pnpm 12.18.0, then run:
   --status /absolute/new-status.json
 ```
 
+For the deployment's optional server-only Rabdi authentication, append
+`--arkiv-env-file /absolute/private-server.env`. That regular file must have
+owner-only permissions (0600 recommended) and exactly one literal `ARKIV_ACCESS_KEY` assignment. Only that
+named value is selected; other environment assignments are ignored. Missing,
+duplicate, malformed, linked or unsafe-mode key files fail before startup.
+No file is loaded implicitly, and an explicitly configured key never falls back
+to the anonymous endpoint on rejection. The existing public default remains
+available to independent consumers that do not select a key.
+
+The reader sends the credential only as `X-API-KEY` to the fixed Rabdi URL and
+rejects redirects on authenticated requests.
+The SDK chain metadata retains public URLs. The key is never placed in a URL,
+browser configuration, child-process argument/environment, status/evidence field
+or hash. Status records only `serverAccessKeyConfigured`. The pinned SDK's public
+chain helper can print its public-metadata warning even with transport-header
+authentication configured; use the explicit status flag and actual trusted query
+result to assess the selected runtime. See the [official access-key documentation](https://stage.docs.arkiv.network/start-here/access-keys/)
+for supported header authentication and quotas. Never include the credential file
+or its hash in a source/runtime evidence bundle.
+
 All three flags are required. The status file must be new. The launcher never
 enrolls or replaces an SSH identity. Use the explicitly reviewed public host pin
 from [MN009's provider observation](../../tests/privacy/live-observer/observed-localhost-run-provider-help-2026-11-06.json).
 Initial enrollment was TOFU; strict pinning subsequently rejects a changed key.
 The actual server help supported `--proxy-protocol-v2`; older website flag names
-were rejected. No paid resource, payer, provider account or private SSH key is
-required for this temporary tunnel.
+were rejected. This temporary SSH tunnel requires no paid resource, payer,
+localhost.run account or private SSH key.
 
 For a session-independent demo process on this Linux workstation, the operator
 can invoke the same command using `systemd-run --user --unit
@@ -34,8 +64,10 @@ only from the accepted registration event; administrative output is discarded.
 The launcher checks only health while waiting for public readiness. It does not
 retry RPC calls, warm a worker or claim live privacy success. Normal termination,
 startup failure, provider exit and cancellation close the child and local API.
-The status transitions through STARTING/READY/CLOSED and includes public tool/pin
-hashes and bounded counters. A successful process start is separate from the
+The status snapshots include STARTING/READY/CLOSED, public tool/pin hashes and
+bounded counters. A repeated termination signal can end the process before its
+final snapshot is written, so READY alone is not current liveness evidence; use
+the user-unit/cgroup state and bounded public health. A successful process start is separate from the
 real browser verification described in [the deployment record](../../docs/observer-deployment.md).
 
 The public edge accepts only:
@@ -84,3 +116,10 @@ pnpm check
 
 No old MN009 source/evidence, normal observer defaults, frontend or root package
 manifest/lockfile is changed by this deployment task.
+
+The [actual deployment record](evidence/2026-11-07/deployment-record.json) binds
+runtime6 and the passing four-case MN014 browser capture. Its metadata/binding
+copies remain byte-identical. This describes the capture-time runtime and is
+not current availability proof. Follow the [latest operational updates](https://github.com/Dijo-404/monolith/issues/40)
+and verify the current backend origin before final dashboard QA. The 12-hour cap
+and unprivileged sleep/idle inhibitor do not guarantee provider or hostname lifetime.

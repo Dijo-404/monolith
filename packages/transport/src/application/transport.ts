@@ -191,7 +191,12 @@ export function createMonolithTransport(options: TransportOptions): MonolithTran
     if (!configuration.valid) return failure('POLICY_DENIED');
     const candidateResult = localCandidate(input);
     if (!candidateResult.ok) {
-      if (input && typeof input.endpointId === 'string') validations.delete(input.endpointId);
+      if (input && typeof input.endpointId === 'string') {
+        validations.delete(input.endpointId);
+        const epoch = validationEpochs.get(input.endpointId);
+        // Rejection revokes pending probes too; unseen invalid IDs need no retained state.
+        if (epoch !== undefined) validationEpochs.set(input.endpointId, epoch + 1);
+      }
       return candidateResult;
     }
     const candidate = candidateResult.value;
@@ -217,9 +222,13 @@ export function createMonolithTransport(options: TransportOptions): MonolithTran
     const result = await execute(request, candidate, expectedGeneration, validateCurrent);
     if (!result.ok) return result;
     const instant = now();
+    // Completion and trace callbacks may have revoked this probe before commit.
+    if (!available() || expectedGeneration !== generation) return failure('WORKER_UNAVAILABLE');
+    if (validationEpochs.get(endpointId) !== epoch) return failure('ENDPOINT_REJECTED');
     if (instant === undefined) return failure('INVALID_INPUT');
+    if (Date.parse(candidate.expiresAt) <= instant) return failure('REGISTRY_EXPIRED');
     validations.set(endpointId, {
-      candidate, fingerprint, generation,
+      candidate, fingerprint, generation: expectedGeneration,
       validUntil: Math.min(Date.parse(candidate.expiresAt), instant + configuration.validationTtlMs),
     });
     state = 'READY';
