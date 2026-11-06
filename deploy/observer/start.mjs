@@ -30,13 +30,14 @@ async function sshAuthentication(options) {
   }
   try {
     if (typeof options.sshIdentity !== 'string' || !isAbsolute(options.sshIdentity)
-      || options.sshIdentity.length > 4096 || /\p{Cc}/u.test(options.sshIdentity)
+      || options.sshIdentity.length > 4096 || /[\p{Cc}%$]/u.test(options.sshIdentity)
       || typeof options.sshUser !== 'string' || !/^[a-z][a-z0-9_-]{0,31}$/.test(options.sshUser)
       || options.sshUser === 'nokey') throw new Error();
     const info = await lstat(options.sshIdentity);
     if (!info.isFile() || info.size < 1 || info.size > 64 * 1024 || (info.mode & 0o077) !== 0
       || (info.mode & 0o400) === 0 || typeof process.getuid !== 'function' || info.uid !== process.getuid()) throw new Error();
     const identity = await realpath(options.sshIdentity);
+    if (/[\p{Cc}%$]/u.test(identity)) throw new Error();
     return { mode: 'dedicated-key', user: options.sshUser, args: ['-i', identity, '-o', 'IdentityAgent=none'] };
   } catch { throw new Error('SSH identity configuration is missing or invalid.'); }
 }

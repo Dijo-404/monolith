@@ -1,5 +1,5 @@
 // SIMULATED provider subprocesses; no SSH, external HTTP, chain or worker contact.
-import { chmod, mkdtemp, readFile, rm, symlink, writeFile } from 'node:fs/promises';
+import { chmod, mkdir, mkdtemp, readFile, rm, symlink, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { expect, test, onTestFinished, vi } from 'vitest';
@@ -205,6 +205,29 @@ test('dedicated authentication rejection closes once without anonymous fallback 
   expect(JSON.parse(status)).toMatchObject({ state: 'CLOSED', sshAuthenticationMode: 'dedicated-key' });
   expect(status).not.toContain(identity); expect(status).not.toContain('SIMULATED_PRIVATE_AUTH_FAILURE');
   expect(f.close).toHaveBeenCalledTimes(1);
+});
+
+test.each([
+  ['literal-percent', '%h', false], ['literal-environment', '${LANG}', false],
+  ['resolved-percent', '%h', true], ['resolved-environment', '${LANG}', true],
+])('identity expansion syntax %s fails before startup', async (_name, token, parentAlias) => {
+  const f = await fixture(); let identity;
+  if (parentAlias) {
+    const actualParent = join(f.directory, `selected-${token}`);
+    await mkdir(actualParent, { mode: 0o700 });
+    await writeFile(join(actualParent, 'identity'), 'SIMULATED_IDENTITY', { mode: 0o600 });
+    const alias = join(f.directory, 'selected-parent'); await symlink(actualParent, alias);
+    identity = join(alias, 'identity');
+  } else {
+    identity = join(f.directory, `selected-${token}`);
+    await writeFile(identity, 'SIMULATED_IDENTITY', { mode: 0o600 });
+  }
+  const createDemo = vi.fn(f.createDemo);
+  const outcome = await startPublicTunnel({ ...f, createDemo, fetchHealth: health, sshIdentity: identity, sshUser: 'monolith-demo' })
+    .then((runtime) => ({ runtime }), (error) => ({ error }));
+  onTestFinished(() => outcome.runtime?.close());
+  expect(outcome.error?.message).toBe('SSH identity configuration is missing or invalid.');
+  expect(createDemo).not.toHaveBeenCalled(); await expect(readFile(f.status)).rejects.toThrow();
 });
 
 test('pre-cancelled dedicated mode does not spawn SSH and closes its backend', async () => {

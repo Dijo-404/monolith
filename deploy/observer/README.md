@@ -51,6 +51,7 @@ The login is a bounded lowercase ASCII name and cannot be `nokey`; the destinati
 is still fixed to localhost.run on port22. One option without the other fails
 before startup. The selected identity must be an absolute regular non-symlink
 file owned by the current user, owner-readable and inaccessible to other users.
+Selected and resolved paths reject OpenSSH percent/environment expansion syntax.
 The launcher checks only file metadata: OpenSSH alone reads the key contents.
 No private identity path, content or hash enters status/evidence; status adds only
 the `sshAuthenticationMode` enum. Dedicated mode disables IdentityAgent and keeps
