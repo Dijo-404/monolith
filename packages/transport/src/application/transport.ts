@@ -129,7 +129,16 @@ export function createMonolithTransport(options: TransportOptions): MonolithTran
       if (invalid) return blocked(request, invalid, attempt);
       const startedAt = now();
       const rpc: JsonRpcRequest = { jsonrpc: '2.0', id: nextId('rpc'), method: request.method, params: request.params };
-      const exchanged = await bounded((signal) => driver.exchange(candidate.rpcUrl, rpc, signal), configuration.requestTimeoutMs);
+      let dispatched = false;
+      const exchanged = await bounded((signal) => {
+        // bounded() queues this callback; admission may have changed before it runs.
+        if (!available() || expectedGeneration !== generation) return Promise.resolve(failure('WORKER_UNAVAILABLE'));
+        const stale = validateCurrent();
+        if (stale) return Promise.resolve(failure(stale));
+        if (!available() || expectedGeneration !== generation) return Promise.resolve(failure('WORKER_UNAVAILABLE'));
+        dispatched = true;
+        return driver.exchange(candidate.rpcUrl, rpc, signal);
+      }, configuration.requestTimeoutMs);
       let result: Result<JsonValue>;
       if (!available() || expectedGeneration !== generation) result = failure('WORKER_UNAVAILABLE');
       else {
@@ -151,7 +160,7 @@ export function createMonolithTransport(options: TransportOptions): MonolithTran
           }
         }
       }
-      trace(request, attempt, startedAt, result);
+      trace(request, attempt, startedAt, result, !dispatched);
       if (result.ok) return result;
       if (state !== 'CLOSED') state = 'DEGRADED';
       if (!result.error.retryable || attempt === configuration.maxAttempts || !available()
@@ -215,8 +224,8 @@ export function createMonolithTransport(options: TransportOptions): MonolithTran
       method: 'eth_chainId', params: [], callsite: 'transport.chain-probe',
     };
     const validateCurrent = (): ErrorCode | undefined => {
-      if (validationEpochs.get(endpointId) !== epoch) return 'ENDPOINT_REJECTED';
       const checked = localCandidate(candidate);
+      if (validationEpochs.get(endpointId) !== epoch) return 'ENDPOINT_REJECTED';
       return checked.ok ? undefined : checked.error.code;
     };
     const result = await execute(request, candidate, expectedGeneration, validateCurrent);

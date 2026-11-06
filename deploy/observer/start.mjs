@@ -23,6 +23,25 @@ export async function readServerAccessKey(path) {
   } catch { throw new Error('Server access key file is missing or invalid.'); }
 }
 
+/** Inspect only selected identity metadata; OpenSSH alone reads the private key. */
+async function sshAuthentication(options) {
+  if (options.sshIdentity === undefined && options.sshUser === undefined) {
+    return { mode: 'anonymous', user: 'nokey', args: ['-o', 'IdentityFile=/dev/null'] };
+  }
+  try {
+    if (typeof options.sshIdentity !== 'string' || !isAbsolute(options.sshIdentity)
+      || options.sshIdentity.length > 4096 || /[\p{Cc}%$]/u.test(options.sshIdentity)
+      || typeof options.sshUser !== 'string' || !/^[a-z][a-z0-9_-]{0,31}$/.test(options.sshUser)
+      || options.sshUser === 'nokey') throw new Error();
+    const info = await lstat(options.sshIdentity);
+    if (!info.isFile() || info.size < 1 || info.size > 64 * 1024 || (info.mode & 0o077) !== 0
+      || (info.mode & 0o400) === 0 || typeof process.getuid !== 'function' || info.uid !== process.getuid()) throw new Error();
+    const identity = await realpath(options.sshIdentity);
+    if (/[\p{Cc}%$]/u.test(identity)) throw new Error();
+    return { mode: 'dedicated-key', user: options.sshUser, args: ['-i', identity, '-o', 'IdentityAgent=none'] };
+  } catch { throw new Error('SSH identity configuration is missing or invalid.'); }
+}
+
 /** Provider output can contain administrative URLs. Only accepted public registration is projected. */
 export function tunnelOutput(onOrigin) {
   let pending = ''; let emitted = false;
@@ -70,6 +89,7 @@ export async function startPublicTunnel(options) {
   const ssh = await realpath(options.ssh); const knownHosts = await realpath(options.knownHosts);
   if (!isAbsolute(options.status) || !isAbsolute(options.ssh) || !isAbsolute(options.knownHosts)) throw new Error('Use explicit absolute operator paths.');
   const statusPath = resolve(options.status);
+  const authentication = await sshAuthentication(options);
   const accessKey = options.arkivEnvFile === undefined ? undefined : await readServerAccessKey(options.arkivEnvFile);
   const startedAt = new Date().toISOString();
   const hashes = {};
@@ -83,7 +103,7 @@ export async function startPublicTunnel(options) {
   const writeStatus = (state) => { statusQueue = statusQueue.then(async () => {
     const temporary = `${statusPath}.${process.pid}.tmp`;
     await writeFile(temporary, `${JSON.stringify({ schemaVersion: 1, state: closed ? 'CLOSED' : state, startedAt,
-    serverAccessKeyConfigured: accessKey !== undefined,
+    serverAccessKeyConfigured: accessKey !== undefined, sshAuthenticationMode: authentication.mode,
     observedAt: new Date().toISOString(), ...(origin ? { origin } : {}), hashes, counters: demo.counters(),
     limits: ['TRUSTED_PROVIDER', 'SINGLE_USER_LOCALHOST', 'INITIAL_SSH_TOFU', 'WORKSTATION_UPTIME', 'ROTATING_HOSTNAME', 'PROVIDER_RETENTION_UNVERIFIED'] }, null, 2)}\n`, { flag: 'wx', mode: 0o600 });
     await rename(temporary, statusPath);
@@ -106,9 +126,9 @@ export async function startPublicTunnel(options) {
     const registered = new Promise((accept, reject) => {
       const timer = setTimeout(() => reject(new Error('Public tunnel registration failed.')), 25_000);
       child = spawn(ssh, ['-F', '/dev/null', '-T', '-p', '22', '-o', 'BatchMode=yes', '-o', 'IdentitiesOnly=yes',
-        '-o', 'IdentityFile=/dev/null', '-o', `UserKnownHostsFile=${knownHosts}`, '-o', 'GlobalKnownHostsFile=/dev/null',
+        ...authentication.args, '-o', `UserKnownHostsFile=${knownHosts}`, '-o', 'GlobalKnownHostsFile=/dev/null',
         '-o', 'StrictHostKeyChecking=yes', '-o', 'ExitOnForwardFailure=yes', '-o', 'ServerAliveInterval=15', '-o', 'ServerAliveCountMax=3',
-        '-R', `80:127.0.0.1:${demo.edgePort}`, 'nokey@localhost.run', '--', '--output', 'json', '--proxy-protocol-v2'],
+        '-R', `80:127.0.0.1:${demo.edgePort}`, `${authentication.user}@localhost.run`, '--', '--output', 'json', '--proxy-protocol-v2'],
       { stdio: ['ignore', 'pipe', 'pipe'], env: { PATH: '/usr/bin:/bin', LANG: 'C.UTF-8' } });
       child.stdout.on('data', tunnelOutput((value) => { origin = value; clearTimeout(timer); accept(value); }));
       child.stderr.on('data', () => {});
@@ -127,7 +147,8 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
   const args = process.argv.slice(2);
   const values = {};
   for (let index = 0; index < args.length; index += 2) {
-    const key = { '--ssh': 'ssh', '--known-hosts': 'knownHosts', '--status': 'status', '--arkiv-env-file': 'arkivEnvFile' }[args[index]];
+    const key = { '--ssh': 'ssh', '--known-hosts': 'knownHosts', '--status': 'status', '--arkiv-env-file': 'arkivEnvFile',
+      '--ssh-identity': 'sshIdentity', '--ssh-user': 'sshUser' }[args[index]];
     if (!key || values[key] || !args[index + 1]) throw new Error('Use each documented public demo option exactly once.');
     values[key] = args[index + 1];
   }
