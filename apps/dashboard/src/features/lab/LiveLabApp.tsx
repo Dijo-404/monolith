@@ -157,7 +157,7 @@ function Activity({ state }: { state: LiveSnapshot }) {
 function RegistryCard({ state }: { state: LiveSnapshot }) {
   const endpoint = state.selection?.endpoint ?? state.manifest?.endpoints[0];
   const manifest = state.selection?.manifest ?? state.manifest;
-  return <section className="card" aria-labelledby="registry-title"><header className="card__head"><h3 id="registry-title">Arkiv endpoint registry</h3><Tag>{manifest ? state.observedAt ? 'Recorded snapshot' : 'Validated snapshot' : 'Not queried'}</Tag></header>
+  return <section className="card" aria-labelledby="registry-title"><header className="card__head"><h3 id="registry-title">Arkiv endpoint registry</h3><Tag>{manifest ? state.busy ? 'Validated snapshot' : 'Recorded snapshot' : 'Not queried'}</Tag></header>
     <p className="card__lead">{endpoint ? endpoint.chainName : 'No endpoint selected'}</p>
     <p className="card__sub">{endpoint ? `${endpoint.rpcUrl} · chain ${endpoint.chainId}` : 'Metadata is read from the real Arkiv-backed service after the worker starts.'}</p>
     {endpoint && <dl className="facts">
@@ -166,7 +166,7 @@ function RegistryCard({ state }: { state: LiveSnapshot }) {
       <div><dt>Trusted publisher</dt><dd className="mono live-wrap" title={endpoint.publisher.creator}>{short(endpoint.publisher.creator, 18)}</dd></div>
       <div><dt>Source revision</dt><dd className="mono live-wrap">{endpoint.source.revision}</dd></div>
       <div><dt>Source SHA-256</dt><dd className="mono live-wrap">{endpoint.source.snapshotSha256}</dd></div>
-      <div><dt>Manifest expires</dt><dd>{manifest?.expiresAt}{state.observedAt && ' · every new run revalidates metadata'}</dd></div>
+      <div><dt>Manifest expires</dt><dd>{manifest?.expiresAt}{!state.busy && ' · every new run revalidates metadata'}</dd></div>
     </dl>}
     <p className="card__note">Arkiv supplies the candidate. Publisher, provenance and expiry checks plus a protected chain probe authorize its use. The observer forwards only this pinned URL.</p>
   </section>;
