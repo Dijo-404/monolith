@@ -16,6 +16,7 @@ The default configuration has no approved endpoints, no registered lab runs and 
 | `MONOLITH_OBSERVER_SOURCE_MODE` | `unknown` | `unknown`, `direct`, or `trusted-proxy` deployment topology |
 | `MONOLITH_OBSERVER_TRUSTED_PROXIES` | empty | Comma-separated exact IPv4/IPv6 peer addresses; only valid in `trusted-proxy` mode |
 | `MONOLITH_OBSERVER_LAB_RUNS` | `[]` | JSON array of fresh synthetic lab registrations |
+| `MONOLITH_OBSERVER_PUBLIC_LAB_RUNS` | `false` | Exactly `true` enables bounded public synthetic run allocation; exactly `false` or absent leaves it disabled |
 
 The following is a synthetic configuration example. `rpc.example.invalid` is intentionally unroutable and supplies no live chain result. Replace it with an operator-approved public HTTPS endpoint and independently verify its chain. The call rule is an example policy for a synthetic target, not a deployed-contract assertion.
 
@@ -42,15 +43,56 @@ Use `direct` only when the application listener receives clients directly withou
 
 Use `trusted-proxy` only behind configured exact edge IPs. The edge must remove any incoming `Forwarded` and `X-Forwarded-For`, then write exactly one validated source IP into `X-Forwarded-For`. Multi-address chains, duplicate forwarding headers and the alternative `Forwarded` form are rejected as source evidence. An untrusted socket peer cannot provide a source through that header. The service keeps Fastify's global `trustProxy` disabled; wildcard, CIDR and hostname trust settings are not accepted. IPv4-mapped IPv6 peer addresses are normalized before comparison.
 
-The server reserves each lab baseline using the configured `baselineRpcId`. Send that synthetic direct control through the declared topology with the registered `x-monolith-run`, then use fresh synthetic RPC IDs for subsequent comparisons. A case header cannot elect a new baseline. Source classes are `baseline`, `different-from-baseline` or `unknown`; a changed source alone does not prove Tor/Nym use or general anonymity. The paired worker evidence must establish which transport actually executed the comparison.
+The server reserves each lab baseline using its registered `baselineRpcId`, either configured by the operator or allocated by the opt-in route below. Send that synthetic direct control through the declared topology with the registered `x-monolith-run`, then use fresh synthetic RPC IDs for subsequent comparisons. A case header cannot elect a new baseline. Source classes are `baseline`, `different-from-baseline` or `unknown`; a changed source alone does not prove Tor/Nym use or general anonymity. The paired worker evidence must establish which transport actually executed the comparison.
+
+## Optional public synthetic runs
+
+MN-024 adds `POST /api/observer/runs` only when `MONOLITH_OBSERVER_PUBLIC_LAB_RUNS=true`.
+The default-disabled route and its allocation preflight return the existing 404 when
+disabled. This opt-in allows a visitor to start a fresh five-minute run without restarting
+the observer or sharing an operator baseline with other visitors. It does not enable
+new upstream destinations, RPC writes, or a successful privacy classification.
+
+Send no body, or an empty JSON object `{}`. Do not send query fields, cookies,
+authorization, or any `x-monolith-*` headers. The route has a 128-byte body cap and
+rejects nonempty objects, arrays, JSON `null`, invalid JSON, and caller-supplied
+run/baseline IDs, URLs, payloads or source/route assertions. Ordinary browser and
+infrastructure headers are ignored by allocation; forwarding headers cannot seed a
+baseline. Only `content-type` is allowed by its public POST preflight. Responses are
+`no-store`, have no cookies and grant no credentialed CORS.
+
+A successful response is HTTP 201 with `Result<ObserverLabAllocation>` in the shared
+versioned HTTP wrapper. Its `value` has exactly `schemaVersion: 1`, `runId`,
+`baselineRpcId`, and `expiresAt`. The server generates both correlation IDs using
+cryptographic UUIDv4 randomness; clients choose neither. The timestamp comes from
+the same registered store state used for diagnostic retrieval. Allocation contains
+no evidence label, source classification, worker readiness or anonymity claim.
+
+Use the returned run and baseline RPC IDs for the explicit direct control on the
+existing read endpoint, then use fresh synthetic RPC IDs for protected comparisons.
+Do not use real-user identifiers or payloads. Random IDs separate synthetic runs;
+they are not authentication or authorization for private data, and the diagnostics
+remain public. Sharing active IDs allows another caller to submit observations to
+that run, so public proof still requires the independent controlled scenario/worker
+correlation defined by MN-009.
+
+Allocation is synchronous and admits at most 12 attempts per minute per process,
+including failed registrations. It retains no IP-based rate counters. The existing
+128-active-run limit is shared with operator registrations; allocation cannot evict,
+replace or renew an existing run. The existing 128-observation limit and read
+concurrency/rate policies also apply. At capacity the response is sanitized HTTP
+429 `RATE_LIMITED`; retry only after the window or existing expiry, rather than
+repeatedly allocating. RNG/registration failures return a fixed HTTP 503 error
+without exposing implementation details. Multiple processes have separate limits
+and stores; this MVP is intended for one observer process.
 
 ## Retention, HTTP limits and deployment
 
-Diagnostics are recorded only when a request supplies a registered random run ID and a synthetic RPC ID. Ordinary requests may receive valid read results without being saved as lab observations. Environment-configured runs are registered at service startup and expire five minutes later, even if no observation has arrived. Reads and diagnostic lookups never refresh that deadline. Start the observer immediately before the paired lab test; a later controlled composition may use the private registration port, which is not exposed through HTTP. Expiry clears the stored source and pending observations. Expired runs return `EVIDENCE_EXPIRED`. No RPC bodies, results, raw addresses, raw peer IPs or incoming forwarding headers are included in public diagnostics or persisted logs. The baseline source is held only in the short-lived process memory needed for comparison.
+Diagnostics are recorded only when a request supplies a registered random run ID and a synthetic RPC ID. Ordinary requests may receive valid read results without being saved as lab observations. Environment-configured runs are registered at service startup and expire five minutes later, even if no observation has arrived. Public runs expire five minutes after allocation. Reads and diagnostic lookups never refresh either deadline. Start the observer immediately before an operator-registered test, or explicitly enable public allocation for the interactive lab. The registration port itself remains private; the public route supplies only its own generated IDs through the bounded use case. Scheduled expiry clears the stored source and pending observations even without a later request, and late upstream completions cannot revive them. Expired runs return `EVIDENCE_EXPIRED`. No RPC bodies, results, raw addresses, raw peer IPs or incoming forwarding headers are included in public diagnostics or persisted logs. The baseline source is held only in the short-lived process memory needed for comparison.
 
 The service caps JSON request bodies at 16 KiB, upstream responses at 512 KiB, upstream execution at eight seconds and global concurrent upstream work at 16. A global 60-read-request-per-minute budget bounds upstream forwarding without retaining per-source IP counters. Rate/concurrency failures are sanitized. Operators must also set suitable infrastructure connection and body limits. These bounds describe the service policy, not measured throughput or availability.
 
-Observer reads and diagnostic lookups support public worker-compatible CORS without credentialed cookies. Only the read route accepts POST preflight; this CORS policy does not apply to a payment relayer or arbitrary server routes. Treat diagnostics as public, short-lived synthetic lab information.
+Observer reads, diagnostic lookups and explicitly enabled public allocation support worker-compatible CORS without credentialed cookies. The read and enabled allocation routes accept their narrowly defined POST preflights; this CORS policy does not apply to a payment relayer or arbitrary server routes. Treat diagnostics as public, short-lived synthetic lab information.
 
 Use HTTPS for a production observer. When terminating TLS at a reverse proxy, configure TLS/HSTS at that edge, disable raw-IP access logs at every layer, and apply the exact trusted-edge policy above. Keep application logging disabled for request data. Startup emits only a fixed readiness message; configuration/startup failures contain no source details. Do not enable generic proxy logging, request-body capture or header tracing for the lab.
 
