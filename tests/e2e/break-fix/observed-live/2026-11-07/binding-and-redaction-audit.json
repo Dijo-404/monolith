@@ -1,0 +1,81 @@
+{
+  "schemaVersion": 1,
+  "scope": "RETAINED_MOUNTED_PRESENTER_CAPTURE_BINDING_AND_BOUNDED_REDACTION_AUDIT",
+  "passed": true,
+  "sourceCommit": "dfb08028da0fac156b9940dd117d892642717355",
+  "captureSha256": "d8685e097e487b50148e513777c4288aa9681a6fc8d3c1e1a68cca5ecb5f9ef2",
+  "sourceBindingsMatched": 246,
+  "fileHashesMatched": true,
+  "rawObservedIpFields": 0,
+  "credentialPatternFindings": 0,
+  "forbiddenPayloadFields": 0,
+  "pngPrivateMetadataChunks": 0,
+  "historicalEvidenceUnchanged": true,
+  "cases": 4,
+  "wireRows": 13,
+  "frameChecks": 6,
+  "unknownFrames": 0,
+  "hostingBootstrapRequests": 2,
+  "files": [
+    {
+      "path": "browser-live.json",
+      "bytes": 51566,
+      "sha256": "d8685e097e487b50148e513777c4288aa9681a6fc8d3c1e1a68cca5ecb5f9ef2"
+    },
+    {
+      "path": "compare-report.json",
+      "bytes": 6415,
+      "sha256": "8bee2a7d9d9142eb470c4928271952f0131733873b2e38829ed3ed56a1e92922"
+    },
+    {
+      "path": "compare.png",
+      "bytes": 850326,
+      "sha256": "62731d10fdf8e038145ff4de94da054a8873f670373bf072fd6e73d6b05e6232"
+    },
+    {
+      "path": "leak-report.json",
+      "bytes": 8634,
+      "sha256": "b5bb2591f7b5496e0796cb479e533b46b5706474d41dbda9323cd33fcf53550b"
+    },
+    {
+      "path": "leak.png",
+      "bytes": 889802,
+      "sha256": "6ef467d835ebfd96e0bab474e81ede3a1519a4a76261bbd666df6d46ee62a1e7"
+    },
+    {
+      "path": "private-report.json",
+      "bytes": 6876,
+      "sha256": "3507f6255861694af6ea21d4c23d767cc11ca687838ddddd26dc958621265964"
+    },
+    {
+      "path": "private.png",
+      "bytes": 851403,
+      "sha256": "6d4b6f0123b9dd9efe83bfaa5327528a79a06dd1036537e69830aa538ee46c34"
+    },
+    {
+      "path": "repair-320.png",
+      "bytes": 484022,
+      "sha256": "2145f13b83411dccf6e3a7573fbd498b92b6d9f8649266877cb5d1aac49d2799"
+    },
+    {
+      "path": "repair-390.png",
+      "bytes": 481100,
+      "sha256": "acf5c9aef13111438c095e0d49c895f6039ffa729928a706e78d3f71d7fb18d8"
+    },
+    {
+      "path": "repair-report.json",
+      "bytes": 7957,
+      "sha256": "b4d0bee8590f7d58678ca651cdc43deed721adcf7c96d6500333317d1acc1105"
+    },
+    {
+      "path": "repair.png",
+      "bytes": 873580,
+      "sha256": "dd5108cc9899bcfec1b3c1ee03ca2877666959babddb4b7c5ae5b2d98c123cd0"
+    }
+  ],
+  "limitations": [
+    "Retained-artifact inspection only; not an independent network recapture.",
+    "Credential files were neither read nor hashed. Pattern and field inspection is bounded, not a guarantee about arbitrary sensitive content.",
+    "Actual hosting HTML, backend runtime provenance and service continuity have separate owner evidence."
+  ]
+}

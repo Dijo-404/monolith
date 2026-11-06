@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "scope": "BYTE_IDENTICAL_OWNER_COORDINATED_BACKEND_COMPANIONS",
+  "passed": true,
+  "files": [
+    {
+      "path": "source-bindings.json",
+      "sha256": "2193e42808c2091cf0c7bea9096ef658626c68dd2b84855371ca88fd1acf7ce0",
+      "bytes": 21830
+    },
+    {
+      "path": "public-metadata.json",
+      "sha256": "81487e2a71efbce6faa21c89d591efc291016907d581a673c91e919fbe625e27",
+      "bytes": 3597
+    },
+    {
+      "path": "pre-capture-health.json",
+      "sha256": "015935ebc1bf1521d8b329e9cdbf18134853b235a4a7ac11107aed1af34d0303",
+      "bytes": 580
+    }
+  ],
+  "limits": [
+    "Original metadata timestamps and metadata-only scope are preserved, not relabelled as current availability or privacy proof.",
+    "The real four-action capture has its own fresh admitted generations and actual observed receipts.",
+    "Backend owner confirmed these allowlisted coarse public files contain no credential or private identity path/hash/content.",
+    "No backend source, service, original evidence, credential file or provider state was changed by this copy."
+  ]
+}

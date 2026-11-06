@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "format": "application/json-patch+json",
+  "before": {
+    "scenarioId": "monolith.synthetic-balance-widget.v1",
+    "seed": "monolith-zero-address-balance-v1",
+    "chainId": "10",
+    "method": "eth_getBalance",
+    "addressFixture": "synthetic-zero-address",
+    "blockTag": "latest",
+    "callsite": "lab.widget",
+    "privacyRequired": true,
+    "route": "direct-debug"
+  },
+  "after": {
+    "scenarioId": "monolith.synthetic-balance-widget.v1",
+    "seed": "monolith-zero-address-balance-v1",
+    "chainId": "10",
+    "method": "eth_getBalance",
+    "addressFixture": "synthetic-zero-address",
+    "blockTag": "latest",
+    "callsite": "lab.widget",
+    "privacyRequired": true,
+    "route": "anon-nym"
+  },
+  "operations": [
+    {
+      "op": "test",
+      "path": "",
+      "value": {
+        "scenarioId": "monolith.synthetic-balance-widget.v1",
+        "seed": "monolith-zero-address-balance-v1",
+        "chainId": "10",
+        "method": "eth_getBalance",
+        "addressFixture": "synthetic-zero-address",
+        "blockTag": "latest",
+        "callsite": "lab.widget",
+        "privacyRequired": true,
+        "route": "direct-debug"
+      }
+    },
+    {
+      "op": "replace",
+      "path": "/route",
+      "value": "anon-nym"
+    }
+  ],
+  "sourceAnchors": {
+    "before": {
+      "file": "apps/dashboard/src/features/lab/live-controller.ts",
+      "anchor": "MN014_WIDGET_BEFORE"
+    },
+    "after": {
+      "file": "apps/dashboard/src/features/lab/live-controller.ts",
+      "anchor": "MN014_WIDGET_AFTER"
+    },
+    "intent": {
+      "file": "apps/dashboard/src/features/lab/scenario.ts",
+      "anchor": "LIVE_SCENARIO"
+    }
+  }
+}
