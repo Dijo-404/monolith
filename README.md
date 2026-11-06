@@ -21,7 +21,7 @@
 </p>
 
 > [!NOTE]
-> **Early development.** The default dashboard is an interactive simulation; its controls make no application API or RPC requests, and payments are disabled. Supporting transport, observer, registry and regression modules are implemented separately. Live preflights have their own timestamped evidence; running the dashboard does not reproduce them.
+> **Early development.** The default dashboard is wired for live reads through a verified Nym worker. It makes no API or RPC requests on page load; run actions block before worker bootstrap with the example local configuration. The separate `?mode=simulated` walkthrough uses local fixtures. Actual public dashboard and reusable-backend acceptance evidence remains pending, and payments are disabled.
 
 ## Overview
 
@@ -29,7 +29,7 @@ Monolith helps wallet and checkout developers catch accidental direct-RPC reads.
 
 ### Features
 
-- **Explore the leak.** A guided dashboard demonstrates direct reads, private routing, an injected bypass and a worker outage with explicit `SIMULATED` labels.
+- **Explore the leak.** Configured live actions read through Nym, compare network sources, inject a fixed synthetic bypass, then reroute and rerun. A separate `SIMULATED` walkthrough includes local fixtures and worker-outage scenarios.
 - **Enforce required privacy.** The transport validates supported reads and chain IDs through a verified Anon-RPC worker, or blocks without a direct fallback.
 - **Check endpoint provenance.** Registry modules validate trusted publishers, source revisions, expiry and permitted origins before admitting candidates.
 - **Observe a controlled comparison.** The observer permits five read methods against configured upstreams and retains bounded synthetic-run diagnostics for five minutes.
@@ -88,11 +88,13 @@ pnpm check  # run lint, type checks, offline tests and production builds
 pnpm dev    # start the dashboard and observer with file watching
 ```
 
-Open **http://127.0.0.1:5173** for the simulated Leak Lab. The observer listens at **http://127.0.0.1:3001**; check `GET /api/health` for its configured state. The default setup needs no wallet, signing key or live-network credentials. Observer upstreams and public registry discovery remain unavailable until configured.
+Open **http://127.0.0.1:5173** for the live Leak Lab. Its run actions block with the example configuration; open **http://127.0.0.1:5173/?mode=simulated** for the offline fixture walkthrough. The local observer listens at **http://127.0.0.1:3001**; check `GET /api/health` for its configured state. Local startup needs no wallet, signing key or live-network credentials. Live actions require the public HTTPS observer, fresh public-run allocation, trusted Arkiv discovery and real Nym setup described in the [live lab guide](tests/e2e/lab-ui/README.md).
 
 ## Usage
 
-In the default dashboard, follow the four steps: send a direct read, compare the private route, inject a leaky widget, then try a worker outage. Inspect **Under the hood** for the scenario controls, activity and remaining payload exposure. These interactions use local fixtures.
+In the default live dashboard, follow the four steps: **Run private read**, **Compare direct and private**, **Send the leaky widget**, then **Reroute widget and rerun**. Each action opens a fresh bounded observer run. Comparison, leak and repair actions explicitly send a fixed synthetic direct control; the leak action adds a deliberate direct bypass. These requests expose your network source. Ordinary private reads use the verified worker or fail closed. Inspect **Under the hood** for receipts, activity and remaining payload exposure. See the [live lab guide](tests/e2e/lab-ui/README.md) for setup and the separate public-workflow evidence gate.
+
+For the fixture walkthrough at `?mode=simulated`, send a direct read, compare the private route, inject a leaky widget, then try a worker outage. Its scenario controls use local fixtures and display `SIMULATED` labels.
 
 ### Commands
 
@@ -130,7 +132,7 @@ The [registry setup guide](docs/registry-setup.md) provides the live `--chain-id
 
 ## Configuration
 
-Both development apps read the root `.env`. Copy [.env.example](.env.example) and retain its defaults for the simulation:
+Both development apps read the root `.env`. Copy [.env.example](.env.example) for local startup. These defaults leave live actions blocked before worker bootstrap; the separate simulated walkthrough remains available:
 
 ```dotenv
 MONOLITH_PUBLIC_OBSERVER_URL=http://127.0.0.1:3001
@@ -145,7 +147,7 @@ MONOLITH_REGISTRY_CONFIG=
 
 | Variable | Effect |
 | :--- | :--- |
-| `MONOLITH_PUBLIC_OBSERVER_URL` | The only application environment value exposed to the browser; an HTTP(S) origin without credentials, path, query or fragment |
+| `MONOLITH_PUBLIC_OBSERVER_URL` | The only application environment value exposed to the browser; an HTTP(S) origin without credentials, path, query or fragment. Live actions require a public HTTPS origin |
 | `MONOLITH_OBSERVER_HOST` / `MONOLITH_OBSERVER_PORT` | Server listener address and port |
 | `MONOLITH_OBSERVER_ENDPOINTS` | Server-owned approved HTTPS targets and contract-call rules; defaults to `[]` |
 | `MONOLITH_OBSERVER_SOURCE_MODE` / `MONOLITH_OBSERVER_TRUSTED_PROXIES` | Declared source topology and exact trusted edge peers; defaults to inconclusive evidence |
@@ -153,12 +155,12 @@ MONOLITH_REGISTRY_CONFIG=
 | `MONOLITH_OBSERVER_PUBLIC_LAB_RUNS` | Opt-in bounded public synthetic-run allocation; disabled by default |
 | `MONOLITH_REGISTRY_CONFIG` | Server-only publisher, source-hash and origin policy for public discovery; disabled when empty |
 
-See the [observer guide](docs/observer.md) and [registry setup](docs/registry-setup.md) before enabling network integrations. Automatic `VITE_` exports and prefix-based environment exports are disabled. Set `NODE_ENV` on the server process when deploying; keep signing keys out of browser configuration.
+See the [observer guide](docs/observer.md), [registry setup](docs/registry-setup.md) and [live lab guide](tests/e2e/lab-ui/README.md) before enabling network integrations. A configured origin alone does not establish a working backend or accepted evidence: live actions also need fresh public-run allocation, matching approved upstream and registry policy, and a verified Nym worker. Automatic `VITE_` exports and prefix-based environment exports are disabled. Set `NODE_ENV` on the server process when deploying; keep signing keys out of browser configuration.
 
 ## Privacy and safety
 
 - Required protected reads and chain-ID probes use a verified anonymizing worker or fail closed. Retries cannot silently downgrade to direct RPC. Passthrough earns no protected credit.
-- Worker bootstrap is non-anonymous. Page/backend contact and public registry metadata queries are separate disclosed connections; Anon-RPC does not conceal them automatically.
+- Worker bootstrap is non-anonymous. Run allocation, public registry metadata and diagnostics use ordinary page/backend connections; Anon-RPC does not conceal them automatically. Comparison, leak and repair actions explicitly send fixed synthetic direct requests; those direct requests earn no protected credit.
 - RPC destinations can read request methods and payloads. Public blockchain transfers remain visible. Protection applies only to the configured, measured read paths.
 - The observer accepts configured endpoint IDs, with restricted read methods and contract calls. Client-supplied URLs, forwarding headers or route labels cannot establish destination trust or anonymity.
 - Controlled comparisons temporarily retain source data in memory. Public diagnostics contain coarse source classes and synthetic IDs, expire after five minutes, and omit raw IPs and RPC bodies; deployment edges must also suppress raw-IP logs.
@@ -178,7 +180,7 @@ flowchart LR
     A --> P["Scoped, sanitized report"]
 ```
 
-This is the configured integration path supported by the modules. Registry discovery supplies candidates; publisher, expiry and origin policy plus a protected chain-ID probe determine admission. Independent egress capture complements transport traces to find bypasses. The default dashboard illustrates this flow with fixtures; live execution requires the separate integration setup and evidence described below.
+Configured dashboard actions follow this worker/observer path. Registry discovery supplies candidates; publisher, expiry and origin policy plus a protected chain-ID probe determine admission. The separate browser runner captures ordinary HTTP egress independently to find bypasses beyond transport traces. Live actions require the setup and accepted backend described in the [live lab guide](tests/e2e/lab-ui/README.md); implemented wiring alone does not establish a successful public run. The separate `?mode=simulated` walkthrough illustrates the flow with fixtures.
 
 ## Tech stack
 
@@ -240,13 +242,13 @@ pnpm install --frozen-lockfile
 <details>
 <summary><b>The observer or registry reports unavailable</b></summary>
 
-The default environment enables no upstream targets or registry trust configuration. The simulated dashboard works without them. For live setup, follow the [observer configuration](docs/observer.md) and [registry setup guide](docs/registry-setup.md). An outage, expired registry record or inconclusive source topology must remain visible in the result.
+The default environment enables no upstream targets or registry trust configuration, and its local HTTP observer origin cannot enable live actions. The default live lab blocks before worker bootstrap; `?mode=simulated` works with local fixtures. For live setup, follow the [observer configuration](docs/observer.md), [registry setup guide](docs/registry-setup.md) and [live lab guide](tests/e2e/lab-ui/README.md). An outage, expired registry record or inconclusive source topology must remain visible in the result.
 
 </details>
 
 ## Limitations
 
-- The default UI uses simulated scenarios. Integrated live dashboard execution and final release evidence are separate tracked work.
+- Live dashboard composition is implemented, but accepted reusable public-backend evidence ([MN-025](https://github.com/Dijo-404/monolith/issues/40)) and the actual public dashboard walkthrough ([MN-014](https://github.com/Dijo-404/monolith/issues/14)) remain pending. Final release evidence is separate tracked work.
 - Browser regression coverage is scoped to configured origins and ordinary Chromium HTTP traffic. It does not cover arbitrary third-party apps, wallet extensions, WebRTC/KPS traffic or every possible JavaScript bypass.
 - Timestamped live evidence records a past run. Worker availability, endpoint freshness and network behavior must be checked again for a new run.
 - Whitechain checkout remains conditional and disabled. No payment settlement or sponsor eligibility is claimed.
@@ -256,7 +258,8 @@ The default environment enables no upstream targets or registry trust configurat
 - [x] Guided Leak Lab with explicit simulation labels
 - [x] Fail-closed transport, controlled observer and trusted registry modules
 - [x] Independent direct-bypass regression checks
-- [ ] Integrated live dashboard and reusable public backend
+- [x] Live dashboard composition with fail-closed configuration
+- [ ] Accepted public dashboard workflow and reusable-backend evidence
 - [ ] Reproducible live leak, repair and rerun walkthrough
 - [ ] Accepted core evidence bundle and clean-clone release
 
