@@ -1,0 +1,107 @@
+{
+  "schemaVersion": 1,
+  "passed": true,
+  "scope": "IMMUTABLE_CAPTURE_COPY_AND_BOUNDED_REDACTION_INSPECTION",
+  "records": [
+    {
+      "targetKind": "ACTUAL_DEPLOYED_HTTPS",
+      "files": [
+        {
+          "path": "attempt-7/browser-live.json",
+          "bytes": 50637,
+          "sha256": "70a0cff9a52394c66754f62280ae9981068f70a2aaddccdad8a53a30ca5cfc7c"
+        },
+        {
+          "path": "attempt-7/compare-report.json",
+          "bytes": 6441,
+          "sha256": "e4bd9a819ff80f0933fda9498a97c765136f9c1f9f1d1312217738065f846575"
+        },
+        {
+          "path": "attempt-7/compare.png",
+          "bytes": 765344,
+          "sha256": "1241e157cd82d8e4d02e266b714d752e97b884a6a33a1e539dc97bc8c26536ce"
+        },
+        {
+          "path": "attempt-7/leak-report.json",
+          "bytes": 8630,
+          "sha256": "1754697f55cdeeb084b4ceff5ac5c823c69eaacd09957d8531cbe7b2a57e8007"
+        },
+        {
+          "path": "attempt-7/leak.png",
+          "bytes": 789359,
+          "sha256": "dbe8173e9c0da7d879906ee53abd4eaa22ddd89260a41b63584a8e51120cfd09"
+        },
+        {
+          "path": "attempt-7/private-report.json",
+          "bytes": 6904,
+          "sha256": "a687a3a61d08c2ecff359bd94910bff383d7d5962bd661e93b5508306dfeccc2"
+        },
+        {
+          "path": "attempt-7/private.png",
+          "bytes": 764406,
+          "sha256": "71099139b79e6caa387c41d8495473e81edc0e509939a458f7acc49508700289"
+        },
+        {
+          "path": "attempt-7/repair-320.png",
+          "bytes": 393237,
+          "sha256": "64401b26a1ea834b3841f76a85c0ddabdacf0b62b0de9adc712604e9121c33ba"
+        },
+        {
+          "path": "attempt-7/repair-390.png",
+          "bytes": 393988,
+          "sha256": "8ff12639f09891038c1cab884259cbe390cc0988994e404c33e3d932b04ad6e0"
+        },
+        {
+          "path": "attempt-7/repair-report.json",
+          "bytes": 7929,
+          "sha256": "f162929960b17f944b2a409baeba3c5a22930f04ec6d513186bc6446cf8387d1"
+        },
+        {
+          "path": "attempt-7/repair.png",
+          "bytes": 776641,
+          "sha256": "22120397dd29801166d4a706d546e25765609055a171413973141a9c3adc450d"
+        }
+      ]
+    },
+    {
+      "targetKind": "BLOCKED_LOCAL_PREVIEW",
+      "files": [
+        {
+          "path": "prior-preview-attempt-6/blocked.png",
+          "bytes": 703733,
+          "sha256": "895ed1455d8769e72fe2eaea9489e08b7df4b16496f460285606c765e5701d64"
+        },
+        {
+          "path": "prior-preview-attempt-6/browser-live.json",
+          "bytes": 37736,
+          "sha256": "0d45673001f60261dd5d8ba391a45eb33638319d6b141b7033cffd715c548917"
+        },
+        {
+          "path": "prior-preview-attempt-6/compare-report.json",
+          "bytes": 6413,
+          "sha256": "01eaf90e3d846b5b46ef0c0791bd7c2c42a088ccd5d46413afdd288a6cc48116"
+        },
+        {
+          "path": "prior-preview-attempt-6/compare.png",
+          "bytes": 759231,
+          "sha256": "7827133a2d13b29bc0101fdfcd0cc637addf85628826da77225f7f4d5fbc8292"
+        },
+        {
+          "path": "prior-preview-attempt-6/private-report.json",
+          "bytes": 6904,
+          "sha256": "e80017500f5dd7588e5226284622853d5d1f22703042264405d25112d5833898"
+        },
+        {
+          "path": "prior-preview-attempt-6/private.png",
+          "bytes": 759156,
+          "sha256": "8c6cf2e6da56d2fdf40d464fde61e7aed9a067294ba61549b676e846344cee89"
+        }
+      ]
+    }
+  ],
+  "limits": [
+    "Attempt6 remains a blocked local production-preview observation, not deployed acceptance.",
+    "Existing four blocked captures and historical successful attempt5 are unchanged.",
+    "No credential files were read or hashed."
+  ]
+}
