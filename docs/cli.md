@@ -1,11 +1,28 @@
 # Monolith CLI and TUI
 
-The prerelease `@monolith/cli` package provides local privacy-analysis commands,
+The public [`@dijo-404/monolith-cli`](https://www.npmjs.com/package/@dijo-404/monolith-cli) package provides local privacy-analysis commands,
 sanitized report viewing and a terminal menu. Its `lab` command opens the existing
 browser application. It does not run an anonymity worker in Node.
 
-This package has not been published to npm. Its proposed package name and future
-registry availability are unverified. MN-026 is tracked in [issue #50](https://github.com/Dijo-404/monolith/issues/50).
+Version `0.1.0` uses the owner-approved public npm name `@dijo-404/monolith-cli`.
+The source workspace remains `@monolith/cli`; the executable remains `monolith`.
+MN-026 and the publication follow-up are tracked in [issue #50](https://github.com/Dijo-404/monolith/issues/50).
+
+## Install from npm
+
+Use Node.js **24.22.2 or newer within the Node.js 24 release line**:
+
+```sh
+npx @dijo-404/monolith-cli@0.1.0 --help
+npx @dijo-404/monolith-cli@0.1.0 tui
+```
+
+For a global installation:
+
+```sh
+npm install --global @dijo-404/monolith-cli@0.1.0
+monolith --help
+```
 
 ## Build and install a local tarball
 
@@ -29,9 +46,13 @@ workspace fixtures, browser SDKs or unpublished workspace packages. Package
 source, test fixtures, `.env` files and dependency trees are outside the tarball's
 declared file set. The tarball includes its license and dependency notices.
 
-After an owner-approved npm release, the intended registry invocation is
-`npx --package @monolith/cli monolith --help`. That registry command is a future
-usage example, not evidence that a release exists.
+Local workspace tarballs retain the internal `@monolith/cli` name and
+`monolith-cli-0.1.0.tgz` filename. The public distribution is
+`@dijo-404/monolith-cli`, with filename `dijo-404-monolith-cli-0.1.0.tgz`.
+Release staging changes only `package.json`'s name and the installation README,
+and normalizes text permissions to `0644` while preserving executable `0755`.
+The executable, Monolith license and bundled Zod notices retain their checked
+bytes. No private workspace package is separately published.
 
 ## Commands
 
@@ -168,3 +189,12 @@ standalone install results, tarball file list, bundled dependency notices and
 documented privacy limits; confirm ownership/availability of the package name;
 and select the intended registry/access policy. Publishing is a separate owner
 action. A prepared tarball is not a published release or accepted live evidence.
+
+The `0.1.0` publication uses accepted source
+`79054dc5c5d2d022af643e75dff48ee01c7a5701`. Its staged public tarball SHA-256 is
+`78f3ff0ff00bfa37c099f6deb945445e8abdf83bc982af1d4bfb1e2e1f9db89e`.
+Pinned `pnpm check` passed 1,517 tests in 47 files plus lint, types and builds;
+the explicit portable suite passed 10 tests. Independent verification installed
+the renamed tarball outside the checkout and checked help, version, doctor,
+passing synthetic analysis, direct-bypass rejection and empty-run rejection.
+These remain local software checks and establish no new live privacy evidence.
