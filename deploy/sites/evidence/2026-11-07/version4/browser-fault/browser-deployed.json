@@ -1,0 +1,96 @@
+{
+  "schemaVersion": 1,
+  "evidence": "OBSERVED_LIVE",
+  "passed": true,
+  "siteOrigin": "https://monolith-privacy-lab.madhanxdev.chatgpt.site",
+  "observerOrigin": "https://e964181cf62d29.lhr.life",
+  "sourceCommit": "5cf16137d60bd2d274a4eb3b2fe078765d0ecc70",
+  "staticVerificationSha256": "896e3a4fbb22a3d71bdf6631e48ff8da08e5b1cef4b5751d24115006b36dc257",
+  "runnerSha256": "6394059476734f95e0846a01677a32d1aed7637383a0f74a460e63e1abeba8ad",
+  "startedAt": "2026-11-06T20:54:29.362Z",
+  "generatedAt": "2026-11-06T20:57:32.988Z",
+  "framePolicySha256": "f4c0324665c4fe5d49578f64826af729e4a039dd085be5fee052b8db46464e1b",
+  "frameChecks": [
+    {
+      "phase": "BEFORE_STARTUP",
+      "valid": true,
+      "total": 1,
+      "monolith": 0,
+      "cloudflare": 1,
+      "unknown": 0
+    },
+    {
+      "phase": "FALLBACK_BEFORE_STARTUP",
+      "valid": true,
+      "total": 1,
+      "monolith": 0,
+      "cloudflare": 1,
+      "unknown": 0
+    },
+    {
+      "phase": "AFTER_INJECTED_WORKER_UNAVAILABILITY",
+      "valid": true,
+      "total": 1,
+      "monolith": 0,
+      "cloudflare": 1,
+      "unknown": 0
+    }
+  ],
+  "browser": "158.0.8127.18",
+  "playwright": "1.65.0",
+  "node": "v24.22.2",
+  "layouts": [
+    {
+      "width": 1440,
+      "passed": true
+    },
+    {
+      "width": 390,
+      "passed": true
+    },
+    {
+      "width": 320,
+      "passed": true
+    },
+    {
+      "webglForcedUnavailable": true,
+      "passed": true
+    }
+  ],
+  "screenshots": [
+    {
+      "path": "published-1440.png",
+      "sha256": "46c42ecd96e81fe1acfa17d1878611b8c11498d69729effccd884e473924a7ef"
+    },
+    {
+      "path": "published-390.png",
+      "sha256": "fd14aec48c858c7054ef76ef2b8259ce07771e8a55fd31682628f5b501bfb56b"
+    },
+    {
+      "path": "published-320.png",
+      "sha256": "d1e4e2776a68f9385ede8b09406ef221618a06027b5bc8d392dbae5ff075f983"
+    },
+    {
+      "path": "published-webgl-fallback.png",
+      "sha256": "3dee066b2c6ba13e90d397af8f93aaff8022df178e3694a1b006c16534e48cd3"
+    },
+    {
+      "path": "published-worker-unavailable.png",
+      "sha256": "85747c14601d3cb2f385f1737148df67b5f2f192fcd4fe069ff6d828d484c1d1"
+    }
+  ],
+  "fault": "TEST_INJECTED_WORKER_HOST_NETWORK_ABORT",
+  "workerHostAborts": 1,
+  "attemptedExternalRequests": 0,
+  "guardSelfCheck": true,
+  "uiBlocked": true,
+  "uiErrorCode": "WORKER_UNAVAILABLE",
+  "pageErrors": 0,
+  "contextDestroyed": true,
+  "limitations": [
+    "Injected document unavailability tests startup fail-closed behavior; this is not an observed provider outage.",
+    "No worker is allowed to start in this fault case. The separate live workflow proves normal worker execution.",
+    "Separately recognized hosting security bootstrap is not anonymous; its fetched challenge runtime is outside transport verification.",
+    "Request capture covers the fresh browser context, not extensions or unrelated pages."
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "scope": "ACTUAL_PUBLIC_STATIC_DEPLOYMENT",
+  "passed": true,
+  "recordedAt": "2026-11-06T20:54:09.169Z",
+  "siteId": "appgprj_6aedf7106c2081919627f07802438881",
+  "version": {
+    "id": "appgprj_6aedf7106c2081919627f07802438881~appgver_330acfe0203c8191b8db1e9619691e2d",
+    "project_id": "appgprj_6aedf7106c2081919627f07802438881",
+    "version_number": 4,
+    "source": {
+      "commit_sha": "a9ebaff98e3b7ba96835e87d0a1c760bb0ccf1a0"
+    },
+    "archive_storage": {
+      "archive_format": "tar",
+      "sediment_file_id": "file_0000000013088208ae8805c1c6e877c8",
+      "content_hash": "sha256:5d4ecfb06f3b13002c2468a7851478e777623bf378c561ef9b65c90a6220fcbb",
+      "size_bytes": 686080,
+      "file_count": 11
+    },
+    "screenshot_url": null,
+    "deployment_id": null
+  },
+  "source": {
+    "project_id": "appgprj_6aedf7106c2081919627f07802438881",
+    "checkout_path": "/tmp/monolith-sites-release-checkout-20261106-2",
+    "commit_sha": "a9ebaff98e3b7ba96835e87d0a1c760bb0ccf1a0",
+    "archive": "/tmp/monolith-release-static-20261107-attempt5.tar.gz"
+  },
+  "deployment": {
+    "id": "appgdep_6aee3e503538819182f484dee726ba4d",
+    "project_id": "appgprj_6aedf7106c2081919627f07802438881",
+    "title": "Monolith — Privacy Regression Lab",
+    "version_id": "appgprj_6aedf7106c2081919627f07802438881~appgver_330acfe0203c8191b8db1e9619691e2d",
+    "type": "publish",
+    "status": "succeeded",
+    "url": "https://monolith-privacy-lab.madhanxdev.chatgpt.site",
+    "has_mcp": false,
+    "screenshot_asset_pointer": null,
+    "provider_deployment_id": "site---6aedf7106c2081919627f07802438881",
+    "failure_message": null,
+    "env_set_revision": 0,
+    "updated_at": "2026-11-06T20:53:55.135785+00:00"
+  },
+  "applicationSourceCommit": "5cf16137d60bd2d274a4eb3b2fe078765d0ecc70",
+  "observerOrigin": "https://e964181cf62d29.lhr.life",
+  "inputAudit": "/tmp/monolith-static-publication-preflight-20261107-attempt5.json",
+  "limitations": [
+    "Intermediate core build; normal HTTPS workflow, presenter mount and final evidence acceptance remain separate.",
+    "Public compiled artifacts only; private GitHub source visibility unchanged.",
+    "Free observer requires workstation and provider connection."
+  ]
+}

@@ -665,6 +665,175 @@ describe('SIMULATED admission at queued driver dispatch', () => {
   });
 });
 
+describe('SIMULATED ordinary read completion authority', () => {
+  it.each([
+    ['close', 'WORKER_UNAVAILABLE'],
+    ['same-endpoint rejection', 'ENDPOINT_REJECTED'],
+    ['registry expiry', 'REGISTRY_EXPIRED'],
+    ['validation TTL', 'ENDPOINT_REJECTED'],
+    ['driver route drift', 'WORKER_UNAVAILABLE'],
+    ['invalid clock', 'INVALID_INPUT'],
+  ] as const)('discards a successful read after its trace causes %s', async (kind, code) => {
+    let instant = baseTime;
+    let validClock = true;
+    let onSuccess: (() => void) | undefined;
+    let effect: Promise<unknown> | undefined;
+    const events: RpcTrace[] = [];
+    const f = fixture({ maxAttempts: 3, clock: { now: () => validClock
+      ? new Date(instant).toISOString() : 'not-a-time' }, traceSink: { emit: (event) => {
+      events.push(event);
+      if (event.readId === 'read_00000001' && event.success) {
+        const action = onSuccess; onSuccess = undefined; action?.();
+      }
+    } } });
+    await f.ready();
+    onSuccess = () => {
+      if (kind === 'close') effect = f.transport.close();
+      else if (kind === 'same-endpoint rejection') {
+        const rejected = candidate(); rejected.publisher.owner = target;
+        effect = f.transport.validateEndpoint(rejected);
+      } else if (kind === 'registry expiry') instant += 600_000;
+      else if (kind === 'validation TTL') instant += 60_000;
+      else if (kind === 'driver route drift') f.driver.route = 'direct-debug';
+      else validClock = false;
+    };
+
+    expect(await f.transport.read(request())).toEqual(failed(code));
+    await effect;
+    // Reporting already happened: retain the actual exchange once, without a retry or replacement trace.
+    expect(events.filter((event) => event.readId === 'read_00000001'))
+      .toMatchObject([{ attempt: 1, route: 'anon-nym', success: true }]);
+    expect(f.driver.calls).toHaveLength(2);
+    expect(f.driver.calls.at(-1)?.request.method).toBe('eth_blockNumber');
+    if (kind === 'close') expect(f.transport.getState()).toBe('CLOSED');
+    await f.transport.close();
+  });
+
+  it('preserves a newer trusted revision established by a successful read trace', async () => {
+    let replace: (() => void) | undefined;
+    let replacement: Promise<Result<EndpointCandidate>> | undefined;
+    const events: RpcTrace[] = [];
+    const f = fixture({ maxAttempts: 3, traceSink: { emit: (event) => {
+      events.push(event);
+      if (event.readId === 'read_00000001' && event.success) {
+        const action = replace; replace = undefined; action?.();
+      }
+    } } });
+    await f.ready();
+    const fresh = candidate(); fresh.source.revision = 'synthetic-revision-2';
+    replace = () => { replacement = f.transport.validateEndpoint(fresh); };
+
+    expect(await f.transport.read(request())).toEqual(failed('ENDPOINT_REJECTED'));
+    expect(await replacement).toEqual(ok(fresh));
+    expect(f.transport.getState()).toBe('READY');
+    expect(f.driver.calls).toHaveLength(3); // Original probe/read, then the explicitly requested replacement probe.
+    expect(events.filter((event) => event.readId === 'read_00000001'))
+      .toMatchObject([{ attempt: 1, route: 'anon-nym', success: true }]);
+    expect(await f.transport.validateEndpoint(fresh)).toEqual(ok(fresh));
+    expect(f.driver.calls).toHaveLength(3);
+    expect(await f.transport.read(request({ readId: 'read_00000002' }))).toEqual(ok('0x1'));
+    expect(f.driver.calls).toHaveLength(4);
+    await f.transport.close();
+  });
+
+  it.each(['close', 'rejection'] as const)('honors %s from the read trace clock', async (kind) => {
+    let onNow: (() => void) | undefined;
+    let effect: Promise<unknown> | undefined;
+    const f = fixture({ maxAttempts: 3, clock: { now: () => {
+      const action = onNow; onNow = undefined; action?.();
+      return new Date(baseTime).toISOString();
+    } } });
+    await f.ready();
+    f.driver.handler = async (rpc) => ok({ jsonrpc: '2.0', id: rpc.id,
+      // Arm after response admission during decoding, so the clock hook targets reporting without call ordinals.
+      get result() {
+        onNow = () => {
+          if (kind === 'close') effect = f.transport.close();
+          else {
+            const rejected = candidate(); rejected.publisher.owner = target;
+            effect = f.transport.validateEndpoint(rejected);
+          }
+        };
+        return '0x1';
+      },
+    });
+
+    expect(await f.transport.read(request()))
+      .toEqual(failed(kind === 'close' ? 'WORKER_UNAVAILABLE' : 'ENDPOINT_REJECTED'));
+    await effect;
+    expect(f.driver.calls).toHaveLength(2);
+    expect(f.traces.filter((event) => event.readId === 'read_00000001'))
+      .toMatchObject([{ attempt: 1, route: 'anon-nym' }]);
+    await f.transport.close();
+  });
+
+  it.each(['close', 'rejection'] as const)('rechecks authority when the final completion clock causes %s', async (kind) => {
+    let onNow: (() => void) | undefined;
+    let effect: Promise<unknown> | undefined;
+    const events: RpcTrace[] = [];
+    const f = fixture({ maxAttempts: 3, clock: { now: () => {
+      const action = onNow; onNow = undefined; action?.();
+      return new Date(baseTime).toISOString();
+    } }, traceSink: { emit: (event) => {
+      events.push(event);
+      if (event.readId === 'read_00000001' && event.success) onNow = () => {
+        if (kind === 'close') effect = f.transport.close();
+        else {
+          const rejected = candidate(); rejected.publisher.owner = target;
+          effect = f.transport.validateEndpoint(rejected);
+        }
+      };
+    } } });
+    await f.ready();
+
+    expect(await f.transport.read(request()))
+      .toEqual(failed(kind === 'close' ? 'WORKER_UNAVAILABLE' : 'ENDPOINT_REJECTED'));
+    await effect;
+    expect(onNow).toBeUndefined();
+    expect(f.driver.calls).toHaveLength(2);
+    expect(events.filter((event) => event.readId === 'read_00000001'))
+      .toMatchObject([{ attempt: 1, route: 'anon-nym', success: true }]);
+    await f.transport.close();
+  });
+
+  it.each(['normal', 'no-op', 'throwing', 'cached validation', 'unrelated rejection'] as const)(
+    'preserves useful completion with a %s reporting sink', async (kind) => {
+      let onSuccess: (() => void) | undefined;
+      let effect: Promise<unknown> | undefined;
+      const events: RpcTrace[] = [];
+      const f = fixture({ traceSink: { emit: (event) => {
+        events.push(event);
+        if (event.readId === 'read_00000001' && event.success) {
+          const action = onSuccess; onSuccess = undefined; action?.();
+        }
+      } } });
+      await f.ready();
+      const other = { ...candidate(), endpointId: 'endpoint_0002', rpcUrl: 'https://rpc.example.com/other' };
+      if (kind === 'unrelated rejection') expect(await f.transport.validateEndpoint(other)).toEqual(ok(other));
+      if (kind === 'no-op') onSuccess = () => undefined;
+      else if (kind === 'throwing') onSuccess = () => { throw new Error('synthetic sink failure'); };
+      else if (kind === 'cached validation') onSuccess = () => { effect = f.transport.validateEndpoint(candidate()); };
+      else if (kind === 'unrelated rejection') onSuccess = () => {
+        const unrelated = structuredClone(other); unrelated.publisher.owner = target;
+        effect = f.transport.validateEndpoint(unrelated);
+      };
+
+      expect(await f.transport.read(request())).toEqual(ok('0x1'));
+      await effect;
+      expect(events.filter((event) => event.readId === 'read_00000001'))
+        .toMatchObject([{ attempt: 1, route: 'anon-nym', success: true }]);
+      expect(await f.transport.validateEndpoint(candidate())).toEqual(ok(candidate()));
+      if (kind === 'unrelated rejection') {
+        expect(await f.transport.read(request({ readId: 'read_00000002', endpointId: other.endpointId })))
+          .toEqual(failed('ENDPOINT_REJECTED'));
+      }
+      expect(f.driver.calls).toHaveLength(kind === 'unrelated rejection' ? 3 : 2);
+      expect(f.transport.getState()).toBe('READY');
+      await f.transport.close();
+    },
+  );
+});
+
 describe('SIMULATED request, response and retry boundaries', () => {
   it('blocks ordinary reads until their exact endpoint and chain are validated', async () => {
     const f = fixture(); await f.transport.initialize();

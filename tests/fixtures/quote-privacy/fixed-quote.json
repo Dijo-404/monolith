@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "evidence": "SIMULATED",
+  "description": "Offline ABI vectors only. The return words are invented test values, not a market quote, pool observation, protected read or live deployment check.",
+  "scenario": {
+    "chainId": "10",
+    "quoter": "0x61fFE014bA17989E743c5F6cB21bF9697530B21e",
+    "tokenIn": "0x4200000000000000000000000000000000000006",
+    "tokenOut": "0x0b2C639c533813f4Aa9D7837CAf62653d097Ff85",
+    "amountIn": "10000000000000000",
+    "fee": 500,
+    "sqrtPriceLimitX96": "0",
+    "blockTag": "latest",
+    "selector": "0xc6a5026a",
+    "callsite": "quote.fixed.exact-input"
+  },
+  "abi": {
+    "signature": "quoteExactInputSingle((address,address,uint256,uint24,uint160))",
+    "inputs": ["tokenIn:address", "tokenOut:address", "amountIn:uint256", "fee:uint24", "sqrtPriceLimitX96:uint160"],
+    "outputs": ["amountOut:uint256", "sqrtPriceX96After:uint160", "initializedTicksCrossed:uint32", "gasEstimate:uint256"],
+    "calldataBytes": 164,
+    "returnBytes": 128,
+    "goldenVectorCheck": "Fixed calldata independently cross-checked offline with viem 2.57.16. No RPC provider was constructed or contacted.",
+    "sources": [
+      "https://github.com/Uniswap/v3-periphery/blob/24ccf014fe7f81d74a14c1689d6fdf123f280e45/contracts/interfaces/IQuoterV2.sol",
+      "https://github.com/Uniswap/v3-sdk/blob/4e16fe8e56c8c26541545f138c89133794c7ce72/src/quoter.test.ts",
+      "https://github.com/Uniswap/default-token-list/blob/fc629302df08c20aa5ca368212b5e416b2299e27/src/tokens/optimism.json",
+      "https://github.com/Uniswap/v3-core/blob/5ea68a77cb541c6b3812df783be71ba8c081e25f/contracts/libraries/TickMath.sol",
+      "https://developers.uniswap.org/docs/protocols/v3/deployments/v3-optimism-deployments"
+    ]
+  },
+  "calldata": "0xc6a5026a00000000000000000000000042000000000000000000000000000000000000060000000000000000000000000b2c639c533813f4aa9d7837caf62653d097ff85000000000000000000000000000000000000000000000000002386f26fc1000000000000000000000000000000000000000000000000000000000000000001f40000000000000000000000000000000000000000000000000000000000000000",
+  "result": {
+    "encoded": "0x00000000000000000000000000000000000000000000000000000000017d7840000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000030d40",
+    "decoded": {
+      "amountOut": "25000000",
+      "sqrtPriceX96After": "79228162514264337593543950336",
+      "initializedTicksCrossed": "2",
+      "gasEstimate": "200000"
+    }
+  }
+}

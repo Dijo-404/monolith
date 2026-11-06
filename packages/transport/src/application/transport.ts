@@ -161,7 +161,13 @@ export function createMonolithTransport(options: TransportOptions): MonolithTran
         }
       }
       trace(request, attempt, startedAt, result, !dispatched);
-      if (result.ok) return result;
+      if (result.ok) {
+        // Reporting callbacks may revoke the completed result before handoff.
+        if (!available() || expectedGeneration !== generation) return failure('WORKER_UNAVAILABLE');
+        const stale = validateCurrent();
+        if (!available() || expectedGeneration !== generation) return failure('WORKER_UNAVAILABLE');
+        return stale ? failure(stale) : result;
+      }
       if (state !== 'CLOSED') state = 'DEGRADED';
       if (!result.error.retryable || attempt === configuration.maxAttempts || !available()
         || expectedGeneration !== generation) return result;
