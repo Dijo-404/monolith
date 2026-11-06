@@ -71,7 +71,7 @@ function stringValue(row: Record<string, unknown>, name: string): string | undef
     return undefined;
   }
   const value = attribute.value;
-  if (new TextEncoder().encode(value).length > 128 || /[\u0000-\u001f\u007f]/.test(value)) {
+  if (new TextEncoder().encode(value).length > 128 || /\p{Cc}/u.test(value)) {
     return undefined;
   }
   return value;
@@ -89,7 +89,7 @@ function timestamp(value: unknown): number | undefined {
 
 /** Syntax-only public HTTPS policy. DNS and actual host authorization are later gates. */
 function publicHttps(value: unknown): value is string {
-  if (typeof value !== 'string' || /[\s\u0000-\u001f\u007f\\${}<>]/.test(value)) return false;
+  if (typeof value !== 'string' || /[\s\p{Cc}\\${}<>]/u.test(value)) return false;
   try {
     const url = new URL(value);
     if (url.protocol !== 'https:' || url.username || url.password || url.hash || url.port) return false;

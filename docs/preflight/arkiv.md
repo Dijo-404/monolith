@@ -135,6 +135,12 @@ truthful unprobed labels, safe projections, SDK query construction/escaping and 
 sample compatibility. `bash -n` passed for the launcher. A real public query returned zero rows
 as recorded above; no write success is implied.
 
+After rebasing onto merged foundation `4bbd38b`, `pnpm install --frozen-lockfile` and
+`pnpm check` passed: lint, all public-consumer/workspace typechecks, 151 workspace tests and
+production builds. The isolated 16-test suite also passed again. The launcher refused a
+repository directory as its dependency environment before editing dependencies. Markdown
+links/fences and `git diff origin/main --check` passed. Shared manifests and lockfile are unchanged.
+
 To finish MN-005: fund the dedicated publishers, execute the real writes, independently query
 the expected entity and actual foreign control, record transaction/entity/expiry references,
 then rerun integration checks on the merged foundation. Keep MN-008 and registry-dependent
