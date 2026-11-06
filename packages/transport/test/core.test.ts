@@ -447,6 +447,143 @@ describe('SIMULATED trust and endpoint validation', () => {
   });
 });
 
+describe('SIMULATED admission at queued driver dispatch', () => {
+  it.each(['balance read', 'chain probe'] as const)(
+    'does not dispatch a queued %s after same-endpoint publisher rejection', async (kind) => {
+      const f = fixture(); await f.transport.initialize();
+      if (kind === 'balance read') await f.transport.validateEndpoint(candidate());
+      const sent = f.driver.calls.length;
+      f.traces.length = 0;
+      const pending = kind === 'balance read'
+        ? f.transport.read(request({ method: 'eth_getBalance', params: [publisher, 'latest'], callsite: 'lab.balance' }))
+        : f.transport.validateEndpoint(candidate());
+      expect(f.driver.calls).toHaveLength(sent);
+      const rejected = candidate(); rejected.publisher.creator = target;
+      expect(await f.transport.validateEndpoint(rejected)).toEqual(failed('REGISTRY_UNTRUSTED'));
+      expect(await pending).toEqual(failed('ENDPOINT_REJECTED'));
+      expect(f.driver.calls).toHaveLength(sent);
+      expect(f.traces).toHaveLength(1);
+      expect(f.traces[0]).toMatchObject({ route: 'blocked', success: false, errorCode: 'ENDPOINT_REJECTED' });
+      expect(await f.transport.validateEndpoint(candidate())).toEqual(ok(candidate()));
+      expect(await f.transport.read(request())).toEqual(ok('0x1'));
+      expect(f.driver.calls).toHaveLength(sent + 2);
+      await f.transport.close();
+    },
+  );
+
+  it.each([
+    ['registry expiry', 600_000, 'REGISTRY_EXPIRED'],
+    ['validation TTL', 60_000, 'ENDPOINT_REJECTED'],
+  ] as const)('does not dispatch a queued useful read after %s', async (_name, milliseconds, code) => {
+    const f = fixture(); await f.ready();
+    const pending = f.transport.read(request({
+      method: 'eth_getBalance', params: [publisher, 'latest'], callsite: 'lab.balance',
+    }));
+    expect(f.driver.calls).toHaveLength(1);
+    f.advance(milliseconds);
+    expect(await pending).toEqual(failed(code));
+    expect(f.driver.calls).toHaveLength(1);
+    expect(f.traces.at(-1)).toMatchObject({ route: 'blocked', success: false, errorCode: code });
+    await f.transport.close();
+  });
+
+  it('does not dispatch a queued chain probe after its candidate expires', async () => {
+    const f = fixture(); await f.transport.initialize();
+    const pending = f.transport.validateEndpoint(candidate());
+    expect(f.driver.calls).toHaveLength(0);
+    f.advance(600_000);
+    expect(await pending).toEqual(failed('REGISTRY_EXPIRED'));
+    expect(f.driver.calls).toHaveLength(0);
+    expect(f.transport.getState()).toBe('DEGRADED');
+    expect(f.traces.at(-1)).toMatchObject({ route: 'blocked', errorCode: 'REGISTRY_EXPIRED' });
+    await f.transport.close();
+  });
+
+  it('dispatches only the newer queued probe and preserves cached validation and useful reads', async () => {
+    const f = fixture(); await f.transport.initialize();
+    const older = f.transport.validateEndpoint(candidate());
+    const current = candidate(); current.source.revision = 'synthetic-revision-2';
+    const newer = f.transport.validateEndpoint(current);
+    expect(f.driver.calls).toHaveLength(0);
+    expect(await older).toEqual(failed('ENDPOINT_REJECTED'));
+    expect(await newer).toEqual(ok(current));
+    expect(f.driver.calls).toHaveLength(1);
+    expect(f.traces.map((event) => event.route)).toEqual(['blocked', 'anon-nym']);
+    expect(await f.transport.validateEndpoint(current)).toEqual(ok(current));
+    expect(f.driver.calls).toHaveLength(1);
+    expect(await f.transport.read(request())).toEqual(ok('0x1'));
+    expect(f.driver.calls).toHaveLength(2);
+    await f.transport.close();
+  });
+
+  it('revokes one queued endpoint without suppressing a different useful read', async () => {
+    const f = fixture(); await f.ready();
+    const other = { ...candidate(), endpointId: 'endpoint_0002', rpcUrl: 'https://rpc.example.com/other' };
+    expect(await f.transport.validateEndpoint(other)).toEqual(ok(other));
+    const revoked = f.transport.read(request());
+    const useful = f.transport.read(request({ readId: 'read_00000002', endpointId: other.endpointId }));
+    expect(f.driver.calls).toHaveLength(2);
+    const rejected = candidate(); rejected.publisher.owner = target;
+    expect(await f.transport.validateEndpoint(rejected)).toEqual(failed('REGISTRY_UNTRUSTED'));
+    expect(await revoked).toEqual(failed('ENDPOINT_REJECTED'));
+    expect(await useful).toEqual(ok('0x1'));
+    expect(f.driver.calls).toHaveLength(3);
+    expect(f.driver.calls.at(-1)?.url).toBe(other.rpcUrl);
+    expect(f.traces.filter((event) => event.readId === 'read_00000001'))
+      .toMatchObject([{ route: 'blocked', success: false }]);
+    expect(f.traces.filter((event) => event.readId === 'read_00000002'))
+      .toMatchObject([{ route: 'anon-nym', success: true }]);
+    await f.transport.close();
+  });
+
+  it.each(['rejection', 'close'] as const)('honors %s from the dispatch-time clock before sending a probe', async (kind) => {
+    let onNow: (() => void) | undefined;
+    let sideEffect: Promise<unknown> | undefined;
+    const f = fixture({ clock: { now: () => {
+      onNow?.();
+      return new Date(baseTime).toISOString();
+    } } });
+    await f.transport.initialize();
+    const pending = f.transport.validateEndpoint(candidate());
+    onNow = () => {
+      onNow = undefined;
+      if (kind === 'close') sideEffect = f.transport.close();
+      else {
+        const rejected = candidate(); rejected.source.revision = '';
+        sideEffect = f.transport.validateEndpoint(rejected);
+      }
+    };
+    expect(await pending).toEqual(failed(kind === 'close' ? 'WORKER_UNAVAILABLE' : 'ENDPOINT_REJECTED'));
+    await sideEffect;
+    expect(f.driver.calls).toHaveLength(0);
+    expect(f.traces.at(-1)).toMatchObject({ route: 'blocked', success: false });
+    await f.transport.close();
+  });
+
+  it.each(['read', 'probe'] as const)('records a queued %s closed before dispatch as blocked', async (kind) => {
+    const f = fixture(); await f.transport.initialize();
+    if (kind === 'read') await f.transport.validateEndpoint(candidate());
+    const sent = f.driver.calls.length;
+    const pending = kind === 'read' ? f.transport.read(request()) : f.transport.validateEndpoint(candidate());
+    const closing = f.transport.close();
+    expect(await pending).toEqual(failed('WORKER_UNAVAILABLE'));
+    await closing;
+    expect(f.driver.calls).toHaveLength(sent);
+    expect(f.traces.at(-1)).toMatchObject({ route: 'blocked', success: false, errorCode: 'WORKER_UNAVAILABLE' });
+    expect(f.transport.getState()).toBe('CLOSED');
+  });
+
+  it('does not dispatch when the worker route changes while a read is queued', async () => {
+    const f = fixture(); await f.ready();
+    const pending = f.transport.read(request());
+    f.driver.route = 'direct-debug';
+    expect(await pending).toEqual(failed('WORKER_UNAVAILABLE'));
+    expect(f.driver.calls).toHaveLength(1);
+    expect(f.traces.at(-1)).toMatchObject({ route: 'blocked', success: false });
+    await f.transport.close();
+  });
+});
+
 describe('SIMULATED request, response and retry boundaries', () => {
   it('blocks ordinary reads until their exact endpoint and chain are validated', async () => {
     const f = fixture(); await f.transport.initialize();
