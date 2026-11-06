@@ -5,16 +5,19 @@ interface StageFallbackProps {
   readonly scene: StageScene;
   readonly flights: readonly StageFlight[];
   readonly onSelect: (target: StageTarget) => void;
+  readonly live?: boolean;
 }
 
 /** Static schematic of the same routes for browsers without WebGL2. */
-export function StageFallback({ scene, flights, onSelect }: StageFallbackProps) {
+export function StageFallback({ scene, flights, onSelect, live = false }: StageFallbackProps) {
   const active = new Set(flights.filter((flight) => flight.durationMs !== null).map((flight) => flight.lane));
   const blocked = scene.workerState === 'BLOCKED' || scene.workerState === 'CLOSED';
   return (
     <div className="stage-fallback">
-      <svg viewBox="0 0 800 360" role="img" aria-label="Route schematic: the Anon-RPC lane passes three relays, the direct lane goes straight to the RPC endpoint, and the Whitechain lane is public and not enabled.">
-        <path className="fallback-lane fallback-lane--settlement" d="M 120 190 C 220 300 360 320 470 316" />
+      <svg viewBox="0 0 800 360" role="img" aria-label={live
+        ? 'Illustrative private and direct network paths. Hop count is not measured; actual outcomes are listed below.'
+        : 'Route schematic: the Anon-RPC lane passes three relays, the direct lane goes straight to the RPC endpoint, and the Whitechain lane is public and not enabled.'}>
+        {!live && <path className="fallback-lane fallback-lane--settlement" d="M 120 190 C 220 300 360 320 470 316" />}
         <path
           className={`fallback-lane fallback-lane--direct${active.has('direct') ? ' is-active' : ''}${scene.privateMode ? '' : ' is-open'}`}
           d="M 120 190 C 300 230 520 230 668 214"
@@ -47,7 +50,7 @@ export function StageFallback({ scene, flights, onSelect }: StageFallbackProps) 
               transform={`rotate(45 ${x} ${y})`}
             />
           ))}
-        <rect className="fallback-ledger" x="456" y="304" width="40" height="22" rx="3" />
+        {!live && <rect className="fallback-ledger" x="456" y="304" width="40" height="22" rx="3" />}
         {scene.leakInjected && <rect className="fallback-widget" x="150" y="268" width="36" height="22" rx="3" />}
         <circle className={`fallback-client${blocked ? ' is-blocked' : ''}`} cx="120" cy="190" r="26" />
         <rect className="fallback-slab" x="668" y="40" width="64" height="290" rx="2" />

@@ -2,6 +2,14 @@
   "schemaVersion": 1,
   "reviewedBase": "dbb1d7e923da69c72be57fcec0413c67a858e6a1",
   "files": {
+    "apps/dashboard/src/composition/lab.ts": {
+      "sha256": "10d8a5a7b538464dfa33b9652031a84f2ede6bf43e1e38c038e887dded8802e5",
+      "purpose": "Fixed public allocation/diagnostic metadata and reviewed registry/verified-worker composition. Captured native send capability is injected only into the explicit synthetic direct fixture; never private fallback."
+    },
+    "apps/dashboard/src/features/lab/direct-fixture.ts": {
+      "sha256": "b2afba31bf8f440cd6fe248a033cb7d3f7d18328bf60f626e360a6f0bec88326",
+      "purpose": "Separately consented fixed zero-address balance negative control/leak at the configured observer lab_optimism/run route. Bounded responses/cancellation, omitted credentials and no redirects; never ordinary private fallback."
+    },
     "apps/dashboard/src/composition/registry.ts": {
       "sha256": "e41ea93e5ee598898f59200b0b97d0e528b22c333b029bff3b9edb77bf1dd96f",
       "purpose": "Bounded public chain metadata; no wallet-specific lookup or direct chain probe."
