@@ -99,7 +99,7 @@ jobs:
         shell: bash
         run: |
           gh api --paginate --slurp 'users/Dijo-404/packages?package_type=npm&per_page=100' \
-            --jq 'add | map(select((.name == "monolith-cli" or .name == "@dijo-404/monolith-cli") and .package_type == "npm")) | if length == 1 then .[0] | {name, package_type, visibility, html_url, repository: .repository.full_name} else error("Expected exactly one Monolith CLI package") end' \
+            | jq 'add | map(select((.name == "monolith-cli" or .name == "@dijo-404/monolith-cli") and .package_type == "npm")) | if length == 1 then .[0] | {name, package_type, visibility, html_url, repository: .repository.full_name} else error("Expected exactly one Monolith CLI package") end' \
             > "$RUNNER_TEMP/github-package-metadata.json"
           node --input-type=module -e '
             import assert from "node:assert/strict";
