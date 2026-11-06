@@ -1,0 +1,35 @@
+{
+  "extends": "../../../tsconfig.base.json",
+  "compilerOptions": {
+    "lib": [
+      "ES2023",
+      "DOM",
+      "DOM.Iterable"
+    ],
+    "types": [],
+    "noEmit": true,
+    "paths": {
+      "@monolith/shared": [
+        "../../../packages/shared/dist/index.d.ts"
+      ],
+      "@monolith/transport": [
+        "../../../packages/transport/dist/index.d.ts"
+      ],
+      "@monolith/transport/browser": [
+        "../../../packages/transport/dist/browser.d.ts"
+      ],
+      "@anon-rpc/browser-harness": [
+        "../../../packages/transport/node_modules/@anon-rpc/browser-harness/dist/types/host/index.d.ts"
+      ],
+      "@mn009/official-browser-harness": [
+        "../../../packages/transport/node_modules/@anon-rpc/browser-harness/dist/types/host/index.d.ts"
+      ]
+    }
+  },
+  "files": [
+    "main.ts",
+    "host.ts",
+    "lab-driver.ts",
+    "harness.ts"
+  ]
+}
