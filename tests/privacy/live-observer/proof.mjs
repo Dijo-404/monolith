@@ -90,6 +90,7 @@ export function validatePairedProof(input, nowISO) {
   const logicalAttempts = new Set();
   let previousCompleted = started;
   let baseline;
+  let controlCount = 0;
   let comparison;
   let protectedStarted = false;
   let probeCount = 0;
@@ -112,6 +113,7 @@ export function validatePairedProof(input, nowISO) {
       baseline = entry;
     } else if (!baseline) return reject('INVALID_BASELINE_ORDER');
     if (entry.role === 'direct-control' && protectedStarted) return reject('INVALID_REQUEST_ORDER');
+    if (entry.role === 'direct-control') controlCount++;
     if (entry.role.startsWith('protected-')) protectedStarted = true;
     if (entry.role === 'protected-probe') {
       if (entry.method !== 'eth_chainId' || entry.requestFingerprint !== CHAIN_FINGERPRINT
@@ -126,6 +128,7 @@ export function validatePairedProof(input, nowISO) {
     }
   }
   if (!baseline || !comparison || probeCount === 0) return reject('INCOMPLETE_PAIRED_RUN');
+  if (controlCount !== 1) return reject('DIRECT_CONTROL_INVENTORY_INVALID');
   // Different block heights can produce different genuine balance values. We
   // compare request inputs, not equality of changing chain-state responses.
   const observations = new Map();
