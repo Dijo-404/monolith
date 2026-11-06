@@ -131,9 +131,11 @@ measured failing report is retained. The card shows the bounded route diff, the
 earlier failure and the distinct current report; it never edits arbitrary source.
 
 Follow this script only in a deployment prepared by the MN-014/MN-025/MN-023
-owners; these instructions do not start, replace or publish a service. A final
-assembled build and genuine deployed presenter-button capture remain required
-before MN-016 or core release acceptance. The
+owners; these instructions do not start, replace or publish a service. A genuine
+deployed presenter-button run passed at the named clean assembled source. Its
+[original capture and route-only repair evidence](../tests/e2e/break-fix/observed-live/2026-11-07/README.md)
+retain the actual source, runtime, report IDs and limits. Normal owner task
+acceptance and the separate core release remain tracked on issues 16 and 17. The
 [live acceptance runner and setup](../tests/e2e/lab-ui/README.md)
 document how the owning sessions bind an actual capture to reviewed source and
 compiled assets.
