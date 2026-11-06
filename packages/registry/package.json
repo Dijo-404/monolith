@@ -20,6 +20,10 @@
     "./reader": {
       "types": "./dist/adapters/arkiv/reader.d.ts",
       "import": "./dist/adapters/arkiv/reader.js"
+    },
+    "./swarm-release": {
+      "types": "./dist/swarm-release.d.ts",
+      "import": "./dist/swarm-release.js"
     }
   },
   "scripts": {
