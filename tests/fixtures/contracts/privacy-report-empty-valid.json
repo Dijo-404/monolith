@@ -1,0 +1,28 @@
+{
+  "fixtureVersion": 1,
+  "evidence": "SIMULATED",
+  "description": "Synthetic empty report uses null coverage and makes no functional acceptance claim.",
+  "contract": "privacyReportSchema",
+  "expected": "valid",
+  "payload": {
+    "schemaVersion": 1,
+    "runId": "fixture-run-001",
+    "evidence": "SIMULATED",
+    "eligibleReads": 0,
+    "protectedReads": 0,
+    "successfulReads": 0,
+    "protectedCoverage": null,
+    "findings": [],
+    "scope": {
+      "rpcOrigins": [
+        "https://rpc.example.com"
+      ],
+      "scenarios": [
+        "GT-03"
+      ],
+      "bootstrapExclusions": [
+        "specifier-lookup"
+      ]
+    }
+  }
+}

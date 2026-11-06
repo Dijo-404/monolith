@@ -1,0 +1,13 @@
+{
+  "fixtureVersion": 1,
+  "evidence": "SIMULATED",
+  "description": "Negative test: unsupported JSON-RPC protocol version.",
+  "contract": "jsonRpcRequestSchema",
+  "expected": "invalid",
+  "payload": {
+    "jsonrpc": "1.0",
+    "id": "fixture-rpc-001",
+    "method": "eth_chainId",
+    "params": []
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "fixtureVersion": 1,
+  "evidence": "SIMULATED",
+  "description": "Negative test: an explicit loopback destination is rejected before network policy evaluation.",
+  "contract": "endpointCandidateSchema",
+  "expected": "invalid",
+  "payload": {
+    "endpointId": "fixture-endpoint-001",
+    "chainId": "1",
+    "chainName": "Synthetic fixture chain",
+    "rpcUrl": "https://127.0.0.1",
+    "publisher": {
+      "creator": "0x1111111111111111111111111111111111111111",
+      "owner": "0x1111111111111111111111111111111111111111"
+    },
+    "entityKey": "0x2222222222222222222222222222222222222222222222222222222222222222",
+    "expiresAt": "2030-01-01T01:00:00Z",
+    "source": {
+      "url": "https://source.example.com/chains",
+      "revision": "1111111111111111111111111111111111111111",
+      "licenseUrl": "https://source.example.com/LICENSE",
+      "snapshotSha256": "3333333333333333333333333333333333333333333333333333333333333333"
+    }
+  }
+}

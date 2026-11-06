@@ -1,0 +1,8 @@
+{
+  "fixtureVersion": 1,
+  "evidence": "SIMULATED",
+  "description": "Negative test: unavailable is an error condition, not an invented worker-state enum.",
+  "contract": "workerStateSchema",
+  "expected": "invalid",
+  "payload": "UNAVAILABLE"
+}

@@ -1,0 +1,23 @@
+{
+  "fixtureVersion": 1,
+  "evidence": "SIMULATED",
+  "description": "Negative test: diagnostics must not acquire an extra raw-IP field.",
+  "contract": "rpcTraceSchema",
+  "expected": "invalid",
+  "payload": {
+    "schemaVersion": 1,
+    "readId": "fixture-read-001",
+    "attempt": 1,
+    "endpointId": "fixture-endpoint-001",
+    "chainId": "1",
+    "method": "eth_chainId",
+    "callsite": "fixture.chain-id:1",
+    "route": "anon-tor",
+    "durationMs": 25,
+    "success": true,
+    "bootstrap": false,
+    "evidence": "SIMULATED",
+    "payloadVisibility": "rpc-endpoint-can-read",
+    "rawIp": "192.0.2.123"
+  }
+}

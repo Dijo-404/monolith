@@ -1,0 +1,19 @@
+{
+  "fixtureVersion": 1,
+  "evidence": "SIMULATED",
+  "description": "Negative test: a policy cannot opt out of failing closed.",
+  "contract": "routePolicySchema",
+  "expected": "invalid",
+  "payload": {
+    "privacyRequired": true,
+    "allowedChains": [
+      "1"
+    ],
+    "allowedMethods": [
+      "eth_chainId",
+      "eth_getBalance"
+    ],
+    "allowDirectDebugControl": false,
+    "failClosed": false
+  }
+}

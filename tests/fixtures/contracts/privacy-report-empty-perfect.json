@@ -1,0 +1,28 @@
+{
+  "fixtureVersion": 1,
+  "evidence": "SIMULATED",
+  "description": "Negative test: an empty run cannot fabricate perfect coverage.",
+  "contract": "privacyReportSchema",
+  "expected": "invalid",
+  "payload": {
+    "schemaVersion": 1,
+    "runId": "fixture-run-001",
+    "evidence": "SIMULATED",
+    "eligibleReads": 0,
+    "protectedReads": 0,
+    "successfulReads": 0,
+    "protectedCoverage": 1,
+    "findings": [],
+    "scope": {
+      "rpcOrigins": [
+        "https://rpc.example.com"
+      ],
+      "scenarios": [
+        "GT-03"
+      ],
+      "bootstrapExclusions": [
+        "specifier-lookup"
+      ]
+    }
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "fixtureVersion": 1,
+  "evidence": "SIMULATED",
+  "description": "Negative test: coverage must match the measured protected/eligible counts.",
+  "contract": "privacyReportSchema",
+  "expected": "invalid",
+  "payload": {
+    "schemaVersion": 1,
+    "runId": "fixture-run-001",
+    "evidence": "SIMULATED",
+    "eligibleReads": 2,
+    "protectedReads": 1,
+    "successfulReads": 2,
+    "protectedCoverage": 1,
+    "findings": [
+      {
+        "code": "DIRECT_BYPASS",
+        "readId": "fixture-read-002",
+        "callsite": "fixture.balance:2",
+        "message": "Synthetic direct-read bypass for fixture validation."
+      }
+    ],
+    "scope": {
+      "rpcOrigins": [
+        "https://rpc.example.com"
+      ],
+      "scenarios": [
+        "GT-03"
+      ],
+      "bootstrapExclusions": [
+        "specifier-lookup"
+      ]
+    }
+  }
+}

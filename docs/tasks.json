@@ -62,7 +62,13 @@
     "paths": [
       "packages/shared/src/**",
       "tests/fixtures/contracts/**",
-      "docs/contracts.md"
+      "docs/contracts.md",
+      "packages/shared/test/**",
+      "packages/shared/tsconfig.test.json",
+      "packages/shared/tsconfig.json",
+      "packages/shared/package.json",
+      "pnpm-lock.yaml",
+      "docs/tasks.json"
     ],
     "scope": [
       "Implement the initial DTOs, validation schemas and error codes from docs/contracts.md using the Monolith naming.",

@@ -1,0 +1,13 @@
+{
+  "fixtureVersion": 1,
+  "evidence": "SIMULATED",
+  "description": "Synthetic permitted chain-ID request; no network is contacted.",
+  "contract": "jsonRpcRequestSchema",
+  "expected": "valid",
+  "payload": {
+    "jsonrpc": "2.0",
+    "id": "fixture-rpc-001",
+    "method": "eth_chainId",
+    "params": []
+  }
+}
