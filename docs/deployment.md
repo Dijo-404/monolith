@@ -28,7 +28,7 @@ With the accepted UI merged, the preceding combined `pnpm check` passed 1,173 te
 
 ## Publication state
 
-The selected Sites project identity is tracked in `.openai/hosting.json`. It has been registered once and remains unpublished at this preparation stage. Generate a new snapshot from the final tested source with the actual current HTTPS backend; never publish the smoke artifact above as the final product.
+The selected Sites project identity is tracked in `.openai/hosting.json`. It has been registered once and remains unpublished at this preparation stage. Generate a new snapshot from the final tested source with the actual current HTTPS backend; never publish the smoke artifact above as the final product. The final packager also emits a hash-bound, served `assets/THIRD-PARTY-NOTICES.txt`, so the published distribution carries the project, dependency and font licenses.
 
 Use the Sites source workflow against that isolated artifact-only snapshot, persist the same Site identity, and pass credentials only through its hidden stdin. Save/deploy the returned exact source commit and unchanged archive. Record the actual saved version, deployment result, public URL, browser check and backend lifetime here when publication runs.
 

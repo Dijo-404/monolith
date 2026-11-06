@@ -153,6 +153,7 @@ test('private committed source produces bound assets; source archive and ignored
   assert.equal(provenance.sourceRepositoryVisibility, 'private');
   assert.equal(provenance.sourceDisclosure, 'compiled-static-artifact-only');
   assert.equal(provenance.source.archiveRetained, false);
+  assert.equal(provenance.artifacts.some((entry) => entry.path === 'dist/assets/THIRD-PARTY-NOTICES.txt'), true);
   for (const artifact of provenance.artifacts) {
     const bytes = await readFile(join(f.options.out, artifact.path));
     assert.equal(bytes.length, artifact.bytes);
@@ -186,6 +187,10 @@ test('required font/runtime notices are retained without copying similarly named
   assert.equal(provenance.retainedNotices.some((entry) => entry.path.endsWith('/OFL-WixMadeforDisplay.txt')), true);
   assert.equal(provenance.retainedNotices.some((entry) => entry.path.endsWith('/OFL-WixMadeforText.txt')), true);
   assert.equal(provenance.retainedNotices.some((entry) => entry.path.endsWith('/LICENSE.ts')), false);
+  const publicNotices = await readFile(join(f.options.out, 'dist/assets/THIRD-PARTY-NOTICES.txt'), 'utf8');
+  assert.equal(publicNotices.includes('Fixture runtime MIT notice'), true);
+  assert.equal(publicNotices.includes('OFL-WixMadeforDisplay.txt'), true);
+  assert.equal(publicNotices.includes('private-source-sentinel-never-disclose'), false);
   for (const entry of provenance.retainedNotices) {
     const bytes = await readFile(join(f.options.out, entry.path));
     assert.equal(createHash('sha256').update(bytes).digest('hex'), entry.sha256);

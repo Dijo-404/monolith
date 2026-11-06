@@ -24,13 +24,14 @@ forwarded. Installation lifecycle scripts and pnpmfile hooks are disabled.
 Output is a new directory containing:
 
 - `dist/index.html` and `dist/assets/`: the static web root.
+- `dist/assets/THIRD-PARTY-NOTICES.txt`: the project and retained dependency/font licenses, available with the public static distribution.
 - `LICENSE`, `README.md`, `notices/` when applicable, and `provenance.json`: source commit, internal Git archive/asset hashes,
   versions, public build configuration and scope limitations.
 
 The private source archive exists only inside the temporary build directory and is
 deleted afterward; private application source is not copied into the snapshot. License
 notices from the dashboard's runtime dependency closure and tracked font/source notices
-are retained outside the static web root. The repository was verified private during
+are retained individually outside the static web root and bundled into the served notice file. The repository was verified private during
 MN-023; the helper records that observation without making a GitHub API request.
 
 The helper never deploys. Runtime readiness, browser checks, the configured observer,

@@ -281,11 +281,17 @@ export async function prepareStatic(options) {
       '--store-dir', join(temp, 'store')], { cwd: source, env });
     await run(pnpm, ['build'], { cwd: source, env });
     const dist = join(source, 'apps/dashboard/dist');
-    const artifacts = await inspectDistribution(dist);
+    await inspectDistribution(dist);
     const archiveSha256 = sha256(await readFile(tar));
     const license = await readFile(join(source, 'LICENSE'));
     requireValue(license.length > 0, 'A retained source license is required.');
     const notices = await collectNotices(source, entries);
+    const publicNotices = Buffer.concat([
+      Buffer.from('Monolith and third-party license notices\n\n=== Monolith LICENSE ===\n\n'), license,
+      ...notices.flatMap((notice) => [Buffer.from(`\n\n=== ${notice.path} ===\n\n`), notice.bytes]),
+    ]);
+    await writeFile(join(dist, 'assets/THIRD-PARTY-NOTICES.txt'), publicNotices, { flag: 'wx' });
+    const artifacts = await inspectDistribution(dist);
     const provenance = {
       schemaVersion: 1,
       generatedAt: new Date().toISOString(),
