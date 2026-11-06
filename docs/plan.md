@@ -6,6 +6,8 @@ Use the shared [Agents view](https://github.com/Dijo-404/monolith/issues/views/M
 
 ## Outcome and gates
 
+**Current target decision — 7 November 2026:** The owner selected EF, Arkiv, Uniswap and Whitechain as development targets. Complete Whitechain Scale, Operate and Tokenize through the [track completion plan](track-completion-plan.md). MN-018–022 are activated work, with new MN-030 merchant integration and MN-031 asset lifecycle extensions. Actual prerequisites, safe route selection and evidence acceptance still determine implementation order; MN-017 remains independently releasable. The final event form permits three partner selections.
+
 The core demo must run a genuine Anon-RPC read, compare its observed path with an explicit direct control, detect a newly injected direct-RPC leak, repair it and rerun the same functional tests. A real Arkiv import/query must supply the endpoint selection. The destination still sees JSON-RPC payloads, and worker bootstrap is disclosed as non-anonymous.
 
 | Gate | Pass evidence | Decision on failure |
@@ -16,10 +18,10 @@ The core demo must run a genuine Anon-RPC read, compare its observed path with a
 | Arkiv feasibility | MN-005 actual write and independent trusted query | Keep privacy work moving; if unresolved, remove the Arkiv qualification claim |
 | Arkiv product use | MN-013 actual Arkiv-derived endpoint selection with a protected chain-ID probe | Block registry-dependent routing or clearly identify an explicitly permitted verified cache; no invented live registry result |
 | Core release | MN-017 accepted after all required core evidence and checks | Record blockers and continue fixing; a drafted report alone cannot close the release |
-| Whitechain activation | MN-009 and MN-013 live evidence, then MN-018 proves token/funding/accepted route | Cut optional payment tasks and assign lane C to core hardening |
-| Whitechain release | MN-022 actual specified-USDT settlement, verified contract and sponsored gas evidence | Keep the core release; omit Whitechain qualification claims |
+| Whitechain preflight | Owner activation recorded; MN-009 and MN-013 live evidence, then MN-018 proves token/funding/accepted route | Record the exact blocker and next action; continue the selected workstream without weakening route or evidence requirements |
+| Whitechain release | MN-022 specified-USDT settlement, verified contract and sponsored gas plus MN-030 merchant integration and MN-031 asset lifecycle | Keep unfinished items on the completion plan; accept each track only with its actual artifacts |
 
-The planned delivery target is EF + Arkiv. If Arkiv remains unavailable, the owner can publish an explicitly reduced EF-only demo using configured, approved endpoint fixtures without claiming Arkiv completion; record that scope change in the affected issues. A different sponsor fallback requires a deliberate scope decision. Whitechain never becomes a dependency of the core release.
+The selected development targets are EF, Arkiv, Uniswap and Whitechain. A temporary failure does not remove a target: record the blocker and recovery step on its issue. Any final scope change belongs to the owner. The core release remains independent of the additional partner work; final submission selects at most three partners.
 
 ## Four parallel lanes
 
@@ -29,8 +31,8 @@ Lanes are suggested responsibilities, not assigned people. A teammate claims an 
 |---|---|---|---|
 | A — Privacy transport | Worker preflight, transport policy, protected endpoint validation | `packages/transport/`, dashboard transport/registry composition, shared contracts during MN-002 | Review transport and browser egress failures after integration |
 | B — Registry | Arkiv preflight, licensed import, trusted query, independent consumer | `packages/registry/`, registry API adapter, registry scripts and `arkiv/` | Help clean-clone verification and evidence if the registry gate fails |
-| C — Observer and proof | Safe observer, paired proof, pure analyzer, core evidence | `apps/observer/` observer internals, `packages/privacy-analyzer/`, comparison/export scripts | Optional payment work only after gates; otherwise improve core reliability |
-| D — UI and regressions | Initial workspace, dashboard, independent bypass tests, break/fix demo | Root setup initially, `apps/dashboard/` features, browser/static regression checks | Optional checkout UI only after relayer acceptance |
+| C — Observer and proof | Safe observer, paired proof, pure analyzer, core evidence | `apps/observer/` observer internals, `packages/privacy-analyzer/`, comparison/export scripts | Payment work after its technical prerequisites; coordinate the separate asset lifecycle extension |
+| D — UI and regressions | Initial workspace, dashboard, independent bypass tests, break/fix demo | Root setup initially, `apps/dashboard/` features, browser/static regression checks | Checkout UI after relayer acceptance, then reusable merchant integration |
 
 The root lockfile, workspace manifests, shared contracts and application composition roots are shared bottlenecks. MN-001 owns the initial workspace changes; MN-002 owns the first shared schema. Subsequent tasks change only their listed paths. Coordinate a dependency/schema change in the issue before editing another owner's area. A single owner updates a shared lockfile for a dependency change; other branches rebase rather than committing unrelated lockfile churn.
 
@@ -57,11 +59,14 @@ Estimates are active engineering time for a focused task, generally one to three
 | MN-015 | Independent registry consumer and Arkiv docs | B | 010 | 1–2h |
 | MN-016 | Real leak, repair and rerun walkthrough | D | 012, 014 | 1–2h |
 | MN-017 | Core evidence and clean-clone release | C | 009, 012, 013, 014, 015, 016 | 2–3h |
-| MN-018 | Optional Whitechain token/funding/route preflight | C | 009, 013 + activation gate | 1–2h |
-| MN-019 | Optional signed payment contract and verification | C | 018 | 2–3h |
-| MN-020 | Optional merchant relayer and reconciliation | C | 019 | 2–3h |
-| MN-021 | Optional protected checkout and actual settlement | D | 014, 020 | 2–3h |
-| MN-022 | Optional Whitechain evidence and final demo | C | 017, 021 | 1–2h |
+| MN-018 | Whitechain token/funding/route preflight | C | 009, 013 | 1–2h |
+| MN-019 | Signed payment contract and verification | C | 018 | 2–3h |
+| MN-020 | Merchant relayer and reconciliation | C | 019 | 2–3h |
+| MN-021 | Protected checkout and actual settlement | D | 014, 020 | 2–3h |
+| MN-022 | Whitechain three-track evidence and final demo | C | 017, 021, 030, 031 | 1–2h |
+| MN-027 | Protected Uniswap quote and privacy regression | D | 017, 023, 025 | 2–4h |
+| MN-030 | Reusable Whitechain merchant checkout integration | D | 021 | 2–3h |
+| MN-031 | Contract-enforced Whitechain asset lifecycle | C | 019, 021 | 3–5h |
 
 Use the full `MN-xxx` identifiers in issues and branches. The two-digit `GT-01`–`GT-16` identifiers in the original idea are test scenarios, not task IDs. Each issue lists its exact branch and the evidence needed for review; no ticket is complete merely because a file with the expected name exists.
 
@@ -72,17 +77,17 @@ Use the full `MN-xxx` identifiers in issues and branches. The two-digit `GT-01`�
 | Foundation | Isolated MN-003 experiment immediately; MN-002 after MN-001 | Isolated MN-005 experiment immediately; review license and publisher setup | Review observer deployment, allowlists and proxy behavior | MN-001 |
 | Feasibility and isolated slices | MN-003 → MN-007 | MN-005 → MN-008 | MN-004 → MN-011; MN-009 once MN-007 lands | MN-006; start MN-012 once MN-007 and MN-011 land |
 | Product integration | MN-013 after MN-010; review egress checks | MN-010 → MN-015 | MN-009 if pending; prepare evidence format and failure replay | Finish MN-012 → MN-014 once all live inputs land |
-| Core acceptance | Review chain mismatch and worker outage cases | Reproduce independent public query and check counts | MN-017 after required D work; use spare time for bounded MN-018 if activated | MN-016 after MN-012 and MN-014 |
-| Optional payment | Review protected Whitechain reads | Help evidence/provenance or core fixes | MN-018 → MN-019 → MN-020; then MN-022 after MN-021 and core acceptance | MN-021 after MN-020; keep existing core acceptance green |
+| Core acceptance | Review chain mismatch and worker outage cases | Reproduce independent public query and check counts | MN-017 after required D work; bounded MN-018 after its own accepted prerequisites | MN-016 after MN-012 and MN-014 |
+| Partner completion | Review protected Whitechain reads | Help evidence/provenance or core fixes | MN-018 → MN-019 → MN-020; MN-031 after MN-021; MN-022 after both track extensions and core acceptance | MN-027 after its core/public prerequisites; MN-021 after MN-020, then MN-030; keep existing core acceptance green |
 
-Each lane has one active owner at a time. MN-014 and MN-016 both belong to D and run sequentially. C serializes MN-004, MN-011/MN-009 and MN-017; MN-009 can precede MN-011 if the transport lands first. C can use the waiting period before the final core walkthrough for the bounded optional preflight, but core acceptance takes priority when it becomes ready. Do not start several tasks simply because multiple issues are technically ready.
+Each lane has one active owner at a time. MN-014 and MN-016 both belong to D and run sequentially. C serializes MN-004, MN-011/MN-009 and MN-017; MN-009 can precede MN-011 if the transport lands first. C can use the waiting period before the final core walkthrough for the bounded Whitechain preflight after its own prerequisites pass; coordinate core acceptance when it becomes ready. Do not start several tasks simply because multiple issues are technically ready.
 
 The two main critical paths are:
 
 - `MN-001 → MN-002 → MN-003 → MN-007 → MN-009 → MN-014 → MN-016 → MN-017`
 - `MN-001 → MN-002 → MN-005 → MN-008 → MN-010 → MN-013 → MN-014 → MN-016 → MN-017`
 
-The analyzer and bypass-CI path also feeds MN-016. If either real-network path stalls, communicate it immediately; extra animation or optional contracts cannot resolve that dependency.
+The analyzer and bypass-CI path also feeds MN-016. If either real-network path stalls, communicate the exact blocker immediately and continue only work whose prerequisites have passed.
 
 ```mermaid
 flowchart LR
@@ -105,11 +110,14 @@ flowchart LR
   B --> Q[015 Independent consumer and docs]
   X --> CORE[017 Core release]
   Q --> CORE
-  P --> W[018 Optional payment preflight]
+  P --> W[018 Whitechain payment preflight]
   R --> W
   W --> PAY[019 to 021 Contract, relayer, settlement]
-  CORE --> FINAL[022 Optional payment release]
-  PAY --> FINAL
+  PAY --> MERCHANT[030 Reusable merchant integration]
+  PAY --> ASSET[031 Asset lifecycle]
+  CORE --> FINAL[022 Whitechain three-track release]
+  MERCHANT --> FINAL
+  ASSET --> FINAL
 ```
 
 ## Task status and handoffs
@@ -122,8 +130,8 @@ Update the issue whenever a blocker, dependency, path ownership or handoff chang
 
 Open a focused PR, link its task and required evidence, then mark `status:review`. The user merges to `main`. After the merge, close the accepted issue and reassess its dependants for readiness. A branch, PR, passing fixture test or recorded design is not evidence of a real worker, Arkiv write or onchain settlement. Keep those distinctions in the task acceptance report.
 
-## Scope cuts and completion
+## Scope and completion
 
-Cut animation polish, automatic codemods, extra anonymity networks, historical charts and hosted telemetry first. Drop Whitechain as a whole if its actual token, accepted gasless strategy, protected reads or sponsored settlement cannot be proven. C then owns observer reliability, redaction, external-failure cases and clean-clone evidence instead of payments.
+Keep animation polish, automatic codemods, extra anonymity networks, historical charts and hosted telemetry behind the selected track work. Uniswap and Whitechain remain on the completion plan. If a token, accepted gasless route, protected read or sponsored settlement blocks progress, record the specific recovery action and retain truthful evidence; do not remove the target automatically or bypass the acceptance criteria.
 
 Complete the core only when the functional read, independently observed route comparison, real bypass failure/repair, trusted Arkiv product use and independent query are supported by reproducible evidence. Run fast deterministic regressions on PRs; invoke live-network preflights separately and label their timestamp and result. Do not make a CI mock the basis for a live privacy claim. Final event submission choices and exact deadlines must be checked in the participant dashboard; this plan does not assume a cutoff from third-party listings.

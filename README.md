@@ -21,7 +21,7 @@
 </p>
 
 > [!NOTE]
-> **Development preview.** The default dashboard is wired for live reads through a verified Nym worker. It makes no API or RPC requests on page load; run actions block before worker bootstrap with the example local configuration. The separate `?mode=simulated` walkthrough uses local fixtures. A local CLI/TUI is available from source; npm publication, final public-workflow evidence and core release acceptance remain pending. Payments are disabled.
+> **Development preview.** The default dashboard is wired for live reads through a verified Nym worker. It makes no API or RPC requests on page load; run actions block before worker bootstrap with the example local configuration. The separate `?mode=simulated` walkthrough uses local fixtures. The CLI/TUI is available from source and on npm as `@dijo-404/monolith-cli` **0.1.0**; final public-workflow evidence and core release acceptance remain pending. Payments are disabled.
 
 ## Overview
 
@@ -46,9 +46,10 @@ Snapshot: **7 November 2026 (IST)**. GitHub issues hold live acceptance status.
 | **Protected reads** | Fail-closed transport and a [recorded real Nym/direct source comparison](docs/preflight/observer.md) from 6 November | Recheck worker and backend availability for each new run |
 | **Arkiv registry** | [100 distinct networks / 100 entities imported and independently queried](arkiv/data-quality.md), with publisher, provenance and expiry checks | Imported endpoints remain candidates; the import did not test their health or chain IDs |
 | **Dashboard** | Live Nym/registry/observer composition, explicit synthetic direct controls and a separate simulated walkthrough | [Accepted public workflow](https://github.com/Dijo-404/monolith/issues/14) and [complete leak/repair walkthrough](https://github.com/Dijo-404/monolith/issues/16) |
-| **CLI/TUI** | Merged source package, local analysis, JSON output and terminal menu | [npm publication and release acceptance](https://github.com/Dijo-404/monolith/issues/50) |
+| **CLI/TUI** | Published `@dijo-404/monolith-cli` **0.1.0**, local analysis, JSON output and terminal menu | [Core release acceptance](https://github.com/Dijo-404/monolith/issues/17) |
 | **Deployment** | Static packaging/verification and reusable temporary observer tooling | [Final hosted dashboard checks](https://github.com/Dijo-404/monolith/issues/36) and [public-backend acceptance](https://github.com/Dijo-404/monolith/issues/40) |
 | **New integrations** | Tracked work for [Uniswap quote privacy tests](https://github.com/Dijo-404/monolith/issues/55) and [protected provider selection](https://github.com/Dijo-404/monolith/issues/56) | Integrated UI/backend behavior and live evidence; neither is a completed product feature |
+| **Whitechain tracks** | Activated [Scale, Operate and Tokenize completion plan](docs/track-completion-plan.md#whitechain-shared-work) | Finish protected sponsored checkout, reusable merchant integration, asset lifecycle and track demonstrations |
 
 Historical `OBSERVED_LIVE` records describe their exact past runs. The [core release](https://github.com/Dijo-404/monolith/issues/17) still requires its own accepted evidence bundle and clean-clone validation.
 
@@ -129,7 +130,7 @@ The check above uses a **SIMULATED** fixture. `check` analyzes local captured me
 
 Use `--json` for automation. A `check` exits **0** only for a nonempty input passing privacy and useful-read checks, **1** for a failed check and **2** for invalid or unavailable input. Local files remain unverified caller input; the CLI does not authenticate captures or establish live privacy. Protected reads run through the browser worker.
 
-The package is prepared as `@monolith/cli` **0.1.0**; npm publication and name availability remain unverified. See the [CLI guide](docs/cli.md) for local tarball installation, report format, CI behavior and release limits.
+The published package is [`@dijo-404/monolith-cli` **0.1.0**](https://www.npmjs.com/package/@dijo-404/monolith-cli). The internal workspace package remains `@monolith/cli`. See the [CLI guide](docs/cli.md) for installation, report format, CI behavior and release limits.
 
 ### Commands
 
@@ -155,15 +156,20 @@ pnpm exec tsx scripts/check-rpc-egress.ts
 
 For the reproducible leaking and repaired browser cases, follow the [egress guide](tests/privacy/egress/README.md). The leak command exits **1** and the fixed command exits **0** when their documented expectations hold. These checks use a synthetic driver and establish software behavior, with `SIMULATED` evidence.
 
+<a id="query-the-accepted-registry-import-independently"></a>
+
 **Query the accepted registry import independently**
 
 ```sh
 pnpm --filter @monolith/shared build
 pnpm --filter @monolith/registry build
-pnpm exec tsx scripts/registry-query-example.ts --help
+env -u DEBUG -u ARKIV_PUBLISHER_KEY_FILE -u ARKIV_PUBLISHER_PRIVATE_KEY \
+  pnpm exec tsx scripts/registry-query-example.ts --chain-id 10
 ```
 
-The [registry setup guide](docs/registry-setup.md) provides the live `--chain-id 10` command, trust pins, publisher references and failure behavior. That query contacts Arkiv directly for public metadata; expired or unavailable records fail without a saved-result fallback. It does not establish endpoint health or anonymity.
+The recorded production writer/owner is **`0x93D1A42655F2B0BCFa126e3D2a33e4ab60a74CA4`** on Arkiv Rabdi (chain **7794095**). The imported dataset is [ethereum-lists/chains at e174742](https://github.com/ethereum-lists/chains/tree/e17474286275730fb6b0490b1d7ea1c64a36ed9e), under its [immutable MIT license](https://github.com/ethereum-lists/chains/blob/e17474286275730fb6b0490b1d7ea1c64a36ed9e/LICENSE); the [notice is retained](packages/registry/src/adapters/source/LICENSE.ethereum-lists-chains). The [importer and recorded receipts](packages/registry/test/importer/README.md) document rerunning the import with a separately configured publisher.
+
+The [registry setup guide](docs/registry-setup.md) provides trust pins, historical output and failure behavior. The query needs no signing key and contacts Arkiv directly for public metadata; expired or unavailable records fail without a saved-result fallback. Historical import success does not guarantee current availability, endpoint health or anonymity.
 
 ### Deployment
 
@@ -296,7 +302,22 @@ The default environment enables no upstream targets or registry trust configurat
 - Live dashboard composition is implemented, but accepted reusable public-backend evidence ([MN-025](https://github.com/Dijo-404/monolith/issues/40)) and the actual public dashboard walkthrough ([MN-014](https://github.com/Dijo-404/monolith/issues/14)) remain pending. Final release evidence is separate tracked work.
 - Browser regression coverage is scoped to configured origins and ordinary Chromium HTTP traffic. It does not cover arbitrary third-party apps, wallet extensions, WebRTC/KPS traffic or every possible JavaScript bypass.
 - Timestamped live evidence records a past run. Worker availability, endpoint freshness and network behavior must be checked again for a new run.
-- Whitechain checkout remains conditional and disabled. No payment settlement or sponsor eligibility is claimed.
+- Whitechain Scale, Operate and Tokenize are activated development targets. Complete the tracked checkout, reusable merchant integration, asset lifecycle and actual settlement evidence before enabling runtime payment controls.
+
+## CROPS
+
+Privacy is the lead property. These are the implementation's guarantees and trade-offs; the [submission audit](docs/prize-compliance.md) records unresolved qualification gates.
+
+- **C — Censorship resistance:** The hosted domain, observer, Arkiv service and configured RPCs are dependencies; losing them blocks live reads. Users can run the source with their own compatible infrastructure; no automatic provider failover is promised.
+- **O — Open source:** Code is MIT-licensed and builds locally with the pinned tools. Live use additionally needs the documented public-network configuration; public repository visibility still requires owner publication.
+- **P — Privacy:** The observer sees direct-control sources transiently; RPCs see methods and payloads; Arkiv/indexers see public metadata queries and their caller. Worker bootstrap and hosting contacts expose network metadata separately; authored client code adds no analytics, and deployed host-injected scripts need separate review.
+- **S — Security:** Browser read mode handles no signing keys; the Arkiv publisher key stays with the operator and outside Git. Trusted publishers, fresh data, approved origins, worker integrity and protected chain probes gate reads; trust still includes the worker/network, host, observer topology and RPC responses.
+
+## Hackathon submission and AI use
+
+The owner confirmed **Classic / new project** registration and selected four development targets: **EF Anon-RPC/CROPS**, **Arkiv Mirror/Build from scratch**, **Uniswap Build**, and **Whitechain Scale/Operate/Tokenize**. The [track completion plan](docs/track-completion-plan.md) lists the implementation, tests, feedback and evidence to finish for every target, with linked GitHub tasks. The event permits selecting three partners at submission. See the [prize audit](docs/prize-compliance.md) for current evidence and submission requirements; planned work is not represented as completed integration.
+
+AI coding assistants contributed planning, implementation, tests, documentation and review across this repository. [AI usage and prompt inventory](docs/ai-usage.md) identifies assisted files and reused assets, retains the available audit prompts, and explicitly records missing historical prompts and owner-supplied human-contribution details. This is an incomplete submission disclosure until those details are verified.
 
 ## Roadmap
 
@@ -309,20 +330,27 @@ The default environment enables no upstream targets or registry trust configurat
 - [ ] Accepted public dashboard workflow and reusable-backend evidence
 - [ ] Reproducible live leak, repair and rerun walkthrough
 - [ ] Accepted core evidence bundle and clean-clone release
-- [ ] Owner-approved npm CLI publication
+- [x] Owner-approved npm CLI publication as `@dijo-404/monolith-cli` **0.1.0**
 - [ ] Real protected Uniswap quote with bypass detection and useful repair
 - [ ] Protected endpoint diagnostics and explicit provider selection
+- [ ] Whitechain protected sponsored-USDT checkout and Scale demonstration
+- [ ] Reusable merchant integration and Operate demonstration
+- [ ] Contract-enforced asset lifecycle and Tokenize demonstration
+- [ ] Complete partner feedback files, forms, videos and verified evidence bundle
 
 ## Documentation
 
 | Guide | What's in it |
 | :--- | :--- |
 | [Project idea](docs/idea.md) | Product design, threat model and evidence gates |
+| [Prize compliance](docs/prize-compliance.md) · [AI usage](docs/ai-usage.md) | Classic track requirements, source-linked evidence and unresolved submission gates |
+| [Track completion plan](docs/track-completion-plan.md) | Full Uniswap and Whitechain Scale/Operate/Tokenize implementation and evidence checklist |
 | [Delivery plan](docs/plan.md) · [Task register](docs/task-register.md) | Dependencies, path ownership and GitHub issue links |
 | [Architecture](docs/architecture.md) · [Integration contracts](docs/contracts.md) | Module boundaries, shared interfaces and trust rules |
 | [Observer](docs/observer.md) | Read API, operator configuration, source topology and retention |
 | [Registry setup](docs/registry-setup.md) · [Arkiv schema](arkiv/schema.md) | Independent queries, provenance, publisher policy and expiry |
 | [Arkiv data quality](arkiv/data-quality.md) · [Independent consumer](arkiv/reach.md) | Recorded import counts, actual storage/query evidence and remaining endpoint limits |
+| [How Arkiv is used](arkiv/how-you-use-arkiv.md) | Query fields, entity permissions, expiry and visible product behavior |
 | [CLI and TUI](docs/cli.md) | Local build/tarball install, analysis input, JSON output and exit codes |
 | [Live lab](tests/e2e/lab-ui/README.md) | Nym/observer/registry wiring, bounded metadata retries and actual public-workflow acceptance |
 | [Anon-RPC preflight](docs/preflight/anon.md) · [Observer preflight](docs/preflight/observer.md) | Reproduction steps, recorded observations and limits |
