@@ -14,7 +14,7 @@ Browser verification uses the production build at local loopback. Offline guide/
 
 ## Validation
 
-Pinned Node 24.22.2 / pnpm 12.18.0 `pnpm check` passed: lint, workspace type checks, **1,895 tests in 57 files**, and all production builds. Current runtime assets are `app-NXfADppi.js` and `app-Dfc0eyNx.css`. The complete command output is preserved in [workspace-check.txt](workspace-check.txt).
+Pinned Node 24.22.2 / pnpm 12.18.0 `pnpm check` passed: lint, workspace type checks, **1,895 tests in 57 files**, and all production builds. Current runtime assets are `app-NXfADppi.js` and `app-Dfc0eyNx.css`. The complete command output, with trailing whitespace normalized, is preserved in [workspace-check.txt](workspace-check.txt).
 
 PR89 remains draft and carries the owner's personal-review hold. This revision does not release that hold or authorize a merge or deployment.
 

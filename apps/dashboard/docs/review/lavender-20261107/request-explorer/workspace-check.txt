@@ -62,7 +62,7 @@ apps/dashboard build: dist/assets/app-Dfc0eyNx.css                           26.
 apps/dashboard build: dist/assets/workerHost-BKrclfgn.js                      0.04 kB │ gzip:   0.06 kB
 apps/dashboard build: dist/assets/browser-BV4R2-sQ.js                       172.30 kB │ gzip:  51.96 kB
 apps/dashboard build: dist/assets/app-NXfADppi.js                           343.75 kB │ gzip: 104.83 kB
-apps/dashboard build: 
+apps/dashboard build:
 apps/dashboard build: ✓ built in 407ms
 apps/dashboard build: Done
 apps/observer build: Done
