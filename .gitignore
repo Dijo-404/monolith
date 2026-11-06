@@ -1,5 +1,6 @@
 node_modules/
 .pnpm-store/
+.openai/
 dist/
 coverage/
 playwright-report/
