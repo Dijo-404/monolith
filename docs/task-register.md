@@ -44,3 +44,5 @@ MN-024 fixes the public demo lifecycle: startup-only operator runs expire after 
 MN-014 owns the two exact reviewed live-UI adapter entries in `tests/privacy/egress/reviewed-adapters.json`, coordinated with MN-012 on their issues. This path addition does not authorize scanner changes or exempt other files from review.
 
 MN-026 adds an npm-distributable `@monolith/cli` package with a `monolith` executable and interactive TUI. Its first release covers local checks, sanitized report inspection and launching the existing browser lab; protected reads remain in the verified browser worker. It is a P2 extension outside the core release dependency graph. Publication and expanded browser automation are separate scope.
+
+MN-025 additionally owns the reader's optional server access-key wiring and its focused test, coordinated with MN-010 on issues #40/#10 after observed public-RPC rate limits. The credential remains local; publisher/source/expiry validation and the public default remain unchanged.
