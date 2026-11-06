@@ -8,6 +8,7 @@ const RUN = new RegExp(`^run-${UUID}$`);
 export const SYNTHETIC_ADDRESS = `0x${'0'.repeat(40)}`;
 export type Role = 'direct-baseline' | 'direct-control' | 'protected-probe' | 'protected-comparison';
 export type LabConfiguration = { target: string; runId: string; baselineRpcId: string; directControlRpcId: string };
+export type WorkerHttpDiagnostic = { status: number | null; jsonContentType: boolean; error: 'REJECTED' | null };
 export type Issued = {
   rpcId: string; role: Role; method: string; issuedAt: string; completedAt: string;
   result: JsonValue | null; requestFingerprint: string; readId?: string; attempt?: number;
@@ -35,6 +36,7 @@ export function captureLabConfiguration(input: LabConfiguration): Readonly<LabCo
 /** Scoped SDK-method decoration in the disposable host, never a global fetch hook. */
 export function installLabHeaderBinding(
   prototype: { fetch: typeof fetch }, input: LabConfiguration,
+  observe?: (diagnostic: WorkerHttpDiagnostic) => void,
 ): () => void {
   const settings = captureLabConfiguration(input);
   const original = prototype.fetch;
@@ -53,7 +55,13 @@ export function installLabHeaderBinding(
       || !body) return Promise.reject(new Error('Lab request denied.'));
     headers.set('x-monolith-run', settings.runId);
     headers.set('x-monolith-case', 'protected');
-    return original.call(this, resource, { ...options, headers });
+    return original.call(this, resource, { ...options, headers }).then((response) => {
+      observe?.({ status: response.status, jsonContentType: response.headers.get('content-type')?.split(';')[0]?.trim() === 'application/json', error: null });
+      return response;
+    }, (error: unknown) => {
+      observe?.({ status: null, jsonContentType: false, error: 'REJECTED' });
+      throw error;
+    });
   };
   prototype.fetch = decorated;
   return () => { if (prototype.fetch === decorated) prototype.fetch = original; };

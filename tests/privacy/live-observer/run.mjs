@@ -11,6 +11,7 @@ import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createObserverEdge, createTunnelOutputProjector } from './edge.mjs';
+import { createProxyObserverEdge, createSshTunnelOutputProjector } from './proxy-edge.mjs';
 import { validatePairedProof } from './proof.mjs';
 
 const directory = dirname(fileURLToPath(import.meta.url));
@@ -19,18 +20,21 @@ const args = process.argv.slice(2);
 const options = {};
 for (let index = 0; index < args.length; index++) {
   const key = args[index];
-  if (!['--output', '--cloudflared', '--browser-tools'].includes(key) || !args[index + 1]) {
-    throw new Error('Use --output <new-file> --cloudflared <pinned-binary> --browser-tools <tool-directory>.');
+  if (!['--output', '--cloudflared', '--browser-tools', '--provider', '--ssh', '--ssh-known-hosts'].includes(key) || !args[index + 1]) {
+    throw new Error('Use --provider cloudflare|localhost-run, --output <new-file>, and the provider/tool paths.');
   }
-  options[key.slice(2)] = resolve(args[++index]);
+  options[key.slice(2)] = key === '--provider' ? args[++index] : resolve(args[++index]);
 }
 if (process.versions.node !== '24.22.2') throw new Error('Use the pinned Node 24.22.2 runtime.');
-const binary = options.cloudflared;
+const provider = options.provider ?? 'cloudflare';
+if (!['cloudflare', 'localhost-run'].includes(provider)) throw new Error('Unsupported observer provider.');
+const sshMode = provider === 'localhost-run';
+const binary = sshMode ? options.ssh ?? '/usr/sbin/ssh' : options.cloudflared;
 const toolDirectory = options['browser-tools'] ?? process.env['MONOLITH_BROWSER_TOOLS'];
-if (!binary || !toolDirectory) throw new Error('Pinned cloudflared and browser tools are required.');
+if (!binary || !toolDirectory || sshMode && !options['ssh-known-hosts']) throw new Error('Provider binary, explicit SSH host pin when needed, and browser tools are required.');
 const digest = (bytes) => createHash('sha256').update(bytes).digest('hex');
 const binaryHash = digest(await readFile(binary));
-if (binaryHash !== '1f99fb518b83dec2ba8d870a7cc991d82a77e6196295a3d2754ba17ab9f91872') {
+if (!sshMode && binaryHash !== '1f99fb518b83dec2ba8d870a7cc991d82a77e6196295a3d2754ba17ab9f91872') {
   throw new Error('cloudflared 2026.10.7 release digest mismatch.');
 }
 const repoRequire = createRequire(join(repository, 'package.json'));
@@ -138,7 +142,9 @@ async function publicDnsReady(origin) {
 const artifact = {
   schemaVersion: 1, sourceTask: 'MN-009', startedAt: new Date().toISOString(), generatedAt: null,
   evidence: 'BLOCKED', stage: 'SETUP', failure: null, node: process.version, browser: null,
-  packages: { cloudflared: '2026.10.7', cloudflaredSha256: binaryHash,
+  packages: { ...(sshMode ? { sshBinarySha256: binaryHash,
+    sshKnownHostsSha256: digest(await readFile(options['ssh-known-hosts'])) }
+    : { cloudflared: '2026.10.7', cloudflaredSha256: binaryHash }),
     playwright: '1.65.0', '@noble/hashes': '1.8.0', '@anon-rpc/browser-harness': '0.4.0' },
   source: {
     lab: await fingerprints(directory), transport: await fingerprints(join(repository, 'packages/transport/src')),
@@ -150,16 +156,18 @@ const artifact = {
     lockfileSha256: digest(await readFile(join(repository, 'pnpm-lock.yaml'))),
   },
   deployment: {
-    kind: 'ephemeral-cloudflare-quick-tunnel', origin: null,
+    kind: sshMode ? 'ephemeral-localhost-run-ssh-proxy-v2' : 'ephemeral-cloudflare-quick-tunnel', origin: null,
     sourceMode: 'trusted-proxy', trustedLocalPeer: 'loopback-only',
-    sourceRule: 'Single Cloudflare connection source on authenticated local hop; all caller forwarding headers discarded.',
+    sourceRule: sshMode ? 'PROXYv2 connection source delivered through host-pinned SSH; all caller forwarding headers discarded.'
+      : 'Single Cloudflare connection source on authenticated local hop; all caller forwarding headers discarded.',
     localLogPolicy: 'Observer/edge logger disabled; raw tunnel stdout/stderr discarded in memory.',
-    platformLogs: 'Cloudflare-managed retention/configuration not verified.',
+    platformLogs: sshMode ? 'localhost.run-managed retention/configuration not verified.' : 'Cloudflare-managed retention/configuration not verified.',
     upstream: 'https://ethereum.publicnode.com',
   },
   controls: {}, comparison: null, shutdown: null,
   limitations: [
-    'Cloudflare is a trusted intermediary and can see source and payload; this is one observed deployment path.',
+    `${sshMode ? 'localhost.run' : 'Cloudflare'} is a trusted intermediary and can see source and payload; this is one observed deployment path.`,
+    ...(sshMode ? ['SSH server identity is pinned to the explicitly supplied known-hosts file; its first enrollment used trust on first use.'] : []),
     'The RPC destination can read the JSON-RPC method and synthetic address payload.',
     'Two specifier bootstrap reads are non-anonymous and excluded from paired application reads.',
     'Configured synthetic candidate identity/provenance is not an Arkiv product-use claim.',
@@ -179,25 +187,42 @@ try {
   const runId = `run-${randomUUID()}`;
   const baselineRpcId = `rpc-${randomUUID()}`;
   const directControlRpcId = `rpc-${randomUUID()}`;
-  edge = await createObserverEdge({ observerPort, capabilityHost });
-  const denied = await localJson(edge.port, '/api/health');
-  const forged = await localJson(edge.port, '/api/health', { host: 'wrong.invalid', 'cf-connecting-ip': '192.0.2.12' });
-  artifact.controls.localUnauthenticatedDenied = denied.status === 403 && forged.status === 403 && edge.counters().forwarded === 0;
+  edge = await (sshMode ? createProxyObserverEdge : createObserverEdge)({ observerPort, capabilityHost,
+    ...(sshMode ? { labRunId: runId } : {}) });
+  const privateHttpPort = sshMode ? edge.privateHttpPort : edge.port;
+  const denied = await localJson(privateHttpPort, '/api/health');
+  const forged = await localJson(privateHttpPort, '/api/health', { host: 'wrong.invalid', 'cf-connecting-ip': '192.0.2.12' });
+  const httpCounters = sshMode ? edge.counters().http : edge.counters();
+  artifact.controls.localUnauthenticatedDenied = denied.status === 403 && forged.status === 403 && httpCounters.forwarded === 0;
   if (!artifact.controls.localUnauthenticatedDenied) throw new Error('EDGE_AUTH_CONTROL_FAILED');
   stage('STARTING_TUNNEL');
   const emptyConfiguration = join(artifactDirectory, 'empty-cloudflared.yml');
   await writeFile(emptyConfiguration, '{}\n', { mode: 0o600 });
   const origin = await bounded(new Promise((resolve, reject) => {
-    const projector = createTunnelOutputProjector(resolve);
-    tunnel = spawn(binary, ['tunnel', '--config', emptyConfiguration, '--no-autoupdate', '--url', `http://127.0.0.1:${edge.port}`,
+    const projector = (sshMode ? createSshTunnelOutputProjector : createTunnelOutputProjector)(resolve);
+    const tunnelArgs = sshMode ? ['-F', '/dev/null', '-o', 'BatchMode=yes', '-o', 'IdentitiesOnly=yes',
+      '-o', 'IdentityFile=/dev/null', '-o', 'StrictHostKeyChecking=yes',
+      '-o', 'GlobalKnownHostsFile=/dev/null',
+      '-o', `UserKnownHostsFile=${options['ssh-known-hosts']}`, '-o', 'ExitOnForwardFailure=yes',
+      '-o', 'ConnectTimeout=15', '-o', 'ServerAliveInterval=15', '-o', 'ServerAliveCountMax=2',
+      '-T', '-R', `80:127.0.0.1:${edge.port}`, 'nokey@localhost.run', '--', '--output', 'json', '--proxy-protocol-v2']
+      : ['tunnel', '--config', emptyConfiguration, '--no-autoupdate', '--url', `http://127.0.0.1:${edge.port}`,
       '--http-host-header', capabilityHost, '--metrics', '127.0.0.1:0', '--management-diagnostics=false',
-      '--protocol', 'http2', '--grace-period', '1s'], { stdio: ['ignore', 'pipe', 'pipe'],
+        '--protocol', 'http2', '--grace-period', '1s'];
+    tunnel = spawn(binary, tunnelArgs, { stdio: ['ignore', 'pipe', 'pipe'],
       env: { PATH: process.env['PATH'] ?? '/usr/bin:/bin' } });
     tunnel.stdout.on('data', projector.push); tunnel.stderr.on('data', projector.push);
     tunnel.once('error', () => reject(new Error('TUNNEL_START_FAILED')));
     tunnel.once('exit', () => { projector.end(); reject(new Error('TUNNEL_STOPPED')); });
   }), 60_000, 'TUNNEL_ORIGIN_TIMEOUT');
   artifact.deployment.origin = origin;
+  if (sshMode) artifact.deployment.diagnosticShim = {
+    scope: 'single-operator-run-exact-POST-read-endpoint-only',
+    behavior: 'Fill missing application/json content type and fixed registered run ID; reject duplicate/conflicting supplied values; never add a route/case label.',
+    preserved: 'Actual RPC body, wire ID, method, params, result and PROXYv2 source are unchanged.',
+    reason: 'Installed verified Nym/harness stack was observed omitting request headers; the exact downstream cause is unconfirmed.',
+    hostTrust: 'Other local processes are trusted; loopback alone does not authenticate the SSH process.',
+  };
   stage('WAITING_PUBLIC_DNS');
   const dnsStarted = Date.now();
   artifact.controls.publicDnsReady = await publicDnsReady(origin);
@@ -313,6 +338,7 @@ try {
   }
   stage('PAIRED_READS');
   const paired = await bounded(page.evaluate(() => globalThis.mn009.pair()), 180_000, 'PAIRED_READ_TIMEOUT');
+  artifact.controls.workerHttp = await page.evaluate(() => globalThis.mn009WorkerHttp ?? []);
   artifact.controls.edgeCounters = edge.counters();
   const safeFailures = ['INVALID_INPUT', 'POLICY_DENIED', 'WORKER_UNAVAILABLE', 'UPSTREAM_TIMEOUT',
     'UPSTREAM_UNAVAILABLE', 'RPC_RESPONSE_INVALID', 'RPC_ERROR', 'BASELINE_UNCONFIRMED', 'RATE_LIMITED', 'TARGET_DENIED'];

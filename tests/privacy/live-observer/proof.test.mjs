@@ -84,6 +84,14 @@ describe('MN-009 pure paired-proof validation with SIMULATED inputs', () => {
     expect(validatePairedProof(input, NOW).verdict).toBe('OBSERVED_LIVE');
   });
 
+  it('requires the forged-header direct control even when the caller claims a verified topology', () => {
+    const input = simulatedClaimedLive();
+    const removed = input.inventory.splice(1, 1)[0];
+    input.traces = input.traces.filter((trace) => trace.readId !== removed.readId);
+    input.diagnostics.observations = input.diagnostics.observations.filter((row) => row.rpcId !== removed.rpcId);
+    rejected(input, 'DIRECT_CONTROL_INVENTORY_INVALID');
+  });
+
   it('supports verified Tor metadata with the same exact inventory checks', () => {
     const input = simulatedClaimedLive();
     input.worker.network = 'tor';

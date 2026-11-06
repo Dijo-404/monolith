@@ -1,10 +1,16 @@
 # MN-009 paired observer proof
 
-**Status: BLOCKED, 6 November 2026.** The runner and offline checks are implemented;
-the real paired-source acceptance gate has not passed. The operator has no VPS,
-domain or existing verified observer deployment. The available Quick Tunnel
-actually sends a `CF-Worker` marker, so its source path is refused rather than
-treated as verified.
+**Current result: OBSERVED_LIVE, 6 November 2026.** The [localhost.run continuation](#localhostrun-continuation)
+records a genuine verified-Nym chain probe and balance comparison with distinct
+observed source classes, after accepted main `dbb1d7e`. The temporary service is
+stopped; this is recorded evidence, not a durable deployed observer. Review and
+owner acceptance remain separate from the observed result.
+
+**Historical Cloudflare result: BLOCKED.** The original implementation and checks
+below record the unavailable VPS/domain and Quick Tunnel path. That tunnel
+actually sends a `CF-Worker` marker and remains refused. Its guard and all earlier
+observation files are unchanged; the successful continuation uses a separate
+reviewed connection-source adapter.
 
 The runner attempts the same fixed synthetic `eth_getBalance` request through an
 explicit direct control and the real Nym worker, using the public
@@ -206,3 +212,139 @@ unrelated page, wallet, extension or third-party traffic. This task establishes
 neither application-wide coverage, Arkiv product use, payment settlement nor
 sponsor eligibility. The observer and ultimate RPC destination still see the
 JSON-RPC method and address payload.
+
+## localhost.run continuation
+
+The [final actual observation](../../tests/privacy/live-observer/observed-localhost-run-final-2026-11-06.json)
+ran from `2026-11-06T16:14:32.271Z` to `2026-11-06T16:15:16.856Z` on Node
+24.22.2 and the pinned tools above, after integrating accepted main `dbb1d7e`
+(PRs #35/#37). Exit **0**, evidence `OBSERVED_LIVE`; artifact SHA-256:
+`d31ca69e8a334f0190fb424c4a7f873f82e1f0cc8d3d426eab0ac930b8c285b0`.
+
+| Actual issued operation | Genuine result | Observed source class |
+| --- | --- | --- |
+| Direct synthetic balance baseline | `0x2ff70ee5de97c9ab42b` | `baseline` |
+| Same direct read with forged forwarding headers/protected case label | `0x2ff70ee5de97c9ab42b` | `baseline` |
+| Nym protected chain probe | `0x1` | `different-from-baseline` |
+| Same balance read through Nym | `0x2ff70ee5de97c9ab42b` | `different-from-baseline` |
+
+Exactly four wire IDs/read-attempt bindings/observer observations and six traces
+agree. Actual 18,283,862-byte resolver response bytes matched Nym hash
+`0xf13a448a8721b9d0b20da3d5b80ffe00bf4c5bb3aae812a38d3d1e3bc81fceb8`.
+The two specifier bootstrap calls remain disclosed as non-anonymous. Independent
+direct-interception self-check passed; exactly two direct comparison sends were
+permitted and **zero ordinary protected-target HTTP requests** were observed.
+Both worker responses were HTTP 200. Cleanup observed CLOSED, no host frames,
+cleared metadata, denied post-close reads, context destruction and stopped
+observer/tunnel/edge processes. The [first successful continuation](../../tests/privacy/live-observer/observed-localhost-run-attempt6-2026-11-06.json)
+is preserved separately; the final observation is a fresh post-integration run.
+
+### Connection-source trust
+
+The new [PROXYv2 adapter](../../tests/privacy/live-observer/proxy-edge.mjs) accepts
+one bounded binary TCP source frame per connection from an SSH reverse tunnel.
+It rejects LOCAL/unknown/datagram/UNIX frames, invalid lengths, zero ports,
+incomplete prefix deadlines and HTTP without a frame. Source identity attaches
+to the actual socket in private process memory; HTTP forwarding headers never
+supply it. Existing path/method/byte/concurrency/time and observer JSON-RPC
+validation remain enforced. Caller forwarding/Worker fields are discarded.
+The existing private edge's internal `CF-Connecting-IP` slot is a compatibility
+bridge, **not Cloudflare-provided evidence**. Original Cloudflare guards remain
+unchanged.
+
+SSH uses only the explicitly supplied known-hosts pin, disables global known-hosts
+files and ignores ambient configuration/user identities. The [actual provider-help
+and public-key observation](../../tests/privacy/live-observer/observed-localhost-run-provider-help-2026-11-06.json)
+records public server fingerprint
+`SHA256:pG6qrBxubYfWa1Zadu/V0NUgjEDiBds/7e2xzte/QNM` plus the pin-file hash.
+Initial enrollment used **trust on first use**, not an independently certified
+fingerprint. Later commands reject a different enrolled key.
+
+**A trusted single-user host is required.** Loopback does not authenticate the
+SSH process against other local processes; another local process can construct
+a frame. The intended provider hop is the pinned encrypted SSH connection.
+localhost.run supplies public TLS termination and is trusted to report the real
+connection source. It can observe sources and payloads; its platform retention
+controls were not verified. Owned raw process/browser logs are discarded. Raw
+source addresses remain only in socket/run memory, expire at teardown/TTL, and
+never appear in artifacts.
+
+### Explicit single-run diagnostic adaptation
+
+Actual attempts observed the installed verified Nym/harness stack omitting
+content-type/run/case headers from a read POST. Its downstream cause remains
+unconfirmed. Changing a `Headers` instance to a record did not solve it; that
+hypothesis is not represented as a fix.
+
+For this **single operator-owned ephemeral run**, the adapter receives the
+already registered synthetic run ID. Only on the exact configured POST/read
+path, it fills a missing `application/json` content type and a missing fixed
+run header. Duplicate/conflicting supplied values are denied. It adds no case
+or route label and changes no actual RPC body, method, parameters, wire ID,
+result or connection source. Baseline election still requires the reserved
+wire ID. Unexpected public calls stay in diagnostics and make exact-inventory
+acceptance fail. The final run records **two content-type fills, two run-header
+fills, zero conflicts**. This is diagnostic composition, never origin evidence.
+
+This bridge is not a multi-visitor allocation API: the startup run expires after
+five minutes. A public product needs fresh bounded runs separately. A recorded
+pair establishes neither application-wide protection nor durable hosting.
+
+### Reproduce
+
+Use the pinned workspace/browser tooling above. Create a dedicated known-hosts
+file and review its public fingerprint; first retrieval alone is trust on first
+use:
+
+```sh
+mn009_known_hosts=$(mktemp)
+ssh-keyscan -t ed25519 localhost.run 2>/dev/null > "$mn009_known_hosts"
+ssh-keygen -lf "$mn009_known_hosts"
+
+MONOLITH_BROWSER_TOOLS=/absolute/path/to/pinned-browser-tools \
+  node scripts/compare-rpc-routes.ts --provider localhost-run \
+  --ssh /usr/sbin/ssh --ssh-known-hosts "$mn009_known_hosts" \
+  --output /absolute/path/to/a-new-comparison.json
+```
+
+The runner uses `nokey@localhost.run -- --output json --proxy-protocol-v2` and
+accepts only the bounded accepted-registration event as its public origin,
+never the admin/marketing URL from a banner. Actual server `--help` exposes
+`--proxy-protocol-v2`; the [website reference](https://localhost.run/docs/cli)
+instead advertised rejected `--inject-proxy-protocol-header`/version options.
+The observed help-command exit 255 is recorded, not misreported as an
+authentication failure or successful worker test. The [provider FAQ](https://localhost.run/docs/faq)
+warns free domains change after hours. Keep the host/SSH process online for an
+ephemeral demo; this acceptance runner deliberately stops its URL afterward.
+
+### Preserved failures and validation
+
+| Observation | Actual outcome |
+| --- | --- |
+| [Attempt 1](../../tests/privacy/live-observer/observed-localhost-run-attempt1-2026-11-06.json) | Direct controls worked; protected read failed. Coarse counters alone did not identify which request was denied. |
+| [Attempt 2](../../tests/privacy/live-observer/observed-localhost-run-attempt2-2026-11-06.json) | Direct controls worked; no protected request reached the edge. |
+| [Attempt 3](../../tests/privacy/live-observer/observed-localhost-run-attempt3-2026-11-06.json) | Actual protected HTTP 403; read POST arrived without content-type/run/case headers. |
+| [Attempt 4](../../tests/privacy/live-observer/observed-localhost-run-attempt4-2026-11-06.json) | Worker rejected without HTTP response; no protected edge request. |
+| [Attempt 5](../../tests/privacy/live-observer/observed-localhost-run-attempt5-2026-11-06.json) | Plain-record header experiment still returned 403 without those headers. |
+| [Post-main 1](../../tests/privacy/live-observer/observed-localhost-run-post-main-attempt1-2026-11-06.json) | Public health 502, zero PROXY connections, no paired dispatch. |
+| [Post-main 2](../../tests/privacy/live-observer/observed-localhost-run-post-main-attempt2-2026-11-06.json) | Protected HTTP 502 without a protected edge connection, after successful direct controls. |
+
+These preserve network/provider reliability limits; later success does not erase
+them. No direct fallback was introduced; original Cloudflare observations remain
+byte-for-byte unchanged.
+
+After main `dbb1d7e`, pinned `pnpm check` passed lint, package/public-consumer
+types, **1,190 tests in 31 files**, and all production builds. Explicit
+`pnpm exec tsc -p tests/privacy/live-observer/tsconfig.json` passed. The MN-009
+suite has **164 SIMULATED cases** including actual loopback sockets, hostile and
+duplicate headers, strict diagnostic normalization, unchanged body/source and
+unexpected-call visibility. Independent review exercised eight further
+adversarial socket/lifecycle cases and reviewed the bounded metadata bridge.
+Offline tests alone do not prove anonymity.
+
+All 68 final source/compiled/entrypoint/lockfile hashes, installed public SDK
+entry, SSH binary and dedicated pin-file hashes (**71 comparisons**) match the
+final workspace/runtime inputs. Generated JSON bytes are preserved. JSON,
+forbidden-field/IP-literal, documentation link/fence, scope and whitespace checks
+passed. Pure validation now requires exactly one forged direct-control inventory
+entry before accepting a pair, independently of the runner's separate controls.
