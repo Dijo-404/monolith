@@ -1,0 +1,215 @@
+import { AnonRpcWorker } from '@anon-rpc/browser-harness';
+import { readSpecifier } from '@anon-rpc/harness-core';
+
+// Temporary experiment, deliberately independent of the unfinished shared contracts.
+// No wallet data, keys, payment methods, or passthrough worker are used.
+const NETWORKS = {
+  tor: {
+    address: '0x700dA3193D35fA54Cd3fBf29B66f2a2A0385659e',
+    config: {
+      gateways: ['152.236.3.22:12298:uEiCH0VdbhryzJcMtCfB0vLA4sOvHdQ4hq5w7CopcwU59bQ'],
+    },
+  },
+  nym: { address: '0x3aCD9742C68F6d993066Ae25533e09b9e1f60eD0', config: undefined },
+};
+
+const BOOTSTRAP = 'https://ethereum.publicnode.com';
+const TARGET = 'https://ethereum-rpc.publicnode.com';
+const SELECTORS = ['0x3898587d', '0x1c67ff29'] as const;
+type Network = keyof typeof NETWORKS;
+type ProviderRequest = { method: string; params?: unknown };
+
+function failureCode(error: unknown): string {
+  const message = error instanceof Error ? error.message : '';
+  if (/deadline/i.test(message)) return 'ATTEMPT_DEADLINE';
+  if (/bootstrap policy/i.test(message)) return 'BOOTSTRAP_POLICY_DENIED';
+  if (/no resolver yielded/i.test(message)) return 'BUNDLE_UNAVAILABLE_OR_INVALID';
+  if (/worker closed/i.test(message)) return 'WORKER_CLOSED';
+  if (/chain mismatch/i.test(message)) return 'CHAIN_MISMATCH';
+  if (/envelope/i.test(message)) return 'RPC_RESPONSE_INVALID';
+  if (/bootstrap HTTP/i.test(message)) return 'BOOTSTRAP_HTTP_FAILURE';
+  if (/bootstrap RPC/i.test(message)) return 'BOOTSTRAP_RPC_FAILURE';
+  if (/fetch/i.test(message)) return 'NETWORK_FETCH_FAILURE';
+  return 'WORKER_OR_READ_FAILURE';
+}
+
+function fixedResolvers(values: string[]): string[] {
+  // Public contract resolver configuration only; no credentials or query strings.
+  return values.map((value) => {
+    if (value.startsWith('kps:')) return 'kps: [public contract resolver; omitted from export]';
+    const url = new URL(value);
+    return `${url.origin}${url.pathname}`;
+  });
+}
+
+export async function runPreflight(network: Network, timeoutMs: number) {
+  if (!Object.hasOwn(NETWORKS, network)) throw new Error('Unknown network');
+  const selected = NETWORKS[network];
+  const started = performance.now();
+  const calls: Array<{ selector: string; success: boolean; nonAnonymous: true }> = [];
+  const results = new Map<string, string>();
+  const requested = new Set<string>();
+  const bootstrapAbort = new AbortController();
+  const logAbort = new AbortController();
+  let closed = false;
+  const observation = {
+    schemaVersion: 1,
+    observedAt: new Date().toISOString(),
+    evidence: 'BLOCKED',
+    network,
+    specifier: selected.address,
+    config: selected.config ?? null,
+    bootstrap: { origin: BOOTSTRAP, disclosure: 'NON_ANONYMOUS_SPECIFIER_LOOKUP', calls },
+    target: { url: TARGET, expectedChainId: '1', method: 'eth_chainId' },
+    stage: 'BOOTSTRAPPING',
+    specifierMetadata: null as null | { workerHash: string; resolvers: string[]; source: string },
+    harnessReadyObserved: false,
+    result: null as string | null,
+    failure: null as string | null,
+    workerLogs: 0,
+    workerDiagnostics: { torBootstrapPercent: null as number | null,
+      gatewayFailures: 0, timeouts: 0, errors: 0 },
+    shutdown: { closeCalled: false, iframeCountAfterClose: -1, futureReadRejected: false,
+      rejectionCode: null as string | null, rejectionMs: -1 },
+    durationMs: 0,
+    limitations: [
+      'No paired observer proof: MN-009 remains UNTESTED.',
+      'The destination can read RPC payloads.',
+      'Harness ready is not proof of anonymous egress.',
+      'Browser context teardown is required after close to cancel late bootstrap work.',
+    ],
+  };
+  Object.assign(window, { preflightProgress: observation });
+  const update = () => {
+    document.querySelector('#status')!.textContent = JSON.stringify(observation, null, 2);
+  };
+
+  const provider = {
+    async request({ method, params }: ProviderRequest): Promise<string> {
+      const tx = Array.isArray(params) ? params[0] : undefined;
+      if (closed || method !== 'eth_call' || !Array.isArray(params) || params.length !== 2 ||
+          params[1] !== 'latest' || !tx || typeof tx !== 'object' ||
+          Object.keys(tx).sort().join(',') !== 'data,to' ||
+          tx.to?.toLowerCase() !== selected.address.toLowerCase() ||
+          !SELECTORS.includes(tx.data) || requested.has(tx.data) || calls.length >= 2) {
+        throw new Error('bootstrap policy denied');
+      }
+      const call = { selector: tx.data as string, success: false, nonAnonymous: true as const };
+      requested.add(tx.data);
+      calls.push(call);
+      update();
+      const response = await fetch(BOOTSTRAP, {
+        method: 'POST', headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ jsonrpc: '2.0', id: calls.length, method, params }),
+        signal: bootstrapAbort.signal, credentials: 'omit', redirect: 'error',
+      });
+      if (!response.ok) throw new Error('bootstrap HTTP failure');
+      const body = await response.json();
+      if (body.jsonrpc !== '2.0' || body.id !== calls.length || body.error ||
+          typeof body.result !== 'string' || !/^0x(?:[0-9a-fA-F]{2})+$/.test(body.result)) {
+        throw new Error('bootstrap RPC failure');
+      }
+      call.success = true;
+      results.set(tx.data, body.result);
+      if (results.size === 2) {
+        // Public helper decodes the captured actual replies without another network call.
+        const spec = await readSpecifier({
+          request: async ({ params: cachedParams }: ProviderRequest) =>
+            results.get((cachedParams as [{ data: string }])[0].data)!,
+        }, selected.address);
+        observation.specifierMetadata = {
+          workerHash: spec.workerHash,
+          resolvers: fixedResolvers(spec.resolvers),
+          source: 'captured bootstrap responses; not a harness metadata getter',
+        };
+        observation.stage = 'WORKER_STARTING';
+        update();
+      }
+      return body.result;
+    },
+  };
+
+  const worker = new AnonRpcWorker({
+    address: selected.address,
+    config: selected.config,
+    preExisting: { rpcProvider: provider },
+  });
+  // Claim and consume logs so raw worker diagnostics (possibly network addresses)
+  // never reach exported browser console artifacts. Export only the count.
+  const logs = (async () => {
+    try {
+      while (!logAbort.signal.aborted) {
+        const entry = await worker.acceptLog({ signal: logAbort.signal });
+        observation.workerLogs++;
+        // Fixed classifications only. Never retain raw worker log arguments.
+        const message = entry.args.filter((arg) => typeof arg === 'string').join(' ');
+        const progress = /Bootstrapped\s+(\d+)%/i.exec(message);
+        if (progress) observation.workerDiagnostics.torBootstrapPercent = Number(progress[1]);
+        if (/(?:gateway|kps|dial).*(?:fail|error)/i.test(message)) {
+          observation.workerDiagnostics.gatewayFailures++;
+        }
+        if (/timeout|timed out/i.test(message)) observation.workerDiagnostics.timeouts++;
+        if (entry.level === 'error') observation.workerDiagnostics.errors++;
+      }
+    } catch { /* close/abort terminates collection */ }
+  })();
+  let deadline: ReturnType<typeof setTimeout> | undefined;
+  const bounded = new Promise<never>((_, reject) => {
+    deadline = setTimeout(() => reject(new Error('attempt deadline')), timeoutMs);
+  });
+  const read = async () => {
+    await worker.ready;
+    if (closed) throw new Error('worker closed');
+    observation.harnessReadyObserved = true;
+    observation.stage = 'PROTECTED_READ';
+    update();
+    // This is the only application read path. No fetch(TARGET) or direct retry.
+    const response = await worker.fetch(TARGET, {
+      method: 'POST', headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ jsonrpc: '2.0', id: 'mn003-chain', method: 'eth_chainId', params: [] }),
+      signal: bootstrapAbort.signal,
+    });
+    if (!response.ok) throw new Error('worker fetch HTTP failure');
+    const body = await response.json();
+    if (closed) throw new Error('worker closed');
+    if (body.jsonrpc !== '2.0' || body.id !== 'mn003-chain' || body.error ||
+        typeof body.result !== 'string' || !/^0x[0-9a-fA-F]+$/.test(body.result)) {
+      throw new Error('invalid RPC envelope');
+    }
+    if (BigInt(body.result) !== 1n) throw new Error('chain mismatch');
+    observation.result = body.result;
+    observation.evidence = 'OBSERVED_LIVE';
+    observation.stage = 'READ_RETURNED';
+  };
+  try {
+    await Promise.race([read(), bounded]);
+  } catch (error) {
+    observation.failure = failureCode(error);
+    observation.stage = 'BLOCKED';
+  } finally {
+    closed = true;
+    clearTimeout(deadline);
+    bootstrapAbort.abort();
+    logAbort.abort();
+    worker.close();
+    observation.shutdown.closeCalled = true;
+    observation.shutdown.iframeCountAfterClose = document.querySelectorAll('iframe').length;
+    // The real harness must reject future reads after close, even after failed boot.
+    const closingReadStarted = performance.now();
+    try {
+      await worker.fetch(TARGET, { signal: AbortSignal.timeout(1000) });
+    } catch (error) {
+      const timedOut = error instanceof DOMException &&
+        (error.name === 'TimeoutError' || error.name === 'AbortError');
+      observation.shutdown.rejectionCode = timedOut ? 'POST_CLOSE_CHECK_TIMEOUT' : failureCode(error);
+      observation.shutdown.futureReadRejected = !timedOut;
+    }
+    observation.shutdown.rejectionMs = Math.round(performance.now() - closingReadStarted);
+    await logs;
+    observation.durationMs = Math.round(performance.now() - started);
+    update();
+  }
+  return observation;
+}
+
+Object.assign(window, { runPreflight });
