@@ -43,3 +43,34 @@ Run the isolated security boundary tests without changing workspace manifests:
 ```sh
 /absolute/pnpm exec vitest run tests/deploy/prepare-static.test.mjs
 ```
+
+After publishing that exact snapshot, check every served asset against its retained
+local bytes and hashes, including a distinct worker-host HTML document and its module:
+
+```sh
+/absolute/node scripts/deploy/verify-static.mjs \
+  https://your-published-site-origin \
+  /absolute/retained-snapshot-directory \
+  /absolute/new-static-verification.json
+```
+
+This command uses bounded HTTPS GETs, refuses redirects, and sends no credentials.
+It does not execute the worker. Run the actual live UI/browser acceptance on the
+published origin separately; static identity alone cannot establish privacy.
+
+For deployed layout, WebGL fallback and an explicitly injected worker-host outage:
+
+```sh
+MONOLITH_BROWSER_TOOLS=/absolute/pinned-browser-tools \
+  /absolute/node scripts/deploy/browser-deployed.mjs \
+  https://your-published-site-origin \
+  https://your-configured-observer-origin \
+  /absolute/new-static-verification.json \
+  /absolute/new-browser-output-directory
+```
+
+This faults the hosted worker document in a fresh browser context, requires a
+`WORKER_UNAVAILABLE` blocked UI and zero attempted external requests after the
+guard self-check, and captures desktop/mobile/fallback screenshots. It supplies
+no mock SDK or RPC response. Its artifact labels the injected fault explicitly;
+normal worker execution and source comparison use the separate live UI runner.

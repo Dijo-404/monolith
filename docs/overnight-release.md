@@ -6,7 +6,7 @@ The owner requested a built, tested and deployed product by **7 November, 07:00 
 
 Finish Monolith as a privacy regression lab: inject a direct RPC leak, detect it, repair the routing, rerun useful reads and export the measured evidence. Preserve the real Nym transport and Arkiv-backed chain registry. Leave Whitechain out of this overnight scope.
 
-Monolith already has merged transport, observer, analyzer, importer, trusted reader and registry-to-protected-transport implementations. [PR #34](https://github.com/Dijo-404/monolith/pull/34) records actual Nym-protected reads selected from a live Arkiv response. These are stronger starting points than new specifications with several untested external integrations. They do not establish a finished dashboard or successful paired-source proof.
+Monolith already has merged transport, observer, analyzer, importer, trusted reader and registry-to-protected-transport implementations. [PR #34](https://github.com/Dijo-404/monolith/pull/34) records actual Nym-protected reads selected from a live Arkiv response, and [PR #41](https://github.com/Dijo-404/monolith/pull/41) adds an accepted genuine paired-source observation. These are stronger starting points than new specifications with several untested external integrations. Final live dashboard integration and deployment have separate acceptance gates below.
 
 The Downloads alternatives were assessed as supplied specifications, not implemented products:
 
@@ -22,9 +22,10 @@ This is a hackathon delivery decision. Customer demand and willingness to pay re
 
 ## Gates and coordination
 
-- [MN-006](https://github.com/Dijo-404/monolith/issues/6): the owner confirmed the original UI session stopped and authorized takeover. Preserve its saved design, correct misleading fixture claims, integrate current public contracts, validate and open a PR.
-- [MN-009](https://github.com/Dijo-404/monolith/issues/9): actual distinct-source proof remains unpassed. Investigate a documented, no-cost source topology without relaxing the existing Cloudflare guards. A real worker result alone does not establish this comparison.
-- [MN-012](https://github.com/Dijo-404/monolith/issues/12), [MN-014](https://github.com/Dijo-404/monolith/issues/14), [MN-016](https://github.com/Dijo-404/monolith/issues/16) and [MN-017](https://github.com/Dijo-404/monolith/issues/17) retain their acceptance gates. Tests and UI must name live, simulated, blocked and untested states accurately.
+- [MN-006](https://github.com/Dijo-404/monolith/issues/6): after the owner-authorized takeover, the preserved UI and honesty fixes were accepted in [PR #37](https://github.com/Dijo-404/monolith/pull/37). Its shell walkthrough is explicitly simulated; live wiring is separate.
+- [MN-009](https://github.com/Dijo-404/monolith/issues/9): the original infrastructure blocker was resolved with an actual, independently reviewed distinct-source Nym comparison in [PR #41](https://github.com/Dijo-404/monolith/pull/41). The controlled observation is recorded with exact source/build bindings, no ordinary protected-target fallback and disclosed provider/SSH/local-host/header-bridge assumptions. Its temporary tunnel is stopped; a permanent backend is not claimed.
+- [MN-012](https://github.com/Dijo-404/monolith/issues/12): [PR #43](https://github.com/Dijo-404/monolith/pull/43) was accepted with same-seed failing leak/passing repair commands, independent browser capture and a functional gate that rejects blocking all useful reads. This is simulated software-regression evidence, separate from the real worker proof.
+- [MN-014](https://github.com/Dijo-404/monolith/issues/14), [MN-016](https://github.com/Dijo-404/monolith/issues/16) and [MN-017](https://github.com/Dijo-404/monolith/issues/17) retain their integration/release gates. Tests and UI must name live, simulated, blocked and untested states accurately. Fresh public sessions and a reusable observer deployment are tracked in [MN-024](https://github.com/Dijo-404/monolith/issues/38) and [MN-025](https://github.com/Dijo-404/monolith/issues/40).
 - [MN-023](https://github.com/Dijo-404/monolith/issues/36) adds independent deployment preparation. A public URL is not core-release acceptance.
 
 If the actual source comparison cannot pass, publish only the honestly functioning subset and show the unresolved comparison as blocked. Do not mark MN-017 complete or claim the original EF/Arkiv core release on that basis. Any sponsor submission must describe the resulting implementation and its evidence.

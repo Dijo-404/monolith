@@ -540,7 +540,8 @@
       "apps/dashboard/assets/worker-host.html",
       "apps/dashboard/src/components/Header.tsx",
       "apps/dashboard/src/components/stage/Stage.tsx",
-      "apps/dashboard/src/components/stage/StageFallback.tsx"
+      "apps/dashboard/src/components/stage/StageFallback.tsx",
+      "tests/privacy/egress/reviewed-adapters.json"
     ],
     "scope": [
       "Replace the fixture adapters with reviewed transport, observer, registry and analyzer outputs.",

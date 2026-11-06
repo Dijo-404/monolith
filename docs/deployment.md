@@ -8,7 +8,7 @@ Build artifacts must be generated from an exact clean Git commit with the reposi
 
 The GitHub repository was verified **private** during deployment preparation. Publishing the compiled static application is authorized; making the source repository public is a separate owner decision. The Sites source snapshot contains compiled assets, license notices and provenance only. The exact source archive used internally to build is not uploaded with that snapshot. Hackathon source-publication requirements remain outstanding until the owner deliberately authorizes and performs that disclosure.
 
-The connected Sites service is being evaluated for the static dashboard. The observer requires a separately verified source topology for paired-source proof. A free tunnel depends on the workstation staying online and may change its hostname; its public endpoint must not be described as permanent infrastructure.
+The connected Sites service hosts the static-dashboard release workflow. MN-009's historical paired-source observation was accepted in PR #41. The reusable production observer and live UI retain their own final-stack gates. A free tunnel depends on the workstation staying online and may change its hostname; its public endpoint must not be described as permanent infrastructure.
 
 ## Verified preparation
 
@@ -33,3 +33,9 @@ The selected Sites project identity is tracked in `.openai/hosting.json`. It has
 Use the Sites source workflow against that isolated artifact-only snapshot, persist the same Site identity, and pass credentials only through its hidden stdin. Save/deploy the returned exact source commit and unchanged archive. Record the actual saved version, deployment result, public URL, browser check and backend lifetime here when publication runs.
 
 [MN-025 / issue #40](https://github.com/Dijo-404/monolith/issues/40) owns the reusable public observer deployment after the source-proof and fresh-run API gates pass. The final browser UI and release acceptance remain with MN-014/MN-017. A successfully hosted static snapshot does not close those tasks.
+
+## Publication identity check
+
+`scripts/deploy/verify-static.mjs` compares every public distribution file and the root document with the retained snapshot's exact bytes, size and SHA-256. It checks executable content types, rejects a worker-host URL that resolves to the application shell, and requires the worker host's local module to be among the verified assets. Its seven boundary tests and the eight packager tests passed with pinned tools; these are software checks until the command is run against an actual publication.
+
+After that byte check, execute the production live UI workflow against the published HTTPS origin. Only the deployed browser can establish whether the platform permits the nested worker, bootstrap, blob/WASM/WebRTC runtime and useful protected reads. Record actual failures rather than treating successful static delivery as runtime acceptance.
