@@ -7,17 +7,23 @@ import { createRequire } from 'node:module';
 import { mkdir, readFile, readdir, writeFile } from 'node:fs/promises';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { isIP } from 'node:net';
 
 const repository = resolve(dirname(fileURLToPath(import.meta.url)), '../../..');
-const preview = new URL(process.env['MONOLITH_PREVIEW_URL'] ?? '');
+const deployedOrigin = process.env['MONOLITH_DEPLOYED_UI_ORIGIN'];
+const previewInput = process.env['MONOLITH_PREVIEW_URL'];
+const preview = new URL(deployedOrigin ?? previewInput ?? 'http://127.0.0.1:5187/');
 const observer = new URL(process.env['MONOLITH_LIVE_OBSERVER_ORIGIN'] ?? '');
 const output = process.env['MONOLITH_LIVE_OUTPUT'];
 const toolDirectory = process.env['MONOLITH_BROWSER_TOOLS'];
+const publicOrigin = (url, value) => url.protocol === 'https:' && url.origin === value
+  && url.hostname.includes('.') && !isIP(url.hostname) && !/(?:^|\.)(?:localhost|local|internal|invalid)$/.test(url.hostname);
 if (process.version !== 'v24.22.2' || !output || !toolDirectory
-  || preview.protocol !== 'http:' || !['127.0.0.1', 'localhost'].includes(preview.hostname)
+  || (deployedOrigin ? previewInput !== undefined || !publicOrigin(preview, deployedOrigin)
+    : preview.protocol !== 'http:' || !['127.0.0.1', 'localhost'].includes(preview.hostname))
   || observer.protocol !== 'https:' || observer.username || observer.password || observer.pathname !== '/'
   || observer.search || observer.hash || preview.pathname !== '/' || preview.search || preview.hash
-  || preview.username || preview.password) throw new Error('Pinned tools, local preview, public observer origin and new output directory required.');
+  || preview.username || preview.password) throw new Error('Pinned tools, explicit local preview or HTTPS deployment origin, public observer and new output directory required.');
 await mkdir(output);
 const toolRequire = createRequire(join(toolDirectory, 'package.json'));
 const transportRequire = createRequire(join(repository, 'packages/transport/package.json'));
@@ -66,19 +72,23 @@ async function inventory() {
 const source = await inventory();
 const artifact = { schemaVersion: 1, sourceTask: 'MN-014', evidence: 'BLOCKED', passed: false,
   startedAt: new Date().toISOString(), generatedAt: null, node: process.version, playwright: '1.65.0', browser: null,
-  observerOrigin: observer.origin, sourceWorkingTreeClean: true,
+  observerOrigin: observer.origin, target: { kind: deployedOrigin ? 'deployed-https' : 'local-production-preview', origin: preview.origin },
+  sourceWorkingTreeClean: true,
   gitHead: execFileSync('git', ['rev-parse', 'HEAD'], { cwd: repository, encoding: 'utf8' }).trim(),
   source, sourceUnchangedAfterRun: false, cases: [], layouts: [], resolverResponses: [], bootstrapRequests: [], metadata: [],
-  controls: { ordinaryProtectedTargetRequests: 0, directDetectionSelfCheck: false, pageErrors: 0 },
+  controls: { ordinaryProtectedTargetRequests: 0, directDetectionSelfCheck: false, pageErrors: 0, forgedLeakLabels: [] },
   shutdown: { browserContextDestroyed: false, iframeRemovedOnNavigation: false }, failure: null,
   limitations: ['One observed synthetic workflow through the configured trusted observer/forwarder; no universal anonymity claim.',
     'The tunnel provider and observer can see source and request payloads. Their operational retention is unverified.',
     'Two worker bootstrap lookups and ordinary allocation/registry/diagnostic metadata contacts are disclosed separately.',
+    'The existing explicit leak POST receives test-only forged forwarding/case labels; its body and wire ID are preserved and its independent source must remain baseline.',
     'Ordinary page/frame HTTP is intercepted. Worker WebRTC/KPS, wallets, extensions and unrelated pages are outside capture.',
     'No raw IP, forwarding headers, RPC params, private wallet input or raw provider messages are retained.'] };
 let mode = 'idle';
 let activeAllocation = null;
 let latestDiagnostics;
+let leakScenario;
+let leakFixture;
 let controlIds = new Set();
 let browser; let context; let page; let heartbeat;
 const pending = [];
@@ -103,18 +113,34 @@ try {
       const baseline = rpc?.id === activeAllocation?.baselineRpcId;
       const directAllowed = mode !== 'private' && mode !== 'idle' && request.url() === expectedUrl
         && request.method() === 'POST' && rpc && Object.keys(rpc).sort().join(',') === 'id,jsonrpc,method,params'
-        && rpc.jsonrpc === '2.0' && rpcPattern.test(rpc.id) && rpc.method === 'eth_getBalance'
+        && rpc.jsonrpc === '2.0' && typeof rpc.id === 'string' && rpcPattern.test(rpc.id) && rpc.method === 'eth_getBalance'
         && JSON.stringify(rpc.params) === JSON.stringify([`0x${'0'.repeat(40)}`, 'latest'])
         && !controlIds.has(rpc.id) && (baseline || mode === 'leak' && controlIds.size === 1)
         && controlIds.size < (mode === 'leak' ? 2 : 1);
       if (!directAllowed) { await deny(route); return; }
       controlIds.add(rpc.id); directRequests.push({ mode, rpcId: rpc.id, role: baseline ? 'direct-control' : 'leak' });
+      if (!baseline && mode === 'leak') {
+        // Test-only origin-label forgery on the already-counted native leak. No body/ID override.
+        const bodySha256 = sha(request.postData() ?? '');
+        artifact.controls.forgedLeakLabels.push({ rpcId: rpc.id, bodySha256, bodyOverridden: false,
+          categories: ['forwarding-labels', 'protected-case-label'], reservedDocumentationAddressesOnly: true });
+        await route.continue({ headers: { ...request.headers(), 'x-forwarded-for': '192.0.2.77, 198.51.100.42',
+          forwarded: 'for=192.0.2.77', 'x-real-ip': '192.0.2.78', 'cf-connecting-ip': '192.0.2.79',
+          'x-monolith-case': 'protected' } });
+        return;
+      }
     } else if (rpc?.jsonrpc === '2.0' && url.origin !== preview.origin) {
       const selector = rpc?.params?.[0]?.data;
       const bootstrap = url.href === 'https://ethereum.publicnode.com/' && rpc.method === 'eth_call'
-        && rpc.params?.[0]?.to?.toLowerCase() === '0x3acd9742c68f6d993066ae25533e09b9e1f60ed0'
-        && ['0x3898587d', '0x1c67ff29'].includes(selector) && rpc.params?.[1] === 'latest'
-        && ['monolith_bootstrap_hash', 'monolith_bootstrap_resolvers'].includes(rpc.id)
+        && Object.keys(rpc).sort().join(',') === 'id,jsonrpc,method,params'
+        && Array.isArray(rpc.params) && rpc.params.length === 2
+        && rpc.params[0] && typeof rpc.params[0] === 'object' && !Array.isArray(rpc.params[0])
+        && Object.keys(rpc.params[0]).sort().join(',') === 'data,to'
+        && typeof rpc.params[0].to === 'string'
+        && rpc.params[0].to.toLowerCase() === '0x3acd9742c68f6d993066ae25533e09b9e1f60ed0'
+        && (rpc.id === 'monolith_bootstrap_hash' && selector === '0x3898587d'
+          || rpc.id === 'monolith_bootstrap_resolvers' && selector === '0x1c67ff29')
+        && rpc.params[1] === 'latest'
         && artifact.bootstrapRequests.length < 2 && !artifact.bootstrapRequests.some((row) => row.id === rpc.id);
       if (!bootstrap) { await deny(route); return; }
       artifact.bootstrapRequests.push({ id: rpc.id, method: rpc.method, selector });
@@ -173,6 +199,8 @@ try {
     const report = JSON.parse(await readFile(await downloaded.path(), 'utf8'));
     assert.equal(report.mode, mode); assert.equal(report.failure, null);
     assert.equal(report.report.evidence, 'OBSERVED_LIVE');
+    assert.equal(report.scenario.scenarioId, 'monolith.synthetic-balance-widget.v1');
+    assert.equal(report.scenario.seed, 'monolith-zero-address-balance-v1');
     assert.match(await page.getByTestId('live-balance').textContent(), /^0x[0-9a-f]+(?:…[0-9a-f]+)?$/);
     assert(activeAllocation && latestDiagnostics && latestDiagnostics.runId === activeAllocation.runId);
     const rows = await page.locator('.activity__row').evaluateAll((elements) => elements.map((element) => ({
@@ -195,16 +223,30 @@ try {
     assert.equal(report.sourceComparison, mode === 'private' ? 'not-run' : 'confirmed');
     assert.equal(report.report.eligibleReads, rows.length);
     assert.equal(report.report.protectedReads, mode === 'private' ? 0 : mode === 'repair' ? 3 : 2);
-    if (mode === 'leak') assert(report.report.findings.some((row) => row.code === 'DIRECT_BYPASS'));
+    if (mode === 'leak') {
+      assert(report.report.findings.some((row) => row.code === 'DIRECT_BYPASS'));
+      assert.equal(report.widgetFixture.route, 'direct-debug');
+      leakScenario = report.scenario; leakFixture = report.widgetFixture;
+      assert.equal(artifact.controls.forgedLeakLabels.length, 1);
+      assert.equal(latestDiagnostics.observations.find((row) => row.rpcId === artifact.controls.forgedLeakLabels[0].rpcId)?.sourceClass, 'baseline');
+    }
     if (mode === 'repair') {
       assert.equal(report.widgetPrivacy, 'pass'); assert.equal(report.summary.functionalAcceptance, 'pass');
       assert(report.previousLeakReport.findings.some((row) => row.code === 'DIRECT_BYPASS'));
+      assert.deepEqual(report.scenario, leakScenario);
+      assert.deepEqual(report.widgetFixture, { ...leakFixture, route: 'anon-nym' });
+      assert.deepEqual(report.fixturePatch.before, leakFixture);
+      assert.deepEqual(report.fixturePatch.after, report.widgetFixture);
+      assert.deepEqual(report.fixturePatch.operations, [{ op: 'test', path: '', value: leakFixture },
+        { op: 'replace', path: '/route', value: 'anon-nym' }]);
     }
     assert(artifact.resolverResponses.some((row) => row.keccak256 === report.worker.workerHash && row.status === 200));
     const screenshot = `${mode}.png`;
     await page.screenshot({ path: join(output, screenshot), fullPage: true });
     await writeFile(join(output, `${mode}-report.json`), `${JSON.stringify(report, null, 2)}\n`, { flag: 'wx' });
     artifact.cases.push({ mode, passed: true, allocation: activeAllocation, inventory: rows,
+      scenarioId: report.scenario.scenarioId, seed: report.scenario.seed,
+      fixtureRoute: report.widgetFixture?.route ?? null,
       diagnostics: latestDiagnostics, reportSha256: sha(await readFile(join(output, `${mode}-report.json`))),
       screenshot, screenshotSha256: sha(await readFile(join(output, screenshot))) });
   }
@@ -225,6 +267,9 @@ try {
   assert(artifact.shutdown.iframeRemovedOnNavigation);
   await context.close(); context = null;
   artifact.shutdown.browserContextDestroyed = true;
+  await Promise.allSettled(pending);
+  assert.equal(artifact.controls.ordinaryProtectedTargetRequests, 0);
+  assert.equal(artifact.controls.pageErrors, 0); assert.equal(artifact.failure, null);
   assert.deepEqual(await inventory(), source);
   artifact.sourceUnchangedAfterRun = true; artifact.evidence = 'OBSERVED_LIVE'; artifact.passed = true;
 } catch (error) {
@@ -242,6 +287,11 @@ try {
   clearInterval(heartbeat);
   if (context) { await context.close(); artifact.shutdown.browserContextDestroyed = true; }
   await browser?.close(); await Promise.allSettled(pending);
+  if (artifact.passed && (artifact.controls.ordinaryProtectedTargetRequests !== 0
+    || artifact.controls.pageErrors !== 0 || artifact.failure !== null)) {
+    artifact.passed = false; artifact.evidence = 'BLOCKED';
+    artifact.failure ??= 'LATE_CAPTURE_FAILED'; process.exitCode = 1;
+  }
   artifact.directRequests = directRequests;
   artifact.generatedAt = new Date().toISOString();
   await writeFile(join(output, 'browser-live.json'), `${JSON.stringify(artifact, null, 2)}\n`, { flag: 'wx', mode: 0o600 });

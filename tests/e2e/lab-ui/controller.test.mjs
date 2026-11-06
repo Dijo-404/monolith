@@ -131,6 +131,29 @@ describe('live controller lifecycle and independent accounting', () => {
     expect(f.directFetch).not.toHaveBeenCalled();
     await f.controller.close();
   });
+  it('retains one synthetic intent and a route-only fixture patch across distinct leak/repair allocations', async () => {
+    const f = fixture();
+    await f.controller.run('leak');
+    const before = JSON.parse(f.controller.exportReport());
+    const leakRun = f.controller.getSnapshot().allocation.runId;
+    const leakCalls = f.calls.map((call) => ({ method: call.rpc.method, params: call.rpc.params }));
+    f.calls.length = 0;
+    await f.controller.run('repair');
+    const after = JSON.parse(f.controller.exportReport());
+    expect(f.controller.getSnapshot().allocation.runId).not.toBe(leakRun);
+    expect(after.scenario).toEqual(before.scenario);
+    expect(after.scenario.seed).toBe('monolith-zero-address-balance-v1');
+    expect(after.widgetFixture).toEqual({ ...before.widgetFixture, route: 'anon-nym' });
+    expect(after.fixturePatch.before).toEqual(before.widgetFixture);
+    expect(after.fixturePatch.after).toEqual(after.widgetFixture);
+    expect(after.fixturePatch.operations).toEqual([
+      { op: 'test', path: '', value: before.widgetFixture },
+      { op: 'replace', path: '/route', value: 'anon-nym' },
+    ]);
+    expect(f.calls.map((call) => ({ method: call.rpc.method, params: call.rpc.params }))).toEqual(leakCalls);
+    expect(before.widgetPrivacy).toBe('fail'); expect(after.widgetPrivacy).toBe('pass');
+    await f.controller.close();
+  });
   it.each(['warmFailure', 'networkFailure', 'wrongChain', 'expiredRegistry', 'extraReceipt'])(
     'fails closed on %s without any automatic direct request', async (fault) => {
       const f = fixture({ [fault]: true });

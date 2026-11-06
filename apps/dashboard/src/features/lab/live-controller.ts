@@ -10,6 +10,7 @@ import { correlateLiveRun, verifiedLiveWorker } from './correlate.js';
 import { sendDirectFixture, type DirectFixtureSend } from './direct-fixture.js';
 import { createMappedLiveDriver } from './wire-driver.js';
 import { SYNTHETIC_ADDRESS, type LiveAllocation, type LiveMode, type LiveRole, type LiveSnapshot, type LiveWireRead } from './live-types.js';
+import { LIVE_FIXTURE_PATCH, LIVE_SCENARIO, LIVE_WIDGET_FIXTURES } from './scenario.js';
 
 export type LiveLabPorts = {
   enabled: boolean;
@@ -163,11 +164,15 @@ export function createLiveLabController(ports: LiveLabPorts) {
       await read('private');
       if (!current(expected)) return;
       if (mode === 'leak') {
+        // MN014_WIDGET_BEFORE: same fixed balance intent, deliberately outside the transport.
         const leaked = await sendDirectFixture({ consent: true, role: 'leak', evidence: base.evidence, observerOrigin: ports.observerOrigin,
           allocation, endpointId: selected.value.routingEndpointId, uuid: ports.uuid, now: ports.clock.now, elapsed: ports.elapsed,
           send: ports.directFetch, signal: AbortSignal.any([controller.signal, AbortSignal.timeout(15_000)]), onRead });
         if (!leaked.ok) fail(leaked.error.code);
-      } else if (mode === 'repair') await read('repair');
+      } else if (mode === 'repair') {
+        // MN014_WIDGET_AFTER: same fixed balance intent through the verified worker.
+        await read('repair');
+      }
     } catch {
       failure ??= controller.signal.aborted ? 'WORKER_UNAVAILABLE' : 'UPSTREAM_UNAVAILABLE';
     } finally {
@@ -216,6 +221,10 @@ export function createLiveLabController(ports: LiveLabPorts) {
       const analysis = snapshot.correlation?.analysis;
       if (!analysis) return null;
       return `${JSON.stringify({ schemaVersion: 1, observedAt: snapshot.observedAt, mode: snapshot.mode,
+        scenario: LIVE_SCENARIO,
+        widgetFixture: snapshot.mode === 'leak' ? LIVE_WIDGET_FIXTURES.leak
+          : snapshot.mode === 'repair' ? LIVE_WIDGET_FIXTURES.repair : null,
+        fixturePatch: LIVE_FIXTURE_PATCH,
         failure: snapshot.error, report: analysis.report, summary: analysis.summary,
         sourceComparison: snapshot.correlation?.sourceComparison,
         widgetPrivacy: snapshot.correlation?.widgetPrivacy,
