@@ -21,8 +21,7 @@ function literal(node) {
 
 /** Conservative review rule for browser network primitives and direct RPC SDK imports. */
 export function inspectBrowserSource(source, filename) {
-  const tree = ts.createSourceFile(filename, source, ts.ScriptTarget.Latest, true,
-    filename.endsWith('.tsx') ? ts.ScriptKind.TSX : ts.ScriptKind.TS);
+  const tree = ts.createSourceFile(filename, source, ts.ScriptTarget.Latest, true);
   const violations = [];
   const positions = new Set();
   function add(node, reason) {
@@ -70,7 +69,7 @@ export async function checkRpcEgress(root = repository) {
     for (const entry of await readdir(join(root, directory), { withFileTypes: true })) {
       const path = `${directory}/${entry.name}`;
       if (entry.isDirectory()) await walk(path);
-      else if (/\.(?:ts|tsx|js|mjs)$/.test(entry.name)) {
+      else if (/\.(?:ts|tsx|mts|cts|js|jsx|mjs|cjs)$/.test(entry.name)) {
         files++;
         const bytes = await readFile(join(root, path));
         if (Object.hasOwn(pins.files, path)) {

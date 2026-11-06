@@ -10,7 +10,7 @@ The test-owned driver's exchange records bind to the exact outstanding transport
 
 Only an exact one-send synthetic bootstrap call can be excluded: URL, POST method, wire ID, contract, selector, complete parameters and actual `bootstrapFixture` initiator must match. This is disclosed as non-anonymous fixture bootstrap. The chain-ID probe remains eligible. A separate runner capability permits one exact direct negative control; it remains eligible with zero protected credit, so its four-read scenario reports coverage 3/4. Other direct requests fail regardless of caller headers.
 
-`static.mjs` parses actual dashboard and transport-browser source with the installed TypeScript parser. It rejects unreviewed raw network primitives, aliases/destructuring, simple computed property forms and direct viem/ethers/web3 imports. Four reviewed adapter files are pinned by whole-file SHA256: bounded bootstrap, explicit direct debug control, verified SDK host and public registry metadata. An adapter edit requires explicit boundary review and a visible pin update. This is a conservative rule, not universal JavaScript deobfuscation; CSP, workers, arbitrary dependencies and third-party apps are not thereby proven safe.
+`static.mjs` recursively inspects `.js`, `.jsx`, `.mjs`, `.cjs`, `.ts`, `.tsx`, `.mts` and `.cts` files under dashboard source and transport browser adapters. The installed TypeScript parser selects the syntax mode from each filename, including JSX and TSX, so executable expressions inside components are inspected while JSX text, comments and string explanations remain data. It rejects unreviewed raw network primitives, aliases/destructuring, simple computed property forms and direct viem/ethers/web3 imports. Reviewed adapter files are pinned by whole-file SHA256: bounded bootstrap, explicit direct debug control, verified SDK host and public registry metadata. An adapter edit requires explicit boundary review and a visible pin update; the same check applies to every supported source extension. This is a conservative rule, not universal JavaScript deobfuscation; CSP, workers, arbitrary dependencies and third-party apps are not thereby proven safe.
 
 Use Node 24.22.2 / pnpm 12.18.0:
 
@@ -18,7 +18,7 @@ Use Node 24.22.2 / pnpm 12.18.0:
 pnpm install --frozen-lockfile
 pnpm --filter './packages/**' -r build
 pnpm exec tsx scripts/check-rpc-egress.ts
-pnpm exec vitest run tests/privacy/egress/policy.test.mjs
+pnpm exec vitest run tests/privacy/egress/policy.test.mjs tests/privacy/egress/static-files.test.mjs
 pnpm exec tsc -p tests/privacy/egress/tsconfig.json
 MONOLITH_BROWSER_TOOLS=/absolute/path/to/playwright-tools \
   node tests/e2e/privacy/run.mjs --output /tmp/mn012-new-matrix.json
