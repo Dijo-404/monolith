@@ -1,0 +1,94 @@
+{
+  "schemaVersion": 1,
+  "sourceTask": "MN-025",
+  "evidence": "OBSERVED_LIVE",
+  "generatedAt": "2026-11-06T19:16:22.984Z",
+  "scope": "Named joint pre-acceptance browser composition; no permanent hosting, universal anonymity, payment or sponsor-eligibility claim",
+  "observerOrigin": "https://31921fa593eb26.lhr.life",
+  "backendCodeCommit": "072741195c8c01d22156336bf3eaf32b20046f2f",
+  "browserCodeCommit": "d5a1e0a38fe9f21d7237e09ce9bc9c05ed129132",
+  "browserCapture": {
+    "canonicalPath": "tests/e2e/lab-ui/observed-live/2026-11-07/attempt-5/browser-live.json",
+    "sha256": "deb812bc3cff570fa999eefcb8061555f1d2c45b5e60045313f0241f331a687b",
+    "bytes": 45474,
+    "evidence": "OBSERVED_LIVE",
+    "passed": true,
+    "exactWireRows": 13,
+    "freshRuns": 4,
+    "ordinaryProtectedTargetFallbacks": 0,
+    "pageErrors": 0,
+    "forgedLeakBodyOverridden": false,
+    "browserContextDestroyed": true,
+    "iframeRemovedOnNavigation": true
+  },
+  "postCaptureBackendBinding": {
+    "fileCount": 161,
+    "allCurrentBytesMatch": true,
+    "note": "Subsequent evidence/document changes do not alter any pinned runtime input."
+  },
+  "serverAccessKeyConfigured": true,
+  "labTimingPolicy": {
+    "generationTtlMs": 120000,
+    "normalDefaultGenerationTtlMs": 30000,
+    "maximumConfiguredGenerationTtlMs": 300000,
+    "trueContentExpiryClampsGeneration": true,
+    "currentBlockStorageDnsChecksRetained": true,
+    "receivedGenerationExtended": false,
+    "browserValidationTtlMs": "separate UI-owned policy"
+  },
+  "runtime": {
+    "unit": "monolith-public-observer-mn025-20261107-6.service",
+    "stateObservedAfterCapture": "active/running",
+    "maximumSeconds": 43200,
+    "sleepIdleInhibitor": "unprivileged-block",
+    "keptActiveForFinalDashboardQa": true,
+    "lastReadyJsonIsLivenessProof": false,
+    "controlledTeardown": "systemctl --user stop monolith-public-observer-mn025-20261107-6.service"
+  },
+  "historicalBlockedUiCaptures": [
+    {
+      "attempt": 1,
+      "evidence": "BLOCKED",
+      "sha256": "8821f14760277c70aa3f322d5d57563ae52cd27b7180e5295b2d23100a26f1ce",
+      "failure": "REGISTRY_EXPIRED"
+    },
+    {
+      "attempt": 2,
+      "evidence": "BLOCKED",
+      "sha256": "e36c559d694fe82235d2078bf8a9fb53b23519da18c520e54ae7b8fc3ac5eb4b",
+      "failure": "UPSTREAM_UNAVAILABLE"
+    },
+    {
+      "attempt": 3,
+      "evidence": "BLOCKED",
+      "sha256": "102d6489e356ddb3ab1edf1838c54dc5b67146d3d63928272bfabb1ee5ec23d5",
+      "failure": "REGISTRY_UNAVAILABLE"
+    },
+    {
+      "attempt": 4,
+      "evidence": "BLOCKED",
+      "sha256": "8ec3e94beeef355cf90f254593d64d37f0a96024089adb4e79b2a7e0bc82488c",
+      "failure": "REGISTRY_EXPIRED"
+    }
+  ],
+  "canonicalBlockedHistoryDirectory": "tests/e2e/lab-ui/observed-live/2026-11-07/blocked/",
+  "limits": [
+    "Initial SSH TOFU",
+    "Provider TLS/source transform trusted",
+    "Local hostile processes out of scope",
+    "Provider retention unverified",
+    "Workstation uptime and rotating temporary hostname",
+    "No guaranteed 07:00 availability or permanent hostname",
+    "Provider/observer see source and payload; operational retention unverified",
+    "Public synthetic IDs are correlation, not authentication",
+    "No credential file/path/content/hash/header or raw source IP retained"
+  ],
+  "artifacts": {
+    "runtime-bindings.json": "45118e0faf8a1ec5f92d57e0869e11825ce5bfa52eae6ca0c9451cd4cd114cd4",
+    "public-metadata.json": "d273e2626c57f30fbdecd29afa9f6fb4975f851df3f7128c36e00bd99227aebe",
+    "authenticated-metadata-preflight.json": "e1ce38aa40db322e24f6a91d0fcc06fb21dca210eb6e5083e95b9d57e9dfd9a7",
+    "prior-runtime-shutdown.json": "e83f270889cfd2a13a5d083c180a8ddc34fafe5757bfed388a429a495ff0f74f",
+    "installed-runtime-entries.json": "e3421bd0e61914bb93501b72ceb64f111226fc32d4b8d7bbbae9e1b105e83c67",
+    "credential-exclusion.json": "917264f0e242c32ac05bcdaf186524293a9e85a61a16d03002d06a952c49e311"
+  }
+}

@@ -1,10 +1,32 @@
 # Public observer deployment
 
-MN025 builds the reusable public backend required by the live browser lab. The
-accepted MN009 paired observation remains historical evidence for its own exact
-runtime; the new production edge requires its own actual browser check. This
-record will contain the final public origin and source-bound live result only
-after those operations occur.
+The actual four-case browser walkthrough passed on 7 November 2026 IST against
+`https://31921fa593eb26.lhr.life`, using backend commit
+`072741195c8c01d22156336bf3eaf32b20046f2f` and reviewed UI commit `d5a1e0a3`.
+The [canonical MN014 capture](../tests/e2e/lab-ui/observed-live/2026-11-07/attempt-5/browser-live.json)
+is byte-identical to the original, SHA-256
+`deb812bc3cff570fa999eefcb8061555f1d2c45b5e60045313f0241f331a687b`.
+Companion reports/screenshots and four earlier BLOCKED captures belong to MN014;
+the accepted MN009 proof remains historical evidence for its own runtime.
+
+| Fresh run | Exact independent rows | Observed result |
+| --- | ---: | --- |
+| Private | 2 | Nym probe and useful read succeed; no baseline source claim. |
+| Comparison | 3 | Two protected reads differ from baseline; coverage 2/3. |
+| Deliberate leak | 4 | Useful widget leaks directly and fails; coverage 2/4. Forged labels still classify as baseline. |
+| Repair | 4 | Three protected reads succeed, including the repaired useful widget; coverage 3/4. |
+
+All 13 wire IDs match their trace and independent diagnostic inventory. The direct
+baseline stays in coverage denominators. The capture reports zero ordinary
+protected-target fallback calls and page errors; mobile layouts and browser/iframe
+cleanup passed. The real Nym bundle was 18,283,862 bytes with Keccak
+`0xf13a448a8721b9d0b20da3d5b80ffe00bf4c5bb3aae812a38d3d1e3bc81fceb8`.
+
+[Runtime bindings](../deploy/observer/evidence/2026-11-07/runtime-bindings.json)
+pin 161 source/compiled/lock inputs and public tool/SSH-pin hashes; every input
+still matched after capture. [Public metadata](../deploy/observer/evidence/2026-11-07/public-metadata.json)
+recorded health200, trusted registry200 with an exact 120-second generation,
+allocation201 and empty diagnostics200. No new live read is needed for this record.
 
 The [launcher and route contract](../deploy/observer/README.md) document the fixed
 chain10 upstream, accepted registry pins, per-visitor five-minute run allocation,
@@ -13,21 +35,48 @@ metadata uses ordinary HTTP; protected browser RPCs use the verified Nym driver
 or fail closed. No forwarding/case label establishes source, and no SDK or worker
 patch is needed to bridge the observed missing headers.
 
-Software verification: 35 focused tests pass using real loopback sockets with
-SIMULATED source frames, upstreams and provider processes. An independent review
-of the three exact production edge/parser/composition files found no material
-source-trust, request-expansion, resource or cleanup blocker; nine additional
-adversarial loopback groups passed. These checks establish no external worker,
-public availability or sponsor acceptance.
+Only the explicit public lab uses a 120-second registry generation and the UI's
+60-second chain-validation policy. The normal registry default remains 30 seconds.
+Each query revalidates actual storage, publisher/source, chain, current engine
+block and DNS; real content expiry clamps the window. Received leases are never
+retimestamped or extended, and checks before/after exchanges remain enforced.
+All four earlier blocked results remain BLOCKED, including the measured
+30-second in-flight generation expiry that prompted this explicit timing policy.
+
+Server-only Rabdi header authentication addresses the observed anonymous quota
+failure. The [authenticated preflight](../deploy/observer/evidence/2026-11-07/authenticated-metadata-preflight.json)
+recorded five HTTP200 responses. The fixed provider URL rejects redirects, and
+explicit missing/invalid credential configuration fails without anonymous
+fallback. Only the configured boolean is retained; no credential file, path,
+value or hash is included.
+
+Pinned Node24.22.2/pnpm12.18.0 `pnpm check` passed 1,453 tests in 46 files plus
+lint, types and builds. Independent timing review passed 51 focused policy/public
+HTTP cases, alongside the earlier edge/parser/launcher and server-key reviews.
+Simulated socket tests remain separate from the actual observation above.
 
 The trust scope remains the pinned SSH provider, its TLS/source transform,
 initial TOFU enrollment, and a trusted single-user localhost. The provider's
 actual supported flag is preserved in [the earlier sanitized help observation](../tests/privacy/live-observer/observed-localhost-run-provider-help-2026-11-06.json).
 Provider retention and hostname lifetime are unverified; the workstation/user
-service must stay online. Operator source metadata is memory-only and bounded;
-no raw source addresses, request bodies, credentials or private keys are logged.
+service must stay online. Other local processes can forge loopback frames or
+private-hop XFF. Provider and observer can see source and request payloads.
+Evidence retains no raw source addresses, RPC parameters, credential or provider
+message. The original installed Nym/header limitation is bridged explicitly; no
+SDK/worker fix is claimed.
 
-Actual deployment and final-stack browser verification: **not yet recorded**.
-The static dashboard, its publication and final release acceptance remain separate
-tasks. Source/control review and an actual endpoint do not by themselves establish
-application-wide coverage, universal anonymity, payments or sponsor eligibility.
+The current service is `monolith-public-observer-mn025-20261107-6.service`, with a
+12-hour cap and an unprivileged sleep/idle inhibitor. Prior owned processes were
+fully stopped first; the [shutdown record](../deploy/observer/evidence/2026-11-07/prior-runtime-shutdown.json)
+preserves their last READY snapshot separately from actual inactive/PID0/cgroup0
+checks. A READY JSON is not current liveness proof: inspect the user service and
+bounded public health. Keep runtime6 active through final dashboard QA. Teardown:
+
+```sh
+systemctl --user stop monolith-public-observer-mn025-20261107-6.service
+```
+
+This is temporary no-cost hosting, without permanent availability or a guaranteed
+07:00 lifetime. Static dashboard publication and final release acceptance remain
+separate tasks. This result does not establish universal anonymity, unrelated
+application coverage, payments or sponsor eligibility.

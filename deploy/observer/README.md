@@ -3,7 +3,7 @@
 This explicit composition starts the existing observer with fresh synthetic run
 allocation enabled. Its ordinary registry API queries the accepted public Arkiv
 reader. Its only upstream mapping is `lab_optimism` → chain `10` →
-`https://mainnet.optimism.io/`. No account or signing key is used.
+`https://mainnet.optimism.io/`. No transaction signing key is used.
 
 Only this public lab opts into a 120-second registry-generation lifetime; the
 normal reader's 30-second default is unchanged. Actual storage, publisher,
@@ -49,8 +49,8 @@ enrolls or replaces an SSH identity. Use the explicitly reviewed public host pin
 from [MN009's provider observation](../../tests/privacy/live-observer/observed-localhost-run-provider-help-2026-11-06.json).
 Initial enrollment was TOFU; strict pinning subsequently rejects a changed key.
 The actual server help supported `--proxy-protocol-v2`; older website flag names
-were rejected. No paid resource, payer, provider account or private SSH key is
-required for this temporary tunnel.
+were rejected. This temporary SSH tunnel requires no paid resource, payer,
+localhost.run account or private SSH key.
 
 For a session-independent demo process on this Linux workstation, the operator
 can invoke the same command using `systemd-run --user --unit
@@ -64,8 +64,10 @@ only from the accepted registration event; administrative output is discarded.
 The launcher checks only health while waiting for public readiness. It does not
 retry RPC calls, warm a worker or claim live privacy success. Normal termination,
 startup failure, provider exit and cancellation close the child and local API.
-The status transitions through STARTING/READY/CLOSED and includes public tool/pin
-hashes and bounded counters. A successful process start is separate from the
+The status snapshots include STARTING/READY/CLOSED, public tool/pin hashes and
+bounded counters. A repeated termination signal can end the process before its
+final snapshot is written, so READY alone is not current liveness evidence; use
+the user-unit/cgroup state and bounded public health. A successful process start is separate from the
 real browser verification described in [the deployment record](../../docs/observer-deployment.md).
 
 The public edge accepts only:
@@ -114,3 +116,9 @@ pnpm check
 
 No old MN009 source/evidence, normal observer defaults, frontend or root package
 manifest/lockfile is changed by this deployment task.
+
+The [actual deployment record](evidence/2026-11-07/deployment-record.json) binds
+runtime6 and the passing four-case MN014 browser capture. Its metadata/binding
+copies remain byte-identical; the current service is kept active through final
+dashboard QA. Its 12-hour cap and unprivileged sleep/idle inhibitor do not
+guarantee provider or hostname lifetime.
