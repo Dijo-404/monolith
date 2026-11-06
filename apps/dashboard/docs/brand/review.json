@@ -1,0 +1,88 @@
+{
+  "evidence": "OFFLINE_UI_ONLY",
+  "scope": "Production-built header and local logo assets; no run action or live network reads.",
+  "passed": true,
+  "generatedAt": "2026-11-06T22:57:35.009Z",
+  "playwright": "1.65.0",
+  "previews": [
+    "http://127.0.0.1:5209/",
+    "http://127.0.0.1:5210/monolith/"
+  ],
+  "viewports": [
+    320,
+    390,
+    1440
+  ],
+  "modes": [
+    "live",
+    "simulated"
+  ],
+  "headerCasesPassed": 12,
+  "lightDarkAssetSheetsPassed": 4,
+  "keyboardCases": [
+    {
+      "url": "http://127.0.0.1:5209/?mode=simulated",
+      "passed": true,
+      "active": true,
+      "focusVisible": true,
+      "outlineStyle": "solid",
+      "outlineWidth": "2px"
+    },
+    {
+      "url": "http://127.0.0.1:5210/monolith/",
+      "passed": true,
+      "active": true,
+      "focusVisible": true,
+      "outlineStyle": "solid",
+      "outlineWidth": "2px"
+    }
+  ],
+  "headerMarkSize": {
+    "width": 14,
+    "height": 28
+  },
+  "pageErrors": 0,
+  "externalRequests": 0,
+  "applicationApiRequests": 0,
+  "logoImageResponses": 12,
+  "logoImageFailures": 0,
+  "surfaceAssets": [
+    "monolith-mark.svg",
+    "monolith-mark-light.svg",
+    "monolith-mark-mono.svg",
+    "monolith-mark.png",
+    "favicon.svg",
+    "favicon-32.png",
+    "apple-touch-icon.png"
+  ],
+  "faviconSizesChecked": [
+    16,
+    32
+  ],
+  "screenshots": [
+    "brand-sheet.png",
+    "live-320-header.png",
+    "live-1440-header.png"
+  ],
+  "limitations": [
+    "No lab action or live read was run.",
+    "Primary and mono marks are for light surfaces; light variant is for dark surfaces.",
+    "PNG favicon is intended for 32 px display, not enlargement."
+  ],
+  "inputSha256": {
+    "apps/dashboard/index.html": "f02ef61a0b1c4097ad5eaeb9c4b4196bbde8327e379544dd384061aaa37c0158",
+    "apps/dashboard/src/components/Icon.tsx": "a45b0fddcc04c83b32b5fc36a293b5be3a08ed09d52db4cdbda9ed6849b33597",
+    "apps/dashboard/public/assets/brand/apple-touch-icon.png": "1d5fc9c1dd2419869489aef43ef930e0ef42d2839c6ae7cc665f0a2c76e3348c",
+    "apps/dashboard/public/assets/brand/favicon-32.png": "dd0292851828f93f7a17ee1821826502f9e02ae8b938c1763fe95a35b5fd66eb",
+    "apps/dashboard/public/assets/brand/favicon.svg": "2f8a4632d9f999face2e02f698e981ab4854355ddbd66ff40877287cbf2d9a84",
+    "apps/dashboard/public/assets/brand/monolith-mark-light.svg": "dc1c78a0130bbd741de98ed953e6f9b90b20248936e7e09d75b5a43739ebb5d5",
+    "apps/dashboard/public/assets/brand/monolith-mark-mono.svg": "86dd573851062958126b18a0eab91708799661ded5fd784e2f4cd386a7e87016",
+    "apps/dashboard/public/assets/brand/monolith-mark.png": "322ecc7a11f22ae567d70e7d1ab84526ce5eafcebd3ad9991b90d30193bca95a",
+    "apps/dashboard/public/assets/brand/monolith-mark.svg": "372fb430abc8dfe3a9fc779387e745838b28ffa0abaa7a6e827988fdf324d5cf"
+  },
+  "screenshotSha256": {
+    "brand-sheet.png": "475d846d20aee1d4eca147db5674bfdc9a3303969dab007ad006a0f3f8b43b40",
+    "live-320-header.png": "d0772d085d9513d7c6eddd5363dedaecf5e8cb628b33e8f2aaa9a86ee57f7a5f",
+    "live-1440-header.png": "24a22ff2c1e842c74269d1fc99e146a2e0f4c9901f2473d7ee9330a4d7603b98"
+  }
+}

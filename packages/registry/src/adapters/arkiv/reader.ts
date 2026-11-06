@@ -179,7 +179,9 @@ export function createRabdiEntityReader(options: { policy: PublisherPolicy; acce
     // the optional server credential belongs only to the fixed HTTP transport.
     chain: rabdi({ accessKey: '' }),
     transport: http(RPC_URL, { timeout: 5_000, retryCount: 0,
-      ...(accessKey === undefined ? {} : { fetchOptions: { redirect: 'error', headers: { 'X-API-KEY': accessKey } } }),
+      fetchOptions: { redirect: 'error',
+        ...(accessKey === undefined ? {} : { headers: { 'X-API-KEY': accessKey } }),
+      },
     }),
   });
   const client: ArkivReaderClient = {
