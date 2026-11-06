@@ -1,0 +1,200 @@
+{
+  "schemaVersion": 1,
+  "sourceTask": "MN-029",
+  "recordingKind": "actual-local-execution-with-simulated-worker-and-network",
+  "evidence": "SIMULATED",
+  "sourceCommit": "7572b921b33ac08640e967453a43b27887e3a6cd",
+  "originalSourceSha256": "384de824d6a698a6eafec2e18e92c82ae5548fa2c0ffa08e77c135039ceb44c1",
+  "candidateSha256": "60a81e423ed859cc5185eb5cc3b8bece2946952e21f0f2ab7f643d19b60c4e4c",
+  "agentProposal": {
+    "kind": "separate-Codex-collaboration-agent",
+    "inheritedConversation": false,
+    "actualReadInputs": [
+      "examples/agent-harness/app.mjs",
+      "coordinator-supplied observed diagnostic facts"
+    ],
+    "baselineArtifactRead": false,
+    "candidateAppliedToMaintainedSource": false,
+    "provenance": "coordinator-attested, not authenticated by the CLI or hash manifest"
+  },
+  "runs": {
+    "agentRepair": {
+      "startedAt": "2026-11-06T21:13:09.254Z",
+      "generatedAt": "2026-11-06T21:13:11.534Z",
+      "status": "pass",
+      "exitCode": 0,
+      "evidence": "SIMULATED",
+      "errorCode": null,
+      "cleanup": {
+        "workspaceRemoved": true,
+        "runnerResourcesClosed": true
+      },
+      "tools": {
+        "node": "v24.22.2",
+        "collector": "monolith-agent-browser-v1",
+        "cliSha256": "e571a5a90d141929a2654379e8f81f31699a4ab66cef22d84d0f15b1167cade7"
+      },
+      "baseline": {
+        "evidence": "SIMULATED",
+        "captureComplete": true,
+        "functionalPass": true,
+        "privacyPass": false,
+        "unexpectedDirectRequests": 1,
+        "cli": {
+          "exitCode": 1,
+          "data": {
+            "evidence": "SIMULATED",
+            "inputTrust": "unverified-local-input",
+            "eligibleReads": 3,
+            "protectedReads": 2,
+            "successfulReads": 3,
+            "protectedCoverage": 0.6666666666666666,
+            "findings": [
+              {
+                "code": "DIRECT_BYPASS",
+                "count": 1
+              },
+              {
+                "code": "MISSING_TRACE",
+                "count": 1
+              }
+            ],
+            "functionalAcceptance": "unresolved"
+          }
+        },
+        "tools": {
+          "playwright": "1.65.0",
+          "browser": "158.0.8127.18"
+        },
+        "worker": {
+          "ready": true,
+          "kind": "SIMULATED_TEST_DRIVER"
+        }
+      },
+      "candidate": {
+        "evidence": "SIMULATED",
+        "captureComplete": true,
+        "functionalPass": true,
+        "privacyPass": true,
+        "unexpectedDirectRequests": 0,
+        "cli": {
+          "exitCode": 0,
+          "data": {
+            "evidence": "SIMULATED",
+            "inputTrust": "unverified-local-input",
+            "eligibleReads": 3,
+            "protectedReads": 3,
+            "successfulReads": 3,
+            "protectedCoverage": 1,
+            "findings": [],
+            "functionalAcceptance": "pass"
+          }
+        },
+        "tools": {
+          "playwright": "1.65.0",
+          "browser": "158.0.8127.18"
+        },
+        "worker": {
+          "ready": true,
+          "kind": "SIMULATED_TEST_DRIVER"
+        }
+      }
+    },
+    "simulatedWorkerUnavailable": {
+      "startedAt": "2026-11-06T21:13:31.460Z",
+      "generatedAt": "2026-11-06T21:13:32.583Z",
+      "status": "unavailable",
+      "exitCode": 3,
+      "evidence": "SIMULATED",
+      "errorCode": "EXECUTION_UNAVAILABLE",
+      "cleanup": {
+        "workspaceRemoved": true,
+        "runnerResourcesClosed": true
+      },
+      "tools": {
+        "node": "v24.22.2",
+        "collector": "monolith-agent-browser-v1",
+        "cliSha256": "e571a5a90d141929a2654379e8f81f31699a4ab66cef22d84d0f15b1167cade7"
+      },
+      "baseline": {
+        "evidence": "SIMULATED",
+        "captureComplete": true,
+        "functionalPass": false,
+        "privacyPass": false,
+        "unexpectedDirectRequests": 0,
+        "cli": {
+          "exitCode": 1,
+          "data": {
+            "evidence": "SIMULATED",
+            "inputTrust": "unverified-local-input",
+            "eligibleReads": 3,
+            "protectedReads": 0,
+            "successfulReads": 0,
+            "protectedCoverage": 0,
+            "findings": [
+              {
+                "code": "BLOCKED_READ",
+                "count": 2
+              },
+              {
+                "code": "MISSING_EXECUTION",
+                "count": 1
+              }
+            ],
+            "functionalAcceptance": "fail"
+          }
+        },
+        "tools": {
+          "playwright": "1.65.0",
+          "browser": "158.0.8127.18"
+        },
+        "worker": {
+          "ready": false,
+          "kind": "SIMULATED_TEST_DRIVER"
+        }
+      },
+      "candidate": null
+    },
+    "liveUnavailable": {
+      "startedAt": "2026-11-06T21:13:31.476Z",
+      "generatedAt": "2026-11-06T21:13:31.835Z",
+      "status": "unavailable",
+      "exitCode": 3,
+      "evidence": "BLOCKED",
+      "errorCode": "EXECUTION_UNAVAILABLE",
+      "cleanup": {
+        "workspaceRemoved": true,
+        "runnerResourcesClosed": true
+      },
+      "tools": {
+        "node": "v24.22.2",
+        "collector": "monolith-agent-browser-v1",
+        "cliSha256": "e571a5a90d141929a2654379e8f81f31699a4ab66cef22d84d0f15b1167cade7"
+      },
+      "baseline": null,
+      "candidate": null
+    }
+  },
+  "bundleManifestSha256": {
+    "agentRepair": "6142aec6b2be1bdaab3b23821a18121697a3318fcb8ccbd26bde7b7da9c7b5ab",
+    "simulatedWorkerUnavailable": "40edb709f160d7985d20e711b1c822867a8e8c7d50bbc96b61b389230c2df091",
+    "liveUnavailable": "102a30b322906839c96737e5971916fb206ad66b4469ef3726cb8c4ccf337893"
+  },
+  "validation": {
+    "node": "24.22.2",
+    "pnpm": "12.18.0",
+    "workspaceCheck": {
+      "command": "pnpm check",
+      "passed": true,
+      "testFiles": 49,
+      "tests": 1582
+    },
+    "relativeDocumentationLinks": "PASS",
+    "whitespace": "PASS"
+  },
+  "limits": [
+    "No real worker, paired observer or live external-agent repair acceptance was obtained.",
+    "The proposed patch was evaluated by the maintained controller, public CLI check and actual Chromium under SIMULATED adapters.",
+    "This is a retained projection of original local artifacts at the recorded source commit; it does not authenticate caller-supplied evidence or assert that later changes were present in that commit."
+  ]
+}

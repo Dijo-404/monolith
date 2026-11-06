@@ -1,0 +1,207 @@
+{
+  "schemaVersion": 1,
+  "observedAt": "2026-11-06T17:42:27.742Z",
+  "mode": "private",
+  "scenario": {
+    "schemaVersion": 1,
+    "scenarioId": "monolith.synthetic-balance-widget.v1",
+    "seed": "monolith-zero-address-balance-v1",
+    "chainId": "10",
+    "method": "eth_getBalance",
+    "addressFixture": "synthetic-zero-address",
+    "blockTag": "latest",
+    "callsite": "lab.widget",
+    "functionalAssertions": [
+      "balance-read-completes",
+      "canonical-hex-quantity-returned"
+    ]
+  },
+  "widgetFixture": null,
+  "fixturePatch": {
+    "schemaVersion": 1,
+    "format": "application/json-patch+json",
+    "before": {
+      "scenarioId": "monolith.synthetic-balance-widget.v1",
+      "seed": "monolith-zero-address-balance-v1",
+      "chainId": "10",
+      "method": "eth_getBalance",
+      "addressFixture": "synthetic-zero-address",
+      "blockTag": "latest",
+      "callsite": "lab.widget",
+      "privacyRequired": true,
+      "route": "direct-debug"
+    },
+    "after": {
+      "scenarioId": "monolith.synthetic-balance-widget.v1",
+      "seed": "monolith-zero-address-balance-v1",
+      "chainId": "10",
+      "method": "eth_getBalance",
+      "addressFixture": "synthetic-zero-address",
+      "blockTag": "latest",
+      "callsite": "lab.widget",
+      "privacyRequired": true,
+      "route": "anon-nym"
+    },
+    "operations": [
+      {
+        "op": "test",
+        "path": "",
+        "value": {
+          "scenarioId": "monolith.synthetic-balance-widget.v1",
+          "seed": "monolith-zero-address-balance-v1",
+          "chainId": "10",
+          "method": "eth_getBalance",
+          "addressFixture": "synthetic-zero-address",
+          "blockTag": "latest",
+          "callsite": "lab.widget",
+          "privacyRequired": true,
+          "route": "direct-debug"
+        }
+      },
+      {
+        "op": "replace",
+        "path": "/route",
+        "value": "anon-nym"
+      }
+    ],
+    "sourceAnchors": {
+      "before": {
+        "file": "apps/dashboard/src/features/lab/live-controller.ts",
+        "anchor": "MN014_WIDGET_BEFORE"
+      },
+      "after": {
+        "file": "apps/dashboard/src/features/lab/live-controller.ts",
+        "anchor": "MN014_WIDGET_AFTER"
+      },
+      "intent": {
+        "file": "apps/dashboard/src/features/lab/scenario.ts",
+        "anchor": "LIVE_SCENARIO"
+      }
+    }
+  },
+  "failure": null,
+  "report": {
+    "schemaVersion": 1,
+    "runId": "report_1aaea3e8-6e71-4506-b007-fb55eca7e9eb",
+    "evidence": "OBSERVED_LIVE",
+    "eligibleReads": 2,
+    "protectedReads": 0,
+    "successfulReads": 2,
+    "protectedCoverage": 0,
+    "findings": [
+      {
+        "code": "CAPTURE_INCOMPLETE",
+        "callsite": "analysis.scope",
+        "message": "Independent capture is incomplete; protection is unresolved."
+      },
+      {
+        "code": "ROUTE_CONFLICT",
+        "readId": "read-000001",
+        "callsite": "Protected balance read",
+        "message": "The measured route or completion disagrees with the trace."
+      },
+      {
+        "code": "UNKNOWN_ROUTE",
+        "readId": "read-000001",
+        "callsite": "Protected balance read",
+        "message": "The measured network route is unknown."
+      },
+      {
+        "code": "ROUTE_CONFLICT",
+        "readId": "read-000002",
+        "callsite": "Protected chain check",
+        "message": "The measured route or completion disagrees with the trace."
+      },
+      {
+        "code": "UNKNOWN_ROUTE",
+        "readId": "read-000002",
+        "callsite": "Protected chain check",
+        "message": "The measured network route is unknown."
+      }
+    ],
+    "scope": {
+      "rpcOrigins": [
+        "https://a8c155325f3130.lhr.life",
+        "https://ethereum.publicnode.com"
+      ],
+      "scenarios": [
+        "Monolith Leak Lab:Live privacy regression"
+      ],
+      "bootstrapExclusions": [
+        "Non-anonymous worker hash lookup",
+        "Non-anonymous worker resolver lookup"
+      ]
+    }
+  },
+  "summary": {
+    "application": "Monolith Leak Lab",
+    "completionRate": 1,
+    "functionalAcceptance": "unresolved",
+    "latency": [
+      {
+        "endpointId": "endpoint-000001",
+        "chainId": "10",
+        "method": "eth_chainId",
+        "route": "unknown",
+        "sampleCount": 1,
+        "successfulSamples": 1,
+        "p50Ms": 8659.5,
+        "p95Ms": 8659.5
+      },
+      {
+        "endpointId": "endpoint-000001",
+        "chainId": "10",
+        "method": "eth_getBalance",
+        "route": "unknown",
+        "sampleCount": 1,
+        "successfulSamples": 1,
+        "p50Ms": 4229.699999988079,
+        "p95Ms": 4229.699999988079
+      }
+    ]
+  },
+  "sourceComparison": "not-run",
+  "widgetPrivacy": "not-run",
+  "registry": {
+    "endpoint": {
+      "endpointId": "rpc_6f661b1c6c9d0ee9f7b37c559a2285dd470a19f3378d7d610b8ec823f197a130",
+      "chainId": "10",
+      "chainName": "OP Mainnet",
+      "rpcUrl": "https://mainnet.optimism.io/",
+      "publisher": {
+        "creator": "0x93d1a42655f2b0bcfa126e3d2a33e4ab60a74ca4",
+        "owner": "0x93d1a42655f2b0bcfa126e3d2a33e4ab60a74ca4"
+      },
+      "entityKey": "0xc8d33bed907f23f9cddcf19fb151318dbe7758c5880a6378e8f6a50826010f07",
+      "expiresAt": "2026-11-07T13:42:00.547Z",
+      "source": {
+        "url": "https://github.com/ethereum-lists/chains/blob/e17474286275730fb6b0490b1d7ea1c64a36ed9e/_data/chains/eip155-10.json",
+        "revision": "e17474286275730fb6b0490b1d7ea1c64a36ed9e",
+        "licenseUrl": "https://github.com/ethereum-lists/chains/blob/e17474286275730fb6b0490b1d7ea1c64a36ed9e/LICENSE",
+        "snapshotSha256": "2180efb0c0b38e76578ebd8d6470d1acbabb7f90463dd4134e7c6d90a692c952"
+      }
+    },
+    "manifestRevision": "registry_0e32b6885965145ce7c4ba3b2d529344b3d009a86862593ca1a5c68f9b18173d",
+    "generatedAt": "2026-11-06T17:42:12.962Z",
+    "expiresAt": "2026-11-06T17:42:42.962Z"
+  },
+  "worker": {
+    "network": "nym",
+    "specifier": "0x3aCD9742C68F6d993066Ae25533e09b9e1f60eD0",
+    "workerHash": "0xf13a448a8721b9d0b20da3d5b80ffe00bf4c5bb3aae812a38d3d1e3bc81fceb8",
+    "harnessVersion": "0.4.0",
+    "verification": "harness-ready-after-specifier-lookup",
+    "bootstrap": "NON_ANONYMOUS_SPECIFIER_LOOKUP",
+    "bootstrapCalls": 2,
+    "privacyLabel": "ANONYMIZING_WORKER",
+    "observedAt": "2026-11-06T17:42:08.744Z"
+  },
+  "previousLeakReport": null,
+  "limitations": [
+    "Only fixed synthetic reads to the configured observer are covered; this is not universal browser capture.",
+    "The observer forwards only the independently pinned Arkiv-selected RPC URL and can see request payloads.",
+    "Allocation, registry metadata, diagnostics and two worker bootstrap lookups are ordinary non-anonymous contacts.",
+    "Explicit direct controls remain in the denominator and receive no protected credit.",
+    "Worker hop count is not measured. Public transfers and RPC payloads are not hidden."
+  ]
+}
