@@ -6,7 +6,7 @@ The owner requested a built, tested and deployed product by **7 November, 07:00 
 
 Finish Monolith as a privacy regression lab: inject a direct RPC leak, detect it, repair the routing, rerun useful reads and export the measured evidence. Preserve the real Nym transport and Arkiv-backed chain registry. Leave Whitechain out of this overnight scope.
 
-Monolith already has merged transport, observer, analyzer, importer, trusted reader and registry-to-protected-transport implementations. [PR #34](https://github.com/Dijo-404/monolith/pull/34) records actual Nym-protected reads selected from a live Arkiv response. These are stronger starting points than new specifications with several untested external integrations. They do not establish a finished dashboard or successful paired-source proof.
+Monolith already has merged transport, observer, analyzer, importer, trusted reader and registry-to-protected-transport implementations. [PR #34](https://github.com/Dijo-404/monolith/pull/34) records actual Nym-protected reads selected from a live Arkiv response, and [PR #41](https://github.com/Dijo-404/monolith/pull/41) adds an accepted genuine paired-source observation. These are stronger starting points than new specifications with several untested external integrations. Final live dashboard integration and deployment have separate acceptance gates below.
 
 The Downloads alternatives were assessed as supplied specifications, not implemented products:
 

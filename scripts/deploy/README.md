@@ -43,3 +43,17 @@ Run the isolated security boundary tests without changing workspace manifests:
 ```sh
 /absolute/pnpm exec vitest run tests/deploy/prepare-static.test.mjs
 ```
+
+After publishing that exact snapshot, check every served asset against its retained
+local bytes and hashes, including a distinct worker-host HTML document and its module:
+
+```sh
+/absolute/node scripts/deploy/verify-static.mjs \
+  https://your-published-site-origin \
+  /absolute/retained-snapshot-directory \
+  /absolute/new-static-verification.json
+```
+
+This command uses bounded HTTPS GETs, refuses redirects, and sends no credentials.
+It does not execute the worker. Run the actual live UI/browser acceptance on the
+published origin separately; static identity alone cannot establish privacy.
