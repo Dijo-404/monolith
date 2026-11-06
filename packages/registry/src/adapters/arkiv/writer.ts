@@ -237,7 +237,7 @@ export function createRabdiEntityWriter(options: { publisher: string; privateKey
   const chain = rabdi({ accessKey: '' });
   const publicClient = createPublicClient({
     chain,
-    transport: http(RPC_URL, { timeout: 15_000, retryCount: 0 }),
+    transport: http(RPC_URL, { timeout: 15_000, retryCount: 0, fetchOptions: { redirect: 'error' } }),
     pollingInterval: 2_000,
   });
   const services: ArkivWriterClient = {
@@ -265,7 +265,7 @@ export function createRabdiEntityWriter(options: { publisher: string; privateKey
     })();
     if (account.address.toLowerCase() !== options.publisher.toLowerCase()) fail('IMPORT_SIGNER_MISMATCH');
     const wallet = createWalletClient({
-      chain, account, transport: http(RPC_URL, { timeout: 15_000, retryCount: 0 }), pollingInterval: 2_000,
+      chain, account, transport: http(RPC_URL, { timeout: 15_000, retryCount: 0, fetchOptions: { redirect: 'error' } }), pollingInterval: 2_000,
     });
     services.executeBatch = async (records, lifetimeHours, contentExpiresAt) => wallet.executeBatch({
       creates: records.map((record) => ({
