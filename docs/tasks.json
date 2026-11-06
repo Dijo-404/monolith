@@ -956,7 +956,9 @@
       "apps/observer/src/composition/public-demo.ts",
       "apps/observer/test/public-demo/**",
       "deploy/observer/**",
-      "docs/observer-deployment.md"
+      "docs/observer-deployment.md",
+      "packages/registry/src/adapters/arkiv/reader.ts",
+      "packages/registry/test/reader/access-key.test.ts"
     ],
     "scope": [
       "Compose a reusable no-cost public observer/registry process with the reviewed source-trust boundary.",

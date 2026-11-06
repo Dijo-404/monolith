@@ -41,3 +41,5 @@ MN-023 was added for the owner-requested overnight no-cost deployment. Its prepa
 MN-024 fixes the public demo lifecycle: startup-only operator runs expire after five minutes and cannot share a visitor baseline. It adds bounded opt-in allocation and preserves existing defaults plus MN-009's source-proof gate.
 
 MN-014 owns the two exact reviewed live-UI adapter entries in `tests/privacy/egress/reviewed-adapters.json`, coordinated with MN-012 on their issues. This path addition does not authorize scanner changes or exempt other files from review.
+
+MN-025 additionally owns the reader's optional server access-key wiring and its focused test, coordinated with MN-010 on issues #40/#10 after observed public-RPC rate limits. The credential remains local; publisher/source/expiry validation and the public default remain unchanged.
