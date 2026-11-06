@@ -1,0 +1,98 @@
+{
+  "schemaVersion": 1,
+  "sourceTask": "MN-025",
+  "evidence": "OBSERVED_LIVE",
+  "scope": "public metadata only; server-side authenticated Arkiv reads occur; no observer/browser target RPC or worker/privacy success claim",
+  "startedAt": "2026-11-06T19:03:32.198Z",
+  "generatedAt": "2026-11-06T19:03:38.790Z",
+  "origin": "https://31921fa593eb26.lhr.life",
+  "codeCommit": "072741195c8c01d22156336bf3eaf32b20046f2f",
+  "serverAccessKeyConfigured": true,
+  "checks": [
+    {
+      "path": "/api/health",
+      "status": 200,
+      "jsonContentType": true,
+      "body": {
+        "schemaVersion": true,
+        "ok": true,
+        "configured": true
+      },
+      "error": null
+    },
+    {
+      "path": "/api/registry/chains?chainId=10",
+      "status": 200,
+      "jsonContentType": true,
+      "body": {
+        "schemaVersion": 1,
+        "ok": true,
+        "value": {
+          "schemaVersion": 1,
+          "revision": "registry_0e32b6885965145ce7c4ba3b2d529344b3d009a86862593ca1a5c68f9b18173d",
+          "generatedAt": "2026-11-06T19:03:35.751Z",
+          "expiresAt": "2026-11-06T19:05:35.751Z",
+          "evidence": "OBSERVED_LIVE",
+          "origin": "arkiv-query",
+          "endpoints": [
+            {
+              "endpointId": "rpc_6f661b1c6c9d0ee9f7b37c559a2285dd470a19f3378d7d610b8ec823f197a130",
+              "chainId": "10",
+              "chainName": "OP Mainnet",
+              "rpcUrl": "https://mainnet.optimism.io/",
+              "publisher": {
+                "creator": "0x93d1a42655f2b0bcfa126e3d2a33e4ab60a74ca4",
+                "owner": "0x93d1a42655f2b0bcfa126e3d2a33e4ab60a74ca4"
+              },
+              "entityKey": "0xc8d33bed907f23f9cddcf19fb151318dbe7758c5880a6378e8f6a50826010f07",
+              "expiresAt": "2026-11-07T13:42:00.547Z",
+              "source": {
+                "url": "https://github.com/ethereum-lists/chains/blob/e17474286275730fb6b0490b1d7ea1c64a36ed9e/_data/chains/eip155-10.json",
+                "revision": "e17474286275730fb6b0490b1d7ea1c64a36ed9e",
+                "licenseUrl": "https://github.com/ethereum-lists/chains/blob/e17474286275730fb6b0490b1d7ea1c64a36ed9e/LICENSE",
+                "snapshotSha256": "2180efb0c0b38e76578ebd8d6470d1acbabb7f90463dd4134e7c6d90a692c952"
+              }
+            }
+          ]
+        }
+      },
+      "error": null
+    },
+    {
+      "path": "/api/observer/runs",
+      "status": 201,
+      "jsonContentType": true,
+      "body": {
+        "schemaVersion": 1,
+        "ok": true,
+        "value": {
+          "schemaVersion": 1,
+          "runId": "run-2942bc7b-73e2-4eb2-977a-3ea43e30b13b",
+          "baselineRpcId": "rpc-e3018bb3-040a-42d6-9a3d-56717f9d695b",
+          "expiresAt": "2026-11-06T19:08:37.032Z"
+        }
+      },
+      "error": null
+    },
+    {
+      "path": "/api/observer/runs/run-2942bc7b-73e2-4eb2-977a-3ea43e30b13b",
+      "status": 200,
+      "jsonContentType": true,
+      "body": {
+        "schemaVersion": 1,
+        "ok": true,
+        "value": {
+          "schemaVersion": 1,
+          "runId": "run-2942bc7b-73e2-4eb2-977a-3ea43e30b13b",
+          "expiresAt": "2026-11-06T19:08:37.032Z",
+          "observations": []
+        }
+      },
+      "error": null
+    }
+  ],
+  "failure": null,
+  "ordinaryObserverTargetRpcCalls": 0,
+  "observedGenerationLifetimeMs": 120000,
+  "observedRegistryRemainingMs": 119790
+}

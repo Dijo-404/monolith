@@ -1,8 +1,27 @@
 import { spawn } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { readFile, realpath, rename, writeFile } from 'node:fs/promises';
+import { lstat, readFile, realpath, rename, writeFile } from 'node:fs/promises';
 import { isAbsolute, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+
+/** Select one literal server credential; never load/export the surrounding environment. */
+export async function readServerAccessKey(path) {
+  try {
+    if (typeof path !== 'string' || !isAbsolute(path)) throw new Error();
+    const info = await lstat(path);
+    if (!info.isFile() || info.size > 64 * 1024 || (info.mode & 0o077) !== 0) throw new Error();
+    const contents = await readFile(path, 'utf8');
+    const declarations = contents.split(/\r?\n/).filter((line) => /^\s*(?:export\s+)?ARKIV_ACCESS_KEY\s*=/.test(line));
+    if (declarations.length !== 1) throw new Error();
+    let value = declarations[0].replace(/^\s*(?:export\s+)?ARKIV_ACCESS_KEY\s*=\s*/, '').trim();
+    if (value.startsWith('"') || value.startsWith("'")) {
+      const quoted = /^(["'])([^\r\n]*?)\1\s*(?:#.*)?$/.exec(value);
+      if (!quoted) throw new Error(); value = quoted[2];
+    } else value = value.split(/\s+#/, 1)[0];
+    if (!/^[\x21-\x7e]{1,512}$/.test(value)) throw new Error();
+    return value;
+  } catch { throw new Error('Server access key file is missing or invalid.'); }
+}
 
 /** Provider output can contain administrative URLs. Only accepted public registration is projected. */
 export function tunnelOutput(onOrigin) {
@@ -51,18 +70,20 @@ export async function startPublicTunnel(options) {
   const ssh = await realpath(options.ssh); const knownHosts = await realpath(options.knownHosts);
   if (!isAbsolute(options.status) || !isAbsolute(options.ssh) || !isAbsolute(options.knownHosts)) throw new Error('Use explicit absolute operator paths.');
   const statusPath = resolve(options.status);
+  const accessKey = options.arkivEnvFile === undefined ? undefined : await readServerAccessKey(options.arkivEnvFile);
   const startedAt = new Date().toISOString();
   const hashes = {};
   for (const [name, path] of Object.entries({ ssh, knownHosts, launcher: fileURLToPath(import.meta.url) })) hashes[name] = createHash('sha256').update(await readFile(path)).digest('hex');
   // Reserve a new operator status path without following or overwriting an old file.
   await writeFile(statusPath, '{}\n', { flag: 'wx', mode: 0o600 });
   const createDemo = options.createDemo ?? (await import('../../apps/observer/dist/composition/public-demo.js')).createPublicDemo;
-  const demo = await createDemo();
+  const demo = await createDemo(accessKey === undefined ? {} : { accessKey });
   const shutdown = new AbortController(); let child; let origin; let closed = false; let closePromise;
   let statusQueue = Promise.resolve();
   const writeStatus = (state) => { statusQueue = statusQueue.then(async () => {
     const temporary = `${statusPath}.${process.pid}.tmp`;
     await writeFile(temporary, `${JSON.stringify({ schemaVersion: 1, state: closed ? 'CLOSED' : state, startedAt,
+    serverAccessKeyConfigured: accessKey !== undefined,
     observedAt: new Date().toISOString(), ...(origin ? { origin } : {}), hashes, counters: demo.counters(),
     limits: ['TRUSTED_PROVIDER', 'SINGLE_USER_LOCALHOST', 'INITIAL_SSH_TOFU', 'WORKSTATION_UPTIME', 'ROTATING_HOSTNAME', 'PROVIDER_RETENTION_UNVERIFIED'] }, null, 2)}\n`, { flag: 'wx', mode: 0o600 });
     await rename(temporary, statusPath);
@@ -106,8 +127,8 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
   const args = process.argv.slice(2);
   const values = {};
   for (let index = 0; index < args.length; index += 2) {
-    const key = { '--ssh': 'ssh', '--known-hosts': 'knownHosts', '--status': 'status' }[args[index]];
-    if (!key || values[key] || !args[index + 1]) throw new Error('Use --ssh, --known-hosts and --status exactly once.');
+    const key = { '--ssh': 'ssh', '--known-hosts': 'knownHosts', '--status': 'status', '--arkiv-env-file': 'arkivEnvFile' }[args[index]];
+    if (!key || values[key] || !args[index + 1]) throw new Error('Use each documented public demo option exactly once.');
     values[key] = args[index + 1];
   }
   let runtime;
