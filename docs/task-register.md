@@ -32,6 +32,7 @@ Read [the plan](plan.md), [architecture](architecture.md), [contracts](contracts
 | MN-022 | [#22 Package the optional Whitechain evidence and final demo](https://github.com/Dijo-404/monolith/issues/22) | C | release (optional) | [MN-017](https://github.com/Dijo-404/monolith/issues/17), [MN-021](https://github.com/Dijo-404/monolith/issues/21) | `feat/mn-022-whitechain-release` |
 | MN-023 | [#36 Prepare no-cost deployment and overnight release hosting](https://github.com/Dijo-404/monolith/issues/36) | C | release | [MN-001](https://github.com/Dijo-404/monolith/issues/1), [MN-002](https://github.com/Dijo-404/monolith/issues/2) | `feat/mn-023-no-cost-deployment` |
 | MN-024 | [#38 Allocate fresh bounded public synthetic observer runs](https://github.com/Dijo-404/monolith/issues/38) | C | integration | [MN-001](https://github.com/Dijo-404/monolith/issues/1), [MN-002](https://github.com/Dijo-404/monolith/issues/2), [MN-004](https://github.com/Dijo-404/monolith/issues/4) | `feat/mn-024-public-lab-runs` |
+| MN-025 | [#40 Deploy reusable no-cost public observer and registry API](https://github.com/Dijo-404/monolith/issues/40) | C | release | [MN-009](https://github.com/Dijo-404/monolith/issues/9), [MN-010](https://github.com/Dijo-404/monolith/issues/10), [MN-024](https://github.com/Dijo-404/monolith/issues/38) | `feat/mn-025-public-observer-deployment` |
 
 Only MN-001 starts ready. Promote downstream tasks after prerequisite merges **and** accepted evidence. MN-017 is the core release; MN-018 through MN-022 are conditional and never block it.
 

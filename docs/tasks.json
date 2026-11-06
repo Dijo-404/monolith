@@ -929,5 +929,44 @@
     ],
     "gate": "MN-001, MN-002 and MN-004 accepted; coordinate with active MN-009 owner without editing its live-proof paths or changing its unresolved source gate.",
     "conditional": false
+  },
+  {
+    "id": "MN-025",
+    "title": "Deploy reusable no-cost public observer and registry API",
+    "lane": "C",
+    "phase": "release",
+    "priority": "P0",
+    "estimate": "1–2 hours",
+    "branch": "feat/mn-025-public-observer-deployment",
+    "depends_on": [
+      "MN-009",
+      "MN-010",
+      "MN-024"
+    ],
+    "paths": [
+      "apps/observer/src/adapters/http/public-lab-edge.ts",
+      "apps/observer/src/adapters/http/proxy-v2.ts",
+      "apps/observer/src/composition/public-demo.ts",
+      "apps/observer/test/public-demo/**",
+      "deploy/observer/**",
+      "docs/observer-deployment.md"
+    ],
+    "scope": [
+      "Compose a reusable no-cost public observer/registry process with the reviewed source-trust boundary.",
+      "Bridge only missing diagnostic run/content-type metadata through a strictly validated synthetic-run query; preserve RPC body, wire ID, result and source.",
+      "Record real startup/cleanup, endpoint/tool/input hashes, controls and explicit free-tunnel availability/retention limits."
+    ],
+    "acceptance": [
+      "Only configured health, registry, synthetic run allocation/diagnostics and read-only RPC routes are exposed with strict resource limits.",
+      "Caller forwarding/route headers never establish source; host-pinned SSH and loopback PROXYv2 trust plus TOFU/single-user-host limits are explicit.",
+      "Run query/header conflicts, duplicates, unsafe targets, oversized traffic and cross-run contamination are rejected; the actual observer remains authoritative for registration/expiry/upstream policy.",
+      "The actual public process and real-worker checks are recorded without raw IP/body/key logs or permanent-cloud claims."
+    ],
+    "evidence": [
+      "Source/HTTP/run isolation/expiry/abuse test results and current checks",
+      "Actual public endpoint, pinned-tool/input hashes, real-worker/source controls and cleanup/startup evidence"
+    ],
+    "gate": "MN-009, MN-010 and MN-024 merged with accepted evidence; coordinate deploy/observer subtree with MN-023 owner.",
+    "conditional": false
   }
 ]

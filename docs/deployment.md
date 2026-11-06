@@ -10,4 +10,26 @@ The GitHub repository was verified **private** during deployment preparation. Pu
 
 The connected Sites service is being evaluated for the static dashboard. The observer requires a separately verified source topology for paired-source proof. A free tunnel depends on the workstation staying online and may change its hostname; its public endpoint must not be described as permanent infrastructure.
 
-This guide will record exact preparation/publication commands, actual URLs, browser checks and remaining limits after those operations run. No public application deployment is claimed by this initial document.
+## Verified preparation
+
+The deployment helper is documented in [scripts/deploy/README.md](../scripts/deploy/README.md). At source `d8c326ef1438b0d05f30629e437aa227469b5004`, this exact command completed a fresh Git archive, frozen dependency installation and Vite build:
+
+```sh
+/home/dj/.local/share/monolith-pr-watcher/toolchain/node-v24.22.2-linux-x64/bin/node scripts/deploy/prepare-static.mjs \
+  --commit d8c326ef1438b0d05f30629e437aa227469b5004 \
+  --out /tmp/monolith-mn023-packaging-smoke2-20261106 \
+  --pnpm /home/dj/.local/share/monolith-pr-watcher/toolchain/pnpm-12.18.0-linux-x64/pnpm \
+  --observer-url https://6101bf2f6b5186.lhr.life
+```
+
+This was a **packaging smoke check only**. The observer origin was a recorded, already-stopped preflight endpoint; no backend availability or public product deployment is claimed for that artifact. The actual output contains six static files and 26 retained notices, including all three bundled font licenses. Independent file size/SHA-256 checks matched every asset and notice; the private Git source archive is absent. The helper's eight security-boundary tests and scoped ESLint passed after the final pnpm-path and font-notice fixes.
+
+With the accepted UI merged, the preceding combined `pnpm check` passed 1,173 tests in 31 files, lint, type checks and builds. It used Node 24.22.2 and pnpm 12.18.0 with both executable directories on `PATH`. The last font-notice-only adjustment then passed the focused tests and the actual fresh packaging smoke above. These are preparation checks, not core release or live privacy acceptance.
+
+## Publication state
+
+The selected Sites project identity is tracked in `.openai/hosting.json`. It has been registered once and remains unpublished at this preparation stage. Generate a new snapshot from the final tested source with the actual current HTTPS backend; never publish the smoke artifact above as the final product.
+
+Use the Sites source workflow against that isolated artifact-only snapshot, persist the same Site identity, and pass credentials only through its hidden stdin. Save/deploy the returned exact source commit and unchanged archive. Record the actual saved version, deployment result, public URL, browser check and backend lifetime here when publication runs.
+
+[MN-025 / issue #40](https://github.com/Dijo-404/monolith/issues/40) owns the reusable public observer deployment after the source-proof and fresh-run API gates pass. The final browser UI and release acceptance remain with MN-014/MN-017. A successfully hosted static snapshot does not close those tasks.
