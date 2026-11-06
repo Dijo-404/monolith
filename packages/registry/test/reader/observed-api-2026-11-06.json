@@ -1,0 +1,177 @@
+{
+  "schemaVersion": 1,
+  "task": "MN-010",
+  "evidence": "OBSERVED_LIVE",
+  "generatedAt": "2026-11-06T14:31:47.843Z",
+  "environment": {
+    "nodeVersion": "v24.22.2",
+    "sdk": "1.0.1",
+    "chain": "Arkiv Rabdi",
+    "chainId": "7794095",
+    "signingEnvironmentInherited": false,
+    "candidateRpcContact": false,
+    "observerEndpointMapConfigured": false
+  },
+  "policy": {
+    "creator": "0x93D1A42655F2B0BCFa126e3D2a33e4ab60a74CA4",
+    "owner": "0x93D1A42655F2B0BCFa126e3D2a33e4ab60a74CA4",
+    "sourceRevision": "e17474286275730fb6b0490b1d7ea1c64a36ed9e",
+    "snapshotSha256": "2180efb0c0b38e76578ebd8d6470d1acbabb7f90463dd4134e7c6d90a692c952",
+    "licenseSha256": "1126322e2cc8d165adc4c792eeb195717de2bcc7b39be1ce77959d78e87ef685",
+    "allowedOrigins": [
+      "https://mainnet.optimism.io"
+    ]
+  },
+  "sourceBinding": {
+    "files": {
+      "packages/registry/src/index.ts": "50b5f65abb4bfe2ce7bf11487d453d0b8aa04125d294189c8add8f21aaf7e80f",
+      "packages/registry/dist/index.js": "8e12012506b77ebb5b68f44afd7e16fe82ea3967cea1fab44263789454306a23",
+      "packages/registry/src/adapters/arkiv/schema.ts": "c30d5efff75c03a9434c5a5e96919c78727ec9631360094d11187978e11a39f6",
+      "packages/registry/dist/adapters/arkiv/schema.js": "c8553e55cd25390c4386392616bd56a2b12f8a1362d1cf5e00164daf9100f25d",
+      "packages/registry/src/adapters/arkiv/reader.ts": "7223cc90aca68ac78f7f846d545eb83cd5d68007007909b89419a0de8549f487",
+      "packages/registry/dist/adapters/arkiv/reader.js": "0244f290fe6f478e46f666e60545b42cefb1ba6cc5abb3f13a8aa098ddac30eb",
+      "packages/registry/src/ports/entity-reader.ts": "16f209e497b007ca42d4ca03ec30237fb9793fcb6b7271c991de592c33022d8f",
+      "packages/registry/dist/ports/entity-reader.js": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881",
+      "packages/registry/src/ports/source-snapshot.ts": "88c83204ee4b1d21209b75fc53d449026ff4c8b5e24a2ea144764ee62fe36630",
+      "packages/registry/dist/ports/source-snapshot.js": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881",
+      "packages/registry/src/domain/source-policy.ts": "806e3ae099c1a4576c4fb787a74d688f58a0ab7a82a2ee123978c241f1cbe8b7",
+      "packages/registry/dist/domain/source-policy.js": "82cfbf66a2c5ce5957fbbc3ba79d326a27502a0ba0f50134598e44835dbdf2e7",
+      "packages/registry/src/domain/publisher-policy.ts": "3df32e3a496fad1d5aa9948f3695caf3fc1b8ce47b9ccc7d78bf6a9b1e59c33d",
+      "packages/registry/dist/domain/publisher-policy.js": "9e726086c8ca1e42effdc09ba812cd9761b53840a608fa03bd9861a99e08c9cd",
+      "packages/registry/src/domain/freshness.ts": "6dbdfc1f820040dce99bea61afb726dd8cd7d4a8ee43f29b1282b7c88d08f246",
+      "packages/registry/dist/domain/freshness.js": "46006e40ffad003b34c1137a8414b9720c0b0fb6d50323991a1285b496da04ce",
+      "packages/registry/src/domain/endpoint-policy.ts": "05164cd74bbb9427b796fb47bea45186028adf4df70cdad41adde8f5169a7331",
+      "packages/registry/dist/domain/endpoint-policy.js": "57e820b1e916d6ec5f64765218123969a0015a183063b7ad58923f97f07c9413",
+      "packages/registry/src/application/query-registry.ts": "c6eaa43f113abc0d9f862e91e52e9cef4aea684f5cc434c049d586cfee55e229",
+      "packages/registry/dist/application/query-registry.js": "88919d56525c158b6af840d5190f601dccdc6073035c05256880a8513a1e98e0",
+      "apps/observer/src/composition/registry.ts": "e20cfac6bb4b65f35bf596f4bf5c1b0f5e1bf8ba40d94b44b133f319023e5107",
+      "apps/observer/dist/composition/registry.js": "13f26e5a9b44709419379508f382b14fa65933511fb0b2071efb618fb497320a",
+      "apps/observer/src/composition/server.ts": "10dee16c5d41e9b8bef425a5f067fa31c04ed76b82c54ba5c1a711be19b333ac",
+      "apps/observer/dist/composition/server.js": "3cd13f4a6588c1977292a82e1570a308556091d4c46d7d8a05f94547527856d0",
+      "apps/observer/src/composition/start.ts": "dd221f6d63c40c59c027097ea713f921a2a87a13568d9a01d7ffe274e24f7da5",
+      "apps/observer/dist/composition/start.js": "a012052e9c532d506fb8e8d50bf95c15ac7607679506724e10e1efcbe7828508",
+      "apps/observer/src/composition/env.ts": "9a2bc93c4b217c8562aec0f892c125840c133ab01697f8b0cd53fe5a6c444d06",
+      "apps/observer/dist/composition/env.js": "7a4cde7de4a9cfbd9fe8eec80c3219a374b174a834681d5b3d828c3f5c3eeb3b",
+      "apps/observer/src/adapters/http/registry.ts": "23c3c574596daa7720ed1b3657e9699e6c4242aa88a012ace1d10e995a58fa2d",
+      "apps/observer/dist/adapters/http/registry.js": "466fdb8f32821bac6105e162ed0f312995e891cf3a52b84aae3969075076b8c0",
+      "apps/observer/src/adapters/upstream/public-address.ts": "b0335ef4b9e435930b9b34fccab5fc91f59c0dbc1d4018d4b4db39dcd479eb3c",
+      "apps/observer/dist/adapters/upstream/public-address.js": "e2d130abef93fcf1ce2a985a52061c207e0e4078bde68f833547987e1a72622a",
+      "apps/observer/src/adapters/upstream/dns-resolver.ts": "e85003fdb91e99eb0766f44a04e18906669426c7309c87b7ec869208e045e391",
+      "apps/observer/dist/adapters/upstream/dns-resolver.js": "0ec8853615f8c857da91fd68197b9cf5ad55ceaefc8f7763e4987a5a79a41df0",
+      "packages/shared/src/transport.ts": "c87baaf8c74efc2c9bc7969c2328b957dfa24dc188d60d6b21a4c0c7b5e494d4",
+      "packages/shared/dist/transport.js": "17e2698dad1daf0d5bdf105d633c72163f39a971e4e24953828de09ae3675ef6",
+      "packages/shared/src/rpc.ts": "bba2f58302254b1463469e4dbe12d0704cf2a5afb6a9dc1862a98d899bdebbd4",
+      "packages/shared/dist/rpc.js": "fc668598722144e4c691bf8cb88e0b548c57885ac2bec2d5a3fc75900723f93a",
+      "packages/shared/src/report.ts": "a21b73f81d9e76d6020d3de7f6b10fa65fbe8cb20005634f5ec9e34f4f96001b",
+      "packages/shared/dist/report.js": "c2f14ebd9d65b22181806868fcff9b7e7237bb6836c94bc8af1157c3a5a7de1e",
+      "packages/shared/src/registry.ts": "58a5605b6b05f45afa202fd999b71ff05651d9c54517308bfbcf8d27cf7fdde1",
+      "packages/shared/dist/registry.js": "4f1bbc750e74c63d6cdb2d1e38ff45a1f7b9b117d05acd84d8e2502172e917d4",
+      "packages/shared/src/primitives.ts": "01659721028e687f20e856ad09eb8964f7f098fc3cf271843f64ccd5f5d84cdc",
+      "packages/shared/dist/primitives.js": "3256ed2dfbfaacc6f5c6f211d59a468df1191c6dafda9b9131209e8d8d702066",
+      "packages/shared/src/payment.ts": "50d44c0e6f87afa59d0a4b989b0de4272f2d26ef8f26a30095d75b8201b59b88",
+      "packages/shared/dist/payment.js": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881",
+      "packages/shared/src/observer.ts": "02f986594b59a423fe22a0639e3d6089548c3ed63dc9729e316e89d7dfe7acd2",
+      "packages/shared/dist/observer.js": "f62d974b571f35f79c7ae8617b58632e342115cfa1bf2cc59aa3eca0086bac39",
+      "packages/shared/src/index.ts": "0cd9e827a3a7bed3efffdbaef7db7d410793298e10610e64c32d1a17261acbb0",
+      "packages/shared/dist/index.js": "39998d7079cb0bb342c5c6a9fb12492bd46e44680ae0e272e1fd943db58912c5",
+      "packages/shared/src/evidence.ts": "c757c4c3f528fde7256300e39d76ae315e7f057b238d74ce374c2766ac4a4f4a",
+      "packages/shared/dist/evidence.js": "4d0139e1af30a657512a68288c34bbac9384820cd05c773b83b4f22facb4cdd3",
+      "packages/shared/src/errors.ts": "973b400706d57af5eced5d9a0128d9beb040ae9e650f81751e7526404940d68b",
+      "packages/shared/dist/errors.js": "75613d3a466c17efe0baa7d475cc970d44e4e85e32c00832c4a6e794d1fafe3a"
+    },
+    "lockSha256": "524520d2960a9baf77dca1d0512a34543cb9d83a32b7cfebc27db42a806f8224"
+  },
+  "reason": "PUBLIC_METADATA_API_VERIFIED",
+  "results": {
+    "first": {
+      "status": 200,
+      "cacheControl": "no-store",
+      "body": {
+        "schemaVersion": 1,
+        "ok": true,
+        "value": {
+          "schemaVersion": 1,
+          "revision": "registry_0e32b6885965145ce7c4ba3b2d529344b3d009a86862593ca1a5c68f9b18173d",
+          "generatedAt": "2026-11-06T14:31:49.976Z",
+          "expiresAt": "2026-11-06T14:32:19.976Z",
+          "evidence": "OBSERVED_LIVE",
+          "origin": "arkiv-query",
+          "endpoints": [
+            {
+              "endpointId": "rpc_6f661b1c6c9d0ee9f7b37c559a2285dd470a19f3378d7d610b8ec823f197a130",
+              "chainId": "10",
+              "chainName": "OP Mainnet",
+              "rpcUrl": "https://mainnet.optimism.io/",
+              "publisher": {
+                "creator": "0x93d1a42655f2b0bcfa126e3d2a33e4ab60a74ca4",
+                "owner": "0x93d1a42655f2b0bcfa126e3d2a33e4ab60a74ca4"
+              },
+              "entityKey": "0xc8d33bed907f23f9cddcf19fb151318dbe7758c5880a6378e8f6a50826010f07",
+              "expiresAt": "2026-11-07T13:42:00.547Z",
+              "source": {
+                "url": "https://github.com/ethereum-lists/chains/blob/e17474286275730fb6b0490b1d7ea1c64a36ed9e/_data/chains/eip155-10.json",
+                "revision": "e17474286275730fb6b0490b1d7ea1c64a36ed9e",
+                "licenseUrl": "https://github.com/ethereum-lists/chains/blob/e17474286275730fb6b0490b1d7ea1c64a36ed9e/LICENSE",
+                "snapshotSha256": "2180efb0c0b38e76578ebd8d6470d1acbabb7f90463dd4134e7c6d90a692c952"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "second": {
+      "status": 200,
+      "cacheControl": "no-store",
+      "body": {
+        "schemaVersion": 1,
+        "ok": true,
+        "value": {
+          "schemaVersion": 1,
+          "revision": "registry_0e32b6885965145ce7c4ba3b2d529344b3d009a86862593ca1a5c68f9b18173d",
+          "generatedAt": "2026-11-06T14:31:49.976Z",
+          "expiresAt": "2026-11-06T14:32:19.976Z",
+          "evidence": "OBSERVED_LIVE",
+          "origin": "arkiv-query",
+          "endpoints": [
+            {
+              "endpointId": "rpc_6f661b1c6c9d0ee9f7b37c559a2285dd470a19f3378d7d610b8ec823f197a130",
+              "chainId": "10",
+              "chainName": "OP Mainnet",
+              "rpcUrl": "https://mainnet.optimism.io/",
+              "publisher": {
+                "creator": "0x93d1a42655f2b0bcfa126e3d2a33e4ab60a74ca4",
+                "owner": "0x93d1a42655f2b0bcfa126e3d2a33e4ab60a74ca4"
+              },
+              "entityKey": "0xc8d33bed907f23f9cddcf19fb151318dbe7758c5880a6378e8f6a50826010f07",
+              "expiresAt": "2026-11-07T13:42:00.547Z",
+              "source": {
+                "url": "https://github.com/ethereum-lists/chains/blob/e17474286275730fb6b0490b1d7ea1c64a36ed9e/_data/chains/eip155-10.json",
+                "revision": "e17474286275730fb6b0490b1d7ea1c64a36ed9e",
+                "licenseUrl": "https://github.com/ethereum-lists/chains/blob/e17474286275730fb6b0490b1d7ea1c64a36ed9e/LICENSE",
+                "snapshotSha256": "2180efb0c0b38e76578ebd8d6470d1acbabb7f90463dd4134e7c6d90a692c952"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "clientBodiesIdentical": true,
+    "privateQuery": {
+      "status": 400,
+      "cacheControl": "no-store",
+      "body": {
+        "schemaVersion": 1,
+        "ok": false,
+        "error": {
+          "code": "INVALID_INPUT",
+          "message": "The input does not match the contract.",
+          "retryable": false
+        }
+      }
+    },
+    "observerRpcMapStatus": 403
+  },
+  "shutdown": {
+    "observerStopped": true
+  }
+}

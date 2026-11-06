@@ -372,7 +372,13 @@
       "apps/observer/src/adapters/http/registry.ts",
       "apps/observer/src/composition/registry.ts",
       "apps/observer/test/registry/**",
-      "packages/registry/test/reader/**"
+      "packages/registry/test/reader/**",
+      "packages/registry/src/index.ts",
+      "packages/registry/package.json",
+      "apps/observer/src/composition/server.ts",
+      "apps/observer/src/composition/start.ts",
+      ".env.example",
+      "docs/tasks.json"
     ],
     "scope": [
       "Query public network metadata by trusted creator/owner and publish a sanitized shared snapshot API without wallet/session parameters.",
