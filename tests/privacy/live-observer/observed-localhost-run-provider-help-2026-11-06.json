@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "sourceTask": "MN-009",
+  "evidence": "OBSERVED_LIVE",
+  "scope": "actual-provider-cli-help-and-public-server-identity-only",
+  "generatedAt": "2026-11-06T16:04:32.446850+00:00",
+  "provider": "localhost.run",
+  "sshCommandExitCode": 255,
+  "safeHelpLines": [
+    "Usage: tunnel [OPTIONS]",
+    "--inject-http-proxy-headers  inject http proxy headers into http requests",
+    "--proxy-protocol-v2          inject proxy protocol v2 at the beginning of streams",
+    "--output <output>            output format [default: text] [possible values: text, json]"
+  ],
+  "knownHostsSha256": "f18ad2187f181de3052fb073724990d41e13ed4732f6c209e34bb98aa7ed4324",
+  "publicServerKeyFingerprints": [
+    "SHA256:pG6qrBxubYfWa1Zadu/V0NUgjEDiBds/7e2xzte/QNM"
+  ],
+  "serverIdentityEnrollment": "trust-on-first-use in isolated preflight; subsequent commands require exact explicit known-hosts pin; global file disabled",
+  "limitations": [
+    "This is not a worker read, paired-source observation, or durable deployment.",
+    "Raw SSH output and all IP addresses were discarded, not saved."
+  ]
+}
