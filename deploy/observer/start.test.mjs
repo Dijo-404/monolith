@@ -1,9 +1,9 @@
 // SIMULATED provider subprocesses; no SSH, external HTTP, chain or worker contact.
-import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
+import { chmod, mkdtemp, readFile, rm, symlink, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { expect, test, onTestFinished, vi } from 'vitest';
-import { startPublicTunnel, tunnelOutput, waitUntilReady } from './start.mjs';
+import { readServerAccessKey, startPublicTunnel, tunnelOutput, waitUntilReady } from './start.mjs';
 
 const origin = 'https://123456abcdef.lhr.life';
 const registered = JSON.stringify({ type: 'v1.tcpip_forward.register.accepted', id: 'localhost/123456abcdef.lhr.life' });
@@ -88,4 +88,44 @@ test('cancellation during the final asynchronous READY write cannot resolve a cl
   await expect(startPublicTunnel({ ...f, createDemo, signal: controller.signal, fetchHealth: health })).rejects.toThrow('could not start');
   expect(f.close).toHaveBeenCalledTimes(1);
   expect(JSON.parse(await readFile(f.status, 'utf8')).state).toBe('CLOSED');
+});
+
+test('only the selected literal key is loaded; unrelated environment values are never exported', async () => {
+  const f = await fixture(); const file = join(f.directory, 'server.env');
+  const key = 'SIMULATED_FILE_ONLY_KEY_12345';
+  await writeFile(file, `OTHER_SECRET=SIMULATED_UNRELATED_SECRET\nexport ARKIV_ACCESS_KEY="${key}" # selected only\n`, { mode: 0o600 });
+  expect(await readServerAccessKey(file)).toBe(key);
+  const createDemo = vi.fn(async (options) => { expect(options).toEqual({ accessKey: key });
+    return { edgePort: 12345, counters: () => ({ activeConnections: 0 }), close: f.close }; });
+  const runtime = await startPublicTunnel({ ...f, arkivEnvFile: file, createDemo, fetchHealth: health });
+  onTestFinished(runtime.close);
+  const status = await readFile(f.status, 'utf8');
+  expect(JSON.parse(status).serverAccessKeyConfigured).toBe(true);
+  expect(Object.keys(JSON.parse(status).hashes).sort()).toEqual(['knownHosts', 'launcher', 'ssh']);
+  expect(status).not.toContain(key); expect(status).not.toContain('SIMULATED_UNRELATED_SECRET'); expect(status).not.toContain(file);
+  await runtime.close();
+});
+
+test('explicit absent, malformed, duplicate, unsafe-mode or linked key files fail before creating a backend or status', async () => {
+  const f = await fixture(); const file = join(f.directory, 'server.env');
+  const createDemo = vi.fn(f.createDemo);
+  for (const contents of ['', 'OTHER_KEY=SIMULATED_IGNORED', 'ARKIV_ACCESS_KEY=',
+    'ARKIV_ACCESS_KEY=one\nARKIV_ACCESS_KEY=two', 'ARKIV_ACCESS_KEY="line break"', 'ARKIV_ACCESS_KEY="unterminated']) {
+    await writeFile(file, contents, { mode: 0o600 });
+    await expect(startPublicTunnel({ ...f, arkivEnvFile: file, createDemo, fetchHealth: health })).rejects.toThrow('missing or invalid');
+  }
+  await writeFile(file, 'ARKIV_ACCESS_KEY=SIMULATED_VALID_KEY', { mode: 0o600 });
+  await chmod(file, 0o644); await expect(readServerAccessKey(file)).rejects.toThrow('missing or invalid');
+  await chmod(file, 0o600); const linked = join(f.directory, 'linked.env'); await symlink(file, linked);
+  for (const path of [linked, join(f.directory, 'absent.env'), 'relative.env', f.directory]) await expect(readServerAccessKey(path)).rejects.toThrow('missing or invalid');
+  expect(createDemo).not.toHaveBeenCalled(); await expect(readFile(f.status)).rejects.toThrow();
+});
+
+test('ambient credentials are ignored unless a file is explicitly selected', async () => {
+  const f = await fixture(); vi.stubEnv('ARKIV_ACCESS_KEY', 'SIMULATED_AMBIENT_KEY');
+  onTestFinished(() => vi.unstubAllEnvs());
+  const createDemo = vi.fn(async (options) => { expect(options).toEqual({}); return f.createDemo(); });
+  const runtime = await startPublicTunnel({ ...f, createDemo, fetchHealth: health }); onTestFinished(runtime.close);
+  expect(JSON.parse(await readFile(f.status, 'utf8')).serverAccessKeyConfigured).toBe(false);
+  await runtime.close();
 });

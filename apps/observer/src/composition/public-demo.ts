@@ -18,12 +18,14 @@ export const PUBLIC_REGISTRY_PINS = Object.freeze({
 
 /** Each actual GET gets fresh generation metadata; true entity expiry is never extended. */
 export function createFreshPublicRegistry(options: { reader?: EntityReader; admission?: EndpointAdmission;
-  nowMs?: () => number; queryTimeoutMs?: number } = {}): RegistryQuery {
+  nowMs?: () => number; queryTimeoutMs?: number; accessKey?: string } = {}): RegistryQuery {
   const policy = parseRegistryConfig({ MONOLITH_REGISTRY_CONFIG: JSON.stringify(PUBLIC_REGISTRY_PINS) });
   if (!policy) throw new Error('Invalid public registry configuration.');
   const timeoutMs = options.queryTimeoutMs ?? 10_000;
   if (!Number.isSafeInteger(timeoutMs) || timeoutMs < 1 || timeoutMs > 15_000) throw new Error('Invalid public registry configuration.');
-  const reader = options.reader ?? createRabdiEntityReader({ policy });
+  const reader = options.reader ?? createRabdiEntityReader({ policy,
+    ...(options.accessKey === undefined ? {} : { accessKey: options.accessKey }),
+  });
   const admission = options.admission ?? createRegistryDnsAdmission();
   const nowMs = options.nowMs ?? Date.now;
   let inFlight = 0;
@@ -52,11 +54,13 @@ export function createFreshPublicRegistry(options: { reader?: EntityReader; admi
 
 /** Explicit demo composition opts into synthetic allocation; normal server defaults stay disabled. */
 export async function createPublicDemo(options: { registry?: RegistryQuery; upstream?: UpstreamReader;
-  nowMs?: () => number; edgeLimits?: Partial<EdgeLimits> } = {}) {
+  nowMs?: () => number; edgeLimits?: Partial<EdgeLimits>; accessKey?: string } = {}) {
   const observer = buildServer({
     config: { endpoints: [{ ...PUBLIC_DEMO_TARGET, calls: [] }],
       sourcePolicy: { mode: 'trusted-proxy', trustedProxies: ['127.0.0.1'] }, labRuns: [] },
-    registry: options.registry ?? createFreshPublicRegistry({ ...(options.nowMs ? { nowMs: options.nowMs } : {}) }),
+    registry: options.registry ?? createFreshPublicRegistry({ ...(options.nowMs ? { nowMs: options.nowMs } : {}),
+      ...(options.accessKey === undefined ? {} : { accessKey: options.accessKey }),
+    }),
     publicLabRuns: true,
     ...(options.upstream ? { upstream: options.upstream } : {}),
     ...(options.nowMs ? { nowMs: options.nowMs } : {}),

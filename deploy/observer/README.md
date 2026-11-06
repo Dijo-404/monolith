@@ -14,6 +14,26 @@ Build with the repository's pinned Node 24.22.2 and pnpm 12.18.0, then run:
   --status /absolute/new-status.json
 ```
 
+For the deployment's optional server-only Rabdi authentication, append
+`--arkiv-env-file /absolute/private-server.env`. That regular file must have
+owner-only permissions (0600 recommended) and exactly one literal `ARKIV_ACCESS_KEY` assignment. Only that
+named value is selected; other environment assignments are ignored. Missing,
+duplicate, malformed, linked or unsafe-mode key files fail before startup.
+No file is loaded implicitly, and an explicitly configured key never falls back
+to the anonymous endpoint on rejection. The existing public default remains
+available to independent consumers that do not select a key.
+
+The reader sends the credential only as `X-API-KEY` to the fixed Rabdi URL and
+rejects redirects on authenticated requests.
+The SDK chain metadata retains public URLs. The key is never placed in a URL,
+browser configuration, child-process argument/environment, status/evidence field
+or hash. Status records only `serverAccessKeyConfigured`. The pinned SDK's public
+chain helper can print its public-metadata warning even with transport-header
+authentication configured; use the explicit status flag and actual trusted query
+result to assess the selected runtime. See the [official access-key documentation](https://stage.docs.arkiv.network/start-here/access-keys/)
+for supported header authentication and quotas. Never include the credential file
+or its hash in a source/runtime evidence bundle.
+
 All three flags are required. The status file must be new. The launcher never
 enrolls or replaces an SSH identity. Use the explicitly reviewed public host pin
 from [MN009's provider observation](../../tests/privacy/live-observer/observed-localhost-run-provider-help-2026-11-06.json).
