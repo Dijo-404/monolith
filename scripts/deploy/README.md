@@ -54,9 +54,37 @@ local bytes and hashes, including a distinct worker-host HTML document and its m
   /absolute/new-static-verification.json
 ```
 
-This command uses bounded HTTPS GETs, refuses redirects, and sends no credentials.
+This command uses bounded HTTPS GETs, refuses redirects by default, and sends no credentials.
 It does not execute the worker. Run the actual live UI/browser acceptance on the
 published origin separately; static identity alone cannot establish privacy.
+
+For the observed Sites HTML canonicalization, explicitly append
+`--allow-canonical-html-redirects`. That policy permits one HTTP307 from
+`/index.html` to `/` and from `/assets/worker-host.html` to
+`/assets/worker-host`, using either the exact relative destination or the exact
+absolute same-origin URL. It records the redirect and still verifies the final
+HTML bytes, MIME, worker document and module against the retained snapshot.
+Queries, fragments, credentials, other destinations/statuses, redirect chains
+and redirected scripts remain rejected. This is a hosting check; application
+RPC/worker trust and fail-closed rules do not change.
+
+Sites also adds a Cloudflare JavaScript Detection script to HTML. To permit the
+reviewed template, separately append `--allow-reviewed-sites-html-addition`.
+The checker requires exactly one 1,114-byte insertion immediately before
+`</body>` and every authored byte unchanged. Only the matched hexadecimal ray ID
+and canonical base64-encoded numeric timestamp vary; the entire normalized
+addition must match SHA-256
+`5c4f4c7822215cd0625b3ee9a67def801a05caa4891443116af3e81fa371c9b6`.
+Unknown additions, changed source, mismatched parameters or changed script code
+fail. The output records observed whole-file hashes and authored-file hashes
+separately. The scrubbed fixture under `tests/deploy/fixtures` is SIMULATED.
+
+The hosting security bootstrap, its fetched challenge runtime and hidden frame
+are outside Monolith's transport verification and are not anonymous. A template
+match does not verify the fetched challenge runtime or grant protected-read
+credit. Browser acceptance must separately identify the disposable Monolith
+frame, record hosting frames and reject unknown frames; it must retain all
+ordinary target-request and source-comparison guards.
 
 For deployed layout, WebGL fallback and an explicitly injected worker-host outage:
 
