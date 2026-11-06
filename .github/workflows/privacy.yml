@@ -1,0 +1,46 @@
+name: Privacy regressions
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: privacy-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  privacy:
+    name: Offline browser privacy regressions
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .node-version
+      - uses: pnpm/action-setup@73e46992e05b19abd31f2f3c20e0e7370d762115 # v6.1.1
+        with:
+          version: 12.18.0
+          run_install: false
+      - name: Install locked workspace and build public exports
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm --filter './packages/**' -r build
+      - name: Static boundary and deterministic policy tests
+        run: |
+          pnpm exec tsx scripts/check-rpc-egress.ts
+          pnpm exec vitest run tests/privacy/egress/policy.test.mjs
+          pnpm exec tsc -p tests/privacy/egress/tsconfig.json
+      - name: Install isolated pinned browser tooling
+        run: |
+          npm install --prefix "$RUNNER_TEMP/monolith-browser-tools" --ignore-scripts --no-fund --save-exact playwright@1.65.0
+          "$RUNNER_TEMP/monolith-browser-tools/node_modules/.bin/playwright" install --with-deps chromium
+      - name: Browser egress failure, repair and outage checks (SIMULATED)
+        env:
+          MONOLITH_BROWSER_TOOLS: ${{ runner.temp }}/monolith-browser-tools
+        run: node tests/e2e/privacy/run.mjs --output "$RUNNER_TEMP/mn012-browser-result.json"
