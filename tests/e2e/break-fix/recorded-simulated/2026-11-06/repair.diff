@@ -1,0 +1,10 @@
+# SIMULATED fixture branch selection preview; no production source is edited.
+# The existing runner selects leak, then fixed, with the same seed and useful intent.
+--- a/tests/fixtures/leak-widget/main.ts (leak branch)
++++ b/tests/fixtures/leak-widget/main.ts (fixed branch)
+@@ supported receipt fixture branch @@
+- const leaked = await leakingReceipt(fixture.rpcUrl, fixture.seed);
+- receiptSucceeded = leaked.jsonrpc === '2.0' && leaked.id === `leak_${fixture.seed}` && leaked.result === null;
++ receipt = await transport.read({ readId: 'fixture_receipt_001', endpointId, chainId: '1',
++ params: [`0x${'00'.repeat(32)}`], method: 'eth_getTransactionReceipt', callsite: 'fixture.receipt' });
++ receiptSucceeded = receipt.ok;
