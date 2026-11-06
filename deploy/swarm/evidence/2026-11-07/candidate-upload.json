@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "stage": "SWARM_FRONTEND_CANDIDATE_STAGING",
+  "evidenceKind": "OBSERVED_LIVE",
+  "startedAt": "2026-11-06T22:45:38.552Z",
+  "status": "CANDIDATE_UPLOADED_NOT_VERIFIED",
+  "sourceIssue": 96,
+  "sourceCommit": "bd43ff315aa1d98552a7f117f91b4afb56adefd4",
+  "archiveBytes": 686080,
+  "archiveSha256": "7d8c8642dff1695038fe464736b36baa40b41f74478e39ccc61c14c931d214c3",
+  "provenanceSha256": "1112c82a82c4b87ac7553bd0277891440b115b7e072377a42c12c534ebf295d2",
+  "publicObserverOrigin": "https://d06045ae660681.lhr.life",
+  "authoredFiles": 10,
+  "uploadService": "https://api.gateway.ethswarm.org",
+  "requestStamp": "PROVIDER_SELECTED_NULL_STAMP",
+  "actualPostageBatchId": null,
+  "actualBatchProvenance": "UNKNOWN",
+  "currentPublicationChanged": false,
+  "artifactIdentity": "UNTESTED",
+  "privacy": "UNTESTED",
+  "arkivRelease": "UNTESTED",
+  "httpStatus": 201,
+  "responseBytes": 82,
+  "responseSha256": "acad646b705b7bec1b59851fcca791c73cfb770fbcf70dc048ad74637fe757c3",
+  "responseMime": "application/json",
+  "reference": "8a2a3e73a09b68306cd4a6ff1935a2492017f7a2c918ede926822d37aa132db1",
+  "cid": "bah5acgzarivd445atnuda3guu37rsnncjeqbp55czemo32jgqiwtpkqtfwyq",
+  "candidateOrigins": [
+    "https://bah5acgzarivd445atnuda3guu37rsnncjeqbp55czemo32jgqiwtpkqtfwyq.bzz.link",
+    "https://bah5acgzarivd445atnuda3guu37rsnncjeqbp55czemo32jgqiwtpkqtfwyq.bzz.limo"
+  ],
+  "completedAt": "2026-11-06T22:45:39.802Z"
+}
