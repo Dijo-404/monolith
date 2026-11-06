@@ -1,8 +1,12 @@
 # MN-005 Arkiv preflight
 
-Status: **INCOMPLETE — publisher funding pending**. The live write, independent read-back of
-that write and live foreign-publisher rejection have not run. This report does not pass the
-Arkiv feasibility gate. MN-002 has merged as [PR #24](https://github.com/Dijo-404/monolith/pull/24).
+Status: **LIVE_PREFLIGHT_PASSED — prepared for independent review**. On 6 November 2026,
+the dedicated Rabdi publisher created a real one-hour sample entity, a separate public-client-only
+process read it back under creator+owner filters, and a real same-tag foreign publisher was
+observed and rejected. Current accepted main `ff8cac0` is incorporated by a normal merge.
+This establishes bounded storage/query feasibility, not an imported dataset, endpoint chain
+verification, product integration, or Arkiv sponsor qualification. PR merge and final issue
+acceptance remain separate actions on [MN-005](https://github.com/Dijo-404/monolith/issues/5).
 
 ## Observed configuration and connectivity
 
@@ -24,9 +28,56 @@ Actual [connectivity observation](../../packages/registry/src/spikes/arkiv-conne
 | Real schema + run + creator + owner query | Completed, zero rows |
 | Actual transaction hash / entity key / expiry | **UNTESTED**; no write attempted |
 
-A successful empty query establishes RPC/query compatibility only. The publisher is a new
+A successful empty query establishes RPC/query compatibility only; the table above is the original
+unfunded observation and remains unchanged. The funded continuation below supplies actual writes.
+The publisher is a new
 disposable test account; its private key is kept outside the repository. No private user data,
 signatures, credentials, source IPs or raw exception bodies belong in exported artifacts.
+
+## Actual funded write and independent query
+
+Both entities use run ID `mn005-be64df48-2377-4697-942e-bc44cced7d4b` and schema tag
+`monolith.rpc.v1`. Each requested one hour with `readonly: true`; the engine's actual expiry
+is recorded as a block height. No write was retried or duplicated.
+
+| Public test role | Publisher | Transaction | Entity | Created / expiry block |
+| --- | --- | --- | --- | --- |
+| Trusted sample | `0x93D1A42655F2B0BCFa126e3D2a33e4ab60a74CA4` | [eef2add4…fe540e](https://rabdi.explorer.arkiv.network/tx/0xeef2add4106865f02ba8fb7ff4cfa5854c0f572891b2006f1699d2ec49fe540e) | `0x7c7e00b8713897cfcf5a7c78a7d15ad2dcf0501153fbbc7ec20dd8b4bd4a080c` | `292410` / `294210` |
+| Same-tag foreign control | `0xa518ca2D1A7a3697855ad5075f999115E1551E01` | [b85556d8…dce680](https://rabdi.explorer.arkiv.network/tx/0xb85556d824247c60fc4d59597ebab1716d04709276555feeadd91be9c4dce680) | `0x57a59e686d880ffaba5c7efaa10d97e0f26e345141efeab7b3c634805c5516e6` | `292445` / `294245` |
+
+The unchanged generated [primary write](../../packages/registry/src/spikes/arkiv-primary-write-2026-11-06.json),
+[foreign write](../../packages/registry/src/spikes/arkiv-foreign-write-2026-11-06.json),
+[final independent query](../../packages/registry/src/spikes/arkiv-independent-query-2026-11-06.json),
+and [receipt summaries](../../packages/registry/src/spikes/arkiv-live-receipts-2026-11-06.json)
+record these actual references. Receipt summaries were obtained with public clients after the
+writes; their `role` fields retain the original temporary journal filenames. No key, signed
+transaction payload, inbound funding sender, or private user wallet data is included.
+
+The first key-free [query before the foreign control](../../packages/registry/src/spikes/arkiv-before-control-query-2026-11-06.json)
+at `2026-11-06T13:10:24.385Z` found the expected trusted entity but correctly returned
+`LIVE_PREFLIGHT_INCOMPLETE` because no foreign entity existed yet. After the actual foreign
+write, another separate process with both signing-key environment variables removed returned
+`LIVE_PREFLIGHT_PASSED` at `2026-11-06T13:11:32.340Z`, current block `292463`:
+
+- creator+owner-filtered rows: **1**; expected entity trusted and all filtered rows valid;
+- unfiltered same-schema/same-run query: **1 actual foreign row**; **1 rejected** by publisher policy;
+- both entity expiries remained above the independently read current block;
+- each query was capped at 20 rows and is not an exhaustive index scan.
+
+The disposable foreign account was funded with **0.1 test tGLM** from the dedicated test
+publisher after pinning Rabdi and estimating a plain transfer at 21,000 gas / 1 gwei. The
+[actual controlled funding receipt](https://rabdi.explorer.arkiv.network/tx/0xd0efb4c1de9dc55107988a619de624949515ff8b36af32e1b9d4ebc7a15f21cd)
+is included in the receipt summary. This was test-only account setup, not a product payment.
+The two writes plus that transfer consumed **0.000393984 tGLM in actual fees**; the 0.1 tGLM
+transfer stays in the separate test account except its own write fee. Setup plus fees were
+bounded below the 1 tGLM experiment budget; unused test balances were retained. Initial SDK
+fee estimation and the observed protocol gas cap were inspected before submitting. The foreign
+funding operator journal was exclusive and its known hash was saved before receipt waiting.
+
+These are time-stamped live observations. The entities expire after their one-hour test life;
+a later reproduction should publish fresh samples rather than relabel expired records as live.
+The candidate payload deliberately remains `SIMULATED`, `candidate`, and unprobed even though
+its storage transaction and independent read are `OBSERVED_LIVE`.
 
 ## Reproduce in isolation
 
@@ -88,7 +139,8 @@ env -u ARKIV_PUBLISHER_KEY_FILE -u ARKIV_FOREIGN_KEY_FILE \
 
 The query cannot report `LIVE_PREFLIGHT_PASSED` without a valid matching trusted entity,
 valid filtered rows and an actually observed foreign entity rejected by the trust policy.
-The live foreign control is currently **UNTESTED**. Simulated rejection is not substituted.
+The recorded live foreign control above passed. Simulated rejection is never substituted for
+that actual observation.
 
 After an uncertain submission, the following read-only command can recover candidate entity
 keys by publisher/run ID even if the SDK did not return a key:
@@ -135,13 +187,38 @@ truthful unprobed labels, safe projections, SDK query construction/escaping and 
 sample compatibility. `bash -n` passed for the launcher. A real public query returned zero rows
 as recorded above; no write success is implied.
 
-After rebasing onto merged foundation `4bbd38b`, `pnpm install --frozen-lockfile` and
-`pnpm check` passed: lint, all public-consumer/workspace typechecks, 151 workspace tests and
-production builds. The isolated 16-test suite also passed again. The launcher refused a
+The original `4bbd38b` integration passed 151 workspace tests. This funded continuation merged
+current accepted main `ff8cac0` normally, then ran Node **24.22.2** / pnpm **12.18.0**:
+
+```sh
+PATH=/tmp/monolith-node24/node-v24.22.2-linux-x64/bin:/tmp/monolith-pnpm/node_modules/.bin:$PATH pnpm install --frozen-lockfile
+PATH=/tmp/monolith-node24/node-v24.22.2-linux-x64/bin:/tmp/monolith-pnpm/node_modules/.bin:$PATH pnpm check
+PATH=/tmp/monolith-node24/node-v24.22.2-linux-x64/bin:$PATH MONOLITH_ARKIV_ENV=/tmp/monolith-mn005-env bash packages/registry/src/spikes/run-isolated.sh selfcheck
+```
+
+All passed: lint, source/public-consumer typechecks, **343 tests in 10 files**, production
+builds, and the isolated strict compiler plus **16 SIMULATED tests**. Only report and actual
+JSON observations were added after these checks; no executable source changes were needed. The launcher refused a
 repository directory as its dependency environment before editing dependencies. Markdown
 links/fences and `git diff origin/main --check` passed. Shared manifests and lockfile are unchanged.
 
-To finish MN-005: fund the dedicated publishers, execute the real writes, independently query
-the expected entity and actual foreign control, record transaction/entity/expiry references,
-then rerun integration checks on the merged foundation. Keep MN-008 and registry-dependent
-downstream tasks behind their evidence gates until that observed evidence is accepted.
+Actual commands for the recorded write/query sequence used the launcher above with its existing
+protected publisher file, new protected foreign file, and exclusive output journals:
+
+```sh
+bash "$spike" write "$MONOLITH_ARKIV_ENV/live-primary-run.json"
+env -u ARKIV_PUBLISHER_KEY_FILE -u ARKIV_FOREIGN_KEY_FILE bash "$spike" query "$MONOLITH_ARKIV_ENV/live-primary-run.json" "$MONOLITH_ARKIV_ENV/live-before-control-query.json"
+# After explicit bounded funding of the separate public test account:
+bash "$spike" write-foreign "$MONOLITH_ARKIV_ENV/live-primary-run.json" "$MONOLITH_ARKIV_ENV/live-foreign-run.json"
+env -u ARKIV_PUBLISHER_KEY_FILE -u ARKIV_FOREIGN_KEY_FILE bash "$spike" query "$MONOLITH_ARKIV_ENV/live-primary-run.json" "$MONOLITH_ARKIV_ENV/live-final-query.json"
+```
+
+The before-control query intentionally exited 2 with `LIVE_PREFLIGHT_INCOMPLETE`; both writes
+and the final query exited 0. Keys were available only in the respective writing processes;
+query processes constructed public clients only. A separate read-only reviewer can verify the
+public receipts and run the same creator/owner and unfiltered queries without either key.
+
+**Handoff:** actual write/read-back/foreign rejection and current-main validation are ready for
+independent review. After merge and accepted MN-005 evidence, assess MN-008 readiness separately.
+Substantive licensed import, product query/route use, endpoint protection and sponsor claims
+remain gated on their own later tasks. No production registry export or shared tooling changed.

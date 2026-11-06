@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "runId": "mn005-be64df48-2377-4697-942e-bc44cced7d4b",
+  "publisher": "0xa518ca2D1A7a3697855ad5075f999115E1551E01",
+  "chainId": 7794095,
+  "observedAt": "2026-11-06T13:10:52.066Z",
+  "status": "WRITTEN_QUERY_PENDING",
+  "storageEvidence": "OBSERVED_LIVE",
+  "payloadEvidence": "SIMULATED",
+  "txHash": "0xb85556d824247c60fc4d59597ebab1716d04709276555feeadd91be9c4dce680",
+  "entityKey": "0x57a59e686d880ffaba5c7efaa10d97e0f26e345141efeab7b3c634805c5516e6",
+  "expiresAtBlock": "294245"
+}
