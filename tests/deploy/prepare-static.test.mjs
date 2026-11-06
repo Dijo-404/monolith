@@ -30,9 +30,10 @@ async function fixture() {
     return git('rev-parse', 'HEAD');
   };
   const sha = commit();
-  const pnpm = join(temp, 'pnpm-fixture');
+  const pnpm = join(temp, 'pnpm');
   await writeFile(pnpm, `#!${process.execPath}\n` +
     `import { existsSync, mkdirSync, writeFileSync } from 'node:fs';\n` +
+    `import { execFileSync } from 'node:child_process';\n` +
     `if (process.argv[2] === '--version') { process.stdout.write('12.18.0\\n'); }\n` +
     `else if (process.argv[2] === 'install') {\n` +
     `  if (!process.argv.includes('--frozen-lockfile') || !process.argv.includes('--ignore-scripts') || !process.argv.includes('--ignore-pnpmfile')) process.exit(9);\n` +
@@ -42,6 +43,7 @@ async function fixture() {
     `    writeFileSync('apps/dashboard/node_modules/fixture-runtime/LICENSE', 'Fixture runtime MIT notice');\n` +
     `  }\n` +
     `} else if (process.argv[2] === 'build') {\n` +
+    `  if (execFileSync('pnpm', ['--version'], { encoding: 'utf8' }).trim() !== '12.18.0') process.exit(10);\n` +
     `  mkdirSync('apps/dashboard/dist/assets', { recursive: true });\n` +
     `  writeFileSync('apps/dashboard/dist/index.html', '<html><script type="module" src="/assets/main.js"></script></html>');\n` +
     `  writeFileSync('apps/dashboard/dist/assets/main.js', 'globalThis.fixtureEnv=' + JSON.stringify(process.env) + ';');\n` +
@@ -65,7 +67,7 @@ test('public configuration rejects credential-bearing and non-origin URLs before
 });
 
 test('build environment is an explicit projection without ambient secrets or Node injection', () => {
-  const env = buildEnvironment('/pinned/node', '/isolated/build-state', OBSERVER);
+  const env = buildEnvironment('/pinned/node', '/isolated/build-state', OBSERVER, '/pinned-pnpm/pnpm');
   assert.deepEqual(Object.keys(env).sort(), [
     'CI', 'GIT_CONFIG_GLOBAL', 'GIT_CONFIG_NOSYSTEM', 'LANG', 'MONOLITH_PUBLIC_OBSERVER_URL',
     'NPM_CONFIG_CACHE', 'NPM_CONFIG_GLOBALCONFIG', 'NPM_CONFIG_USERCONFIG', 'PATH', 'TMPDIR', 'TZ',

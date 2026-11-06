@@ -33,9 +33,9 @@ export function publicObserverOrigin(value) {
   return url.origin;
 }
 
-export function buildEnvironment(nodePath, buildStateDirectory, observerUrl) {
+export function buildEnvironment(nodePath, buildStateDirectory, observerUrl, pnpmPath) {
   return {
-    PATH: `${dirname(nodePath)}${sep === '/' ? ':' : ';'}/usr/bin:/bin`,
+    PATH: [dirname(nodePath), dirname(pnpmPath), '/usr/bin', '/bin'].join(sep === '/' ? ':' : ';'),
     XDG_CONFIG_HOME: join(buildStateDirectory, 'config'),
     XDG_CACHE_HOME: join(buildStateDirectory, 'cache'),
     XDG_STATE_HOME: join(buildStateDirectory, 'state'),
@@ -253,7 +253,7 @@ export async function prepareStatic(options) {
   try {
     const buildStateDirectory = join(temp, 'build-state');
     await mkdir(join(buildStateDirectory, 'tmp'), { recursive: true });
-    const env = buildEnvironment(node, buildStateDirectory, observerUrl);
+    const env = buildEnvironment(node, buildStateDirectory, observerUrl, pnpm);
     const git = (args) => run('git', ['-C', repo, ...args], { env, capture: true, timeout: 30_000 });
     const head = (await git(['rev-parse', '--verify', 'HEAD'])).toString('utf8').trim();
     requireValue(head === options.commit, 'Requested source must match the clean HEAD captured before building.');
