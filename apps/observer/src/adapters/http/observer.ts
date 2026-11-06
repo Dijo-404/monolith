@@ -1,6 +1,7 @@
 import type { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 import { identifierSchema, makeError } from '@monolith/shared';
 import { getDiagnostics } from '../../application/get-diagnostics.js';
+import type { createLabRun } from '../../application/create-lab-run.js';
 import { createObserveRead, requestId, rpcFailure } from '../../application/observe-read.js';
 import type { DiagnosticsStore } from '../../domain/diagnostics.js';
 import type { SourcePolicy } from '../../domain/ports.js';
@@ -13,7 +14,9 @@ export function registerObserver(server: FastifyInstance, options: {
   nowMs: () => number;
   requestsPerMinute: number;
   maxConcurrent: number;
+  allocateRun?: ReturnType<typeof createLabRun>;
 }) {
+  const allocateRun = options.allocateRun;
   let windowStarted = options.nowMs();
   let accepted = 0;
   let concurrent = 0;
@@ -22,21 +25,43 @@ export function registerObserver(server: FastifyInstance, options: {
   server.addHook('preClose', async () => { shutdown.abort(); });
   server.addHook('onRequest', async (request, reply) => {
     const path = request.url.split('?')[0];
-    if (path === '/api/observer/read' || path?.startsWith('/api/observer/runs/')) {
+    if (path === '/api/observer/read' || path?.startsWith('/api/observer/runs/')
+      || allocateRun && path === '/api/observer/runs') {
       reply.header('Access-Control-Allow-Origin', '*');
       reply.header('Cache-Control', 'no-store');
     }
   });
-  const preflight = (method: string) => async (request: FastifyRequest, reply: FastifyReply) => {
+  const preflight = (method: string, allowedHeaders = ['content-type', 'x-monolith-run', 'x-monolith-case']) => async (request: FastifyRequest, reply: FastifyReply) => {
     const requestedMethod = request.headers['access-control-request-method'];
     const requestedHeaders = request.headers['access-control-request-headers'];
     if (requestedMethod !== method || typeof requestedHeaders !== 'undefined' && (
       typeof requestedHeaders !== 'string' || requestedHeaders.length > 256
-      || requestedHeaders.split(',').some((header) => !['content-type', 'x-monolith-run', 'x-monolith-case'].includes(header.trim().toLowerCase()))
+      || requestedHeaders.split(',').some((header) => !allowedHeaders.includes(header.trim().toLowerCase()))
     )) return reply.code(403).send({ schemaVersion: 1, ok: false, error: makeError('POLICY_DENIED') });
     return reply.header('Access-Control-Allow-Methods', method)
-      .header('Access-Control-Allow-Headers', 'content-type,x-monolith-run,x-monolith-case').code(204).send();
+      .header('Access-Control-Allow-Headers', allowedHeaders.join(',')).code(204).send();
   };
+  if (allocateRun) {
+    server.options('/api/observer/runs', (request, reply) => {
+      if (request.url !== '/api/observer/runs') return reply.code(403).send({
+        schemaVersion: 1, ok: false, error: makeError('POLICY_DENIED'),
+      });
+      return preflight('POST', ['content-type'])(request, reply);
+    });
+    server.post('/api/observer/runs', { bodyLimit: 128 }, (request, reply) => {
+      const body = request.body;
+      // Standard browser/edge headers are ignored. No application inputs, credentials,
+      // caller correlation IDs or source/route assertions enter allocation.
+      if (request.url !== '/api/observer/runs' || body !== undefined && (
+        body === null || typeof body !== 'object' || Array.isArray(body) || Object.keys(body).length !== 0
+      ) || Object.keys(request.headers).some((header) => header === 'authorization' || header === 'cookie'
+        || header.startsWith('x-monolith-'))) {
+        return reply.code(400).send({ schemaVersion: 1, ok: false, error: makeError('INVALID_INPUT') });
+      }
+      const result = allocateRun();
+      return reply.code(result.statusCode).send(result.body);
+    });
+  }
   server.options('/api/observer/read', preflight('POST'));
   server.options('/api/observer/runs/:runId', preflight('GET'));
   server.post('/api/observer/read', async (request, reply) => {

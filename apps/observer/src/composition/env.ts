@@ -37,6 +37,15 @@ export function parseObserverEnv(
 }
 
 const CONFIG_ERROR = 'Observer configuration is invalid.';
+
+/** Separate opt-in preserves the existing operator configuration contract/defaults. */
+export function parsePublicLabRuns(input: Readonly<Record<string, string | undefined>>): boolean {
+  const value = input['MONOLITH_OBSERVER_PUBLIC_LAB_RUNS'];
+  if (value === undefined || value === 'false') return false;
+  if (value === 'true') return true;
+  throw new Error(CONFIG_ERROR);
+}
+
 const CONFIG_KEYS = [
   'MONOLITH_OBSERVER_ENDPOINTS',
   'MONOLITH_OBSERVER_SOURCE_MODE',
