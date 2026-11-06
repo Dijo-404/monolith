@@ -26,6 +26,24 @@ export type LiveLabPorts = {
 };
 
 const copy = <T>(value: T): T => JSON.parse(JSON.stringify(value)) as T;
+const retryableMetadata = new Set<ErrorCode>(['REGISTRY_UNAVAILABLE', 'UPSTREAM_TIMEOUT']);
+function waitForMetadataRetry(milliseconds: number, signal: AbortSignal): Promise<boolean> {
+  if (signal.aborted) return Promise.resolve(false);
+  return new Promise((resolve) => {
+    let settled = false;
+    const finish = (ready: boolean) => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timer);
+      signal.removeEventListener('abort', aborted);
+      resolve(ready);
+    };
+    const aborted = () => finish(false);
+    const timer = setTimeout(() => finish(true), milliseconds);
+    signal.addEventListener('abort', aborted, { once: true });
+    if (signal.aborted) aborted();
+  });
+}
 const initial = (): LiveSnapshot => ({
   version: 0, phase: 'IDLE', mode: 'private', busy: false, workerState: 'CLOSED', worker: null,
   allocation: null, selection: null, manifest: null, reads: [], traces: [], correlation: null,
@@ -111,8 +129,18 @@ export function createLiveLabController(ports: LiveLabPorts) {
       if (Date.parse(allocation.expiresAt) <= Date.parse(ports.clock.now())
         || Date.parse(allocation.expiresAt) - Date.parse(ports.clock.now()) > 302_000) fail('EVIDENCE_EXPIRED');
       publish({ allocation: copy(allocation), phase: 'REGISTRY' });
-      const loaded = await ports.registry.load(LIVE_CHAIN, controller.signal);
-      if (!current(expected)) return;
+      let loaded: Result<RegistryManifest> = { ok: false, error: makeError('REGISTRY_UNAVAILABLE') };
+      // Public metadata can fail transiently. No application RPC or direct control exists yet.
+      for (let attempt = 1; attempt <= 3; attempt++) {
+        publish({ phase: 'REGISTRY' });
+        loaded = await ports.registry.load(LIVE_CHAIN, controller.signal);
+        if (!current(expected)) return;
+        if (loaded.ok || !retryableMetadata.has(loaded.error.code) || attempt === 3) break;
+        publish({ phase: 'REGISTRY_RETRY' });
+        const ready = await waitForMetadataRetry(attempt * 1000, controller.signal);
+        if (!current(expected)) return;
+        if (!ready) fail('WORKER_UNAVAILABLE');
+      }
       if (!loaded.ok) fail(loaded.error.code);
       const admitted = admitRegistryManifest(loaded.value, LIVE_CHAIN, LIVE_REGISTRY_POLICY, ports.clock.now());
       if (!admitted.ok) fail(admitted.error.code);

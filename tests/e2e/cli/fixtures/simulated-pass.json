@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "input": {
+    "schemaVersion": 1,
+    "runId": "internal-run-synthetic-001",
+    "evidence": "SIMULATED",
+    "reads": [
+      {
+        "readId": "internal-read-synthetic-001",
+        "endpointId": "internal-endpoint-synthetic-001",
+        "chainId": "1",
+        "method": "eth_chainId",
+        "callsiteAlias": "lab-balance",
+        "scenarioAlias": "useful-read",
+        "privacyRequired": true
+      }
+    ],
+    "traces": [
+      {
+        "schemaVersion": 1,
+        "readId": "internal-read-synthetic-001",
+        "attempt": 1,
+        "endpointId": "internal-endpoint-synthetic-001",
+        "chainId": "1",
+        "method": "eth_chainId",
+        "callsite": "lab-balance",
+        "route": "anon-nym",
+        "durationMs": 25,
+        "success": true,
+        "bootstrap": false,
+        "evidence": "SIMULATED",
+        "payloadVisibility": "rpc-endpoint-can-read"
+      }
+    ],
+    "attempts": [
+      {
+        "eventId": "internal-event-synthetic-001",
+        "ref": { "readId": "internal-read-synthetic-001", "attempt": 1 },
+        "endpointId": "internal-endpoint-synthetic-001",
+        "chainId": "1",
+        "method": "eth_chainId",
+        "originAlias": "rpc-primary",
+        "callsiteAlias": "lab-balance",
+        "route": "anon-nym",
+        "sent": true,
+        "completed": true,
+        "durationMs": 25,
+        "workerVerified": true,
+        "evidence": "SIMULATED"
+      }
+    ]
+  },
+  "scope": {
+    "reportRunId": "public-run-synthetic-001",
+    "application": "cli-fixture",
+    "origins": [{ "alias": "rpc-primary", "origin": "https://rpc.example.com" }],
+    "callsites": [{ "alias": "lab-balance", "label": "lab.balance" }],
+    "scenarios": [{ "alias": "useful-read", "label": "read" }],
+    "bootstrapRules": [],
+    "captureComplete": true
+  }
+}
