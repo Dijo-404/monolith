@@ -106,7 +106,8 @@ target RPC and is not a new worker or privacy proof. All 160 other runtime sourc
 and compiled inputs remain unchanged; only the reviewed launcher differs from
 the earlier runtime. A separate genuine browser capture must bind this origin.
 
-The [three-minute health check](../deploy/observer/evidence/2026-11-07/runtime8/continuity-health-1.json)
+The [three-minute health check](../deploy/observer/evidence/2026-11-07/runtime8/continuity-health-1.json),
+[later health check at 6 minutes 50 seconds](../deploy/observer/evidence/2026-11-07/runtime8/continuity-health-2.json)
 and [owned-unit inspection](../deploy/observer/evidence/2026-11-07/runtime8/owned-unit-state.json)
 record a detached, active user service with the 12-hour cap and sleep/idle
 inhibitor. It was launched without `--scope`, `--wait` or a controlling TTY.
@@ -121,3 +122,8 @@ passed 1,453 tests in 46 files plus lint, types and builds. The implementation a
 the 32-case suite received separate root review before activation. The existing
 full runtime6 workflow and every blocked attempt remain unchanged historical
 records. Billing remains inactive; no paid plan or custom domain is used.
+
+A separate review worktree, with accepted main through `873c4f5`, also passed
+full `pnpm check`: 1,464 tests in 46 files plus lint, types and builds, and the
+32-case launcher suite. The running backend remains frozen at `469f49d`; these
+software checks do not replace the current-origin browser evidence gate.

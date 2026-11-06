@@ -3,7 +3,7 @@
   "sourceTask": "MN-025",
   "evidence": "OBSERVED_LIVE",
   "scope": "REGISTERED_FREE_RUNTIME_STARTUP_AND_PUBLIC_METADATA_ONLY",
-  "generatedAt": "2026-11-06T20:43:28.211Z",
+  "generatedAt": "2026-11-06T20:53:43.049Z",
   "observedMetadataAt": "2026-11-06T20:40:46.173Z",
   "codeCommit": "469f49d27ba9e2c40578b6bb18fc9e23cd71c4a4",
   "origin": "https://e964181cf62d29.lhr.life",
@@ -15,7 +15,8 @@
     "public-metadata.json": "ae20cfdc279e17d88da5bcfbba0edfc32cc6a755f57fdeed28145c54d3802b0a",
     "startup-status.json": "fc05a2c4a7abad472c685d648d4b1f85e8a245a7ce2736045d5aeca7178aaf72",
     "continuity-health-1.json": "fe8dbb8c1ed4279979df3db9aa87082653c6e6bb295b12bb05d6fe5702ce2059",
-    "owned-unit-state.json": "a3c02cbe8ae63dadf1afe6749ecf42cf9800460f1e9ef366485355711c7dbb9a"
+    "owned-unit-state.json": "a3c02cbe8ae63dadf1afe6749ecf42cf9800460f1e9ef366485355711c7dbb9a",
+    "continuity-health-2.json": "37e834c88cabc73373aec809b2c03d4c492a826483af7f57a07be53700b1da1c"
   },
   "checks": {
     "health": 200,
@@ -43,9 +44,10 @@
     "privateIdentityContentReadOrHashIncluded": false
   },
   "notes": [
-    "Historical runtime6 fullworkflow and all BLOCKED attempts remain unchanged; this metadata capture is not new worker/source/privacy proof.",
-    "Root independently reviewed the optionalidentity/path-expansion candidate and32synthetic tests; full1453tests46files/lint/types/build passed beforeactivation.",
-    "OnlyOpenSSH reads the user-confirmed selectedprivateidentity; evidence generator does not read privatekey or Arkivcredential contents.",
-    "Runtime7 was absent at freshresumption; no shutdowncause is inferred from its staleREADYsnapshot."
+    "Historical runtime6 full workflow and all BLOCKED attempts remain unchanged; this metadata capture is not new worker, source or privacy proof.",
+    "Root independently reviewed the optional identity and path-expansion candidate, with 32 synthetic tests. Full 1453-test, 46-file checks, lint, types and builds passed before activation.",
+    "Only OpenSSH reads the user-confirmed selected private identity; the evidence generator does not read private key or Arkiv credential contents.",
+    "Runtime7 was absent at fresh resumption; no shutdown cause is inferred from its stale READY snapshot.",
+    "A separate evidence worktree integrated accepted main through 873c4f5 and passed full 1464-test, 46-file checks, lint, types and builds plus all 32 synthetic launcher cases. A later merge through f5bb205 changed only the task register and task JSON."
   ]
 }
