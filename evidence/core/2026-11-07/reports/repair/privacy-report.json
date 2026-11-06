@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "runId": "report_3833d341-b412-441f-915d-14d2421322a3",
+  "evidence": "OBSERVED_LIVE",
+  "eligibleReads": 4,
+  "protectedReads": 3,
+  "successfulReads": 4,
+  "protectedCoverage": 0.75,
+  "findings": [
+    {
+      "code": "DIRECT_CONTROL",
+      "readId": "read-000001",
+      "callsite": "Explicit direct comparison",
+      "message": "An explicit direct comparison earns no protected credit."
+    }
+  ],
+  "scope": {
+    "rpcOrigins": [
+      "https://d06045ae660681.lhr.life",
+      "https://ethereum.publicnode.com"
+    ],
+    "scenarios": [
+      "Monolith Leak Lab:Live privacy regression"
+    ],
+    "bootstrapExclusions": [
+      "Non-anonymous worker hash lookup",
+      "Non-anonymous worker resolver lookup"
+    ]
+  }
+}

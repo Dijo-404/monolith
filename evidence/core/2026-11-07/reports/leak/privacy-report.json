@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "runId": "report_48e717f6-8ce9-4cb1-bd97-c99b8cfe3147",
+  "evidence": "OBSERVED_LIVE",
+  "eligibleReads": 4,
+  "protectedReads": 2,
+  "successfulReads": 4,
+  "protectedCoverage": 0.5,
+  "findings": [
+    {
+      "code": "DIRECT_CONTROL",
+      "readId": "read-000001",
+      "callsite": "Explicit direct comparison",
+      "message": "An explicit direct comparison earns no protected credit."
+    },
+    {
+      "code": "DIRECT_BYPASS",
+      "readId": "read-000002",
+      "callsite": "Sandbox status widget",
+      "message": "A privacy-required read used an ordinary direct RPC route."
+    },
+    {
+      "code": "MISSING_TRACE",
+      "readId": "read-000002",
+      "callsite": "Sandbox status widget",
+      "message": "A measured attempt has no matching transport trace."
+    }
+  ],
+  "scope": {
+    "rpcOrigins": [
+      "https://d06045ae660681.lhr.life",
+      "https://ethereum.publicnode.com"
+    ],
+    "scenarios": [
+      "Monolith Leak Lab:Live privacy regression"
+    ],
+    "bootstrapExclusions": [
+      "Non-anonymous worker hash lookup",
+      "Non-anonymous worker resolver lookup"
+    ]
+  }
+}
