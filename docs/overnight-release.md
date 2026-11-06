@@ -31,3 +31,11 @@ This is a hackathon delivery decision. Customer demand and willingness to pay re
 If the actual source comparison cannot pass, publish only the honestly functioning subset and show the unresolved comparison as blocked. Do not mark MN-017 complete or claim the original EF/Arkiv core release on that basis. Any sponsor submission must describe the resulting implementation and its evidence.
 
 The final submission needs human contribution and disclosure of AI assistance. Record human narration if a narrated video is used: the official rules prohibit AI voiceovers.
+
+## Measured publication checkpoint — 7 November2026
+
+The public [privacy lab](https://monolith-privacy-lab.madhanxdev.chatgpt.site) version6 uses sourceDFB and the real runtime10 backend. Source-bound static delivery, mobile/WebGL/injectedfailure checks and the actual presenter-button leak/repair workflow passed. The final genuine observation has four fresh runs and13wire rows, with a failing2/4leak and useful passing3/4repair. [Deployment records and limits](deployment.md) distinguish authored assets, hosting bootstrap, original capture source, evidence storage and separately simulated controls.
+
+MN014 and MN025 are accepted; normalMN016owneracceptance andMN017original-evidenceexport/clean-clone are still required at this checkpoint. The current code passed1,550tests/50files plus lint/types/build. A newer owner-requested visual revision remains a separate active lane; this older source-bound capture does not claim to execute it. GitHubsource staysprivate, so public-source prize requirements remain an owner decision after a final audited branch/history is prepared. The official submission deadline and AI-disclosure rules were rechecked on the linked primary pages; participant eligibility and meaningful human contributions are not invented.
+
+No paid hosting is used. The real backend remains dependent on workstation/provider availability; a bounded passive health monitor is observation rather than guaranteed recovery. Keep failed and successful captures unchanged and name the exact selected source when assembling or publishing a later release.
