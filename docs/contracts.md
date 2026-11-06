@@ -212,6 +212,45 @@ type ObserverRun = {
 
 Use a five-minute in-memory TTL for the lab run; cap active runs and never persist source addresses, RPC bodies or results in diagnostics. The controlled direct call establishes the baseline from trusted socket/proxy context. A different source class plus a verified worker supports the paired observation; a header or source difference alone proves neither Tor usage nor general anonymity. Unknown/untrusted proxy topology yields `unknown`, never inferred success. On expiry return `EVIDENCE_EXPIRED`. The scenario runner exports only sanitized data before expiry.
 
+### Additive public synthetic run allocation (MN-024)
+
+`POST /api/observer/runs` is available only under an explicit server-side opt-in;
+it and its preflight remain absent by default. It accepts no body or `{}`, with no
+query fields, credentials/cookies or `x-monolith-*` headers. The body limit is 128
+bytes and preflight permits only `content-type`. Clients cannot choose correlation
+IDs, upstreams, source metadata or payloads. Standard forwarding headers are ignored
+by allocation and do not establish any source classification.
+
+The additive public export `observerLabAllocationSchema` validates this strict DTO;
+`observerLabRunIdSchema` and `observerLabRpcIdSchema` validate canonical lowercase
+prefixed UUIDv4 IDs. Existing observer DTOs, schemas and HTTP routes are unchanged.
+
+```ts
+type ObserverLabAllocation = {
+  schemaVersion: 1;
+  runId: string;             // server-generated run-<UUIDv4>
+  baselineRpcId: string;     // server-generated rpc-<UUIDv4>
+  expiresAt: string;         // fixed canonical UTC deadline, five minutes after allocation
+};
+```
+
+Return HTTP 201 with `{ schemaVersion: 1, ...Result<ObserverLabAllocation> }`.
+The allocation makes no evidence, anonymity, readiness or source-success assertion.
+The same bounded diagnostics store registers the generated baseline, preserves the
+fixed expiry and rejects replacement. Global allocation admission is synchronous
+and limited to 12 attempts per minute per process; the shared store caps active runs
+at 128 and observations per run at 128. Operator runs share capacity and cannot be
+evicted by allocation. Expiry deletes baseline source state and pending observations;
+late completions cannot revive expired runs. Capacity/rate failures return sanitized
+HTTP 429 `RATE_LIMITED`; unexpected generator/registration failures return sanitized
+HTTP 503 `UPSTREAM_UNAVAILABLE`. Responses are `no-store` with no credentialed CORS.
+
+Allocation is not authentication: diagnostics remain synthetic and public, and a
+caller who obtains an active run ID can submit observations to that run. The existing
+MN-009 independent worker/scenario correlation and trusted source policy are still
+required for a paired proof. See [observer operation](observer.md) for the opt-in,
+retention and deployment limits. No live gate is passed by these additive contracts.
+
 ## Analyzer and test-run boundary
 
 The analyzer consumes traces, independent egress observations, declared scenario scope and bootstrap exclusions. It performs no network calls or SDK access. Its v1 result is:
