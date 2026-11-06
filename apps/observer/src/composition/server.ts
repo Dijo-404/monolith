@@ -1,11 +1,13 @@
 import Fastify from 'fastify';
 import { makeError } from '@monolith/shared';
+import type { RegistryQuery } from '@monolith/registry';
 import { createObserveRead, requestId, rpcFailure } from '../application/observe-read.js';
 import { DiagnosticsStore } from '../domain/diagnostics.js';
 import { endpointMap } from '../domain/observer-policy.js';
 import type { ObserverConfig, UpstreamReader } from '../domain/ports.js';
 import { normalizePeer } from '../adapters/http/peer.js';
 import { registerObserver } from '../adapters/http/observer.js';
+import { registerRegistry } from '../adapters/http/registry.js';
 import { createUpstreamReader } from '../adapters/upstream/https-reader.js';
 
 export type ObserverServerOptions = {
@@ -14,6 +16,7 @@ export type ObserverServerOptions = {
   nowMs?: () => number;
   requestsPerMinute?: number;
   maxConcurrent?: number;
+  registry?: RegistryQuery;
 };
 
 export function buildServer(options: ObserverServerOptions = {}) {
@@ -64,6 +67,10 @@ export function buildServer(options: ObserverServerOptions = {}) {
   registerObserver(server, {
     observe: createObserveRead({ endpoints, diagnostics, nowMs, upstream: options.upstream ?? createUpstreamReader() }),
     diagnostics, sourcePolicy, nowMs, requestsPerMinute, maxConcurrent,
+  });
+  registerRegistry(server, {
+    registry: options.registry ?? { query: async () => ({ ok: false, error: makeError('REGISTRY_UNAVAILABLE') }) },
+    nowMs, requestsPerMinute, maxConcurrent,
   });
   return server;
 }

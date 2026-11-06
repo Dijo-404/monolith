@@ -1,9 +1,10 @@
 import { parseObserverConfig, parseObserverEnv } from './env.js';
 import { buildServer } from './server.js';
+import { createConfiguredRegistry } from './registry.js';
 
 async function startObserver() {
   const { host, port } = parseObserverEnv(process.env);
-  const server = buildServer({ config: parseObserverConfig(process.env) });
+  const server = buildServer({ config: parseObserverConfig(process.env), registry: createConfiguredRegistry(process.env) });
 
   const shutdown = () => {
     void server.close().catch(() => {
