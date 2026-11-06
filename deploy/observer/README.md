@@ -1,0 +1,86 @@
+# Public observer demo
+
+This explicit composition starts the existing observer with fresh synthetic run
+allocation enabled. Its ordinary registry API queries the accepted public Arkiv
+reader. Its only upstream mapping is `lab_optimism` → chain `10` →
+`https://mainnet.optimism.io/`. No account or signing key is used.
+
+Build with the repository's pinned Node 24.22.2 and pnpm 12.18.0, then run:
+
+```sh
+/absolute/node deploy/observer/start.mjs \
+  --ssh /absolute/ssh \
+  --known-hosts /absolute/previously-reviewed-known_hosts \
+  --status /absolute/new-status.json
+```
+
+All three flags are required. The status file must be new. The launcher never
+enrolls or replaces an SSH identity. Use the explicitly reviewed public host pin
+from [MN009's provider observation](../../tests/privacy/live-observer/observed-localhost-run-provider-help-2026-11-06.json).
+Initial enrollment was TOFU; strict pinning subsequently rejects a changed key.
+The actual server help supported `--proxy-protocol-v2`; older website flag names
+were rejected. No paid resource, payer, provider account or private SSH key is
+required for this temporary tunnel.
+
+For a session-independent demo process on this Linux workstation, the operator
+can invoke the same command using `systemd-run --user --unit
+monolith-public-observer --property=KillMode=control-group
+--property=TimeoutStopSec=10s`, followed by the absolute Node/script/flag arguments.
+Stop it with `systemctl --user stop monolith-public-observer.service`. This is a
+transient user service, dependent on the workstation and user manager. Inspect
+the sanitized JSON status rather than raw provider logs. The public origin comes
+only from the accepted registration event; administrative output is discarded.
+
+The launcher checks only health while waiting for public readiness. It does not
+retry RPC calls, warm a worker or claim live privacy success. Normal termination,
+startup failure, provider exit and cancellation close the child and local API.
+The status transitions through STARTING/READY/CLOSED and includes public tool/pin
+hashes and bounded counters. A successful process start is separate from the
+real browser verification described in [the deployment record](../../docs/observer-deployment.md).
+
+The public edge accepts only:
+
+- `GET /api/health`
+- `GET`/`OPTIONS /api/registry/chains?chainId=10`
+- `POST`/`OPTIONS /api/observer/runs`
+- `GET`/`OPTIONS /api/observer/runs/run-<lowercase UUIDv4>`
+- `POST`/`OPTIONS /api/observer/read?endpointId=lab_optimism&runId=run-<lowercase UUIDv4>`
+
+The read query is diagnostic metadata. Its canonical spelling/order is required;
+duplicates, extra fields, conflicts and alternate endpoint IDs are denied. Before
+the private hop, the edge removes only the run query and supplies missing JSON
+content type/run header. It preserves the RPC bytes and ID. A supplied case label
+never proves a route or elects a baseline. The existing observer reserves the
+server-generated baseline ID and rejects unknown/expired runs before upstream
+work. IDs are public synthetic correlation, not authentication; unexpected rows
+must fail inventory checks. The fixed five-minute store and global allocation
+limits remain unchanged.
+
+Source identity comes exclusively from a bounded PROXYv2 frame delivered over the
+host-pinned SSH connection into loopback. Caller forwarding headers are discarded.
+The private backend receives exactly one XFF derived from that socket. Both local
+ports trust the operator's single-user host: another local process can forge a
+frame or private-hop XFF. The provider and its TLS termination remain trusted.
+The public hostname may rotate or disappear, provider retention is unverified,
+and the destination still sees the JSON-RPC payload. This is temporary no-cost
+demonstration hosting, without a permanent availability claim.
+
+Limits include 64 sockets, 16 concurrent HTTP operations, 240 admitted operations
+per minute across metadata and reads, 8 KiB headers/32 fields, 16 KiB request bodies
+(128 bytes for allocation), 512 KiB responses, three-second prefix/header/body
+deadlines, a twelve-second backend deadline and twenty-second socket lifetime.
+One HTTP request is accepted per PROXY connection. Credentials/cookies, unsupported
+application headers, ambiguous framing, Expect/Upgrade/CONNECT and arbitrary
+routes are rejected. Counters contain numbers only; the denial counter counts
+events and can count a timeout and subsequent error for the same request.
+
+Offline tests use actual loopback sockets and explicitly simulated sources:
+
+```sh
+pnpm exec vitest run apps/observer/test/public-demo
+pnpm exec vitest run --config deploy/observer/vitest.config.mjs
+pnpm check
+```
+
+No old MN009 source/evidence, normal observer defaults, frontend or root package
+manifest/lockfile is changed by this deployment task.
