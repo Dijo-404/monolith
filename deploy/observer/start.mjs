@@ -84,7 +84,7 @@ export async function startPublicTunnel(options) {
     if (closed) throw new Error('Public demo startup cancelled.');
     const registered = new Promise((accept, reject) => {
       const timer = setTimeout(() => reject(new Error('Public tunnel registration failed.')), 25_000);
-      child = spawn(ssh, ['-F', '/dev/null', '-T', '-p', '443', '-o', 'BatchMode=yes', '-o', 'IdentitiesOnly=yes',
+      child = spawn(ssh, ['-F', '/dev/null', '-T', '-p', '22', '-o', 'BatchMode=yes', '-o', 'IdentitiesOnly=yes',
         '-o', 'IdentityFile=/dev/null', '-o', `UserKnownHostsFile=${knownHosts}`, '-o', 'GlobalKnownHostsFile=/dev/null',
         '-o', 'StrictHostKeyChecking=yes', '-o', 'ExitOnForwardFailure=yes', '-o', 'ServerAliveInterval=15', '-o', 'ServerAliveCountMax=3',
         '-R', `80:127.0.0.1:${demo.edgePort}`, 'nokey@localhost.run', '--', '--output', 'json', '--proxy-protocol-v2'],

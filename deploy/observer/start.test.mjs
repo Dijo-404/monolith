@@ -54,6 +54,7 @@ test('launcher pins the sole SSH identity path and shuts child/backend down idem
   for (const flag of ['StrictHostKeyChecking=yes', 'GlobalKnownHostsFile=/dev/null', `UserKnownHostsFile=${f.knownHosts}`,
     'IdentityFile=/dev/null', 'IdentitiesOnly=yes', 'BatchMode=yes', 'ExitOnForwardFailure=yes', '--proxy-protocol-v2']) expect(args).toContain(flag);
   expect(args.slice(0, 2)).toEqual(['-F', '/dev/null']);
+  expect(args[args.indexOf('-p') + 1]).toBe('22');
   expect(args).toContain('80:127.0.0.1:12345');
   expect(JSON.parse(await readFile(f.status, 'utf8')).state).toBe('READY');
   await Promise.all([runtime.close(), runtime.close()]);
