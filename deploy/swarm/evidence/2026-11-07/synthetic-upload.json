@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "stage": "BOUNDED_PUBLIC_GATEWAY_RESOURCE_PROBE",
+  "evidenceKind": "OBSERVED_LIVE",
+  "startedAt": "2026-11-06T22:43:10.331Z",
+  "status": "PUBLIC_SYNTHETIC_PAYLOAD_UPLOADED_AND_RETRIEVED",
+  "sourceIssue": 96,
+  "uploadService": "https://api.gateway.ethswarm.org",
+  "payloadBytes": 46,
+  "payloadSha256": "edd4caa54fb738c34ccf1c001055a21380727ecf85c8270a3937ae9c22f97594",
+  "requestStamp": "PROVIDER_SELECTED_NULL_STAMP",
+  "actualPostageBatchId": null,
+  "actualBatchProvenance": "UNKNOWN",
+  "deploymentClaim": "NONE",
+  "privacyClaim": "NONE",
+  "operations": [
+    {
+      "method": "POST",
+      "target": "OFFICIAL_UPLOAD_SERVICE",
+      "status": 201,
+      "responseBytes": 82,
+      "responseSha256": "ecad12f1e85d7b1575fdad49f606188bb93c8fae2420faade1165a5f879d1704",
+      "mime": "application/json",
+      "redirectRejected": false
+    },
+    {
+      "method": "GET",
+      "target": "bzz.link",
+      "status": 200,
+      "responseBytes": 46,
+      "responseSha256": "edd4caa54fb738c34ccf1c001055a21380727ecf85c8270a3937ae9c22f97594",
+      "mime": "text/plain",
+      "redirectRejected": false,
+      "exactPayloadMatch": true
+    },
+    {
+      "method": "GET",
+      "target": "bzz.limo",
+      "status": 200,
+      "responseBytes": 46,
+      "responseSha256": "edd4caa54fb738c34ccf1c001055a21380727ecf85c8270a3937ae9c22f97594",
+      "mime": "text/plain",
+      "redirectRejected": false,
+      "exactPayloadMatch": true
+    }
+  ],
+  "reference": "089c469103d1b9e031ac1d1d7cbb600a008e97ca8682a9aa6caad626626d8a09",
+  "cid": "bah5acgzabcoeneid2g46amnmduoxzo3abiai5f6kq2bktktmvllcmytnrieq",
+  "completedAt": "2026-11-06T22:43:13.092Z"
+}
