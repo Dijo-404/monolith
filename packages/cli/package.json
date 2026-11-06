@@ -1,0 +1,37 @@
+{
+  "name": "@monolith/cli",
+  "version": "0.1.0",
+  "description": "Terminal commands and an interactive TUI for Monolith privacy reports and the browser lab",
+  "type": "module",
+  "license": "MIT",
+  "bin": {
+    "monolith": "./dist/monolith.mjs"
+  },
+  "files": [
+    "dist/monolith.mjs",
+    "dist/THIRD_PARTY_NOTICES.txt",
+    "LICENSE",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=24.22.2 <25"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Dijo-404/monolith.git",
+    "directory": "packages/cli"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "node build.mjs",
+    "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p tsconfig.test.json --noEmit",
+    "prepack": "node build.mjs"
+  },
+  "devDependencies": {
+    "@monolith/privacy-analyzer": "workspace:*",
+    "@monolith/shared": "workspace:*",
+    "esbuild": "0.28.2"
+  }
+}

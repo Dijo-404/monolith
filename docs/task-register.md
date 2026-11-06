@@ -33,6 +33,7 @@ Read [the plan](plan.md), [architecture](architecture.md), [contracts](contracts
 | MN-023 | [#36 Prepare no-cost deployment and overnight release hosting](https://github.com/Dijo-404/monolith/issues/36) | C | release | [MN-001](https://github.com/Dijo-404/monolith/issues/1), [MN-002](https://github.com/Dijo-404/monolith/issues/2) | `feat/mn-023-no-cost-deployment` |
 | MN-024 | [#38 Allocate fresh bounded public synthetic observer runs](https://github.com/Dijo-404/monolith/issues/38) | C | integration | [MN-001](https://github.com/Dijo-404/monolith/issues/1), [MN-002](https://github.com/Dijo-404/monolith/issues/2), [MN-004](https://github.com/Dijo-404/monolith/issues/4) | `feat/mn-024-public-lab-runs` |
 | MN-025 | [#40 Deploy reusable no-cost public observer and registry API](https://github.com/Dijo-404/monolith/issues/40) | C | release | [MN-009](https://github.com/Dijo-404/monolith/issues/9), [MN-010](https://github.com/Dijo-404/monolith/issues/10), [MN-024](https://github.com/Dijo-404/monolith/issues/38) | `feat/mn-025-public-observer-deployment` |
+| MN-026 | [#50 Package Monolith as an npm CLI with an interactive TUI](https://github.com/Dijo-404/monolith/issues/50) | D | integration | [MN-001](https://github.com/Dijo-404/monolith/issues/1), [MN-002](https://github.com/Dijo-404/monolith/issues/2), [MN-011](https://github.com/Dijo-404/monolith/issues/11), [MN-014](https://github.com/Dijo-404/monolith/issues/14) | `feat/mn-026-npm-cli-tui` |
 
 Only MN-001 starts ready. Promote downstream tasks after prerequisite merges **and** accepted evidence. MN-017 is the core release; MN-018 through MN-022 are conditional and never block it.
 
@@ -41,5 +42,7 @@ MN-023 was added for the owner-requested overnight no-cost deployment. Its prepa
 MN-024 fixes the public demo lifecycle: startup-only operator runs expire after five minutes and cannot share a visitor baseline. It adds bounded opt-in allocation and preserves existing defaults plus MN-009's source-proof gate.
 
 MN-014 owns the two exact reviewed live-UI adapter entries in `tests/privacy/egress/reviewed-adapters.json`, coordinated with MN-012 on their issues. This path addition does not authorize scanner changes or exempt other files from review.
+
+MN-026 adds an npm-distributable `@monolith/cli` package with a `monolith` executable and interactive TUI. Its first release covers local checks, sanitized report inspection and launching the existing browser lab; protected reads remain in the verified browser worker. It is a P2 extension outside the core release dependency graph. Publication and expanded browser automation are separate scope.
 
 MN-025 additionally owns the reader's optional server access-key wiring and its focused test, coordinated with MN-010 on issues #40/#10 after observed public-RPC rate limits. The credential remains local; publisher/source/expiry validation and the public default remain unchanged.

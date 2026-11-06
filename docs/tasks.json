@@ -977,5 +977,51 @@
     ],
     "gate": "MN-009, MN-010 and MN-024 merged with accepted evidence; coordinate deploy/observer subtree with MN-023 owner.",
     "conditional": false
+  },
+  {
+    "id": "MN-026",
+    "title": "Package Monolith as an npm CLI with an interactive TUI",
+    "lane": "D",
+    "phase": "integration",
+    "priority": "P2",
+    "estimate": "2–3 hours for a thin first release; split expanded runner or scaffolding work",
+    "branch": "feat/mn-026-npm-cli-tui",
+    "depends_on": [
+      "MN-001",
+      "MN-002",
+      "MN-011",
+      "MN-014"
+    ],
+    "paths": [
+      "packages/cli/**",
+      "tests/e2e/cli/**",
+      "docs/cli.md",
+      "pnpm-lock.yaml",
+      "docs/tasks.json",
+      "docs/task-register.md",
+      "tooling/eslint/architecture.mjs",
+      "tests/tooling/architecture.test.mjs"
+    ],
+    "scope": [
+      "Prepare an npm-distributable @monolith/cli package exposing the monolith executable, using existing public shared/analyzer exports and one set of command handlers for CLI and TUI.",
+      "Provide doctor for local prerequisites/configuration, check --input <file> for validated portable analyzer inputs and CI outcomes, report <file> for sanitized report inspection, and lab --url <configured-dashboard> to open the existing browser lab. Add help/version, documented configuration and a keyboard-driven monolith tui with equivalent actions and visible evidence/worker states.",
+      "Keep the first release thin: doctor/check/report work offline by default; lab launches the existing application rather than adding a Node anonymity transport or automated browser runner. Preserve evidence labels, useful-read denominators, bootstrap disclosure and no direct fallback.",
+      "Define bin, files, engines, license, build and release metadata; bundle needed private workspace code through public entry points or coordinate a separately scoped publication plan so the packed package works outside this repository. Coordinate the single lockfile editor before dependency changes.",
+      "Document installation, commands, exit codes, terminal behavior, privacy limits and an npm release checklist. Package publication, codemods, app scaffolding, payment operations, telemetry and arbitrary-project scanning are outside this first release."
+    ],
+    "acceptance": [
+      "An npm pack tarball installs in a fresh temporary project outside the checkout and exposes monolith --help/--version and the documented commands without unresolved workspace dependencies, repository-relative scripts/fixtures or private files. A future npx invocation is documented without claiming the package has been published or its npm name is available.",
+      "CLI and TUI share behavior and preserve OBSERVED_LIVE, SIMULATED, UNTESTED and BLOCKED provenance. check validates input and emits stable JSON/exit codes for policy/functional failure, malformed input and unavailable prerequisites; zero eligible reads or blocking every useful read cannot produce a passing privacy check. Viewing a report does not verify its artifact hashes, redaction or live provenance.",
+      "The TUI supports keyboard navigation, help, cancellation and clean terminal restoration. Non-TTY use never starts an interactive prompt or hangs; JSON output stays machine-readable and errors/progress use the documented output streams.",
+      "Protected reads and chain-ID probes remain in the existing browser lab through a real verified worker or fail closed. Node fetch, passthrough, timeout/retry and browser-launch failure never become protected success or direct RPC fallback. Opening the lab alone produces no successful-run claim; direct comparison and non-anonymous bootstrap remain explicit.",
+      "Tests cover standalone tarball execution, CLI/TUI handler parity, invalid input, failing/leaking and empty-denominator analysis, non-TTY behavior and cancellation. Published output omits raw IPs, private wallet/order payloads, keys and stable session identifiers; no new browser automation/live-evidence claim is made by the launcher smoke test."
+    ],
+    "evidence": [
+      "Exact build, npm pack, clean external installation/bin invocation and existing workspace check commands with actual results",
+      "Focused command/JSON/exit-code and terminal interaction/cancellation test output, clearly labelled synthetic where applicable",
+      "Tarball file/dependency inspection and CLI usage/release documentation; actual browser lab evidence remains owned by its existing tasks"
+    ],
+    "gate": "MN-001, MN-002, MN-011 and MN-014 merged with accepted evidence; task unclaimed. Keep this P2 extension off MN-017's required dependency graph. Coordinate any lockfile edit with the current single editor and any shared API/browser-runner/README change on its owning issue before expanding scope. Registration is planning only; no implementation or npm publication is authorized by this task's creation.",
+    "conditional": false
   }
 ]
