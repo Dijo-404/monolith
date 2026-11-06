@@ -174,11 +174,17 @@ test('required font/runtime notices are retained without copying similarly named
     name: '@monolith/dashboard', dependencies: { 'fixture-runtime': '1.0.0' },
   }));
   await writeFile(join(f.repo, 'apps/dashboard/src/fonts/OFL.txt'), 'Fixture font license notice');
+  for (const name of ['OFL-FragmentMono.txt', 'OFL-WixMadeforDisplay.txt', 'OFL-WixMadeforText.txt']) {
+    await writeFile(join(f.repo, 'apps/dashboard/src/fonts', name), `Fixture font notice: ${name}`);
+  }
   await writeFile(join(f.repo, 'apps/dashboard/src/LICENSE.ts'), 'private-source-sentinel-never-disclose');
   await writeFile(join(f.repo, 'notice-fixture.json'), '{}');
   const provenance = await prepareStatic({ ...f.options, commit: f.commit() });
-  assert.equal(provenance.retainedNotices.length, 2);
+  assert.equal(provenance.retainedNotices.length, 5);
   assert.equal(provenance.retainedNotices.some((entry) => entry.path.endsWith('/OFL.txt')), true);
+  assert.equal(provenance.retainedNotices.some((entry) => entry.path.endsWith('/OFL-FragmentMono.txt')), true);
+  assert.equal(provenance.retainedNotices.some((entry) => entry.path.endsWith('/OFL-WixMadeforDisplay.txt')), true);
+  assert.equal(provenance.retainedNotices.some((entry) => entry.path.endsWith('/OFL-WixMadeforText.txt')), true);
   assert.equal(provenance.retainedNotices.some((entry) => entry.path.endsWith('/LICENSE.ts')), false);
   for (const entry of provenance.retainedNotices) {
     const bytes = await readFile(join(f.options.out, entry.path));

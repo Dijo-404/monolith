@@ -182,7 +182,7 @@ async function collectNotices(source, entries) {
     requireValue(totalBytes <= 16 * 1024 * 1024, 'License notices exceeded their size bound.');
     notices.push({ path: destination, bytes, sha256: sha256(bytes) });
   };
-  const isNotice = (name) => /^(?:licen[cs]e(?:-(?:MIT|APACHE|BSD))?|notice|ofl)(?:\.(?:txt|md|rst))?$/i.test(name);
+  const isNotice = (name) => /^(?:licen[cs]e(?:-(?:MIT|APACHE|BSD))?|notice|ofl(?:-[a-z0-9][a-z0-9_-]{0,63})?)(?:\.(?:txt|md|rst))?$/i.test(name);
   for (const entry of entries) {
     if ((entry.path.startsWith('apps/dashboard/') && isNotice(entry.path.split('/').at(-1))) ||
       entry.path === 'packages/registry/src/adapters/source/LICENSE.ethereum-lists-chains') {
