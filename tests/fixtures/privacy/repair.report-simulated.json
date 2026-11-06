@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "runId": "public-run-fixture-001",
+  "evidence": "SIMULATED",
+  "eligibleReads": 2,
+  "protectedReads": 2,
+  "successfulReads": 2,
+  "protectedCoverage": 1,
+  "findings": [],
+  "scope": {
+    "rpcOrigins": [
+      "https://rpc.example.com"
+    ],
+    "scenarios": [
+      "leak-lab:read"
+    ],
+    "bootstrapExclusions": []
+  }
+}
