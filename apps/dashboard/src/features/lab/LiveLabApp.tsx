@@ -12,6 +12,7 @@ import './live.css';
 const PHASES: Record<LiveSnapshot['phase'], string> = {
   IDLE: 'Ready when you are', WARMING: 'Starting the private network…', ALLOCATING: 'Opening a fresh observer run…',
   REGISTRY: 'Reading trusted Arkiv metadata…', SELECTING: 'Checking the chain through Nym…', READING: 'Reading the synthetic balance…',
+  REGISTRY_RETRY: 'Rechecking public registry metadata…',
   VERIFYING: 'Matching independent observer receipts…', READY: 'Run recorded', BLOCKED: 'The run is blocked', CLOSED: 'Worker closed',
 };
 const short = (value: string, width = 12) => value.length <= width + 6 ? value : `${value.slice(0, width)}…${value.slice(-5)}`;
@@ -68,6 +69,7 @@ function LiveGuide({ state, active, onSelect, onRun }: {
       <Icon name={state.error ? 'alert' : state.busy ? 'clock' : 'check'} />{PHASES[state.phase]}
     </p>
     {state.busy && state.phase === 'WARMING' && <p className="live-hint">Nym may take a minute to start. A timeout blocks the read; it never switches to a direct route.</p>}
+    {state.busy && state.phase === 'REGISTRY_RETRY' && <p className="live-hint">Trying public registry metadata again, up to three attempts. Your balance read stays blocked until trust checks pass.</p>}
     <ol className="steps" aria-label="Live lab steps">{STEPS.map((item, index) => <li key={item.mode}>
       <button type="button" className="step" aria-current={active === index ? 'step' : undefined}
         data-done={state.milestones[item.milestone]} onClick={() => onSelect(index)}>
