@@ -1,6 +1,6 @@
 # Guided lavender lab review
 
-This is the initial `77c79be` presentation record. The owner subsequently rejected its 3D stage. The current replacement, integrated-build checks and fresh review are in the [stage revision report](stage-v2/README.md) and [scene design](stage-v2/scene-design.md). The original captures and results below remain historical evidence for their named source; they are not current visual approval.
+> **Historical — rejected dark-stage presentation.** The owner rejected the entire dark 3D card, including both this initial `77c79be` version and the later [sculptural revision](stage-v2/README.md). All dispositions, captures and counts below apply only to those superseded builds. The current direction removes 3D and uses a light DOM/SVG request explorer; its [replacement review](request-explorer/README.md) is being prepared separately. Historical captures and JSON remain unchanged and do not establish approval or validation of the replacement.
 
 Presentation follow-up [#86](https://github.com/Dijo-404/monolith/issues/86), based on accepted main `79054dc`. The owner requested a light Phantom-inspired interface and confirmed a guided lab with a clear next action.
 

@@ -26,27 +26,21 @@ export function StageCard({
   const { worker, registry } = state;
   const passthrough = worker.network === 'Passthrough';
   return (
-    <section className="stage-card" aria-label="Route stage">
-      <Stage scene={scene} flights={flights} reducedMotion={reducedMotion} onSelect={onSelect} />
-      <p className="hud hud--tl">
+    <section className="request-workspace" aria-label="Interactive request explanation">
+      <Stage scene={scene} flights={flights} reducedMotion={reducedMotion} onSelect={(target) => {
+        if (target === 'endpoint') {
+          document.getElementById('registry-title')?.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'center' });
+        } else onSelect(target);
+      }} />
+      <p className="request-workspace__status">
         <span className={`dot dot--state-${worker.state.toLowerCase()}`} aria-hidden="true" />
         {passthrough ? 'Passthrough worker' : 'Anon-RPC worker'}
         <strong>{passthrough ? 'Not anonymized' : WORKER_WORDS[worker.state]}</strong>
-      </p>
-      <p className="hud hud--tr">
+        <span className="request-workspace__context">
         {registry.endpoint.chainName} · {registry.status === 'fresh' ? 'registry fresh' : 'registry expired'}
-      </p>
-      <p className="hud hud--bl">
-        <span className="hud__legend">
-          <span className="hud__line hud__line--anon" aria-hidden="true" />
-          Private route
         </span>
-        <span className="hud__legend">
-          <span className="hud__line hud__line--direct" aria-hidden="true" />
-          Direct route
-        </span>
+        <span className="request-workspace__mode">Simulated lab</span>
       </p>
-      <p className="hud hud--br">Simulated</p>
     </section>
   );
 }

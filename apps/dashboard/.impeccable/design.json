@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-11-06T22:05:40Z",
+  "generatedAt": "2026-11-06T22:33:11Z",
   "title": "Design System: Monolith Leak Lab",
   "extensions": {
     "colorMeta": {
@@ -297,76 +297,6 @@
           "oklch(84% 0.13648 76.84)",
           "oklch(95% 0.13648 76.84)"
         ]
-      },
-      "stage": {
-        "role": "neutral",
-        "displayName": "Night Stage",
-        "tonalRamp": [
-          "oklch(15% 0.03752 292.38)",
-          "oklch(26% 0.03752 292.38)",
-          "oklch(38% 0.03752 292.38)",
-          "oklch(49% 0.03752 292.38)",
-          "oklch(61% 0.03752 292.38)",
-          "oklch(72% 0.03752 292.38)",
-          "oklch(84% 0.03752 292.38)",
-          "oklch(95% 0.03752 292.38)"
-        ]
-      },
-      "stage-ink": {
-        "role": "neutral",
-        "displayName": "Bright Stage Ink",
-        "tonalRamp": [
-          "oklch(15% 0.02189 300.21)",
-          "oklch(26% 0.02189 300.21)",
-          "oklch(38% 0.02189 300.21)",
-          "oklch(49% 0.02189 300.21)",
-          "oklch(61% 0.02189 300.21)",
-          "oklch(72% 0.02189 300.21)",
-          "oklch(84% 0.02189 300.21)",
-          "oklch(95% 0.02189 300.21)"
-        ]
-      },
-      "stage-ink-2": {
-        "role": "neutral",
-        "displayName": "Supporting Stage Ink",
-        "tonalRamp": [
-          "oklch(15% 0.04134 299.65)",
-          "oklch(26% 0.04134 299.65)",
-          "oklch(38% 0.04134 299.65)",
-          "oklch(49% 0.04134 299.65)",
-          "oklch(61% 0.04134 299.65)",
-          "oklch(72% 0.04134 299.65)",
-          "oklch(84% 0.04134 299.65)",
-          "oklch(95% 0.04134 299.65)"
-        ]
-      },
-      "stage-anon": {
-        "role": "primary",
-        "displayName": "Light Route Purple",
-        "tonalRamp": [
-          "oklch(15% 0.10408 293.88)",
-          "oklch(26% 0.10408 293.88)",
-          "oklch(38% 0.10408 293.88)",
-          "oklch(49% 0.10408 293.88)",
-          "oklch(61% 0.10408 293.88)",
-          "oklch(72% 0.10408 293.88)",
-          "oklch(84% 0.10408 293.88)",
-          "oklch(95% 0.10408 293.88)"
-        ]
-      },
-      "stage-direct": {
-        "role": "neutral",
-        "displayName": "Light Exposure Coral",
-        "tonalRamp": [
-          "oklch(15% 0.11254 30.44)",
-          "oklch(26% 0.11254 30.44)",
-          "oklch(38% 0.11254 30.44)",
-          "oklch(49% 0.11254 30.44)",
-          "oklch(61% 0.11254 30.44)",
-          "oklch(72% 0.11254 30.44)",
-          "oklch(84% 0.11254 30.44)",
-          "oklch(95% 0.11254 30.44)"
-        ]
       }
     },
     "typographyMeta": {
@@ -401,6 +331,10 @@
       "mono": {
         "displayName": "Technical Mono",
         "purpose": "Method names, code and technical identifiers."
+      },
+      "explorer-title": {
+        "displayName": "Request Explorer Title",
+        "purpose": "The light “Follow a request” heading."
       }
     },
     "shadows": [
@@ -410,14 +344,19 @@
         "purpose": "Comparison and evidence cards."
       },
       {
-        "name": "shadow-stage",
-        "value": "0 36px 70px -36px rgb(23 20 31 / 0.55)",
-        "purpose": "Contained dark route stage."
-      },
-      {
         "name": "shadow-float",
         "value": "0 1px 2px rgb(23 20 31 / 0.05), 0 10px 28px -14px rgb(23 20 31 / 0.18)",
-        "purpose": "Section navigation and current guide step."
+        "purpose": "Section navigation, current run step and selected explanation route."
+      },
+      {
+        "name": "private-stop-selected",
+        "value": "0 8px 16px -8px rgb(101 66 179 / 0.55)",
+        "purpose": "Selected private-explanation stop; not measured protection."
+      },
+      {
+        "name": "direct-stop-selected",
+        "value": "0 8px 16px -8px rgb(201 55 47 / 0.4)",
+        "purpose": "Selected direct-explanation stop; selecting it sends nothing."
       }
     ],
     "motion": [
@@ -442,11 +381,6 @@
         "purpose": "Switch thumb moves 18px when checked."
       },
       {
-        "name": "bootstrap-pulse",
-        "value": "1.4s ease-in-out infinite",
-        "purpose": "Bootstrapping indicator, not evidence of success."
-      },
-      {
         "name": "card-focus",
         "value": "1.6s var(--ease-out)",
         "purpose": "Temporary outline around a focused evidence card."
@@ -457,14 +391,24 @@
         "purpose": "CSS animation/transition duration under prefers-reduced-motion: reduce; one animation iteration and no smooth scrolling."
       },
       {
-        "name": "stage-control-color",
-        "value": "160ms",
-        "purpose": "Text and background feedback on stage view controls."
+        "name": "explanation-route-color",
+        "value": "180ms",
+        "purpose": "Local route-choice text and background feedback."
       },
       {
-        "name": "stage-control-press",
-        "value": "200ms var(--ease-out)",
-        "purpose": "Stage control press feedback to scale 0.96."
+        "name": "explanation-route-shadow",
+        "value": "240ms var(--ease-out)",
+        "purpose": "Selected route-choice shadow change."
+      },
+      {
+        "name": "explanation-stop-hover",
+        "value": "350ms var(--ease-out)",
+        "purpose": "Selected stop-icon hover lift of 3px, not traffic animation."
+      },
+      {
+        "name": "request-reveal",
+        "value": "350ms var(--ease-out)",
+        "purpose": "Facts reveal from blur 2px/translateY 3px to settled content."
       }
     ],
     "breakpoints": [
@@ -477,7 +421,7 @@
         "value": "899px"
       },
       {
-        "name": "live-compact-max",
+        "name": "vertical-explorer-max",
         "value": "640px"
       },
       {
@@ -552,22 +496,30 @@
       "css": ".ds-step{display:flex;align-items:center;gap:14px;width:100%;min-height:48px;padding:8px 12px;border:0;border-radius:var(--radius-md);background:none;color:var(--ink-2);font-family:var(--font-text);font-size:.9375rem;font-weight:500;line-height:1.55;text-align:left;cursor:pointer;transition:background-color .2s;}.ds-step:hover{background:rgb(255 255 255 / .6);}.ds-step[aria-current=\"step\"]{background:var(--surface);color:var(--ink);font-weight:600;box-shadow:var(--shadow-float);}.ds-step-marker{display:grid;place-items:center;width:26px;height:26px;flex:none;border-radius:50%;background:var(--ink);color:#fff;font-size:.8125rem;font-weight:600;}.ds-step:focus-visible{outline:2px solid var(--protected);outline-offset:3px;}@media(max-width:899px){.ds-step{align-items:flex-start;gap:10px;height:100%;font-size:.875rem;}}@media(prefers-reduced-motion:reduce){.ds-primary,.ds-secondary,.ds-nav a,.ds-switch,.ds-thumb,.ds-step{transition-duration:0.01ms!important;animation-duration:0.01ms!important;animation-iteration-count:1!important;}}"
     },
     {
-      "name": "Stage View Controls",
+      "name": "Request Route Explanation",
       "kind": "custom",
-      "refersTo": "stage-view-control",
-      "description": "Presentation preview of Pause/Resume and Reset view. Actual controls affect the illustration, while authoritative state and supplied flights continue; reduced motion replaces Pause with an accessible status.",
-      "html": "<div class=\"ds-stage-controls\" aria-label=\"3D view controls\"><button type=\"button\" class=\"ds-stage-control ds-scene-motion\" aria-pressed=\"false\" aria-label=\"Pause scene motion\" title=\"Pause decorative scene motion\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 20 20\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" aria-hidden=\"true\"><path d=\"M6.5 4v12M13.5 4v12\"/></svg><span>Pause</span></button><span class=\"ds-stage-control ds-motion-note\" role=\"status\" aria-label=\"Reduced motion is enabled\" title=\"Your system preference reduces scene motion\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 20 20\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M10 17a7 7 0 1 0 0-14 7 7 0 0 0 0 14zM10 9.2V14M10 6.3v.3\"/></svg><span>Reduced motion</span></span><button type=\"button\" class=\"ds-stage-control ds-stage-reset\" aria-label=\"Reset 3D view\" title=\"Reset the 3D view\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 20 20\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M4.5 10a5.5 5.5 0 1 0 1.7-4M6 2.8V6.4h3.6\"/></svg><span>Reset view</span></button></div>",
-      "css": ".ds-stage-controls{display:inline-flex;align-items:center;gap:6px;}.ds-stage-control{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:44px;min-width:44px;padding:8px 12px;border:0;border-radius:12px;background:rgb(14 14 27 / .74);color:var(--stage-ink-2);font-family:var(--font-text);font-size:.8125rem;font-weight:500;line-height:1.55;}.ds-stage-controls button{cursor:pointer;transition:color 160ms,background-color 160ms,transform 200ms var(--ease-out);}.ds-stage-controls button:hover{color:var(--stage-ink);background:rgb(114 96 162 / .3);}.ds-stage-controls button:active{transform:scale(.96);}.ds-stage-controls button[aria-pressed=\"true\"]{color:var(--stage-anon);}.ds-stage-controls button:focus-visible{outline:2px solid var(--stage-anon);outline-offset:3px;}.ds-motion-note{display:none;}@media(max-width:1180px){.ds-stage-control span{display:none;}}@media(max-width:520px){.ds-stage-reset{display:none;}}@media(prefers-reduced-motion:reduce){.ds-stage-controls .ds-scene-motion{display:none;}.ds-stage-controls .ds-motion-note{display:inline-flex;}.ds-stage-controls button{transition-duration:.01ms!important;animation-duration:.01ms!important;animation-iteration-count:1!important;}}"
+      "refersTo": "route-choice",
+      "description": "Static preview of local Private/Direct explanation choices. The app buttons change explanation only; they do not send requests or change policy.",
+      "html": "<div class=\"ds-route-choices\" data-route=\"private\" role=\"group\" aria-label=\"Route explanations\"><button type=\"button\" class=\"ds-route-choice\" aria-pressed=\"true\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 20 20\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M10 2.5 4 5v4.6c0 3.7 2.6 6.6 6 7.9 3.4-1.3 6-4.2 6-7.9V5z\"/></svg>Private path</button><button type=\"button\" class=\"ds-route-choice\" aria-pressed=\"false\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 20 20\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M2.5 10s2.8-5 7.5-5 7.5 5 7.5 5-2.8 5-7.5 5-7.5-5-7.5-5zM10 12.3a2.3 2.3 0 1 0 0-4.6 2.3 2.3 0 0 0 0 4.6z\"/></svg>Direct path</button></div>",
+      "css": ".ds-route-choices{display:flex;gap:4px;width:fit-content;max-width:100%;padding:4px;border-radius:12px;background:var(--surface-2);}.ds-route-choice{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:10px 16px;border:0;border-radius:9px;background:transparent;color:var(--ink-2);font-family:var(--font-text);font-size:.875rem;font-weight:600;line-height:1.55;cursor:pointer;transition:background-color 180ms,color 180ms,box-shadow 240ms var(--ease-out);}.ds-route-choice:hover{color:var(--ink);background:var(--bg-deep);}.ds-route-choice[aria-pressed=\"true\"]{color:var(--protected);background:var(--surface);box-shadow:var(--shadow-float);}.ds-route-choices[data-route=\"direct\"] .ds-route-choice[aria-pressed=\"true\"]{color:var(--exposed);}.ds-route-choice:focus-visible{outline:2px solid var(--protected);outline-offset:3px;}@media(max-width:640px){.ds-route-choice{padding-inline:12px;}}@media(prefers-reduced-motion:reduce){.ds-route-choice{transition-duration:.01ms!important;}}"
+    },
+    {
+      "name": "Read Inspector",
+      "kind": "custom",
+      "refersTo": "read-inspector",
+      "description": "Native result disclosure. This preview uses clearly labelled simulated example metadata; the app displays supplied read values without raw RPC parameters.",
+      "html": "<details class=\"ds-read-inspector\"><summary>Inspect read<svg class=\"ds-read-arrow\" width=\"16\" height=\"16\" viewBox=\"0 0 20 20\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M10 4.5v11m-4.5-4.5L10 15.5l4.5-4.5\"/></svg></summary><dl><div><dt>Method</dt><dd class=\"ds-read-mono\">eth_getBalance</dd></div><div><dt>Route</dt><dd>Example only</dd></div><div><dt>Evidence</dt><dd>SIMULATED example</dd></div><div><dt>Outcome</dt><dd>Example only</dd></div><div><dt>Round trip</dt><dd>Pending</dd></div><div><dt>Read ID</dt><dd class=\"ds-read-mono\">example-read</dd></div></dl></details>",
+      "css": ".ds-read-inspector{margin-top:16px;border-top:1px solid var(--line);color:var(--ink-2);font-family:var(--font-text);font-size:.8125rem;line-height:1.55;}.ds-read-inspector summary{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:44px;list-style:none;font-weight:600;cursor:pointer;}.ds-read-inspector summary::-webkit-details-marker{display:none;}.ds-read-inspector[open] summary .ds-read-arrow{transform:rotate(180deg);}.ds-read-inspector summary:focus-visible{outline:2px solid var(--protected);outline-offset:3px;}.ds-read-inspector dl{margin:0;padding-block:4px 8px;}.ds-read-inspector dl>div{padding-block:6px;}.ds-read-inspector dt{color:var(--ink-3);font-size:.75rem;}.ds-read-inspector dd{margin:2px 0 0;overflow-wrap:anywhere;}.ds-read-mono{font-family:var(--font-mono);font-size:.9em;font-variant-numeric:tabular-nums;}"
     }
   ],
   "narrative": {
     "northStar": "The Guided Lab",
-    "overview": "The light guided surface preserves the owner's requested Phantom-inspired direction: a lavender-grey page, white cards, a restrained purple action, and an original dark route stage. Dark ink and readable labels keep the surrounding interface clear in a lit room. Inside the stage, a pearl browser device, open relay assemblies and a recessed endpoint share silver edges, dark cavities and restrained lavender light. The Monolith mark and route model remain original.\n\nThe visual system makes the next action easy to find and keeps results, residual exposure and provenance readable together. [PRODUCT.md](PRODUCT.md) carries product truth; [the guided-lab brief](.impeccable/guided-lab.md) carries this surface's mode and composition. This document merges the established MN-006 shell guidance with the implemented refinement, extracting values from [tokens.css](src/styles/tokens.css), [lab.css](src/styles/lab.css) and the existing components. The frontmatter records implemented primitives; it does not add CSS variables. Sidecar tonal ramps are derived preview swatches, not additional application tokens.\n\nThe default app is now the live composition; `?mode=simulated` opens the separate offline fixture walkthrough. The persistent mode badge names the selected mode, while result badges establish a run's provenance. The original [MN-006 review](docs/review/README.md) remains historical SIMULATED shell evidence. Its desktop, 390px, 320px and WebGL-fallback screenshots, and screenshots made for this refinement, establish presentation behavior only; they provide no new live anonymity, registry, payment or sponsor evidence.",
+    "overview": "The current world is a clean, light interface for a lit room or projector: lavender-grey paper, white working surfaces, dark plum ink and restrained purple actions. A readable request explorer replaces the complete dark 3D card. The owner rejected both earlier stage revisions; their visual approvals do not carry forward. Keep the original Monolith mark and self-hosted typography, with no copied mascot or assets.\n\nThe explorer explains a request through local route choices, clickable stops and expandable fields. Separate run actions, worker status and comparison cards carry the actual lab state. An example is useful without pretending to be a measurement. [PRODUCT.md](PRODUCT.md) carries product truth and [the guided-lab brief](.impeccable/guided-lab.md) carries the surface flow. Tokens are extracted from [tokens.css](src/styles/tokens.css) and [lab.css](src/styles/lab.css); sidecar tonal ramps are derived preview swatches, not extra application tokens.\n\nThe default app is the live composition; `?mode=simulated` opens the offline fixture walkthrough. Mode names identify the selected mode; result badges identify run provenance. The [MN-006 review](docs/review/README.md), [first lavender review](docs/review/lavender-20261107/README.md) and [sculptural-stage review](docs/review/lavender-20261107/stage-v2/README.md) remain historical records for their named builds. The replacement is documented separately in [request-explorer/README.md](docs/review/lavender-20261107/request-explorer/README.md). Presentation screenshots and local examples establish no new live anonymity, registry, payment or sponsor evidence.",
     "keyCharacteristics": [
-      "Pale lavender ground with dark readable ink and white result surfaces.",
-      "Purple actions and protected-route labels; red exposure and amber simulation labels.",
-      "A contained sculptural route stage with a readable text counterpart.",
-      "Self-hosted typography, visible keyboard focus and reduced-motion support."
+      "Lavender paper, white working surfaces and dark readable ink.",
+      "Purple primary/private controls, red direct exposure and explicit provenance words.",
+      "A light request explanation beside separate run results.",
+      "Ordinary DOM controls, SVG icons, visible focus and responsive reading order."
     ],
     "rules": [
       {
@@ -577,19 +529,18 @@
       }
     ],
     "dos": [
-      "**Do** preserve the lavender ground, white working surfaces and contained original dark route stage.",
-      "**Do** keep the next primary action visible and give secondary evidence a readable hierarchy.",
-      "**Do** pair meaning colors with text or icons and preserve explicit mode and result provenance.",
-      "**Do** retain self-hosted fonts, keyboard focus, reduced motion and the SVG/text fallback.",
-      "**Do** show both route protection and the payload information the endpoint can still read."
+      "**Do** keep dark readable ink on lavender paper and white working surfaces.",
+      "**Do** preserve one clear next run action and a separate local request explanation.",
+      "**Do** pair meaning colors with words, pressed states and explicit provenance.",
+      "**Do** keep mobile stops vertical, native disclosures usable and focus visible.",
+      "**Do** show residual payload exposure beside route protection and actual result evidence."
     ],
     "donts": [
-      "**Don't** treat a live-mode label, route animation or presentation screenshot as observed anonymity evidence.",
-      "**Don't** turn unavailable or unmeasured results into green success, full coverage or a fabricated score.",
-      "**Don't** hide a direct bypass when a managed read fails closed during an outage.",
-      "**Don't** depict payment as anonymous or activate it from visual styling alone.",
-      "**Don't** copy another product's mascot, mark or visual assets into the original Monolith stage.",
-      "**Don't** animate invented packet traffic or treat decorative bars and relay geometry as measured requests or topology."
+      "**Don't** restore the rejected dark 3D card, GPU effects, parallax or moving packet scene.",
+      "**Don't** make Private/Direct explanation buttons send a read or change the real privacy policy.",
+      "**Don't** treat example fields, a mode label or a screenshot as observed anonymity evidence.",
+      "**Don't** invent traffic, hop counts, successful reads, full coverage or privacy scores.",
+      "**Don't** hide a bypass during an outage or depict payment as anonymous."
     ]
   }
 }

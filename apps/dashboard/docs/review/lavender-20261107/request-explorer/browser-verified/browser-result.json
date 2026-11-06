@@ -1,0 +1,4826 @@
+{
+  "schemaVersion": 1,
+  "sourceTask": "#86",
+  "evidence": "SIMULATED",
+  "passed": true,
+  "scope": "Actual production-preview request-explorer controls, truthful fixture read metadata and existing lab journeys. Live mode is tested only with disabled/unconfigured networking; no live RPC or privacy acceptance.",
+  "livePrivacyAcceptance": false,
+  "startedAt": "2026-11-06T22:36:09.943Z",
+  "node": "v24.22.2",
+  "playwright": "1.65.0",
+  "browser": "158.0.8127.18",
+  "sourceBefore": {
+    "source": {
+      "app/LabApp.tsx": "2bd0f0b813dd64b8c411a219dbf00746a3a1a7bc9263cef88c634f0719fb03e6",
+      "app/guide.ts": "c13eebbbaf6567ef14ff4967c70b548c488a4f86091aa6e67a4b5f629ddbd204",
+      "app/lab-fixtures.ts": "d68275afc445277fc324cd70981c73c05fe09d65e76dfdbb3beed4925f9894e5",
+      "app/lab-model.ts": "b8ef594b55f459fe061f5c22a2c7d59e468c30d92d04bafa98b8a0438cbf9ada",
+      "app/lab-reducer.ts": "7c5f42b30276407fe76c46eeeb057b36a678d4bac61ddd5f33ce2c0b2463ae9e",
+      "app/use-lab.ts": "02303e3d3302120c13b61a938c6e218d9c9333ebd5eade7af46a236cf573c49e",
+      "components/Comparison.tsx": "d62fd66d6ed91b37a61763ab3264bd6937597afa6ec7fe469101a4283877e81a",
+      "components/Guide.tsx": "a8a6a96a5fc77c95996bb644709c382f15e7030a82f4c64ec67c90b3ff64d7fe",
+      "components/Header.tsx": "1190173d0dc184f2291b4ccd95ad81dff795a01fb541ae8b84f9e805352f52f9",
+      "components/Icon.tsx": "ffe7c4a93033730b773da5818435966932e23aad74caa4f3a187af592ceb07da",
+      "components/ReadInspector.tsx": "3251a346e487fe0c875db6504199a7c3266a69849345108fa57c4e972d6e37ba",
+      "components/StageCard.tsx": "722cb4bf76e0c367f011676954433c85f19c18387dcf3af4197ba29587cb220b",
+      "components/Switch.tsx": "6974a12d8ec20358e9d1ba91162d570115889666df7e9d8e1196193c851529bd",
+      "components/Tag.tsx": "c43df271299a76a75b2ddce3e9871783859829050290e964a2d4dac5c48be441",
+      "components/UnderTheHood.tsx": "fa9425cc6b0f2c5a930b72dac9a047455dfe13df2e3fe3fc052e838f68485bfa",
+      "components/format.ts": "340e576dfde3d8f183c6936e2116e97ccad2ef8555e72af66e4d95317c6142f8",
+      "components/stage/Stage.tsx": "261d5577d4ea9fc3bc079e91c722191d9a41aa155f503d5c97a98bd6ae58e599",
+      "components/stage/renderer.ts": "117e17bcd0620826b0a9e0e66d53112f78da4e98a8a4d017ce4d0bc8e4e9458f",
+      "composition/lab.ts": "10d8a5a7b538464dfa33b9652031a84f2ede6bf43e1e38c038e887dded8802e5",
+      "composition/registry.ts": "e41ea93e5ee598898f59200b0b97d0e528b22c333b029bff3b9edb77bf1dd96f",
+      "composition/transport.ts": "416a0075692f431da4cccfe2f4592c13bd7e021b73388f8b87d6cd6e7a38fad2",
+      "config/public-env.ts": "0c6eb98d0ce147875818d14b7b0f0140493dbd739da61593dda425c0d785f401",
+      "features/lab/LiveLabApp.tsx": "cff35bfc8d1ca524594261dd0c9f46d44acbd0dc8b5a2dcd1fb24a80e523e3ba",
+      "features/lab/correlate.ts": "7f4e082cc971f016a9c1c41be256e0e700640c173d566c6d5e7dc6b9b5b8efea",
+      "features/lab/direct-fixture.ts": "b2afba31bf8f440cd6fe248a033cb7d3f7d18328bf60f626e360a6f0bec88326",
+      "features/lab/live-controller.ts": "e4869d296a57ea6a78ddecac925e03ef51446f850c85ec766b2483b943f9d0e7",
+      "features/lab/live-types.ts": "107e2b7eee951604e12db33bef28a032668dc3d260fbf5fb047fbc1e288fb827",
+      "features/lab/live.css": "694453dea3b61378a910d7a5cec16d4ce4a859bc7b46c3b4c5dde72bd94e905a",
+      "features/lab/scenario.ts": "e1c02984f4d49ec71cfa091c0290d974348a5b9cc95b8cb1f763570b20eb6d1b",
+      "features/lab/wire-driver.ts": "c419106f54bb25dd70c602b9d6bbdd283a3ea13a2bbe6a58fb14e148490b8d14",
+      "features/providers/controller.ts": "b149187538597d3fc5d3c4ea988a9b32df5007a1bfbbc1a371cf9bdc2de07079",
+      "features/quote/fixed-quote.ts": "adde66c415f969d399fb068a2d8d01aec7b3af93e1276727f42df1c5ffb4cb1d",
+      "features/registry/live-policy.ts": "f729250f388eb84ed6de44bfcdd6d1a411a26d4df67f6ba18e4f13627315b184",
+      "features/sandbox/SandboxWalkthrough.tsx": "9228fded2f3076fd65025254a0023c3714e0d32218c48e94f094b59ef3492c6d",
+      "main.tsx": "c114b7c3be6592db34885f96c050872d18824ceb071bcd01a9434ed9771f4af0",
+      "spikes/anon/index.html": "8fda235a27120212585737d3cf6f830e32c06d07d7e95c003b3900762944d3e2",
+      "spikes/anon/main.ts.txt": "d1bcdb69f1ad53114eca0302e49a127d37858758b599690194af14aeafc6516a",
+      "spikes/anon/observed-2026-11-06.json": "4522287d860335100b29e26155d03dfc60cfa394602ccae39b481373cdc37fdd",
+      "spikes/anon/packaging-smoke-2026-11-06.json": "016c8c33aaef1a275a28d8d555ffb834fd644fdc128aa13247aa9ec1b52e9a68",
+      "spikes/anon/post-foundation-nym-2026-11-06.json": "6221bdb015838bb0844326c7eca286870a6402e651db95d00ae8eacc29cdb177",
+      "spikes/anon/run.mjs.txt": "9494bf94ec3f9ed135cb383b9fdbc5490b379e05e7476da927b1f51bc7e20699",
+      "spikes/anon/run.sh": "6fe6420e89cecce72d8de9fb02774d388a9c1bb8b729c981120302170cbf3308",
+      "styles/fonts/OFL-FragmentMono.txt": "04e68eeb550895a2f5c3558510a7e83505b73159d6a3e4b841c365e9c9005461",
+      "styles/fonts/OFL-WixMadeforDisplay.txt": "5167ab9754b56678f7363976eee0576a52782b1f225af2635c505406cd14dd67",
+      "styles/fonts/OFL-WixMadeforText.txt": "5167ab9754b56678f7363976eee0576a52782b1f225af2635c505406cd14dd67",
+      "styles/fonts/fragment-mono-latin.woff2": "44c4e39bff5e76652a24a872cbebabccbcfb20f62c4633b27c1f2745cba86b56",
+      "styles/fonts/wix-madefor-display-latin.woff2": "19bf2f2f1eaa10b2a047a8a1e624a1e12008ab5e3c50ad199ac968f8324f5f4d",
+      "styles/fonts/wix-madefor-text-latin.woff2": "cbd90a79e04d153fd521d90b08e9962628e3139313af330bd898001fe5b36e1a",
+      "styles/lab.css": "ffcda0e7a75b99977bc183111dbc92b1a0cf40ba07d54e0f8fefed85a3c10baf",
+      "styles/tokens.css": "cdc686f64d11b175e197d95085bcadccee79071502a0be737cf0873e96501992",
+      "vite-env.d.ts": "493f46be45455ec7a882bf649cff161f7e2cad6b7e532f75008a852d60fabfac"
+    },
+    "dist": {
+      "assets/app-Dfc0eyNx.css": "acf44d93214388d786cebff9bdec3c79d396ff57d814b8b00754e89b1d274254",
+      "assets/app-NXfADppi.js": "c80fcba01b9654876a863cc39033b4049f48a05d05013bb16595fb4f597daf1b",
+      "assets/browser-BV4R2-sQ.js": "71eb5d7ba875e25ad922eab59d944b3fe0d4cd0756395512f303158f52f5dca1",
+      "assets/fragment-mono-latin-yxdJ5AmL.woff2": "44c4e39bff5e76652a24a872cbebabccbcfb20f62c4633b27c1f2745cba86b56",
+      "assets/wix-madefor-display-latin-Blzrepd3.woff2": "19bf2f2f1eaa10b2a047a8a1e624a1e12008ab5e3c50ad199ac968f8324f5f4d",
+      "assets/wix-madefor-text-latin-M4ts_BV7.woff2": "cbd90a79e04d153fd521d90b08e9962628e3139313af330bd898001fe5b36e1a",
+      "assets/worker-host.html": "844c700df979d2bdb16ff70650c1b68b6f51512602dfadeaee94433a3ea6cebe",
+      "assets/workerHost-BKrclfgn.js": "be79dfb1b101571e15515125b2769d96b1d5d13a2001ca51e0b4684afdcaa35d",
+      "index.html": "324f1589660126de3015f9f917e6dfc1f30406eb9a021f93cd1f9d1d8fb30252"
+    },
+    "package": "6a76d101b960f66de7681953b6057388abf0d65bcd8735b9b1a1405f420af319",
+    "lockfile": "dd52d17efe95f178c5de765f06d4dfdd3f73545ed11d7491602c6fc17da489f5",
+    "runner": "f0f33650935bec3d1b2fe9a9c345c8e8edc8ccb621fa6a56661ce429dd253b77"
+  },
+  "sourceAfter": {
+    "source": {
+      "app/LabApp.tsx": "2bd0f0b813dd64b8c411a219dbf00746a3a1a7bc9263cef88c634f0719fb03e6",
+      "app/guide.ts": "c13eebbbaf6567ef14ff4967c70b548c488a4f86091aa6e67a4b5f629ddbd204",
+      "app/lab-fixtures.ts": "d68275afc445277fc324cd70981c73c05fe09d65e76dfdbb3beed4925f9894e5",
+      "app/lab-model.ts": "b8ef594b55f459fe061f5c22a2c7d59e468c30d92d04bafa98b8a0438cbf9ada",
+      "app/lab-reducer.ts": "7c5f42b30276407fe76c46eeeb057b36a678d4bac61ddd5f33ce2c0b2463ae9e",
+      "app/use-lab.ts": "02303e3d3302120c13b61a938c6e218d9c9333ebd5eade7af46a236cf573c49e",
+      "components/Comparison.tsx": "d62fd66d6ed91b37a61763ab3264bd6937597afa6ec7fe469101a4283877e81a",
+      "components/Guide.tsx": "a8a6a96a5fc77c95996bb644709c382f15e7030a82f4c64ec67c90b3ff64d7fe",
+      "components/Header.tsx": "1190173d0dc184f2291b4ccd95ad81dff795a01fb541ae8b84f9e805352f52f9",
+      "components/Icon.tsx": "ffe7c4a93033730b773da5818435966932e23aad74caa4f3a187af592ceb07da",
+      "components/ReadInspector.tsx": "3251a346e487fe0c875db6504199a7c3266a69849345108fa57c4e972d6e37ba",
+      "components/StageCard.tsx": "722cb4bf76e0c367f011676954433c85f19c18387dcf3af4197ba29587cb220b",
+      "components/Switch.tsx": "6974a12d8ec20358e9d1ba91162d570115889666df7e9d8e1196193c851529bd",
+      "components/Tag.tsx": "c43df271299a76a75b2ddce3e9871783859829050290e964a2d4dac5c48be441",
+      "components/UnderTheHood.tsx": "fa9425cc6b0f2c5a930b72dac9a047455dfe13df2e3fe3fc052e838f68485bfa",
+      "components/format.ts": "340e576dfde3d8f183c6936e2116e97ccad2ef8555e72af66e4d95317c6142f8",
+      "components/stage/Stage.tsx": "261d5577d4ea9fc3bc079e91c722191d9a41aa155f503d5c97a98bd6ae58e599",
+      "components/stage/renderer.ts": "117e17bcd0620826b0a9e0e66d53112f78da4e98a8a4d017ce4d0bc8e4e9458f",
+      "composition/lab.ts": "10d8a5a7b538464dfa33b9652031a84f2ede6bf43e1e38c038e887dded8802e5",
+      "composition/registry.ts": "e41ea93e5ee598898f59200b0b97d0e528b22c333b029bff3b9edb77bf1dd96f",
+      "composition/transport.ts": "416a0075692f431da4cccfe2f4592c13bd7e021b73388f8b87d6cd6e7a38fad2",
+      "config/public-env.ts": "0c6eb98d0ce147875818d14b7b0f0140493dbd739da61593dda425c0d785f401",
+      "features/lab/LiveLabApp.tsx": "cff35bfc8d1ca524594261dd0c9f46d44acbd0dc8b5a2dcd1fb24a80e523e3ba",
+      "features/lab/correlate.ts": "7f4e082cc971f016a9c1c41be256e0e700640c173d566c6d5e7dc6b9b5b8efea",
+      "features/lab/direct-fixture.ts": "b2afba31bf8f440cd6fe248a033cb7d3f7d18328bf60f626e360a6f0bec88326",
+      "features/lab/live-controller.ts": "e4869d296a57ea6a78ddecac925e03ef51446f850c85ec766b2483b943f9d0e7",
+      "features/lab/live-types.ts": "107e2b7eee951604e12db33bef28a032668dc3d260fbf5fb047fbc1e288fb827",
+      "features/lab/live.css": "694453dea3b61378a910d7a5cec16d4ce4a859bc7b46c3b4c5dde72bd94e905a",
+      "features/lab/scenario.ts": "e1c02984f4d49ec71cfa091c0290d974348a5b9cc95b8cb1f763570b20eb6d1b",
+      "features/lab/wire-driver.ts": "c419106f54bb25dd70c602b9d6bbdd283a3ea13a2bbe6a58fb14e148490b8d14",
+      "features/providers/controller.ts": "b149187538597d3fc5d3c4ea988a9b32df5007a1bfbbc1a371cf9bdc2de07079",
+      "features/quote/fixed-quote.ts": "adde66c415f969d399fb068a2d8d01aec7b3af93e1276727f42df1c5ffb4cb1d",
+      "features/registry/live-policy.ts": "f729250f388eb84ed6de44bfcdd6d1a411a26d4df67f6ba18e4f13627315b184",
+      "features/sandbox/SandboxWalkthrough.tsx": "9228fded2f3076fd65025254a0023c3714e0d32218c48e94f094b59ef3492c6d",
+      "main.tsx": "c114b7c3be6592db34885f96c050872d18824ceb071bcd01a9434ed9771f4af0",
+      "spikes/anon/index.html": "8fda235a27120212585737d3cf6f830e32c06d07d7e95c003b3900762944d3e2",
+      "spikes/anon/main.ts.txt": "d1bcdb69f1ad53114eca0302e49a127d37858758b599690194af14aeafc6516a",
+      "spikes/anon/observed-2026-11-06.json": "4522287d860335100b29e26155d03dfc60cfa394602ccae39b481373cdc37fdd",
+      "spikes/anon/packaging-smoke-2026-11-06.json": "016c8c33aaef1a275a28d8d555ffb834fd644fdc128aa13247aa9ec1b52e9a68",
+      "spikes/anon/post-foundation-nym-2026-11-06.json": "6221bdb015838bb0844326c7eca286870a6402e651db95d00ae8eacc29cdb177",
+      "spikes/anon/run.mjs.txt": "9494bf94ec3f9ed135cb383b9fdbc5490b379e05e7476da927b1f51bc7e20699",
+      "spikes/anon/run.sh": "6fe6420e89cecce72d8de9fb02774d388a9c1bb8b729c981120302170cbf3308",
+      "styles/fonts/OFL-FragmentMono.txt": "04e68eeb550895a2f5c3558510a7e83505b73159d6a3e4b841c365e9c9005461",
+      "styles/fonts/OFL-WixMadeforDisplay.txt": "5167ab9754b56678f7363976eee0576a52782b1f225af2635c505406cd14dd67",
+      "styles/fonts/OFL-WixMadeforText.txt": "5167ab9754b56678f7363976eee0576a52782b1f225af2635c505406cd14dd67",
+      "styles/fonts/fragment-mono-latin.woff2": "44c4e39bff5e76652a24a872cbebabccbcfb20f62c4633b27c1f2745cba86b56",
+      "styles/fonts/wix-madefor-display-latin.woff2": "19bf2f2f1eaa10b2a047a8a1e624a1e12008ab5e3c50ad199ac968f8324f5f4d",
+      "styles/fonts/wix-madefor-text-latin.woff2": "cbd90a79e04d153fd521d90b08e9962628e3139313af330bd898001fe5b36e1a",
+      "styles/lab.css": "ffcda0e7a75b99977bc183111dbc92b1a0cf40ba07d54e0f8fefed85a3c10baf",
+      "styles/tokens.css": "cdc686f64d11b175e197d95085bcadccee79071502a0be737cf0873e96501992",
+      "vite-env.d.ts": "493f46be45455ec7a882bf649cff161f7e2cad6b7e532f75008a852d60fabfac"
+    },
+    "dist": {
+      "assets/app-Dfc0eyNx.css": "acf44d93214388d786cebff9bdec3c79d396ff57d814b8b00754e89b1d274254",
+      "assets/app-NXfADppi.js": "c80fcba01b9654876a863cc39033b4049f48a05d05013bb16595fb4f597daf1b",
+      "assets/browser-BV4R2-sQ.js": "71eb5d7ba875e25ad922eab59d944b3fe0d4cd0756395512f303158f52f5dca1",
+      "assets/fragment-mono-latin-yxdJ5AmL.woff2": "44c4e39bff5e76652a24a872cbebabccbcfb20f62c4633b27c1f2745cba86b56",
+      "assets/wix-madefor-display-latin-Blzrepd3.woff2": "19bf2f2f1eaa10b2a047a8a1e624a1e12008ab5e3c50ad199ac968f8324f5f4d",
+      "assets/wix-madefor-text-latin-M4ts_BV7.woff2": "cbd90a79e04d153fd521d90b08e9962628e3139313af330bd898001fe5b36e1a",
+      "assets/worker-host.html": "844c700df979d2bdb16ff70650c1b68b6f51512602dfadeaee94433a3ea6cebe",
+      "assets/workerHost-BKrclfgn.js": "be79dfb1b101571e15515125b2769d96b1d5d13a2001ca51e0b4684afdcaa35d",
+      "index.html": "324f1589660126de3015f9f917e6dfc1f30406eb9a021f93cd1f9d1d8fb30252"
+    },
+    "package": "6a76d101b960f66de7681953b6057388abf0d65bcd8735b9b1a1405f420af319",
+    "lockfile": "dd52d17efe95f178c5de765f06d4dfdd3f73545ed11d7491602c6fc17da489f5",
+    "runner": "f0f33650935bec3d1b2fe9a9c345c8e8edc8ccb621fa6a56661ce429dd253b77"
+  },
+  "checks": [
+    {
+      "name": "Live opening preserves the actual untouched lab, disabled export and mounted sandbox, with keyboard skip/focus",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Desktop live: keyboard path/stop/back/next/method/field controls explain without changing policy or sending reads",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Desktop live: section navigation and post-anchor content remain clear",
+      "passed": true,
+      "detail": {
+        "header": 95,
+        "count": 138.515625,
+        "title": 171.765625
+      }
+    },
+    {
+      "name": "Explorer context links reach real transport/endpoint panels and actual run results",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Actual live private/leaky-fixture/retry actions fail closed without bootstrap, export or fabricated repair",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Desktop offline: keyboard path/stop/back/next/method/field controls explain without changing policy or sending reads",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Recorded direct read inspector uses current read metadata",
+      "passed": true,
+      "detail": {
+        "Method": "eth_getBalance",
+        "Route": "direct-debug",
+        "Evidence": "SIMULATED",
+        "Outcome": "arrived",
+        "Round trip": "420 ms",
+        "Callsite": "lab/direct-comparison.ts",
+        "Read ID": "read-1-1"
+      }
+    },
+    {
+      "name": "Recorded anon read inspector uses current read metadata",
+      "passed": true,
+      "detail": {
+        "Method": "eth_getBalance",
+        "Route": "anon-tor",
+        "Evidence": "SIMULATED",
+        "Outcome": "arrived",
+        "Round trip": "1,500 ms",
+        "Callsite": "checkout/balance.ts:41",
+        "Read ID": "read-1-3"
+      }
+    },
+    {
+      "name": "Recorded direct read inspector uses current read metadata",
+      "passed": true,
+      "detail": {
+        "Method": "eth_getTransactionReceipt",
+        "Route": "direct-debug",
+        "Evidence": "SIMULATED",
+        "Outcome": "arrived",
+        "Round trip": "460 ms",
+        "Callsite": "payments/status.ts:27",
+        "Read ID": "read-1-4"
+      }
+    },
+    {
+      "name": "Full direct/private/leak/repair fixture sequence recomputes useful outcomes and truthful read inspectors",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Managed-worker outage remains blocked and explicit recovery restores the worker",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "An unrepaired bypass stays explicitly visible during an otherwise blocked worker outage",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "passthrough: managed read reports POLICY_DENIED without success or policy downgrade",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "registry-expired: managed read reports REGISTRY_EXPIRED without success or policy downgrade",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "observer-unavailable: managed read reports UPSTREAM_UNAVAILABLE without success or policy downgrade",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Degraded fixture completes useful worker reads and keeps degraded provenance visible",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "narrow live: keyboard path/stop/back/next/method/field controls explain without changing policy or sending reads",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "narrow: section navigation and post-anchor content remain clear",
+      "passed": true,
+      "detail": {
+        "header": 151.59375,
+        "count": 194,
+        "title": 227.25
+      }
+    },
+    {
+      "name": "Recorded direct read inspector uses current read metadata",
+      "passed": true,
+      "detail": {
+        "Method": "eth_getBalance",
+        "Route": "direct-debug",
+        "Evidence": "SIMULATED",
+        "Outcome": "arrived",
+        "Round trip": "420 ms",
+        "Callsite": "lab/direct-comparison.ts",
+        "Read ID": "read-0-1"
+      }
+    },
+    {
+      "name": "narrow: local controls, guide and read inspector fit 320×844",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "mobile live: keyboard path/stop/back/next/method/field controls explain without changing policy or sending reads",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "mobile: section navigation and post-anchor content remain clear",
+      "passed": true,
+      "detail": {
+        "header": 151.59375,
+        "count": 194,
+        "title": 227.25
+      }
+    },
+    {
+      "name": "Recorded direct read inspector uses current read metadata",
+      "passed": true,
+      "detail": {
+        "Method": "eth_getBalance",
+        "Route": "direct-debug",
+        "Evidence": "SIMULATED",
+        "Outcome": "arrived",
+        "Round trip": "420 ms",
+        "Callsite": "lab/direct-comparison.ts",
+        "Read ID": "read-0-1"
+      }
+    },
+    {
+      "name": "mobile: local controls, guide and read inspector fit 390×844",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "tablet live: keyboard path/stop/back/next/method/field controls explain without changing policy or sending reads",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "tablet: section navigation and post-anchor content remain clear",
+      "passed": true,
+      "detail": {
+        "header": 127,
+        "count": 169.109375,
+        "title": 202.359375
+      }
+    },
+    {
+      "name": "Recorded direct read inspector uses current read metadata",
+      "passed": true,
+      "detail": {
+        "Method": "eth_getBalance",
+        "Route": "direct-debug",
+        "Evidence": "SIMULATED",
+        "Outcome": "arrived",
+        "Round trip": "420 ms",
+        "Callsite": "lab/direct-comparison.ts",
+        "Read ID": "read-0-1"
+      }
+    },
+    {
+      "name": "tablet: local controls, guide and read inspector fit 768×1024",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "laptop live: keyboard path/stop/back/next/method/field controls explain without changing policy or sending reads",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "laptop: section navigation and post-anchor content remain clear",
+      "passed": true,
+      "detail": {
+        "header": 95,
+        "count": 138.515625,
+        "title": 171.765625
+      }
+    },
+    {
+      "name": "Recorded direct read inspector uses current read metadata",
+      "passed": true,
+      "detail": {
+        "Method": "eth_getBalance",
+        "Route": "direct-debug",
+        "Evidence": "SIMULATED",
+        "Outcome": "arrived",
+        "Round trip": "420 ms",
+        "Callsite": "lab/direct-comparison.ts",
+        "Read ID": "read-0-1"
+      }
+    },
+    {
+      "name": "laptop: local controls, guide and read inspector fit 1280×800",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "desktop live: keyboard path/stop/back/next/method/field controls explain without changing policy or sending reads",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "desktop: section navigation and post-anchor content remain clear",
+      "passed": true,
+      "detail": {
+        "header": 95,
+        "count": 138.515625,
+        "title": 171.765625
+      }
+    },
+    {
+      "name": "Recorded direct read inspector uses current read metadata",
+      "passed": true,
+      "detail": {
+        "Method": "eth_getBalance",
+        "Route": "direct-debug",
+        "Evidence": "SIMULATED",
+        "Outcome": "arrived",
+        "Round trip": "420 ms",
+        "Callsite": "lab/direct-comparison.ts",
+        "Read ID": "read-0-1"
+      }
+    },
+    {
+      "name": "desktop: local controls, guide and read inspector fit 1440×1000",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "200% equivalent reflow: keyboard path/stop/back/next/method/field controls explain without changing policy or sending reads",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Equivalent 200% reflow preserves controls and wrapping",
+      "passed": true,
+      "detail": "720×500 CSS viewport at2x scale; no browser zoom-setting claim."
+    },
+    {
+      "name": "Normal motion preference: keyboard path/stop/back/next/method/field controls explain without changing policy or sending reads",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Normal-motion users get the same accessible DOM explorer without a graphics surface",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Reduced motion preserves every explorer control and uses immediate scrolling",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Zero canvas/WebGL, page errors, external requests or API requests; exact source/build stayed unchanged",
+      "passed": true,
+      "detail": ""
+    }
+  ],
+  "screenshots": [
+    {
+      "path": "desktop-live-initial.png",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "method": "Document-top full-page capture",
+      "sha256": "126e6259927aced3b3d5953c092f4ff1bc647ca6a189d299be0d25a17e733b0f"
+    },
+    {
+      "path": "desktop-live-viewport.png",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "method": "Document-top actual viewport capture",
+      "sha256": "a1bd54a2f7492ec173ac36d2cca055633b31e987fd1a405978064dcbe7a30462"
+    },
+    {
+      "path": "mobile-live-initial.png",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "method": "Document-top full-page capture",
+      "sha256": "5af1b795e1b9c267074653c997a339b6a7c4981f58c8d7070148f2379a031729"
+    },
+    {
+      "path": "initial-320-top.png",
+      "viewport": {
+        "width": 320,
+        "height": 844
+      },
+      "method": "Document-top actual viewport capture",
+      "sha256": "b80b2a1700c4c51a95060d7093c115003919fa5dadd9ebba8e8422a15893ae24"
+    },
+    {
+      "path": "initial-320-explorer-tall.png",
+      "viewport": {
+        "width": 320,
+        "height": 2200
+      },
+      "method": "Unobscured component in a tall viewport at the stated CSS width; product header/styles remain intact.",
+      "sha256": "0dfa97666dcdb34f547efa0720cef5972a0e21aeb558521a2dff30be59b50ce2"
+    },
+    {
+      "path": "initial-390-top.png",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "method": "Document-top actual viewport capture",
+      "sha256": "ce7f14347d22f3e5f7e99dc3b0edd6da33de18bf6928052f41f2b11faaaca6ee"
+    },
+    {
+      "path": "initial-390-explorer-tall.png",
+      "viewport": {
+        "width": 390,
+        "height": 2200
+      },
+      "method": "Unobscured component in a tall viewport at the stated CSS width; product header/styles remain intact.",
+      "sha256": "5f5e8b4bd7b6efeb1db99a313f58f3998766225a2aa3046c581910e296028fde"
+    },
+    {
+      "path": "initial-768-top.png",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "method": "Document-top actual viewport capture",
+      "sha256": "5eefc880bc2bd0a87c9481eb8cb5847e197d56d4bda04ca4b422580bed87af43"
+    },
+    {
+      "path": "initial-768-explorer-tall.png",
+      "viewport": {
+        "width": 768,
+        "height": 2200
+      },
+      "method": "Unobscured component in a tall viewport at the stated CSS width; product header/styles remain intact.",
+      "sha256": "10f69667c896f8623a654efe56805304e2838518a160882207970bc0292baf7d"
+    },
+    {
+      "path": "initial-1280-top.png",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "method": "Document-top actual viewport capture",
+      "sha256": "9311e561309ec00ea246f8f9c5640af62b645d9524615a1a5729477f1c829fe5"
+    },
+    {
+      "path": "initial-1440-top.png",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "method": "Document-top actual viewport capture",
+      "sha256": "a1bd54a2f7492ec173ac36d2cca055633b31e987fd1a405978064dcbe7a30462"
+    },
+    {
+      "path": "keyboard-primary-focus.png",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "method": "Document-top actual viewport capture",
+      "sha256": "880ebb2cac042566187cc4c5845ebe3a360016d1ffba96ecebd8f4ccf7bb72ab"
+    },
+    {
+      "path": "keyboard-explorer-focus.png",
+      "viewport": {
+        "width": 1440,
+        "height": 2200
+      },
+      "method": "Unobscured component in a tall viewport at the stated CSS width; product header/styles remain intact.",
+      "sha256": "b3737c13f25a6195226531b8103ffd29757501e67d6c3bbb5bbcaa3d98d1cdac"
+    },
+    {
+      "path": "desktop-example-fields.png",
+      "viewport": {
+        "width": 1440,
+        "height": 2200
+      },
+      "method": "Unobscured component in a tall viewport at the stated CSS width; product header/styles remain intact.",
+      "sha256": "4703a90d0f16bea25bd016d00ad46661b0c79ff95c1575a3616c8271d276b82f"
+    },
+    {
+      "path": "desktop-live-blocked.png",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "method": "Document-top full-page capture",
+      "sha256": "a646eed948e0abaa154b2efb756ad338886dedecf2da75c00523c93838801271"
+    },
+    {
+      "path": "desktop-offline-initial.png",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "method": "Document-top full-page capture",
+      "sha256": "b837091c52bd51254b787cb47705fa8484617816fbd084e746a939d15e80e82e"
+    },
+    {
+      "path": "desktop-read-inspector.png",
+      "viewport": {
+        "width": 1440,
+        "height": 2200
+      },
+      "method": "Unobscured component in a tall viewport at the stated CSS width; product header/styles remain intact.",
+      "sha256": "3b18df6e8938c3bc2994c105c7f752d1f3e30a78e52ec47401106c447bc3a6da"
+    },
+    {
+      "path": "desktop-leak.png",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "method": "Document-top full-page capture",
+      "sha256": "21484cb4e8ebe6dade3aaceb579c2a35d5fbf25b060381beabd10dca3facf3be"
+    },
+    {
+      "path": "desktop-worker-outage.png",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "method": "Document-top full-page capture",
+      "sha256": "6d46de24f5e595b2dde291b8b24174895c7716611a5023d34339a594c7090337"
+    },
+    {
+      "path": "narrow-live-full.png",
+      "viewport": {
+        "width": 320,
+        "height": 844
+      },
+      "method": "Document-top full-page capture",
+      "sha256": "e977884acc967f0dc6fd7277631162e29371b2687fc17281f47e180f17f81214"
+    },
+    {
+      "path": "narrow-explorer.png",
+      "viewport": {
+        "width": 320,
+        "height": 2200
+      },
+      "method": "Unobscured component in a tall viewport at the stated CSS width; product header/styles remain intact.",
+      "sha256": "0dfa97666dcdb34f547efa0720cef5972a0e21aeb558521a2dff30be59b50ce2"
+    },
+    {
+      "path": "mobile-live-full.png",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "method": "Document-top full-page capture",
+      "sha256": "5af1b795e1b9c267074653c997a339b6a7c4981f58c8d7070148f2379a031729"
+    },
+    {
+      "path": "mobile-explorer.png",
+      "viewport": {
+        "width": 390,
+        "height": 2200
+      },
+      "method": "Unobscured component in a tall viewport at the stated CSS width; product header/styles remain intact.",
+      "sha256": "5f5e8b4bd7b6efeb1db99a313f58f3998766225a2aa3046c581910e296028fde"
+    },
+    {
+      "path": "tablet-live-full.png",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "method": "Document-top full-page capture",
+      "sha256": "01e405932eafc0aba74262f628e95b51e9960cc7821ba38878f9a64a32930dad"
+    },
+    {
+      "path": "tablet-explorer.png",
+      "viewport": {
+        "width": 768,
+        "height": 2200
+      },
+      "method": "Unobscured component in a tall viewport at the stated CSS width; product header/styles remain intact.",
+      "sha256": "10f69667c896f8623a654efe56805304e2838518a160882207970bc0292baf7d"
+    },
+    {
+      "path": "laptop-live-full.png",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "method": "Document-top full-page capture",
+      "sha256": "1dfd6b4b5fbed183874171fdb87904c21384aaf3a02b9510223a947a8a595615"
+    },
+    {
+      "path": "desktop-live-full.png",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "method": "Document-top full-page capture",
+      "sha256": "126e6259927aced3b3d5953c092f4ff1bc647ca6a189d299be0d25a17e733b0f"
+    },
+    {
+      "path": "equivalent-reflow-200-percent.png",
+      "viewport": {
+        "width": 720,
+        "height": 500
+      },
+      "method": "Document-top full-page capture",
+      "sha256": "55fa68a9a12bee8570a3d4712a7485060c4fd62aa36080474de4b3b68f774c8b"
+    }
+  ],
+  "inspectedReads": [
+    {
+      "Method": "eth_getBalance",
+      "Route": "direct-debug",
+      "Evidence": "SIMULATED",
+      "Outcome": "arrived",
+      "Round trip": "420 ms",
+      "Callsite": "lab/direct-comparison.ts",
+      "Read ID": "read-1-1"
+    },
+    {
+      "Method": "eth_getBalance",
+      "Route": "anon-tor",
+      "Evidence": "SIMULATED",
+      "Outcome": "arrived",
+      "Round trip": "1,500 ms",
+      "Callsite": "checkout/balance.ts:41",
+      "Read ID": "read-1-3"
+    },
+    {
+      "Method": "eth_getTransactionReceipt",
+      "Route": "direct-debug",
+      "Evidence": "SIMULATED",
+      "Outcome": "arrived",
+      "Round trip": "460 ms",
+      "Callsite": "payments/status.ts:27",
+      "Read ID": "read-1-4"
+    },
+    {
+      "Method": "eth_getBalance",
+      "Route": "direct-debug",
+      "Evidence": "SIMULATED",
+      "Outcome": "arrived",
+      "Round trip": "420 ms",
+      "Callsite": "lab/direct-comparison.ts",
+      "Read ID": "read-0-1"
+    },
+    {
+      "Method": "eth_getBalance",
+      "Route": "direct-debug",
+      "Evidence": "SIMULATED",
+      "Outcome": "arrived",
+      "Round trip": "420 ms",
+      "Callsite": "lab/direct-comparison.ts",
+      "Read ID": "read-0-1"
+    },
+    {
+      "Method": "eth_getBalance",
+      "Route": "direct-debug",
+      "Evidence": "SIMULATED",
+      "Outcome": "arrived",
+      "Round trip": "420 ms",
+      "Callsite": "lab/direct-comparison.ts",
+      "Read ID": "read-0-1"
+    },
+    {
+      "Method": "eth_getBalance",
+      "Route": "direct-debug",
+      "Evidence": "SIMULATED",
+      "Outcome": "arrived",
+      "Round trip": "420 ms",
+      "Callsite": "lab/direct-comparison.ts",
+      "Read ID": "read-0-1"
+    },
+    {
+      "Method": "eth_getBalance",
+      "Route": "direct-debug",
+      "Evidence": "SIMULATED",
+      "Outcome": "arrived",
+      "Round trip": "420 ms",
+      "Callsite": "lab/direct-comparison.ts",
+      "Read ID": "read-0-1"
+    }
+  ],
+  "viewportBounds": [
+    {
+      "name": "Mobile initial",
+      "left": 16,
+      "right": 374,
+      "children": [
+        {
+          "name": "button",
+          "text": "Private path",
+          "left": 40,
+          "right": 173,
+          "width": 133,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Direct path",
+          "left": 177,
+          "right": 304,
+          "width": 127,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Your appCreates the request",
+          "left": 36,
+          "right": 354,
+          "width": 318,
+          "height": 58
+        },
+        {
+          "name": "button",
+          "text": "Monolith policyChecks the route",
+          "left": 36,
+          "right": 354,
+          "width": 318,
+          "height": 58
+        },
+        {
+          "name": "button",
+          "text": "Private workerRoutes the read",
+          "left": 36,
+          "right": 354,
+          "width": 318,
+          "height": 58
+        },
+        {
+          "name": "button",
+          "text": "RPC endpointReads the payload",
+          "left": 36,
+          "right": 354,
+          "width": 318,
+          "height": 58
+        },
+        {
+          "name": "dl",
+          "text": null,
+          "left": 36,
+          "right": 354,
+          "width": 318,
+          "height": 175.53125
+        },
+        {
+          "name": "select",
+          "text": null,
+          "left": 148,
+          "right": 293,
+          "width": 145,
+          "height": 44
+        },
+        {
+          "name": "summary",
+          "text": null,
+          "left": 36,
+          "right": 354,
+          "width": 318,
+          "height": 44
+        },
+        {
+          "name": "div",
+          "text": null,
+          "left": 36,
+          "right": 354,
+          "width": 318,
+          "height": 229.484375
+        },
+        {
+          "name": "button",
+          "text": "Previous stop",
+          "left": 36,
+          "right": 141,
+          "width": 105,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Next stop",
+          "left": 194,
+          "right": 297,
+          "width": 103,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "View endpoint details",
+          "left": 161,
+          "right": 316,
+          "width": 155,
+          "height": 44
+        }
+      ]
+    },
+    {
+      "name": "Initial 320",
+      "left": 16,
+      "right": 304,
+      "children": [
+        {
+          "name": "button",
+          "text": "Private path",
+          "left": 40,
+          "right": 160.65625,
+          "width": 120.65625,
+          "height": 63.375
+        },
+        {
+          "name": "button",
+          "text": "Direct path",
+          "left": 164.65625,
+          "right": 280,
+          "width": 115.34375,
+          "height": 63.375
+        },
+        {
+          "name": "button",
+          "text": "Your appCreates the request",
+          "left": 36,
+          "right": 284,
+          "width": 248,
+          "height": 58
+        },
+        {
+          "name": "button",
+          "text": "Monolith policyChecks the route",
+          "left": 36,
+          "right": 284,
+          "width": 248,
+          "height": 58
+        },
+        {
+          "name": "button",
+          "text": "Private workerRoutes the read",
+          "left": 36,
+          "right": 284,
+          "width": 248,
+          "height": 58
+        },
+        {
+          "name": "button",
+          "text": "RPC endpointReads the payload",
+          "left": 36,
+          "right": 284,
+          "width": 248,
+          "height": 58
+        },
+        {
+          "name": "dl",
+          "text": null,
+          "left": 36,
+          "right": 284,
+          "width": 248,
+          "height": 175.53125
+        },
+        {
+          "name": "select",
+          "text": null,
+          "left": 36,
+          "right": 181,
+          "width": 145,
+          "height": 44
+        },
+        {
+          "name": "summary",
+          "text": null,
+          "left": 36,
+          "right": 284,
+          "width": 248,
+          "height": 44
+        },
+        {
+          "name": "div",
+          "text": null,
+          "left": 36,
+          "right": 284,
+          "width": 248,
+          "height": 249.625
+        },
+        {
+          "name": "button",
+          "text": "Previous stop",
+          "left": 36,
+          "right": 141,
+          "width": 105,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Next stop",
+          "left": 36,
+          "right": 139,
+          "width": 103,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "View endpoint details",
+          "left": 36,
+          "right": 191,
+          "width": 155,
+          "height": 44
+        }
+      ]
+    },
+    {
+      "name": "Initial 390",
+      "left": 16,
+      "right": 374,
+      "children": [
+        {
+          "name": "button",
+          "text": "Private path",
+          "left": 40,
+          "right": 173,
+          "width": 133,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Direct path",
+          "left": 177,
+          "right": 304,
+          "width": 127,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Your appCreates the request",
+          "left": 36,
+          "right": 354,
+          "width": 318,
+          "height": 58
+        },
+        {
+          "name": "button",
+          "text": "Monolith policyChecks the route",
+          "left": 36,
+          "right": 354,
+          "width": 318,
+          "height": 58
+        },
+        {
+          "name": "button",
+          "text": "Private workerRoutes the read",
+          "left": 36,
+          "right": 354,
+          "width": 318,
+          "height": 58
+        },
+        {
+          "name": "button",
+          "text": "RPC endpointReads the payload",
+          "left": 36,
+          "right": 354,
+          "width": 318,
+          "height": 58
+        },
+        {
+          "name": "dl",
+          "text": null,
+          "left": 36,
+          "right": 354,
+          "width": 318,
+          "height": 175.53125
+        },
+        {
+          "name": "select",
+          "text": null,
+          "left": 148,
+          "right": 293,
+          "width": 145,
+          "height": 44
+        },
+        {
+          "name": "summary",
+          "text": null,
+          "left": 36,
+          "right": 354,
+          "width": 318,
+          "height": 44
+        },
+        {
+          "name": "div",
+          "text": null,
+          "left": 36,
+          "right": 354,
+          "width": 318,
+          "height": 229.484375
+        },
+        {
+          "name": "button",
+          "text": "Previous stop",
+          "left": 36,
+          "right": 141,
+          "width": 105,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Next stop",
+          "left": 194,
+          "right": 297,
+          "width": 103,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "View endpoint details",
+          "left": 161,
+          "right": 316,
+          "width": 155,
+          "height": 44
+        }
+      ]
+    },
+    {
+      "name": "Initial 768",
+      "left": 23.03125,
+      "right": 744.96875,
+      "children": [
+        {
+          "name": "button",
+          "text": "Private path",
+          "left": 47.03125,
+          "right": 188.03125,
+          "width": 141,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Direct path",
+          "left": 192.03125,
+          "right": 327.03125,
+          "width": 135,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Your appCreates the request",
+          "left": 43.03125,
+          "right": 207.515625,
+          "width": 164.484375,
+          "height": 115.84375
+        },
+        {
+          "name": "button",
+          "text": "Monolith policyChecks the route",
+          "left": 215.515625,
+          "right": 380,
+          "width": 164.484375,
+          "height": 115.84375
+        },
+        {
+          "name": "button",
+          "text": "Private workerRoutes the read",
+          "left": 388,
+          "right": 552.484375,
+          "width": 164.484375,
+          "height": 115.84375
+        },
+        {
+          "name": "button",
+          "text": "RPC endpointReads the payload",
+          "left": 560.484375,
+          "right": 724.96875,
+          "width": 164.484375,
+          "height": 115.84375
+        },
+        {
+          "name": "dl",
+          "text": null,
+          "left": 43.03125,
+          "right": 724.96875,
+          "width": 681.9375,
+          "height": 102.5625
+        },
+        {
+          "name": "select",
+          "text": null,
+          "left": 155.03125,
+          "right": 300.03125,
+          "width": 145,
+          "height": 44
+        },
+        {
+          "name": "summary",
+          "text": null,
+          "left": 43.03125,
+          "right": 724.96875,
+          "width": 681.9375,
+          "height": 44
+        },
+        {
+          "name": "div",
+          "text": null,
+          "left": 43.03125,
+          "right": 724.96875,
+          "width": 681.9375,
+          "height": 209.34375
+        },
+        {
+          "name": "button",
+          "text": "Previous stop",
+          "left": 43.03125,
+          "right": 148.03125,
+          "width": 105,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Next stop",
+          "left": 201.03125,
+          "right": 304.03125,
+          "width": 103,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "View endpoint details",
+          "left": 437.03125,
+          "right": 592.03125,
+          "width": 155,
+          "height": 44
+        }
+      ]
+    },
+    {
+      "name": "Initial 1280",
+      "left": 491.71875,
+      "right": 1241.609375,
+      "children": [
+        {
+          "name": "button",
+          "text": "Private path",
+          "left": 527.71875,
+          "right": 668.71875,
+          "width": 141,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Direct path",
+          "left": 672.71875,
+          "right": 807.71875,
+          "width": 135,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Your appCreates the request",
+          "left": 523.71875,
+          "right": 689.1875,
+          "width": 165.46875,
+          "height": 115.84375
+        },
+        {
+          "name": "button",
+          "text": "Monolith policyChecks the route",
+          "left": 697.1875,
+          "right": 862.671875,
+          "width": 165.484375,
+          "height": 115.84375
+        },
+        {
+          "name": "button",
+          "text": "Private workerRoutes the read",
+          "left": 870.671875,
+          "right": 1036.140625,
+          "width": 165.46875,
+          "height": 115.84375
+        },
+        {
+          "name": "button",
+          "text": "RPC endpointReads the payload",
+          "left": 1044.140625,
+          "right": 1209.609375,
+          "width": 165.46875,
+          "height": 115.84375
+        },
+        {
+          "name": "dl",
+          "text": null,
+          "left": 523.71875,
+          "right": 1209.609375,
+          "width": 685.890625,
+          "height": 102.5625
+        },
+        {
+          "name": "select",
+          "text": null,
+          "left": 635.71875,
+          "right": 780.71875,
+          "width": 145,
+          "height": 44
+        },
+        {
+          "name": "summary",
+          "text": null,
+          "left": 523.71875,
+          "right": 1209.609375,
+          "width": 685.890625,
+          "height": 44
+        },
+        {
+          "name": "div",
+          "text": null,
+          "left": 523.71875,
+          "right": 1209.609375,
+          "width": 685.890625,
+          "height": 209.34375
+        },
+        {
+          "name": "button",
+          "text": "Previous stop",
+          "left": 523.71875,
+          "right": 628.71875,
+          "width": 105,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Next stop",
+          "left": 681.71875,
+          "right": 784.71875,
+          "width": 103,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "View endpoint details",
+          "left": 917.71875,
+          "right": 1072.71875,
+          "width": 155,
+          "height": 44
+        }
+      ]
+    },
+    {
+      "name": "Initial 1440",
+      "left": 552.265625,
+      "right": 1400,
+      "children": [
+        {
+          "name": "button",
+          "text": "Private path",
+          "left": 588.265625,
+          "right": 729.265625,
+          "width": 141,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Direct path",
+          "left": 733.265625,
+          "right": 868.265625,
+          "width": 135,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Your appCreates the request",
+          "left": 584.265625,
+          "right": 774.1875,
+          "width": 189.921875,
+          "height": 115.84375
+        },
+        {
+          "name": "button",
+          "text": "Monolith policyChecks the route",
+          "left": 782.1875,
+          "right": 972.125,
+          "width": 189.9375,
+          "height": 115.84375
+        },
+        {
+          "name": "button",
+          "text": "Private workerRoutes the read",
+          "left": 980.125,
+          "right": 1170.0625,
+          "width": 189.9375,
+          "height": 115.84375
+        },
+        {
+          "name": "button",
+          "text": "RPC endpointReads the payload",
+          "left": 1178.0625,
+          "right": 1368,
+          "width": 189.9375,
+          "height": 115.84375
+        },
+        {
+          "name": "dl",
+          "text": null,
+          "left": 584.265625,
+          "right": 1368,
+          "width": 783.734375,
+          "height": 102.5625
+        },
+        {
+          "name": "select",
+          "text": null,
+          "left": 696.265625,
+          "right": 841.265625,
+          "width": 145,
+          "height": 44
+        },
+        {
+          "name": "summary",
+          "text": null,
+          "left": 584.265625,
+          "right": 1368,
+          "width": 783.734375,
+          "height": 44
+        },
+        {
+          "name": "div",
+          "text": null,
+          "left": 584.265625,
+          "right": 1368,
+          "width": 783.734375,
+          "height": 209.34375
+        },
+        {
+          "name": "button",
+          "text": "Previous stop",
+          "left": 584.265625,
+          "right": 689.265625,
+          "width": 105,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Next stop",
+          "left": 742.265625,
+          "right": 845.265625,
+          "width": 103,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "View endpoint details",
+          "left": 978.265625,
+          "right": 1133.265625,
+          "width": 155,
+          "height": 44
+        }
+      ]
+    },
+    {
+      "name": "Desktop live receipt fields",
+      "left": 552.265625,
+      "right": 1400,
+      "children": [
+        {
+          "name": "button",
+          "text": "Private path",
+          "left": 588.265625,
+          "right": 729.265625,
+          "width": 141,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Direct path",
+          "left": 733.265625,
+          "right": 868.265625,
+          "width": 135,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Your appCreates the request",
+          "left": 584.265625,
+          "right": 972.125,
+          "width": 387.859375,
+          "height": 115.84375
+        },
+        {
+          "name": "button",
+          "text": "RPC endpointReads the payload",
+          "left": 980.125,
+          "right": 1368,
+          "width": 387.875,
+          "height": 115.84375
+        },
+        {
+          "name": "dl",
+          "text": null,
+          "left": 584.265625,
+          "right": 1368,
+          "width": 783.734375,
+          "height": 102.5625
+        },
+        {
+          "name": "select",
+          "text": null,
+          "left": 696.265625,
+          "right": 841.265625,
+          "width": 145,
+          "height": 44
+        },
+        {
+          "name": "summary",
+          "text": null,
+          "left": 584.265625,
+          "right": 1368,
+          "width": 783.734375,
+          "height": 44
+        },
+        {
+          "name": "div",
+          "text": null,
+          "left": 584.265625,
+          "right": 1368,
+          "width": 783.734375,
+          "height": 155.609375
+        },
+        {
+          "name": "button",
+          "text": "Previous stop",
+          "left": 584.265625,
+          "right": 689.265625,
+          "width": 105,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Next stop",
+          "left": 740.265625,
+          "right": 843.265625,
+          "width": 103,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "View endpoint details",
+          "left": 976.265625,
+          "right": 1131.265625,
+          "width": 155,
+          "height": 44
+        }
+      ]
+    },
+    {
+      "name": "Desktop live balance fields",
+      "left": 552.265625,
+      "right": 1400,
+      "children": [
+        {
+          "name": "button",
+          "text": "Private path",
+          "left": 588.265625,
+          "right": 729.265625,
+          "width": 141,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Direct path",
+          "left": 733.265625,
+          "right": 868.265625,
+          "width": 135,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Your appCreates the request",
+          "left": 584.265625,
+          "right": 972.125,
+          "width": 387.859375,
+          "height": 115.84375
+        },
+        {
+          "name": "button",
+          "text": "RPC endpointReads the payload",
+          "left": 980.125,
+          "right": 1368,
+          "width": 387.875,
+          "height": 115.84375
+        },
+        {
+          "name": "dl",
+          "text": null,
+          "left": 584.265625,
+          "right": 1368,
+          "width": 783.734375,
+          "height": 102.5625
+        },
+        {
+          "name": "select",
+          "text": null,
+          "left": 696.265625,
+          "right": 841.265625,
+          "width": 145,
+          "height": 44
+        },
+        {
+          "name": "summary",
+          "text": null,
+          "left": 584.265625,
+          "right": 1368,
+          "width": 783.734375,
+          "height": 44
+        },
+        {
+          "name": "div",
+          "text": null,
+          "left": 584.265625,
+          "right": 1368,
+          "width": 783.734375,
+          "height": 209.34375
+        },
+        {
+          "name": "button",
+          "text": "Previous stop",
+          "left": 584.265625,
+          "right": 689.265625,
+          "width": 105,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Next stop",
+          "left": 740.265625,
+          "right": 843.265625,
+          "width": 103,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "View endpoint details",
+          "left": 976.265625,
+          "right": 1131.265625,
+          "width": 155,
+          "height": 44
+        }
+      ]
+    },
+    {
+      "name": "Live blocked with sandbox",
+      "left": 552.265625,
+      "right": 1400,
+      "children": [
+        {
+          "name": "button",
+          "text": "Private path",
+          "left": 588.265625,
+          "right": 729.265625,
+          "width": 141,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Direct path",
+          "left": 733.265625,
+          "right": 868.265625,
+          "width": 135,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Your appCreates the request",
+          "left": 584.265625,
+          "right": 774.1875,
+          "width": 189.921875,
+          "height": 115.84375
+        },
+        {
+          "name": "button",
+          "text": "Monolith policyChecks the route",
+          "left": 782.1875,
+          "right": 972.125,
+          "width": 189.9375,
+          "height": 115.84375
+        },
+        {
+          "name": "button",
+          "text": "Private workerRoutes the read",
+          "left": 980.125,
+          "right": 1170.0625,
+          "width": 189.9375,
+          "height": 115.84375
+        },
+        {
+          "name": "button",
+          "text": "RPC endpointReads the payload",
+          "left": 1178.0625,
+          "right": 1368,
+          "width": 189.9375,
+          "height": 115.84375
+        },
+        {
+          "name": "dl",
+          "text": null,
+          "left": 584.265625,
+          "right": 1368,
+          "width": 783.734375,
+          "height": 102.5625
+        },
+        {
+          "name": "select",
+          "text": null,
+          "left": 696.265625,
+          "right": 841.265625,
+          "width": 145,
+          "height": 44
+        },
+        {
+          "name": "summary",
+          "text": null,
+          "left": 584.265625,
+          "right": 1368,
+          "width": 783.734375,
+          "height": 44
+        },
+        {
+          "name": "div",
+          "text": null,
+          "left": 584.265625,
+          "right": 1368,
+          "width": 783.734375,
+          "height": 209.34375
+        },
+        {
+          "name": "button",
+          "text": "Previous stop",
+          "left": 584.265625,
+          "right": 689.265625,
+          "width": 105,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Next stop",
+          "left": 742.265625,
+          "right": 845.265625,
+          "width": 103,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "View endpoint details",
+          "left": 978.265625,
+          "right": 1133.265625,
+          "width": 155,
+          "height": 44
+        }
+      ]
+    },
+    {
+      "name": "Desktop offline receipt fields",
+      "left": 552.265625,
+      "right": 1400,
+      "children": [
+        {
+          "name": "button",
+          "text": "Private path",
+          "left": 588.265625,
+          "right": 729.265625,
+          "width": 141,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Direct path",
+          "left": 733.265625,
+          "right": 868.265625,
+          "width": 135,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Your appCreates the request",
+          "left": 584.265625,
+          "right": 972.125,
+          "width": 387.859375,
+          "height": 115.84375
+        },
+        {
+          "name": "button",
+          "text": "RPC endpointReads the payload",
+          "left": 980.125,
+          "right": 1368,
+          "width": 387.875,
+          "height": 115.84375
+        },
+        {
+          "name": "dl",
+          "text": null,
+          "left": 584.265625,
+          "right": 1368,
+          "width": 783.734375,
+          "height": 102.5625
+        },
+        {
+          "name": "select",
+          "text": null,
+          "left": 696.265625,
+          "right": 841.265625,
+          "width": 145,
+          "height": 44
+        },
+        {
+          "name": "summary",
+          "text": null,
+          "left": 584.265625,
+          "right": 1368,
+          "width": 783.734375,
+          "height": 44
+        },
+        {
+          "name": "div",
+          "text": null,
+          "left": 584.265625,
+          "right": 1368,
+          "width": 783.734375,
+          "height": 155.609375
+        },
+        {
+          "name": "button",
+          "text": "Previous stop",
+          "left": 584.265625,
+          "right": 689.265625,
+          "width": 105,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Next stop",
+          "left": 740.265625,
+          "right": 843.265625,
+          "width": 103,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "View endpoint details",
+          "left": 976.265625,
+          "right": 1131.265625,
+          "width": 155,
+          "height": 44
+        }
+      ]
+    },
+    {
+      "name": "Desktop offline balance fields",
+      "left": 552.265625,
+      "right": 1400,
+      "children": [
+        {
+          "name": "button",
+          "text": "Private path",
+          "left": 588.265625,
+          "right": 729.265625,
+          "width": 141,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Direct path",
+          "left": 733.265625,
+          "right": 868.265625,
+          "width": 135,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Your appCreates the request",
+          "left": 584.265625,
+          "right": 972.125,
+          "width": 387.859375,
+          "height": 115.84375
+        },
+        {
+          "name": "button",
+          "text": "RPC endpointReads the payload",
+          "left": 980.125,
+          "right": 1368,
+          "width": 387.875,
+          "height": 115.84375
+        },
+        {
+          "name": "dl",
+          "text": null,
+          "left": 584.265625,
+          "right": 1368,
+          "width": 783.734375,
+          "height": 102.5625
+        },
+        {
+          "name": "select",
+          "text": null,
+          "left": 696.265625,
+          "right": 841.265625,
+          "width": 145,
+          "height": 44
+        },
+        {
+          "name": "summary",
+          "text": null,
+          "left": 584.265625,
+          "right": 1368,
+          "width": 783.734375,
+          "height": 44
+        },
+        {
+          "name": "div",
+          "text": null,
+          "left": 584.265625,
+          "right": 1368,
+          "width": 783.734375,
+          "height": 209.34375
+        },
+        {
+          "name": "button",
+          "text": "Previous stop",
+          "left": 584.265625,
+          "right": 689.265625,
+          "width": 105,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Next stop",
+          "left": 740.265625,
+          "right": 843.265625,
+          "width": 103,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "View endpoint details",
+          "left": 976.265625,
+          "right": 1131.265625,
+          "width": 155,
+          "height": 44
+        }
+      ]
+    },
+    {
+      "name": "Fixture passthrough",
+      "left": 552.265625,
+      "right": 1400,
+      "children": [
+        {
+          "name": "button",
+          "text": "Private path",
+          "left": 588.265625,
+          "right": 729.265625,
+          "width": 141,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Direct path",
+          "left": 733.265625,
+          "right": 868.265625,
+          "width": 135,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Your appCreates the request",
+          "left": 584.265625,
+          "right": 774.1875,
+          "width": 189.921875,
+          "height": 115.84375
+        },
+        {
+          "name": "button",
+          "text": "Monolith policyChecks the route",
+          "left": 782.1875,
+          "right": 972.125,
+          "width": 189.9375,
+          "height": 115.84375
+        },
+        {
+          "name": "button",
+          "text": "Private workerRoutes the read",
+          "left": 980.125,
+          "right": 1170.0625,
+          "width": 189.9375,
+          "height": 115.84375
+        },
+        {
+          "name": "button",
+          "text": "RPC endpointReads the payload",
+          "left": 1178.0625,
+          "right": 1368,
+          "width": 189.9375,
+          "height": 115.84375
+        },
+        {
+          "name": "dl",
+          "text": null,
+          "left": 584.265625,
+          "right": 1368,
+          "width": 783.734375,
+          "height": 102.5625
+        },
+        {
+          "name": "select",
+          "text": null,
+          "left": 696.265625,
+          "right": 841.265625,
+          "width": 145,
+          "height": 44
+        },
+        {
+          "name": "summary",
+          "text": null,
+          "left": 584.265625,
+          "right": 1368,
+          "width": 783.734375,
+          "height": 44
+        },
+        {
+          "name": "div",
+          "text": null,
+          "left": 584.265625,
+          "right": 1368,
+          "width": 783.734375,
+          "height": 209.34375
+        },
+        {
+          "name": "button",
+          "text": "Previous stop",
+          "left": 584.265625,
+          "right": 689.265625,
+          "width": 105,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Next stop",
+          "left": 742.265625,
+          "right": 845.265625,
+          "width": 103,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "View endpoint details",
+          "left": 978.265625,
+          "right": 1133.265625,
+          "width": 155,
+          "height": 44
+        }
+      ]
+    },
+    {
+      "name": "Fixture registry-expired",
+      "left": 552.265625,
+      "right": 1400,
+      "children": [
+        {
+          "name": "button",
+          "text": "Private path",
+          "left": 588.265625,
+          "right": 729.265625,
+          "width": 141,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Direct path",
+          "left": 733.265625,
+          "right": 868.265625,
+          "width": 135,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Your appCreates the request",
+          "left": 584.265625,
+          "right": 774.1875,
+          "width": 189.921875,
+          "height": 115.84375
+        },
+        {
+          "name": "button",
+          "text": "Monolith policyChecks the route",
+          "left": 782.1875,
+          "right": 972.125,
+          "width": 189.9375,
+          "height": 115.84375
+        },
+        {
+          "name": "button",
+          "text": "Private workerRoutes the read",
+          "left": 980.125,
+          "right": 1170.0625,
+          "width": 189.9375,
+          "height": 115.84375
+        },
+        {
+          "name": "button",
+          "text": "RPC endpointReads the payload",
+          "left": 1178.0625,
+          "right": 1368,
+          "width": 189.9375,
+          "height": 115.84375
+        },
+        {
+          "name": "dl",
+          "text": null,
+          "left": 584.265625,
+          "right": 1368,
+          "width": 783.734375,
+          "height": 102.5625
+        },
+        {
+          "name": "select",
+          "text": null,
+          "left": 696.265625,
+          "right": 841.265625,
+          "width": 145,
+          "height": 44
+        },
+        {
+          "name": "summary",
+          "text": null,
+          "left": 584.265625,
+          "right": 1368,
+          "width": 783.734375,
+          "height": 44
+        },
+        {
+          "name": "div",
+          "text": null,
+          "left": 584.265625,
+          "right": 1368,
+          "width": 783.734375,
+          "height": 209.34375
+        },
+        {
+          "name": "button",
+          "text": "Previous stop",
+          "left": 584.265625,
+          "right": 689.265625,
+          "width": 105,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Next stop",
+          "left": 742.265625,
+          "right": 845.265625,
+          "width": 103,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "View endpoint details",
+          "left": 978.265625,
+          "right": 1133.265625,
+          "width": 155,
+          "height": 44
+        }
+      ]
+    },
+    {
+      "name": "Fixture observer-unavailable",
+      "left": 552.265625,
+      "right": 1400,
+      "children": [
+        {
+          "name": "button",
+          "text": "Private path",
+          "left": 588.265625,
+          "right": 729.265625,
+          "width": 141,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Direct path",
+          "left": 733.265625,
+          "right": 868.265625,
+          "width": 135,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Your appCreates the request",
+          "left": 584.265625,
+          "right": 774.1875,
+          "width": 189.921875,
+          "height": 115.84375
+        },
+        {
+          "name": "button",
+          "text": "Monolith policyChecks the route",
+          "left": 782.1875,
+          "right": 972.125,
+          "width": 189.9375,
+          "height": 115.84375
+        },
+        {
+          "name": "button",
+          "text": "Private workerRoutes the read",
+          "left": 980.125,
+          "right": 1170.0625,
+          "width": 189.9375,
+          "height": 115.84375
+        },
+        {
+          "name": "button",
+          "text": "RPC endpointReads the payload",
+          "left": 1178.0625,
+          "right": 1368,
+          "width": 189.9375,
+          "height": 115.84375
+        },
+        {
+          "name": "dl",
+          "text": null,
+          "left": 584.265625,
+          "right": 1368,
+          "width": 783.734375,
+          "height": 102.5625
+        },
+        {
+          "name": "select",
+          "text": null,
+          "left": 696.265625,
+          "right": 841.265625,
+          "width": 145,
+          "height": 44
+        },
+        {
+          "name": "summary",
+          "text": null,
+          "left": 584.265625,
+          "right": 1368,
+          "width": 783.734375,
+          "height": 44
+        },
+        {
+          "name": "div",
+          "text": null,
+          "left": 584.265625,
+          "right": 1368,
+          "width": 783.734375,
+          "height": 209.34375
+        },
+        {
+          "name": "button",
+          "text": "Previous stop",
+          "left": 584.265625,
+          "right": 689.265625,
+          "width": 105,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Next stop",
+          "left": 742.265625,
+          "right": 845.265625,
+          "width": 103,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "View endpoint details",
+          "left": 978.265625,
+          "right": 1133.265625,
+          "width": 155,
+          "height": 44
+        }
+      ]
+    },
+    {
+      "name": "narrow live receipt fields",
+      "left": 16,
+      "right": 304,
+      "children": [
+        {
+          "name": "button",
+          "text": "Private path",
+          "left": 40,
+          "right": 160.65625,
+          "width": 120.65625,
+          "height": 63.375
+        },
+        {
+          "name": "button",
+          "text": "Direct path",
+          "left": 164.65625,
+          "right": 280,
+          "width": 115.34375,
+          "height": 63.375
+        },
+        {
+          "name": "button",
+          "text": "Your appCreates the request",
+          "left": 36,
+          "right": 284,
+          "width": 248,
+          "height": 58
+        },
+        {
+          "name": "button",
+          "text": "RPC endpointReads the payload",
+          "left": 36,
+          "right": 284,
+          "width": 248,
+          "height": 58
+        },
+        {
+          "name": "dl",
+          "text": null,
+          "left": 36,
+          "right": 284,
+          "width": 248,
+          "height": 175.53125
+        },
+        {
+          "name": "select",
+          "text": null,
+          "left": 36,
+          "right": 181,
+          "width": 145,
+          "height": 44
+        },
+        {
+          "name": "summary",
+          "text": null,
+          "left": 36,
+          "right": 284,
+          "width": 248,
+          "height": 44
+        },
+        {
+          "name": "div",
+          "text": null,
+          "left": 36,
+          "right": 284,
+          "width": 248,
+          "height": 216.03125
+        },
+        {
+          "name": "button",
+          "text": "Previous stop",
+          "left": 36,
+          "right": 141,
+          "width": 105,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Next stop",
+          "left": 36,
+          "right": 139,
+          "width": 103,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "View endpoint details",
+          "left": 36,
+          "right": 191,
+          "width": 155,
+          "height": 44
+        }
+      ]
+    },
+    {
+      "name": "narrow live balance fields",
+      "left": 16,
+      "right": 304,
+      "children": [
+        {
+          "name": "button",
+          "text": "Private path",
+          "left": 40,
+          "right": 160.65625,
+          "width": 120.65625,
+          "height": 63.375
+        },
+        {
+          "name": "button",
+          "text": "Direct path",
+          "left": 164.65625,
+          "right": 280,
+          "width": 115.34375,
+          "height": 63.375
+        },
+        {
+          "name": "button",
+          "text": "Your appCreates the request",
+          "left": 36,
+          "right": 284,
+          "width": 248,
+          "height": 58
+        },
+        {
+          "name": "button",
+          "text": "RPC endpointReads the payload",
+          "left": 36,
+          "right": 284,
+          "width": 248,
+          "height": 58
+        },
+        {
+          "name": "dl",
+          "text": null,
+          "left": 36,
+          "right": 284,
+          "width": 248,
+          "height": 153.84375
+        },
+        {
+          "name": "select",
+          "text": null,
+          "left": 36,
+          "right": 181,
+          "width": 145,
+          "height": 44
+        },
+        {
+          "name": "summary",
+          "text": null,
+          "left": 36,
+          "right": 284,
+          "width": 248,
+          "height": 44
+        },
+        {
+          "name": "div",
+          "text": null,
+          "left": 36,
+          "right": 284,
+          "width": 248,
+          "height": 249.625
+        },
+        {
+          "name": "button",
+          "text": "Previous stop",
+          "left": 36,
+          "right": 141,
+          "width": 105,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Next stop",
+          "left": 36,
+          "right": 139,
+          "width": 103,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "View endpoint details",
+          "left": 36,
+          "right": 191,
+          "width": 155,
+          "height": 44
+        }
+      ]
+    },
+    {
+      "name": "narrow live",
+      "left": 16,
+      "right": 304,
+      "children": [
+        {
+          "name": "button",
+          "text": "Private path",
+          "left": 40,
+          "right": 160.65625,
+          "width": 120.65625,
+          "height": 63.375
+        },
+        {
+          "name": "button",
+          "text": "Direct path",
+          "left": 164.65625,
+          "right": 280,
+          "width": 115.34375,
+          "height": 63.375
+        },
+        {
+          "name": "button",
+          "text": "Your appCreates the request",
+          "left": 36,
+          "right": 284,
+          "width": 248,
+          "height": 58
+        },
+        {
+          "name": "button",
+          "text": "Monolith policyChecks the route",
+          "left": 36,
+          "right": 284,
+          "width": 248,
+          "height": 58
+        },
+        {
+          "name": "button",
+          "text": "Private workerRoutes the read",
+          "left": 36,
+          "right": 284,
+          "width": 248,
+          "height": 58
+        },
+        {
+          "name": "button",
+          "text": "RPC endpointReads the payload",
+          "left": 36,
+          "right": 284,
+          "width": 248,
+          "height": 58
+        },
+        {
+          "name": "dl",
+          "text": null,
+          "left": 36,
+          "right": 284,
+          "width": 248,
+          "height": 175.53125
+        },
+        {
+          "name": "select",
+          "text": null,
+          "left": 36,
+          "right": 181,
+          "width": 145,
+          "height": 44
+        },
+        {
+          "name": "summary",
+          "text": null,
+          "left": 36,
+          "right": 284,
+          "width": 248,
+          "height": 44
+        },
+        {
+          "name": "div",
+          "text": null,
+          "left": 36,
+          "right": 284,
+          "width": 248,
+          "height": 249.625
+        },
+        {
+          "name": "button",
+          "text": "Previous stop",
+          "left": 36,
+          "right": 141,
+          "width": 105,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Next stop",
+          "left": 36,
+          "right": 139,
+          "width": 103,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "View endpoint details",
+          "left": 36,
+          "right": 191,
+          "width": 155,
+          "height": 44
+        }
+      ]
+    },
+    {
+      "name": "narrow offline read inspector",
+      "left": 16,
+      "right": 304,
+      "children": [
+        {
+          "name": "button",
+          "text": "Private path",
+          "left": 40,
+          "right": 160.65625,
+          "width": 120.65625,
+          "height": 63.375
+        },
+        {
+          "name": "button",
+          "text": "Direct path",
+          "left": 164.65625,
+          "right": 280,
+          "width": 115.34375,
+          "height": 63.375
+        },
+        {
+          "name": "button",
+          "text": "Your appCreates the request",
+          "left": 36,
+          "right": 284,
+          "width": 248,
+          "height": 58
+        },
+        {
+          "name": "button",
+          "text": "Monolith policyChecks the route",
+          "left": 36,
+          "right": 284,
+          "width": 248,
+          "height": 58
+        },
+        {
+          "name": "button",
+          "text": "Private workerRoutes the read",
+          "left": 36,
+          "right": 284,
+          "width": 248,
+          "height": 58
+        },
+        {
+          "name": "button",
+          "text": "RPC endpointReads the payload",
+          "left": 36,
+          "right": 284,
+          "width": 248,
+          "height": 58
+        },
+        {
+          "name": "dl",
+          "text": null,
+          "left": 36,
+          "right": 284,
+          "width": 248,
+          "height": 175.53125
+        },
+        {
+          "name": "select",
+          "text": null,
+          "left": 36,
+          "right": 181,
+          "width": 145,
+          "height": 44
+        },
+        {
+          "name": "summary",
+          "text": null,
+          "left": 36,
+          "right": 284,
+          "width": 248,
+          "height": 44
+        },
+        {
+          "name": "div",
+          "text": null,
+          "left": 36,
+          "right": 284,
+          "width": 248,
+          "height": 249.625
+        },
+        {
+          "name": "button",
+          "text": "Previous stop",
+          "left": 36,
+          "right": 141,
+          "width": 105,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Next stop",
+          "left": 36,
+          "right": 139,
+          "width": 103,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "View endpoint details",
+          "left": 36,
+          "right": 191,
+          "width": 155,
+          "height": 44
+        }
+      ]
+    },
+    {
+      "name": "mobile live receipt fields",
+      "left": 16,
+      "right": 374,
+      "children": [
+        {
+          "name": "button",
+          "text": "Private path",
+          "left": 40,
+          "right": 173,
+          "width": 133,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Direct path",
+          "left": 177,
+          "right": 304,
+          "width": 127,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Your appCreates the request",
+          "left": 36,
+          "right": 354,
+          "width": 318,
+          "height": 58
+        },
+        {
+          "name": "button",
+          "text": "RPC endpointReads the payload",
+          "left": 36,
+          "right": 354,
+          "width": 318,
+          "height": 58
+        },
+        {
+          "name": "dl",
+          "text": null,
+          "left": 36,
+          "right": 354,
+          "width": 318,
+          "height": 153.84375
+        },
+        {
+          "name": "select",
+          "text": null,
+          "left": 148,
+          "right": 293,
+          "width": 145,
+          "height": 44
+        },
+        {
+          "name": "summary",
+          "text": null,
+          "left": 36,
+          "right": 354,
+          "width": 318,
+          "height": 44
+        },
+        {
+          "name": "div",
+          "text": null,
+          "left": 36,
+          "right": 354,
+          "width": 318,
+          "height": 175.75
+        },
+        {
+          "name": "button",
+          "text": "Previous stop",
+          "left": 36,
+          "right": 141,
+          "width": 105,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Next stop",
+          "left": 192,
+          "right": 295,
+          "width": 103,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "View endpoint details",
+          "left": 161,
+          "right": 316,
+          "width": 155,
+          "height": 44
+        }
+      ]
+    },
+    {
+      "name": "mobile live balance fields",
+      "left": 16,
+      "right": 374,
+      "children": [
+        {
+          "name": "button",
+          "text": "Private path",
+          "left": 40,
+          "right": 173,
+          "width": 133,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Direct path",
+          "left": 177,
+          "right": 304,
+          "width": 127,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Your appCreates the request",
+          "left": 36,
+          "right": 354,
+          "width": 318,
+          "height": 58
+        },
+        {
+          "name": "button",
+          "text": "RPC endpointReads the payload",
+          "left": 36,
+          "right": 354,
+          "width": 318,
+          "height": 58
+        },
+        {
+          "name": "dl",
+          "text": null,
+          "left": 36,
+          "right": 354,
+          "width": 318,
+          "height": 153.84375
+        },
+        {
+          "name": "select",
+          "text": null,
+          "left": 148,
+          "right": 293,
+          "width": 145,
+          "height": 44
+        },
+        {
+          "name": "summary",
+          "text": null,
+          "left": 36,
+          "right": 354,
+          "width": 318,
+          "height": 44
+        },
+        {
+          "name": "div",
+          "text": null,
+          "left": 36,
+          "right": 354,
+          "width": 318,
+          "height": 229.484375
+        },
+        {
+          "name": "button",
+          "text": "Previous stop",
+          "left": 36,
+          "right": 141,
+          "width": 105,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Next stop",
+          "left": 192,
+          "right": 295,
+          "width": 103,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "View endpoint details",
+          "left": 161,
+          "right": 316,
+          "width": 155,
+          "height": 44
+        }
+      ]
+    },
+    {
+      "name": "mobile live",
+      "left": 16,
+      "right": 374,
+      "children": [
+        {
+          "name": "button",
+          "text": "Private path",
+          "left": 40,
+          "right": 173,
+          "width": 133,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Direct path",
+          "left": 177,
+          "right": 304,
+          "width": 127,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Your appCreates the request",
+          "left": 36,
+          "right": 354,
+          "width": 318,
+          "height": 58
+        },
+        {
+          "name": "button",
+          "text": "Monolith policyChecks the route",
+          "left": 36,
+          "right": 354,
+          "width": 318,
+          "height": 58
+        },
+        {
+          "name": "button",
+          "text": "Private workerRoutes the read",
+          "left": 36,
+          "right": 354,
+          "width": 318,
+          "height": 58
+        },
+        {
+          "name": "button",
+          "text": "RPC endpointReads the payload",
+          "left": 36,
+          "right": 354,
+          "width": 318,
+          "height": 58
+        },
+        {
+          "name": "dl",
+          "text": null,
+          "left": 36,
+          "right": 354,
+          "width": 318,
+          "height": 175.53125
+        },
+        {
+          "name": "select",
+          "text": null,
+          "left": 148,
+          "right": 293,
+          "width": 145,
+          "height": 44
+        },
+        {
+          "name": "summary",
+          "text": null,
+          "left": 36,
+          "right": 354,
+          "width": 318,
+          "height": 44
+        },
+        {
+          "name": "div",
+          "text": null,
+          "left": 36,
+          "right": 354,
+          "width": 318,
+          "height": 229.484375
+        },
+        {
+          "name": "button",
+          "text": "Previous stop",
+          "left": 36,
+          "right": 141,
+          "width": 105,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Next stop",
+          "left": 194,
+          "right": 297,
+          "width": 103,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "View endpoint details",
+          "left": 161,
+          "right": 316,
+          "width": 155,
+          "height": 44
+        }
+      ]
+    },
+    {
+      "name": "mobile offline read inspector",
+      "left": 16,
+      "right": 374,
+      "children": [
+        {
+          "name": "button",
+          "text": "Private path",
+          "left": 40,
+          "right": 173,
+          "width": 133,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Direct path",
+          "left": 177,
+          "right": 304,
+          "width": 127,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Your appCreates the request",
+          "left": 36,
+          "right": 354,
+          "width": 318,
+          "height": 58
+        },
+        {
+          "name": "button",
+          "text": "Monolith policyChecks the route",
+          "left": 36,
+          "right": 354,
+          "width": 318,
+          "height": 58
+        },
+        {
+          "name": "button",
+          "text": "Private workerRoutes the read",
+          "left": 36,
+          "right": 354,
+          "width": 318,
+          "height": 58
+        },
+        {
+          "name": "button",
+          "text": "RPC endpointReads the payload",
+          "left": 36,
+          "right": 354,
+          "width": 318,
+          "height": 58
+        },
+        {
+          "name": "dl",
+          "text": null,
+          "left": 36,
+          "right": 354,
+          "width": 318,
+          "height": 175.53125
+        },
+        {
+          "name": "select",
+          "text": null,
+          "left": 148,
+          "right": 293,
+          "width": 145,
+          "height": 44
+        },
+        {
+          "name": "summary",
+          "text": null,
+          "left": 36,
+          "right": 354,
+          "width": 318,
+          "height": 44
+        },
+        {
+          "name": "div",
+          "text": null,
+          "left": 36,
+          "right": 354,
+          "width": 318,
+          "height": 229.484375
+        },
+        {
+          "name": "button",
+          "text": "Previous stop",
+          "left": 36,
+          "right": 141,
+          "width": 105,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Next stop",
+          "left": 194,
+          "right": 297,
+          "width": 103,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "View endpoint details",
+          "left": 161,
+          "right": 316,
+          "width": 155,
+          "height": 44
+        }
+      ]
+    },
+    {
+      "name": "tablet live receipt fields",
+      "left": 23.03125,
+      "right": 744.96875,
+      "children": [
+        {
+          "name": "button",
+          "text": "Private path",
+          "left": 47.03125,
+          "right": 188.03125,
+          "width": 141,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Direct path",
+          "left": 192.03125,
+          "right": 327.03125,
+          "width": 135,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Your appCreates the request",
+          "left": 43.03125,
+          "right": 380,
+          "width": 336.96875,
+          "height": 115.84375
+        },
+        {
+          "name": "button",
+          "text": "RPC endpointReads the payload",
+          "left": 388,
+          "right": 724.96875,
+          "width": 336.96875,
+          "height": 115.84375
+        },
+        {
+          "name": "dl",
+          "text": null,
+          "left": 43.03125,
+          "right": 724.96875,
+          "width": 681.9375,
+          "height": 102.5625
+        },
+        {
+          "name": "select",
+          "text": null,
+          "left": 155.03125,
+          "right": 300.03125,
+          "width": 145,
+          "height": 44
+        },
+        {
+          "name": "summary",
+          "text": null,
+          "left": 43.03125,
+          "right": 724.96875,
+          "width": 681.9375,
+          "height": 44
+        },
+        {
+          "name": "div",
+          "text": null,
+          "left": 43.03125,
+          "right": 724.96875,
+          "width": 681.9375,
+          "height": 155.609375
+        },
+        {
+          "name": "button",
+          "text": "Previous stop",
+          "left": 43.03125,
+          "right": 148.03125,
+          "width": 105,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Next stop",
+          "left": 199.03125,
+          "right": 302.03125,
+          "width": 103,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "View endpoint details",
+          "left": 435.03125,
+          "right": 590.03125,
+          "width": 155,
+          "height": 44
+        }
+      ]
+    },
+    {
+      "name": "tablet live balance fields",
+      "left": 23.03125,
+      "right": 744.96875,
+      "children": [
+        {
+          "name": "button",
+          "text": "Private path",
+          "left": 47.03125,
+          "right": 188.03125,
+          "width": 141,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Direct path",
+          "left": 192.03125,
+          "right": 327.03125,
+          "width": 135,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Your appCreates the request",
+          "left": 43.03125,
+          "right": 380,
+          "width": 336.96875,
+          "height": 115.84375
+        },
+        {
+          "name": "button",
+          "text": "RPC endpointReads the payload",
+          "left": 388,
+          "right": 724.96875,
+          "width": 336.96875,
+          "height": 115.84375
+        },
+        {
+          "name": "dl",
+          "text": null,
+          "left": 43.03125,
+          "right": 724.96875,
+          "width": 681.9375,
+          "height": 102.5625
+        },
+        {
+          "name": "select",
+          "text": null,
+          "left": 155.03125,
+          "right": 300.03125,
+          "width": 145,
+          "height": 44
+        },
+        {
+          "name": "summary",
+          "text": null,
+          "left": 43.03125,
+          "right": 724.96875,
+          "width": 681.9375,
+          "height": 44
+        },
+        {
+          "name": "div",
+          "text": null,
+          "left": 43.03125,
+          "right": 724.96875,
+          "width": 681.9375,
+          "height": 209.34375
+        },
+        {
+          "name": "button",
+          "text": "Previous stop",
+          "left": 43.03125,
+          "right": 148.03125,
+          "width": 105,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Next stop",
+          "left": 199.03125,
+          "right": 302.03125,
+          "width": 103,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "View endpoint details",
+          "left": 435.03125,
+          "right": 590.03125,
+          "width": 155,
+          "height": 44
+        }
+      ]
+    },
+    {
+      "name": "tablet live",
+      "left": 23.03125,
+      "right": 744.96875,
+      "children": [
+        {
+          "name": "button",
+          "text": "Private path",
+          "left": 47.03125,
+          "right": 188.03125,
+          "width": 141,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Direct path",
+          "left": 192.03125,
+          "right": 327.03125,
+          "width": 135,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Your appCreates the request",
+          "left": 43.03125,
+          "right": 207.515625,
+          "width": 164.484375,
+          "height": 115.84375
+        },
+        {
+          "name": "button",
+          "text": "Monolith policyChecks the route",
+          "left": 215.515625,
+          "right": 380,
+          "width": 164.484375,
+          "height": 115.84375
+        },
+        {
+          "name": "button",
+          "text": "Private workerRoutes the read",
+          "left": 388,
+          "right": 552.484375,
+          "width": 164.484375,
+          "height": 115.84375
+        },
+        {
+          "name": "button",
+          "text": "RPC endpointReads the payload",
+          "left": 560.484375,
+          "right": 724.96875,
+          "width": 164.484375,
+          "height": 115.84375
+        },
+        {
+          "name": "dl",
+          "text": null,
+          "left": 43.03125,
+          "right": 724.96875,
+          "width": 681.9375,
+          "height": 102.5625
+        },
+        {
+          "name": "select",
+          "text": null,
+          "left": 155.03125,
+          "right": 300.03125,
+          "width": 145,
+          "height": 44
+        },
+        {
+          "name": "summary",
+          "text": null,
+          "left": 43.03125,
+          "right": 724.96875,
+          "width": 681.9375,
+          "height": 44
+        },
+        {
+          "name": "div",
+          "text": null,
+          "left": 43.03125,
+          "right": 724.96875,
+          "width": 681.9375,
+          "height": 209.34375
+        },
+        {
+          "name": "button",
+          "text": "Previous stop",
+          "left": 43.03125,
+          "right": 148.03125,
+          "width": 105,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Next stop",
+          "left": 201.03125,
+          "right": 304.03125,
+          "width": 103,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "View endpoint details",
+          "left": 437.03125,
+          "right": 592.03125,
+          "width": 155,
+          "height": 44
+        }
+      ]
+    },
+    {
+      "name": "tablet offline read inspector",
+      "left": 23.03125,
+      "right": 744.96875,
+      "children": [
+        {
+          "name": "button",
+          "text": "Private path",
+          "left": 47.03125,
+          "right": 188.03125,
+          "width": 141,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Direct path",
+          "left": 192.03125,
+          "right": 327.03125,
+          "width": 135,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Your appCreates the request",
+          "left": 43.03125,
+          "right": 207.515625,
+          "width": 164.484375,
+          "height": 115.84375
+        },
+        {
+          "name": "button",
+          "text": "Monolith policyChecks the route",
+          "left": 215.515625,
+          "right": 380,
+          "width": 164.484375,
+          "height": 115.84375
+        },
+        {
+          "name": "button",
+          "text": "Private workerRoutes the read",
+          "left": 388,
+          "right": 552.484375,
+          "width": 164.484375,
+          "height": 115.84375
+        },
+        {
+          "name": "button",
+          "text": "RPC endpointReads the payload",
+          "left": 560.484375,
+          "right": 724.96875,
+          "width": 164.484375,
+          "height": 115.84375
+        },
+        {
+          "name": "dl",
+          "text": null,
+          "left": 43.03125,
+          "right": 724.96875,
+          "width": 681.9375,
+          "height": 102.5625
+        },
+        {
+          "name": "select",
+          "text": null,
+          "left": 155.03125,
+          "right": 300.03125,
+          "width": 145,
+          "height": 44
+        },
+        {
+          "name": "summary",
+          "text": null,
+          "left": 43.03125,
+          "right": 724.96875,
+          "width": 681.9375,
+          "height": 44
+        },
+        {
+          "name": "div",
+          "text": null,
+          "left": 43.03125,
+          "right": 724.96875,
+          "width": 681.9375,
+          "height": 209.34375
+        },
+        {
+          "name": "button",
+          "text": "Previous stop",
+          "left": 43.03125,
+          "right": 148.03125,
+          "width": 105,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Next stop",
+          "left": 201.03125,
+          "right": 304.03125,
+          "width": 103,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "View endpoint details",
+          "left": 437.03125,
+          "right": 592.03125,
+          "width": 155,
+          "height": 44
+        }
+      ]
+    },
+    {
+      "name": "laptop live receipt fields",
+      "left": 491.71875,
+      "right": 1241.609375,
+      "children": [
+        {
+          "name": "button",
+          "text": "Private path",
+          "left": 527.71875,
+          "right": 668.71875,
+          "width": 141,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Direct path",
+          "left": 672.71875,
+          "right": 807.71875,
+          "width": 135,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Your appCreates the request",
+          "left": 523.71875,
+          "right": 862.65625,
+          "width": 338.9375,
+          "height": 115.84375
+        },
+        {
+          "name": "button",
+          "text": "RPC endpointReads the payload",
+          "left": 870.65625,
+          "right": 1209.609375,
+          "width": 338.953125,
+          "height": 115.84375
+        },
+        {
+          "name": "dl",
+          "text": null,
+          "left": 523.71875,
+          "right": 1209.609375,
+          "width": 685.890625,
+          "height": 102.5625
+        },
+        {
+          "name": "select",
+          "text": null,
+          "left": 635.71875,
+          "right": 780.71875,
+          "width": 145,
+          "height": 44
+        },
+        {
+          "name": "summary",
+          "text": null,
+          "left": 523.71875,
+          "right": 1209.609375,
+          "width": 685.890625,
+          "height": 44
+        },
+        {
+          "name": "div",
+          "text": null,
+          "left": 523.71875,
+          "right": 1209.609375,
+          "width": 685.890625,
+          "height": 155.609375
+        },
+        {
+          "name": "button",
+          "text": "Previous stop",
+          "left": 523.71875,
+          "right": 628.71875,
+          "width": 105,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Next stop",
+          "left": 679.71875,
+          "right": 782.71875,
+          "width": 103,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "View endpoint details",
+          "left": 915.71875,
+          "right": 1070.71875,
+          "width": 155,
+          "height": 44
+        }
+      ]
+    },
+    {
+      "name": "laptop live balance fields",
+      "left": 491.71875,
+      "right": 1241.609375,
+      "children": [
+        {
+          "name": "button",
+          "text": "Private path",
+          "left": 527.71875,
+          "right": 668.71875,
+          "width": 141,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Direct path",
+          "left": 672.71875,
+          "right": 807.71875,
+          "width": 135,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Your appCreates the request",
+          "left": 523.71875,
+          "right": 862.65625,
+          "width": 338.9375,
+          "height": 115.84375
+        },
+        {
+          "name": "button",
+          "text": "RPC endpointReads the payload",
+          "left": 870.65625,
+          "right": 1209.609375,
+          "width": 338.953125,
+          "height": 115.84375
+        },
+        {
+          "name": "dl",
+          "text": null,
+          "left": 523.71875,
+          "right": 1209.609375,
+          "width": 685.890625,
+          "height": 102.5625
+        },
+        {
+          "name": "select",
+          "text": null,
+          "left": 635.71875,
+          "right": 780.71875,
+          "width": 145,
+          "height": 44
+        },
+        {
+          "name": "summary",
+          "text": null,
+          "left": 523.71875,
+          "right": 1209.609375,
+          "width": 685.890625,
+          "height": 44
+        },
+        {
+          "name": "div",
+          "text": null,
+          "left": 523.71875,
+          "right": 1209.609375,
+          "width": 685.890625,
+          "height": 209.34375
+        },
+        {
+          "name": "button",
+          "text": "Previous stop",
+          "left": 523.71875,
+          "right": 628.71875,
+          "width": 105,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Next stop",
+          "left": 679.71875,
+          "right": 782.71875,
+          "width": 103,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "View endpoint details",
+          "left": 915.71875,
+          "right": 1070.71875,
+          "width": 155,
+          "height": 44
+        }
+      ]
+    },
+    {
+      "name": "laptop live",
+      "left": 491.71875,
+      "right": 1241.609375,
+      "children": [
+        {
+          "name": "button",
+          "text": "Private path",
+          "left": 527.71875,
+          "right": 668.71875,
+          "width": 141,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Direct path",
+          "left": 672.71875,
+          "right": 807.71875,
+          "width": 135,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Your appCreates the request",
+          "left": 523.71875,
+          "right": 689.1875,
+          "width": 165.46875,
+          "height": 115.84375
+        },
+        {
+          "name": "button",
+          "text": "Monolith policyChecks the route",
+          "left": 697.1875,
+          "right": 862.671875,
+          "width": 165.484375,
+          "height": 115.84375
+        },
+        {
+          "name": "button",
+          "text": "Private workerRoutes the read",
+          "left": 870.671875,
+          "right": 1036.140625,
+          "width": 165.46875,
+          "height": 115.84375
+        },
+        {
+          "name": "button",
+          "text": "RPC endpointReads the payload",
+          "left": 1044.140625,
+          "right": 1209.609375,
+          "width": 165.46875,
+          "height": 115.84375
+        },
+        {
+          "name": "dl",
+          "text": null,
+          "left": 523.71875,
+          "right": 1209.609375,
+          "width": 685.890625,
+          "height": 102.5625
+        },
+        {
+          "name": "select",
+          "text": null,
+          "left": 635.71875,
+          "right": 780.71875,
+          "width": 145,
+          "height": 44
+        },
+        {
+          "name": "summary",
+          "text": null,
+          "left": 523.71875,
+          "right": 1209.609375,
+          "width": 685.890625,
+          "height": 44
+        },
+        {
+          "name": "div",
+          "text": null,
+          "left": 523.71875,
+          "right": 1209.609375,
+          "width": 685.890625,
+          "height": 209.34375
+        },
+        {
+          "name": "button",
+          "text": "Previous stop",
+          "left": 523.71875,
+          "right": 628.71875,
+          "width": 105,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Next stop",
+          "left": 681.71875,
+          "right": 784.71875,
+          "width": 103,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "View endpoint details",
+          "left": 917.71875,
+          "right": 1072.71875,
+          "width": 155,
+          "height": 44
+        }
+      ]
+    },
+    {
+      "name": "laptop offline read inspector",
+      "left": 491.71875,
+      "right": 1241.609375,
+      "children": [
+        {
+          "name": "button",
+          "text": "Private path",
+          "left": 527.71875,
+          "right": 668.71875,
+          "width": 141,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Direct path",
+          "left": 672.71875,
+          "right": 807.71875,
+          "width": 135,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Your appCreates the request",
+          "left": 523.71875,
+          "right": 689.1875,
+          "width": 165.46875,
+          "height": 115.84375
+        },
+        {
+          "name": "button",
+          "text": "Monolith policyChecks the route",
+          "left": 697.1875,
+          "right": 862.671875,
+          "width": 165.484375,
+          "height": 115.84375
+        },
+        {
+          "name": "button",
+          "text": "Private workerRoutes the read",
+          "left": 870.671875,
+          "right": 1036.140625,
+          "width": 165.46875,
+          "height": 115.84375
+        },
+        {
+          "name": "button",
+          "text": "RPC endpointReads the payload",
+          "left": 1044.140625,
+          "right": 1209.609375,
+          "width": 165.46875,
+          "height": 115.84375
+        },
+        {
+          "name": "dl",
+          "text": null,
+          "left": 523.71875,
+          "right": 1209.609375,
+          "width": 685.890625,
+          "height": 102.5625
+        },
+        {
+          "name": "select",
+          "text": null,
+          "left": 635.71875,
+          "right": 780.71875,
+          "width": 145,
+          "height": 44
+        },
+        {
+          "name": "summary",
+          "text": null,
+          "left": 523.71875,
+          "right": 1209.609375,
+          "width": 685.890625,
+          "height": 44
+        },
+        {
+          "name": "div",
+          "text": null,
+          "left": 523.71875,
+          "right": 1209.609375,
+          "width": 685.890625,
+          "height": 209.34375
+        },
+        {
+          "name": "button",
+          "text": "Previous stop",
+          "left": 523.71875,
+          "right": 628.71875,
+          "width": 105,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Next stop",
+          "left": 681.71875,
+          "right": 784.71875,
+          "width": 103,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "View endpoint details",
+          "left": 917.71875,
+          "right": 1072.71875,
+          "width": 155,
+          "height": 44
+        }
+      ]
+    },
+    {
+      "name": "desktop live receipt fields",
+      "left": 552.265625,
+      "right": 1400,
+      "children": [
+        {
+          "name": "button",
+          "text": "Private path",
+          "left": 588.265625,
+          "right": 729.265625,
+          "width": 141,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Direct path",
+          "left": 733.265625,
+          "right": 868.265625,
+          "width": 135,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Your appCreates the request",
+          "left": 584.265625,
+          "right": 972.125,
+          "width": 387.859375,
+          "height": 115.84375
+        },
+        {
+          "name": "button",
+          "text": "RPC endpointReads the payload",
+          "left": 980.125,
+          "right": 1368,
+          "width": 387.875,
+          "height": 115.84375
+        },
+        {
+          "name": "dl",
+          "text": null,
+          "left": 584.265625,
+          "right": 1368,
+          "width": 783.734375,
+          "height": 102.5625
+        },
+        {
+          "name": "select",
+          "text": null,
+          "left": 696.265625,
+          "right": 841.265625,
+          "width": 145,
+          "height": 44
+        },
+        {
+          "name": "summary",
+          "text": null,
+          "left": 584.265625,
+          "right": 1368,
+          "width": 783.734375,
+          "height": 44
+        },
+        {
+          "name": "div",
+          "text": null,
+          "left": 584.265625,
+          "right": 1368,
+          "width": 783.734375,
+          "height": 155.609375
+        },
+        {
+          "name": "button",
+          "text": "Previous stop",
+          "left": 584.265625,
+          "right": 689.265625,
+          "width": 105,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Next stop",
+          "left": 740.265625,
+          "right": 843.265625,
+          "width": 103,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "View endpoint details",
+          "left": 976.265625,
+          "right": 1131.265625,
+          "width": 155,
+          "height": 44
+        }
+      ]
+    },
+    {
+      "name": "desktop live balance fields",
+      "left": 552.265625,
+      "right": 1400,
+      "children": [
+        {
+          "name": "button",
+          "text": "Private path",
+          "left": 588.265625,
+          "right": 729.265625,
+          "width": 141,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Direct path",
+          "left": 733.265625,
+          "right": 868.265625,
+          "width": 135,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Your appCreates the request",
+          "left": 584.265625,
+          "right": 972.125,
+          "width": 387.859375,
+          "height": 115.84375
+        },
+        {
+          "name": "button",
+          "text": "RPC endpointReads the payload",
+          "left": 980.125,
+          "right": 1368,
+          "width": 387.875,
+          "height": 115.84375
+        },
+        {
+          "name": "dl",
+          "text": null,
+          "left": 584.265625,
+          "right": 1368,
+          "width": 783.734375,
+          "height": 102.5625
+        },
+        {
+          "name": "select",
+          "text": null,
+          "left": 696.265625,
+          "right": 841.265625,
+          "width": 145,
+          "height": 44
+        },
+        {
+          "name": "summary",
+          "text": null,
+          "left": 584.265625,
+          "right": 1368,
+          "width": 783.734375,
+          "height": 44
+        },
+        {
+          "name": "div",
+          "text": null,
+          "left": 584.265625,
+          "right": 1368,
+          "width": 783.734375,
+          "height": 209.34375
+        },
+        {
+          "name": "button",
+          "text": "Previous stop",
+          "left": 584.265625,
+          "right": 689.265625,
+          "width": 105,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Next stop",
+          "left": 740.265625,
+          "right": 843.265625,
+          "width": 103,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "View endpoint details",
+          "left": 976.265625,
+          "right": 1131.265625,
+          "width": 155,
+          "height": 44
+        }
+      ]
+    },
+    {
+      "name": "desktop live",
+      "left": 552.265625,
+      "right": 1400,
+      "children": [
+        {
+          "name": "button",
+          "text": "Private path",
+          "left": 588.265625,
+          "right": 729.265625,
+          "width": 141,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Direct path",
+          "left": 733.265625,
+          "right": 868.265625,
+          "width": 135,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Your appCreates the request",
+          "left": 584.265625,
+          "right": 774.1875,
+          "width": 189.921875,
+          "height": 115.84375
+        },
+        {
+          "name": "button",
+          "text": "Monolith policyChecks the route",
+          "left": 782.1875,
+          "right": 972.125,
+          "width": 189.9375,
+          "height": 115.84375
+        },
+        {
+          "name": "button",
+          "text": "Private workerRoutes the read",
+          "left": 980.125,
+          "right": 1170.0625,
+          "width": 189.9375,
+          "height": 115.84375
+        },
+        {
+          "name": "button",
+          "text": "RPC endpointReads the payload",
+          "left": 1178.0625,
+          "right": 1368,
+          "width": 189.9375,
+          "height": 115.84375
+        },
+        {
+          "name": "dl",
+          "text": null,
+          "left": 584.265625,
+          "right": 1368,
+          "width": 783.734375,
+          "height": 102.5625
+        },
+        {
+          "name": "select",
+          "text": null,
+          "left": 696.265625,
+          "right": 841.265625,
+          "width": 145,
+          "height": 44
+        },
+        {
+          "name": "summary",
+          "text": null,
+          "left": 584.265625,
+          "right": 1368,
+          "width": 783.734375,
+          "height": 44
+        },
+        {
+          "name": "div",
+          "text": null,
+          "left": 584.265625,
+          "right": 1368,
+          "width": 783.734375,
+          "height": 209.34375
+        },
+        {
+          "name": "button",
+          "text": "Previous stop",
+          "left": 584.265625,
+          "right": 689.265625,
+          "width": 105,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Next stop",
+          "left": 742.265625,
+          "right": 845.265625,
+          "width": 103,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "View endpoint details",
+          "left": 978.265625,
+          "right": 1133.265625,
+          "width": 155,
+          "height": 44
+        }
+      ]
+    },
+    {
+      "name": "desktop offline read inspector",
+      "left": 552.265625,
+      "right": 1400,
+      "children": [
+        {
+          "name": "button",
+          "text": "Private path",
+          "left": 588.265625,
+          "right": 729.265625,
+          "width": 141,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Direct path",
+          "left": 733.265625,
+          "right": 868.265625,
+          "width": 135,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Your appCreates the request",
+          "left": 584.265625,
+          "right": 774.1875,
+          "width": 189.921875,
+          "height": 115.84375
+        },
+        {
+          "name": "button",
+          "text": "Monolith policyChecks the route",
+          "left": 782.1875,
+          "right": 972.125,
+          "width": 189.9375,
+          "height": 115.84375
+        },
+        {
+          "name": "button",
+          "text": "Private workerRoutes the read",
+          "left": 980.125,
+          "right": 1170.0625,
+          "width": 189.9375,
+          "height": 115.84375
+        },
+        {
+          "name": "button",
+          "text": "RPC endpointReads the payload",
+          "left": 1178.0625,
+          "right": 1368,
+          "width": 189.9375,
+          "height": 115.84375
+        },
+        {
+          "name": "dl",
+          "text": null,
+          "left": 584.265625,
+          "right": 1368,
+          "width": 783.734375,
+          "height": 102.5625
+        },
+        {
+          "name": "select",
+          "text": null,
+          "left": 696.265625,
+          "right": 841.265625,
+          "width": 145,
+          "height": 44
+        },
+        {
+          "name": "summary",
+          "text": null,
+          "left": 584.265625,
+          "right": 1368,
+          "width": 783.734375,
+          "height": 44
+        },
+        {
+          "name": "div",
+          "text": null,
+          "left": 584.265625,
+          "right": 1368,
+          "width": 783.734375,
+          "height": 209.34375
+        },
+        {
+          "name": "button",
+          "text": "Previous stop",
+          "left": 584.265625,
+          "right": 689.265625,
+          "width": 105,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Next stop",
+          "left": 742.265625,
+          "right": 845.265625,
+          "width": 103,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "View endpoint details",
+          "left": 978.265625,
+          "right": 1133.265625,
+          "width": 155,
+          "height": 44
+        }
+      ]
+    },
+    {
+      "name": "200% equivalent reflow receipt fields",
+      "left": 21.59375,
+      "right": 698.40625,
+      "children": [
+        {
+          "name": "button",
+          "text": "Private path",
+          "left": 45.59375,
+          "right": 186.59375,
+          "width": 141,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Direct path",
+          "left": 190.59375,
+          "right": 325.59375,
+          "width": 135,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Your appCreates the request",
+          "left": 41.59375,
+          "right": 356,
+          "width": 314.40625,
+          "height": 115.84375
+        },
+        {
+          "name": "button",
+          "text": "RPC endpointReads the payload",
+          "left": 364,
+          "right": 678.40625,
+          "width": 314.40625,
+          "height": 115.84375
+        },
+        {
+          "name": "dl",
+          "text": null,
+          "left": 41.59375,
+          "right": 678.40625,
+          "width": 636.8125,
+          "height": 102.5625
+        },
+        {
+          "name": "select",
+          "text": null,
+          "left": 153.59375,
+          "right": 298.59375,
+          "width": 145,
+          "height": 44
+        },
+        {
+          "name": "summary",
+          "text": null,
+          "left": 41.59375,
+          "right": 678.40625,
+          "width": 636.8125,
+          "height": 44
+        },
+        {
+          "name": "div",
+          "text": null,
+          "left": 41.59375,
+          "right": 678.40625,
+          "width": 636.8125,
+          "height": 155.609375
+        },
+        {
+          "name": "button",
+          "text": "Previous stop",
+          "left": 41.59375,
+          "right": 146.59375,
+          "width": 105,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Next stop",
+          "left": 197.59375,
+          "right": 300.59375,
+          "width": 103,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "View endpoint details",
+          "left": 433.59375,
+          "right": 588.59375,
+          "width": 155,
+          "height": 44
+        }
+      ]
+    },
+    {
+      "name": "200% equivalent reflow balance fields",
+      "left": 21.59375,
+      "right": 698.40625,
+      "children": [
+        {
+          "name": "button",
+          "text": "Private path",
+          "left": 45.59375,
+          "right": 186.59375,
+          "width": 141,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Direct path",
+          "left": 190.59375,
+          "right": 325.59375,
+          "width": 135,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Your appCreates the request",
+          "left": 41.59375,
+          "right": 356,
+          "width": 314.40625,
+          "height": 115.84375
+        },
+        {
+          "name": "button",
+          "text": "RPC endpointReads the payload",
+          "left": 364,
+          "right": 678.40625,
+          "width": 314.40625,
+          "height": 115.84375
+        },
+        {
+          "name": "dl",
+          "text": null,
+          "left": 41.59375,
+          "right": 678.40625,
+          "width": 636.8125,
+          "height": 102.5625
+        },
+        {
+          "name": "select",
+          "text": null,
+          "left": 153.59375,
+          "right": 298.59375,
+          "width": 145,
+          "height": 44
+        },
+        {
+          "name": "summary",
+          "text": null,
+          "left": 41.59375,
+          "right": 678.40625,
+          "width": 636.8125,
+          "height": 44
+        },
+        {
+          "name": "div",
+          "text": null,
+          "left": 41.59375,
+          "right": 678.40625,
+          "width": 636.8125,
+          "height": 209.34375
+        },
+        {
+          "name": "button",
+          "text": "Previous stop",
+          "left": 41.59375,
+          "right": 146.59375,
+          "width": 105,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Next stop",
+          "left": 197.59375,
+          "right": 300.59375,
+          "width": 103,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "View endpoint details",
+          "left": 433.59375,
+          "right": 588.59375,
+          "width": 155,
+          "height": 44
+        }
+      ]
+    },
+    {
+      "name": "200% equivalent reflow",
+      "left": 21.59375,
+      "right": 698.40625,
+      "children": [
+        {
+          "name": "button",
+          "text": "Private path",
+          "left": 45.59375,
+          "right": 186.59375,
+          "width": 141,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Direct path",
+          "left": 190.59375,
+          "right": 325.59375,
+          "width": 135,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Your appCreates the request",
+          "left": 41.59375,
+          "right": 194.796875,
+          "width": 153.203125,
+          "height": 115.84375
+        },
+        {
+          "name": "button",
+          "text": "Monolith policyChecks the route",
+          "left": 202.796875,
+          "right": 356,
+          "width": 153.203125,
+          "height": 115.84375
+        },
+        {
+          "name": "button",
+          "text": "Private workerRoutes the read",
+          "left": 364,
+          "right": 517.203125,
+          "width": 153.203125,
+          "height": 115.84375
+        },
+        {
+          "name": "button",
+          "text": "RPC endpointReads the payload",
+          "left": 525.203125,
+          "right": 678.40625,
+          "width": 153.203125,
+          "height": 115.84375
+        },
+        {
+          "name": "dl",
+          "text": null,
+          "left": 41.59375,
+          "right": 678.40625,
+          "width": 636.8125,
+          "height": 124.25
+        },
+        {
+          "name": "select",
+          "text": null,
+          "left": 153.59375,
+          "right": 298.59375,
+          "width": 145,
+          "height": 44
+        },
+        {
+          "name": "summary",
+          "text": null,
+          "left": 41.59375,
+          "right": 678.40625,
+          "width": 636.8125,
+          "height": 44
+        },
+        {
+          "name": "div",
+          "text": null,
+          "left": 41.59375,
+          "right": 678.40625,
+          "width": 636.8125,
+          "height": 209.34375
+        },
+        {
+          "name": "button",
+          "text": "Previous stop",
+          "left": 41.59375,
+          "right": 146.59375,
+          "width": 105,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Next stop",
+          "left": 199.59375,
+          "right": 302.59375,
+          "width": 103,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "View endpoint details",
+          "left": 435.59375,
+          "right": 590.59375,
+          "width": 155,
+          "height": 44
+        }
+      ]
+    },
+    {
+      "name": "Normal motion preference receipt fields",
+      "left": 552.265625,
+      "right": 1400,
+      "children": [
+        {
+          "name": "button",
+          "text": "Private path",
+          "left": 588.265625,
+          "right": 729.265625,
+          "width": 141,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Direct path",
+          "left": 733.265625,
+          "right": 868.265625,
+          "width": 135,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Your appCreates the request",
+          "left": 584.265625,
+          "right": 972.125,
+          "width": 387.859375,
+          "height": 115.84375
+        },
+        {
+          "name": "button",
+          "text": "RPC endpointReads the payload",
+          "left": 980.125,
+          "right": 1368,
+          "width": 387.875,
+          "height": 115.84375
+        },
+        {
+          "name": "dl",
+          "text": null,
+          "left": 584.265625,
+          "right": 1368,
+          "width": 783.734375,
+          "height": 102.5625
+        },
+        {
+          "name": "select",
+          "text": null,
+          "left": 696.265625,
+          "right": 841.265625,
+          "width": 145,
+          "height": 44
+        },
+        {
+          "name": "summary",
+          "text": null,
+          "left": 584.265625,
+          "right": 1368,
+          "width": 783.734375,
+          "height": 44
+        },
+        {
+          "name": "div",
+          "text": null,
+          "left": 584.265625,
+          "right": 1368,
+          "width": 783.734375,
+          "height": 155.609375
+        },
+        {
+          "name": "button",
+          "text": "Previous stop",
+          "left": 584.265625,
+          "right": 689.265625,
+          "width": 105,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Next stop",
+          "left": 740.265625,
+          "right": 843.265625,
+          "width": 103,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "View endpoint details",
+          "left": 976.265625,
+          "right": 1131.265625,
+          "width": 155,
+          "height": 44
+        }
+      ]
+    },
+    {
+      "name": "Normal motion preference balance fields",
+      "left": 552.265625,
+      "right": 1400,
+      "children": [
+        {
+          "name": "button",
+          "text": "Private path",
+          "left": 588.265625,
+          "right": 729.265625,
+          "width": 141,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Direct path",
+          "left": 733.265625,
+          "right": 868.265625,
+          "width": 135,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Your appCreates the request",
+          "left": 584.265625,
+          "right": 972.125,
+          "width": 387.859375,
+          "height": 115.84375
+        },
+        {
+          "name": "button",
+          "text": "RPC endpointReads the payload",
+          "left": 980.125,
+          "right": 1368,
+          "width": 387.875,
+          "height": 115.84375
+        },
+        {
+          "name": "dl",
+          "text": null,
+          "left": 584.265625,
+          "right": 1368,
+          "width": 783.734375,
+          "height": 102.5625
+        },
+        {
+          "name": "select",
+          "text": null,
+          "left": 696.265625,
+          "right": 841.265625,
+          "width": 145,
+          "height": 44
+        },
+        {
+          "name": "summary",
+          "text": null,
+          "left": 584.265625,
+          "right": 1368,
+          "width": 783.734375,
+          "height": 44
+        },
+        {
+          "name": "div",
+          "text": null,
+          "left": 584.265625,
+          "right": 1368,
+          "width": 783.734375,
+          "height": 209.34375
+        },
+        {
+          "name": "button",
+          "text": "Previous stop",
+          "left": 584.265625,
+          "right": 689.265625,
+          "width": 105,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "Next stop",
+          "left": 740.265625,
+          "right": 843.265625,
+          "width": 103,
+          "height": 44
+        },
+        {
+          "name": "button",
+          "text": "View endpoint details",
+          "left": 976.265625,
+          "right": 1131.265625,
+          "width": 155,
+          "height": 44
+        }
+      ]
+    }
+  ],
+  "pageErrors": [],
+  "externalRequests": [],
+  "applicationApiRequests": [],
+  "graphicsContexts": [],
+  "generatedAt": "2026-11-06T22:36:50.007Z"
+}

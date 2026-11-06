@@ -1,0 +1,25 @@
+{
+  "passed": true,
+  "scope": "Independent retained-byte audit of current local UI evidence; not live privacy acceptance",
+  "sourceFiles": 51,
+  "distFiles": 9,
+  "journeyChecks": 42,
+  "compatibilityChecks": 8,
+  "currentScreenshotsVerified": 33,
+  "sourceBeforeAfterIdentical": true,
+  "graphicsContexts": 0,
+  "pageErrors": 0,
+  "externalRequests": 0,
+  "applicationApiRequests": 0,
+  "detector": {
+    "primary": 0,
+    "advisory": 44
+  },
+  "journeyResultSha256": "3081f21428b4fc06de03e60adec6ab9a594f8b2efbe3872180dc6a3025f1dddb",
+  "compatibilityResultSha256": "ff106ee32f5e1076ea27a65ec996797bb52cf3d815eea4f45d6502db2836d9b9",
+  "runnerSha256": "f0f33650935bec3d1b2fe9a9c345c8e8edc8ccb621fa6a56661ce429dd253b77",
+  "notes": [
+    "Earlier browser/ and browser-final/ failures are preserved as harness diagnostics; they do not establish current acceptance.",
+    "Actual-width top captures and tall-viewport component captures are distinguished in their capture metadata."
+  ]
+}

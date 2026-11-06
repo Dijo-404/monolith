@@ -1,5 +1,7 @@
 # Revised stage: browser verification
 
+> **Historical — rejected dark-stage presentation.** The owner subsequently rejected the complete dark 3D card, including this sculptural revision. The scoped reviewer verdict and software results below remain records of this named build, not current visual approval. The replacement removes 3D and uses a light DOM/SVG request explorer; its [separate review](../request-explorer/README.md) is being prepared. Preserve the existing captures and JSON; none establishes validation or live privacy for the replacement.
+
 The assembled candidate, including accepted-main integration, passed **13 stage interaction checks**, the unchanged **26 user journeys**, and targeted navigation, fallback and overlay checks. All four current results bind the same 54 dashboard source files and nine production build files before and after capture: `app-Dw5fWw7-.js` and `app-DBCLKKsN.css`. This is software verification for owner review; it does not accept a live anonymity or release gate.
 
 The owner rejected the original orb/diamonds/slab screenshot. The [replacement scene](scene-design.md) adds recognizable dimensional forms, layered materials, pointer depth and elapsed-time transitions. The unchanged public scene/flight contract and existing run controllers still supply the state. Accepted main `cf13a9d` was integrated at merge `1370a99` before the final build. Pinned Node 24.22.2/pnpm 12.18.0 `pnpm check` passed lint, types, all builds and **1,862 tests in 54 files**; all new capture scripts pass focused ESLint and parse checks.
