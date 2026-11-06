@@ -1,9 +1,9 @@
-import { parseObserverEnv } from './env.js';
+import { parseObserverConfig, parseObserverEnv } from './env.js';
 import { buildServer } from './server.js';
 
 async function startObserver() {
   const { host, port } = parseObserverEnv(process.env);
-  const server = buildServer();
+  const server = buildServer({ config: parseObserverConfig(process.env) });
 
   const shutdown = () => {
     void server.close().catch(() => {
@@ -16,7 +16,7 @@ async function startObserver() {
 
   try {
     await server.listen({ host, port });
-    console.info('Monolith observer scaffold is listening; RPC integrations are not enabled.');
+    console.info('Monolith observer is listening.');
   } catch (error) {
     process.removeListener('SIGINT', shutdown);
     process.removeListener('SIGTERM', shutdown);
