@@ -290,6 +290,152 @@ describe('SIMULATED trust and endpoint validation', () => {
     await f.transport.close();
   });
 
+  it.each([
+    ['publisher rejection', (value: EndpointCandidate) => { value.publisher.creator = target; }, 'REGISTRY_UNTRUSTED'],
+    ['owner rejection', (value: EndpointCandidate) => { value.publisher.owner = target; }, 'REGISTRY_UNTRUSTED'],
+    ['expiry rejection', (value: EndpointCandidate) => { value.expiresAt = '2030-01-01T00:00:00Z'; }, 'REGISTRY_EXPIRED'],
+    ['chain policy rejection', (value: EndpointCandidate) => { value.chainId = '2'; }, 'POLICY_DENIED'],
+    ['origin rejection', (value: EndpointCandidate) => { value.rpcUrl = 'https://evil.example.com'; }, 'TARGET_DENIED'],
+    ['malformed identifiable candidate', (value: EndpointCandidate) => { value.source.revision = ''; }, 'ENDPOINT_REJECTED'],
+  ] as const)('revokes an older pending probe after a newer %s for the same endpoint', async (_name, mutate, code) => {
+    const f = fixture(); await f.transport.initialize();
+    const held = deferred<Result<unknown>>();
+    const started = deferred<JsonRpcRequest>();
+    let holdFirst = true;
+    f.driver.handler = async (rpc) => {
+      if (holdFirst) { holdFirst = false; started.resolve(rpc); return held.promise; }
+      return response(rpc);
+    };
+    const older = f.transport.validateEndpoint(candidate());
+    const olderRpc = await started.promise;
+    const rejected = candidate(); mutate(rejected);
+    expect(await f.transport.validateEndpoint(rejected)).toEqual(failed(code));
+    expect(f.driver.calls).toHaveLength(1);
+
+    held.resolve(response(olderRpc));
+    expect(await older).toEqual(failed('ENDPOINT_REJECTED'));
+    expect(f.transport.getState()).toBe('DEGRADED');
+    expect(await f.transport.read(request())).toEqual(failed('ENDPOINT_REJECTED'));
+    expect(f.driver.calls).toHaveLength(1);
+
+    expect(await f.transport.validateEndpoint(candidate())).toEqual(ok(candidate()));
+    expect(await f.transport.read(request())).toEqual(ok('0x1'));
+    expect(f.driver.calls.map((call) => call.request.method)).toEqual([
+      'eth_chainId', 'eth_chainId', 'eth_blockNumber',
+    ]);
+    await f.transport.close();
+  });
+
+  it('keeps a different endpoint usable when a rejected candidate revokes only its own pending probe', async () => {
+    const f = fixture(); await f.transport.initialize();
+    const other = { ...candidate(), endpointId: 'endpoint_0002' };
+    expect(await f.transport.validateEndpoint(other)).toEqual(ok(other));
+    const held = deferred<Result<unknown>>();
+    const started = deferred<JsonRpcRequest>();
+    f.driver.handler = async (rpc) => { started.resolve(rpc); return held.promise; };
+    const older = f.transport.validateEndpoint(candidate());
+    const olderRpc = await started.promise;
+    const rejected = candidate(); rejected.publisher.creator = target;
+    expect(await f.transport.validateEndpoint(rejected)).toEqual(failed('REGISTRY_UNTRUSTED'));
+    held.resolve(response(olderRpc));
+    expect(await older).toEqual(failed('ENDPOINT_REJECTED'));
+
+    f.driver.handler = async (rpc) => response(rpc);
+    expect(await f.transport.read(request())).toEqual(failed('ENDPOINT_REJECTED'));
+    expect(f.driver.calls).toHaveLength(2);
+    expect(await f.transport.read(request({ endpointId: other.endpointId }))).toEqual(ok('0x1'));
+    expect(f.driver.calls).toHaveLength(3);
+    expect(await f.transport.validateEndpoint(other)).toEqual(ok(other));
+    expect(f.driver.calls).toHaveLength(3);
+    await f.transport.close();
+  });
+
+  it('cannot publish endpoint readiness when the successful probe trace closes the transport', async () => {
+    let onProbe: (() => void) | undefined;
+    let closing: Promise<void> | undefined;
+    const f = fixture({ traceSink: { emit: (event) => {
+      if (event.callsite === 'transport.chain-probe' && event.success) onProbe?.();
+    } } });
+    await f.transport.initialize();
+    onProbe = () => { onProbe = undefined; closing = f.transport.close(); };
+    expect(await f.transport.validateEndpoint(candidate())).toEqual(failed('WORKER_UNAVAILABLE'));
+    await closing;
+    expect(f.transport.getState()).toBe('CLOSED');
+    expect(await f.transport.read(request())).toEqual(failed('ENDPOINT_REJECTED'));
+    expect(f.driver.calls).toHaveLength(1);
+    expect(f.driver.closed).toBe(1);
+  });
+
+  it('rechecks expiry after the successful probe trace and requires a fresh candidate to recover', async () => {
+    let onProbe: (() => void) | undefined;
+    const f = fixture({ traceSink: { emit: (event) => {
+      if (event.callsite === 'transport.chain-probe' && event.success) onProbe?.();
+    } } });
+    await f.transport.initialize();
+    onProbe = () => { onProbe = undefined; f.advance(600_000); };
+    expect(await f.transport.validateEndpoint(candidate())).toEqual(failed('REGISTRY_EXPIRED'));
+    expect(f.transport.getState()).toBe('DEGRADED');
+    expect(await f.transport.read(request())).toEqual(failed('ENDPOINT_REJECTED'));
+    expect(f.driver.calls).toHaveLength(1);
+
+    const fresh = candidate(); fresh.expiresAt = '2030-01-01T00:20:00Z';
+    expect(await f.transport.validateEndpoint(fresh)).toEqual(ok(fresh));
+    expect(await f.transport.read(request())).toEqual(ok('0x1'));
+    expect(f.driver.calls).toHaveLength(3);
+    await f.transport.close();
+  });
+
+  it('honors a newer local rejection from the successful probe trace before publishing readiness', async () => {
+    let onProbe: (() => void) | undefined;
+    let rejection: Promise<Result<EndpointCandidate>> | undefined;
+    const f = fixture({ traceSink: { emit: (event) => {
+      if (event.callsite === 'transport.chain-probe' && event.success) onProbe?.();
+    } } });
+    await f.transport.initialize();
+    onProbe = () => {
+      onProbe = undefined;
+      const rejected = candidate(); rejected.publisher.owner = target;
+      rejection = f.transport.validateEndpoint(rejected);
+    };
+    expect(await f.transport.validateEndpoint(candidate())).toEqual(failed('ENDPOINT_REJECTED'));
+    expect(await rejection).toEqual(failed('REGISTRY_UNTRUSTED'));
+    expect(await f.transport.read(request())).toEqual(failed('ENDPOINT_REJECTED'));
+    expect(f.driver.calls).toHaveLength(1);
+    expect(await f.transport.validateEndpoint(candidate())).toEqual(ok(candidate()));
+    expect(await f.transport.read(request())).toEqual(ok('0x1'));
+    expect(f.driver.calls).toHaveLength(3);
+    await f.transport.close();
+  });
+
+  it('lets a newer revision started by the successful probe trace exclusively establish readiness', async () => {
+    let onProbe: (() => void) | undefined;
+    let newer: Promise<Result<EndpointCandidate>> | undefined;
+    const f = fixture({ traceSink: { emit: (event) => {
+      if (event.callsite === 'transport.chain-probe' && event.success) onProbe?.();
+    } } });
+    await f.transport.initialize();
+    const fresh = candidate(); fresh.source.revision = 'synthetic-revision-2';
+    const held = deferred<Result<unknown>>();
+    const started = deferred<JsonRpcRequest>();
+    f.driver.handler = async (rpc) => {
+      if (f.driver.calls.length === 1) return response(rpc);
+      started.resolve(rpc); return held.promise;
+    };
+    onProbe = () => { onProbe = undefined; newer = f.transport.validateEndpoint(fresh); };
+    const older = f.transport.validateEndpoint(candidate());
+    const newerRpc = await started.promise;
+    expect(await older).toEqual(failed('ENDPOINT_REJECTED'));
+    expect(await f.transport.read(request())).toEqual(failed('ENDPOINT_REJECTED'));
+    expect(f.driver.calls).toHaveLength(2);
+    held.resolve(response(newerRpc));
+    expect(await newer).toEqual(ok(fresh));
+    f.driver.handler = async (rpc) => response(rpc);
+    expect(await f.transport.validateEndpoint(fresh)).toEqual(ok(fresh));
+    expect(await f.transport.read(request())).toEqual(ok('0x1'));
+    expect(f.driver.calls).toHaveLength(3);
+    await f.transport.close();
+  });
+
   it('copies policy and call allowlists rather than adopting later capability expansion', async () => {
     const f = fixture(); await f.ready();
     f.options.policy.allowedChains.push('2');

@@ -199,7 +199,7 @@ function registryObservation(now: number, expiresAt: number): EntityObservation 
 test('separate public GETs twenty seconds apart receive fresh windows clamped to the real entity deadline', async () => {
   const began = Date.parse('2030-01-01T00:00:00.000Z'); let now = began; let reads = 0; let admissions = 0;
   const registry = createFreshPublicRegistry({ nowMs: () => now,
-    reader: { readChain: async () => { reads++; return { ok: true, value: registryObservation(now, began + 120_000) }; } },
+    reader: { readChain: async () => { reads++; return { ok: true, value: registryObservation(now, began + 240_000) }; } },
     admission: { check: async () => { admissions++; return { ok: true, value: undefined }; } },
   });
   const demo = await setup({ registry, nowMs: () => now });
@@ -208,12 +208,12 @@ test('separate public GETs twenty seconds apart receive fresh windows clamped to
     expect(response.status).toBe(200);
     return (response.body as { value: { generatedAt: string; expiresAt: string; revision: string } }).value;
   };
-  const first = await metadata(); expect(Date.parse(first.expiresAt)).toBe(began + 30_000);
+  const first = await metadata(); expect(Date.parse(first.expiresAt)).toBe(began + 120_000);
   now += 20_000;
   const second = await metadata(); expect(second.revision).toBe(first.revision);
-  expect(Date.parse(second.generatedAt)).toBe(now); expect(Date.parse(second.expiresAt)).toBe(now + 30_000);
-  now = began + 110_000;
-  const last = await metadata(); expect(Date.parse(last.expiresAt)).toBe(began + 120_000);
+  expect(Date.parse(second.generatedAt)).toBe(now); expect(Date.parse(second.expiresAt)).toBe(now + 120_000);
+  now = began + 230_000;
+  const last = await metadata(); expect(Date.parse(last.expiresAt)).toBe(began + 240_000);
   expect(reads).toBe(3); expect(admissions).toBe(3); expect(demo.calls).toHaveLength(0);
 });
 
