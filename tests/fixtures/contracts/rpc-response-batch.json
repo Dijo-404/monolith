@@ -1,0 +1,14 @@
+{
+  "fixtureVersion": 1,
+  "evidence": "SIMULATED",
+  "description": "Negative test: batches are excluded from the v1 single-response contract.",
+  "contract": "jsonRpcResponseSchema",
+  "expected": "invalid",
+  "payload": [
+    {
+      "jsonrpc": "2.0",
+      "id": "fixture-rpc-001",
+      "result": "0x1"
+    }
+  ]
+}

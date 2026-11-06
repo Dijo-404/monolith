@@ -1,0 +1,15 @@
+{
+  "fixtureVersion": 1,
+  "evidence": "SIMULATED",
+  "description": "Synthetic application read; payload is test data and is never sent.",
+  "contract": "readRequestSchema",
+  "expected": "valid",
+  "payload": {
+    "readId": "fixture-read-001",
+    "endpointId": "fixture-endpoint-001",
+    "chainId": "1",
+    "method": "eth_chainId",
+    "params": [],
+    "callsite": "fixture.chain-id:1"
+  }
+}

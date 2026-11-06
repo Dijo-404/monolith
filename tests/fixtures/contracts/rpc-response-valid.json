@@ -1,0 +1,12 @@
+{
+  "fixtureVersion": 1,
+  "evidence": "SIMULATED",
+  "description": "Synthetic success envelope used to check JSON-RPC ID matching.",
+  "contract": "jsonRpcResponseSchema",
+  "expected": "valid",
+  "payload": {
+    "jsonrpc": "2.0",
+    "id": "fixture-rpc-001",
+    "result": "0x1"
+  }
+}

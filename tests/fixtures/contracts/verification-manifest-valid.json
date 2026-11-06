@@ -1,0 +1,22 @@
+{
+  "fixtureVersion": 1,
+  "evidence": "SIMULATED",
+  "description": "Synthetic evidence-manifest shape with an obviously fake hash; not an observed evidence artifact.",
+  "contract": "verificationManifestSchema",
+  "expected": "valid",
+  "payload": {
+    "schemaVersion": 1,
+    "runId": "fixture-run-001",
+    "evidence": "SIMULATED",
+    "generatedAt": "2030-01-01T00:02:00Z",
+    "artifacts": [
+      {
+        "path": "privacy-run.json",
+        "sha256": "4444444444444444444444444444444444444444444444444444444444444444",
+        "generatedAt": "2030-01-01T00:02:00Z",
+        "evidence": "SIMULATED",
+        "sourceTask": "MN-002"
+      }
+    ]
+  }
+}
