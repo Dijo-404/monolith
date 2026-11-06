@@ -8,6 +8,7 @@ import { mkdir, readFile, readdir, writeFile } from 'node:fs/promises';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { isIP } from 'node:net';
+import { classifyFrameInventory, collectFrameDescriptors } from './hosting-frames.mjs';
 
 const repository = resolve(dirname(fileURLToPath(import.meta.url)), '../../..');
 const deployedOrigin = process.env['MONOLITH_DEPLOYED_UI_ORIGIN'];
@@ -65,7 +66,8 @@ async function inventory() {
   for (const name of ['apps/dashboard/src', 'apps/dashboard/dist', ...['shared', 'registry', 'transport', 'privacy-analyzer']
     .flatMap((name) => [`packages/${name}/src`, `packages/${name}/dist`])]) await walk(name);
   for (const file of ['pnpm-lock.yaml', 'package.json', 'apps/dashboard/package.json', 'apps/dashboard/vite.config.ts',
-    'apps/dashboard/assets/worker-host.html', 'tests/e2e/lab-ui/browser-live.mjs']) result[file] = sha(await readFile(join(repository, file)));
+    'apps/dashboard/assets/worker-host.html', 'tests/e2e/lab-ui/browser-live.mjs',
+    'tests/e2e/lab-ui/hosting-frames.mjs']) result[file] = sha(await readFile(join(repository, file)));
   result.officialSdkEntry = sha(await readFile(transportRequire.resolve('@anon-rpc/browser-harness')));
   return result;
 }
@@ -76,11 +78,14 @@ const artifact = { schemaVersion: 1, sourceTask: 'MN-014', evidence: 'BLOCKED', 
   sourceWorkingTreeClean: true,
   gitHead: execFileSync('git', ['rev-parse', 'HEAD'], { cwd: repository, encoding: 'utf8' }).trim(),
   source, sourceUnchangedAfterRun: false, cases: [], layouts: [], resolverResponses: [], bootstrapRequests: [], metadata: [],
+  hostingBootstrapRequests: [], frameChecks: [],
   controls: { ordinaryProtectedTargetRequests: 0, directDetectionSelfCheck: false, pageErrors: 0, forgedLeakLabels: [] },
-  shutdown: { browserContextDestroyed: false, iframeRemovedOnNavigation: false }, failure: null,
+  shutdown: { browserContextDestroyed: false, iframeRemovedOnNavigation: false,
+    iframeScope: 'MONOLITH_DISPOSABLE_WORKER_HOST', globalFramesAfterNavigation: null }, failure: null,
   limitations: ['One observed synthetic workflow through the configured trusted observer/forwarder; no universal anonymity claim.',
     'The tunnel provider and observer can see source and request payloads. Their operational retention is unverified.',
     'Two worker bootstrap lookups and ordinary allocation/registry/diagnostic metadata contacts are disclosed separately.',
+    'Public hosting may add a non-anonymous Cloudflare security bootstrap and hidden challenge frame. It is recorded separately from app reads and the owned worker lifecycle; fetched challenge runtime is outside transport privacy measurement.',
     'The existing explicit leak POST receives test-only forged forwarding/case labels; its body and wire ID are preserved and its independent source must remain baseline.',
     'Ordinary page/frame HTTP is intercepted. Worker WebRTC/KPS, wallets, extensions and unrelated pages are outside capture.',
     'No raw IP, forwarding headers, RPC params, private wallet input or raw provider messages are retained.'] };
@@ -94,6 +99,12 @@ let browser; let context; let page; let heartbeat;
 const pending = [];
 const directRequests = [];
 const deny = async (route) => { artifact.controls.ordinaryProtectedTargetRequests++; await route.abort('blockedbyclient'); };
+const recordFrames = async (stage) => {
+  const frames = await page.evaluate(collectFrameDescriptors, { origin: preview.origin });
+  const counts = classifyFrameInventory(frames, { allowCloudflare: Boolean(deployedOrigin) });
+  artifact.frameChecks.push({ stage, ...counts, frames });
+  return counts;
+};
 try {
   browser = await chromium.launch({ headless: true });
   artifact.browser = browser.version();
@@ -101,6 +112,10 @@ try {
   await context.route('**/*', async (route) => {
     const request = route.request();
     const url = new URL(request.url());
+    if (url.origin === preview.origin && url.pathname.startsWith('/cdn-cgi/challenge-platform/')) {
+      if (artifact.hostingBootstrapRequests.length >= 64) artifact.failure ??= 'HOSTING_BOOTSTRAP_LIMIT_EXCEEDED';
+      else artifact.hostingBootstrapRequests.push({ mode, method: request.method(), category: 'cloudflare-security-bootstrap' });
+    }
     let rpc;
     try { rpc = request.postDataJSON(); } catch { /* Only exact RPC envelopes receive an exemption. */ }
     if (url.origin === 'https://mainnet.optimism.io') { await deny(route); return; }
@@ -173,7 +188,8 @@ try {
   page.on('pageerror', () => artifact.controls.pageErrors++);
   await page.goto(preview.href);
   await page.getByRole('heading', { name: 'Monolith live privacy lab' }).waitFor();
-  assert.equal(await page.locator('iframe').count(), 0);
+  const startupFrames = await recordFrames('startup');
+  assert(startupFrames.valid); assert.equal(startupFrames.monolith, 0);
   await page.evaluate(async (target) => { try { await fetch(target, { method: 'POST', body: '{}' }); } catch { /* Expected interception. */ } },
     `${observer.origin}/api/observer/read?endpointId=lab_optimism&runId=run-${randomUUID()}`);
   artifact.controls.directDetectionSelfCheck = artifact.controls.ordinaryProtectedTargetRequests === 1;
@@ -193,6 +209,8 @@ try {
     }, previousRun, { timeout: 280_000 });
     await Promise.allSettled(pending);
     if (await page.locator('.live-error').count()) throw new Error('UI_RUN_BLOCKED');
+    const activeFrames = await recordFrames(`${mode}-complete`);
+    assert(activeFrames.valid); assert.equal(activeFrames.monolith, 1);
     const download = page.waitForEvent('download');
     await page.getByRole('button', { name: 'Export measured report' }).click();
     const downloaded = await download;
@@ -265,7 +283,9 @@ try {
   // Navigation destroys the live document; the clearly marked secondary view owns no live driver.
   await page.goto(new URL('/?mode=simulated', preview).href);
   await page.getByText('Simulated data', { exact: true }).waitFor();
-  artifact.shutdown.iframeRemovedOnNavigation = await page.locator('iframe').count() === 0;
+  const navigatedFrames = await recordFrames('navigation');
+  artifact.shutdown.iframeRemovedOnNavigation = navigatedFrames.valid && navigatedFrames.monolith === 0;
+  artifact.shutdown.globalFramesAfterNavigation = navigatedFrames.total;
   assert(artifact.shutdown.iframeRemovedOnNavigation);
   await context.close(); context = null;
   artifact.shutdown.browserContextDestroyed = true;
@@ -279,6 +299,7 @@ try {
   const code = await page?.locator('.live-error .mono').textContent({ timeout: 1000 }).catch(() => null);
   artifact.failedAttempt = { mode, allocation: activeAllocation, diagnostics: latestDiagnostics,
     uiErrorCode: typeof code === 'string' && /^[A-Z_]{1,64}$/.test(code) ? code : null };
+  try { await recordFrames('failed-attempt'); } catch { /* An unavailable page cannot establish frame ownership. */ }
   try {
     await page?.screenshot({ path: join(output, 'blocked.png'), fullPage: true, timeout: 5000 });
     artifact.failedAttempt.screenshot = 'blocked.png';

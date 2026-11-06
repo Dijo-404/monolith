@@ -183,6 +183,7 @@ function WorkerCard({ state }: { state: LiveSnapshot }) {
       <div><dt>Worker observed</dt><dd>{state.worker.observedAt}</dd></div>
     </dl>}
     <p className="card__note card__note--exposed"><strong>Bootstrap is not anonymous.</strong> Two allowlisted specifier lookups happen before the worker exists. They are disclosed separately and excluded from application-read coverage.</p>
+    <p className="card__note">The hosted page and any Cloudflare security bootstrap are ordinary, non-anonymous contacts. They are outside protected RPC coverage.</p>
   </section>;
 }
 
