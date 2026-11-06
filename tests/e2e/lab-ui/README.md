@@ -41,11 +41,13 @@ This checks actual Chromium rendering at desktop/390/320 widths, reduced motion,
 
 ## Actual public workflow
 
-Run only after MN-024 and MN-025 have merged and their evidence has been accepted. Build with the reviewed public `MONOLITH_PUBLIC_OBSERVER_URL`, then serve the production output as above. Set `MONOLITH_LIVE_OBSERVER_ORIGIN` to the same origin, `MONOLITH_LIVE_OUTPUT` to a **new** directory, and the same pinned browser-tool and preview variables:
+For ordinary accepted-stack runs, MN-024 and MN-025 must have merged and their evidence have been accepted. A specifically coordinated pre-acceptance composition may produce evidence at named clean commits; it does not itself accept a dependency. Build with the reviewed public `MONOLITH_PUBLIC_OBSERVER_URL`, then serve the production output as above. Set `MONOLITH_LIVE_OBSERVER_ORIGIN` to the same origin, `MONOLITH_LIVE_OUTPUT` to a **new** directory, and the same pinned browser-tool and preview variables:
 
 ```sh
 node tests/e2e/lab-ui/browser-live.mjs
 ```
+
+[The actual 7 November capture](observed-live/2026-11-07/README.md) passed all four actions through the production preview and public backend at exact clean source/compiled inputs. It preserves all four earlier blocked attempts, sanitized reports, screenshots and hash/redaction bindings. Public frontend deployment QA remains a separate gate.
 
 This runner uses only the actual UI and official worker. It does not inject a fake driver, alter SDK/worker source, mock RPC responses, or replace backend responses. It first proves its ordinary-HTTP interception detects an attempted direct target request, then permits only the explicitly requested fixed synthetic direct controls. On the already-counted leak POST only, it adds test-only forged forwarding/case labels using reserved documentation addresses; it changes neither the body nor wire ID and requires that request still be observed as baseline. It retains only the body hash, ID, count and categories of those labels. It runs private read, comparison, leak and useful repair through the UI; downloads the sanitized reports; and independently correlates visible wire/trace identities with actual diagnostic responses. It requires actual bundle-response bytes matching the verified worker hash, four fresh run allocations, zero ordinary protected-target fallback requests, no page errors through teardown, and browser-context shutdown. It preserves a failed attempt as `BLOCKED` instead of inventing success. Screenshots and reports are bound to exact current source, compiled package/dashboard artifacts, SDK entry and lockfile hashes; the runner requires those inputs remain unchanged during capture.
 
