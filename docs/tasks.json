@@ -1132,5 +1132,49 @@
     ],
     "gate": "MN-017, MN-023, MN-025 and MN-027 merged with accepted evidence, plus this registration merged; task unclaimed until normal fresh claim. MN-027 precedes this task to supply the useful quote and serialize shared lab/observer integration. Coordinate importer, registry/composition, observer and exact adapter-review paths with affected owners before editing. Keep this P2 extension off the core release graph. Root manifests/lockfile, trust-policy domain/reader, shared contracts, scanner rules, old observed-evidence files and publication/runtime operations are not granted by these paths; expand only through explicit coordination. Registration adds planning only, not active implementation ownership or deployment authority.",
     "conditional": false
+  },
+  {
+    "id": "MN-029",
+    "title": "Add an agent-facing privacy regression harness for one example app",
+    "lane": "D",
+    "phase": "integration",
+    "priority": "P2",
+    "estimate": "1–2 days for one supported example and genuine agent repair evidence; split broader adapters or hosted execution",
+    "branch": "feat/mn-029-agent-harness",
+    "depends_on": [
+      "MN-017",
+      "MN-023",
+      "MN-025",
+      "MN-026"
+    ],
+    "paths": [
+      "scripts/agent-harness/**",
+      "examples/agent-harness/**",
+      "tests/e2e/agent-harness/**",
+      "tests/fixtures/agent-harness/**",
+      "docs/agent-harness.md"
+    ],
+    "scope": [
+      "Build a thin repository-local harness for existing coding agents using the installed CLI's noninteractive JSON and public Monolith package exports. Start with one licensed example app, separate from the dashboard, at a pinned source revision and one fixed public useful-read scenario. Reuse approved browser/observer boundaries and configured endpoints; no new CLI command or npm publication is required in this first slice.",
+      "Execute the supported browser scenario with a real verified worker, independently capture app-owned network attempts, analyze the resulting measurements and return versioned structured outcomes. Preserve complete useful-read and attempt accounting, separately disclosed bootstrap, worker state and honest evidence provenance. CLI analysis of caller-supplied JSON alone never authenticates a collector or establishes a live run.",
+      "Expose vetted local diagnostic labels and a reviewed mapping to the fixed example's source locations so an external coding agent can propose a bounded candidate patch. Apply the patch only to declared example application files in a disposable copy. Keep the trusted runner, scenario policy, collector, tests, egress inventory and original evidence outside the candidate patch, with independently checked source hashes before and after each run.",
+      "Rerun the same frozen privacy and functional scenario after the candidate patch, then produce a reviewable diff and redacted evidence bundle. Bound attempts, runtime, resource use and cancellation; clean up browser/process resources. Human review controls any resulting PR or application of the patch to maintained source.",
+      "Document setup, agent invocation, versioned JSON/exit semantics, supported patch patterns and limits. Generic agent orchestration, an embedded model/provider SDK, arbitrary-project scanning, hostile-code sandbox guarantees, MCP integration, hosted execution, signing/payments, telemetry, automatic merge/deployment and changes to existing CLI/report contracts are outside this first task. An optional MCP adapter can be scoped later after the CLI workflow is proven."
+    ],
+    "acceptance": [
+      "One supported example app completes a real useful protected read; an explicit synthetic direct-fetch regression is independently detected even without its transport trace. An external coding agent proposes a candidate repair, and the unchanged privacy plus functional scenario then succeeds with zero unexpected direct egress. A deterministic fixture/codemod alone is labelled separately and does not establish the agent trial.",
+      "All ordinary browser RPC reads and chain-ID probes use the admitted real verified worker or fail closed. A real worker-unavailable case blocks without direct/Node/passthrough fallback. Wrong-chain or expired/untrusted endpoint data cannot be repaired by bypassing admission; direct negative controls require explicit opt-in. Zero reads or blocking all useful reads cannot pass.",
+      "The trusted controller accepts candidate diffs only for declared example application paths and rejects traversal, symlink escapes, protected-file edits and changes that suppress observations or weaken acceptance. Before/after hashes bind the unchanged runner, oracle, policy, tests and inventory; prompt instructions alone do not enforce this boundary. The first slice makes no claim of safely executing arbitrary hostile code.",
+      "Noninteractive versioned JSON and documented fixed exit codes distinguish acceptance failure, invalid input, unavailable execution and cancellation. Local source diagnostics use reviewed static mappings rather than arbitrary report free text. Report-view or browser-launch success cannot substitute for the actual runner/provenance checks and CLI check gate; supplied report labels are not upgraded.",
+      "Each run records source/patch/policy/tool bindings, timestamps, the full read/attempt inventory and independent capture correlation in redacted artifacts, preserving original observations. OBSERVED_LIVE, SIMULATED, UNTESTED and BLOCKED remain distinct. Public output omits raw IPs, credentials, private wallet/order payloads and stable user identifiers.",
+      "Focused checks cover detected bypass, useful repair, blocked worker, tampered policy/evidence, forbidden patches, empty/incomplete capture, timeout/cancellation and resource cleanup. Reproducible instructions work for a fresh local checkout using the supported example and available approved services; the existing CLI/TUI behavior and core checks remain valid."
+    ],
+    "evidence": [
+      "Exact supported setup, current workspace checks and focused runner/patch-boundary/CLI/browser test commands with actual results",
+      "Actual useful protected read, independently detected injected bypass, genuine external-agent candidate repair, unchanged passing rerun and worker-unavailable evidence; synthetic fixtures identified separately",
+      "Pinned example provenance/license, reviewed local diagnostic contract, complete source/patch/policy/capture bindings, redacted diff/evidence artifacts and documented limitations"
+    ],
+    "gate": "MN-017, MN-023, MN-025 and MN-026 merged with accepted evidence, plus this registration merged; task unclaimed until a normal fresh claim. Keep this P2 extension outside MN-017's required graph; MN-027/MN-028 are independent extensions, not prerequisites. The first slice owns only its new runner/example/test/documentation paths. Coordinate any needed existing browser-runner extraction, CLI integration, shared contract, egress adapter/inventory or root manifest/lockfile change on the affected issues and update scope before editing; no ownership transfers or policy exemptions are implied. Registration adds planned work only, not harness implementation, model/hosting spend, package publication, source publication, deployment or merge authority.",
+    "conditional": false
   }
 ]
