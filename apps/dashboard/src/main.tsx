@@ -1,6 +1,7 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { LabApp } from './app/LabApp.js';
+import { LiveLabApp } from './features/lab/LiveLabApp.js';
 import { parsePublicEnv } from './config/public-env.js';
 import './styles/lab.css';
 
@@ -15,6 +16,7 @@ const config = parsePublicEnv({
 
 createRoot(root).render(
   <StrictMode>
-    <LabApp observerUrl={config.observerUrl} />
+    {new URLSearchParams(location.search).get('mode') === 'simulated'
+      ? <LabApp observerUrl={config.observerUrl} /> : <LiveLabApp observerUrl={config.observerUrl} />}
   </StrictMode>,
 );
