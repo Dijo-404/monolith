@@ -1,0 +1,11 @@
+--- leak/widget-fixture.json
++++ repair/widget-fixture.json
+@@ -5,7 +5,7 @@
+   "chainId": "10",
+   "method": "eth_getBalance",
+   "privacyRequired": true,
+-  "route": "direct-debug",
++  "route": "anon-nym",
+   "scenarioId": "monolith.synthetic-balance-widget.v1",
+   "seed": "monolith-zero-address-balance-v1"
+ }
