@@ -102,3 +102,10 @@ This faults the hosted worker document in a fresh browser context, requires a
 guard self-check, and captures desktop/mobile/fallback screenshots. It supplies
 no mock SDK or RPC response. Its artifact labels the injected fault explicitly;
 normal worker execution and source comparison use the separate live UI runner.
+
+The runner hash-binds its frame policy and records coarse frame inventories.
+Cleanup requires zero Monolith frames with the exact owned title/source/hidden
+attributes. At most one positively recognized hosting challenge frame may remain;
+unknown, duplicate, unreadable or merely hidden impostor frames fail. The hosting
+exception requires the separately pinned document-addition policy above. These
+records contain booleans/counts, without challenge IDs, timestamps or cookies.
