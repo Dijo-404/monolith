@@ -31,6 +31,8 @@ git status --short
 
 Run this from the intended source worktree. Confirm the two commit IDs match; otherwise stop and check out the reviewed commit in the clone before validation. Use Node 24.22.2 and pnpm 12.18.0. The offline package store must already contain the lockfile's pinned packages. Missing cached dependencies are an installation blocker, not permission to report an offline PASS after a network download.
 
+When the clone is on another filesystem, pnpm may select a different, empty store. Keep the failed offline result and explicitly select the already populated store with copy imports before retrying. For example, on this validation host the command is `pnpm install --frozen-lockfile --offline --store-dir /home/dj/.local/share/pnpm/store --package-import-method copy`. Use the actual populated store on another host; this option does not download missing packages.
+
 No `.env`, signer, Arkiv access key, Whitechain account or live observer service is required for these commands. Do not copy credentials or untracked runtime files into the clone. `pnpm check` covers the workspace lint/type/test/build commands; run the dedicated exporter type/test commands as well because the root Vitest pattern excludes `scripts/`.
 
 The tests use temporary synthetic inputs. They must preserve the `SIMULATED` label, verify original-byte export and reject unsafe paths, symlinks, unexpected fields, label/hash/identity/time mismatches, sensitive content and invalid output destinations. No test output is production release evidence. See [the policy commands](evidence-policy.md#commands) for verify-only and local-export usage.
