@@ -1,0 +1,228 @@
+{
+  "evidence": "SIMULATED",
+  "seed": "mn012-regression-001",
+  "passed": false,
+  "generatedAt": "2026-11-06T16:31:32.703Z",
+  "cases": [
+    {
+      "mode": "leak",
+      "evidence": "SIMULATED",
+      "seed": "mn012-regression-001",
+      "privacyPass": false,
+      "functionalPass": true,
+      "gatePassed": false,
+      "unexpectedDirectRequests": 1,
+      "unparsedRequests": 0,
+      "captureIssues": [],
+      "requestsBeyondCaptureLimit": 0,
+      "report": {
+        "schemaVersion": 1,
+        "runId": "public_mn012_fixture",
+        "evidence": "SIMULATED",
+        "eligibleReads": 3,
+        "protectedReads": 2,
+        "successfulReads": 3,
+        "protectedCoverage": 0.6666666666666666,
+        "findings": [
+          {
+            "code": "DIRECT_BYPASS",
+            "readId": "read-000002",
+            "callsite": "fixture.receipt",
+            "message": "A privacy-required read used an ordinary direct RPC route."
+          },
+          {
+            "code": "MISSING_TRACE",
+            "readId": "read-000002",
+            "callsite": "fixture.receipt",
+            "message": "A measured attempt has no matching transport trace."
+          }
+        ],
+        "scope": {
+          "rpcOrigins": [
+            "https://bootstrap.monolith.example",
+            "https://rpc.monolith.example"
+          ],
+          "scenarios": [
+            "Monolith fixture:software regression"
+          ],
+          "bootstrapExclusions": [
+            "Exact fixture specifier lookup; non-anonymous"
+          ]
+        }
+      },
+      "summary": {
+        "application": "Monolith fixture",
+        "completionRate": 1,
+        "functionalAcceptance": "unresolved",
+        "latency": [
+          {
+            "endpointId": "endpoint-000001",
+            "chainId": "1",
+            "method": "eth_chainId",
+            "route": "anon-nym",
+            "sampleCount": 1,
+            "successfulSamples": 1,
+            "p50Ms": 1,
+            "p95Ms": 1
+          },
+          {
+            "endpointId": "endpoint-000001",
+            "chainId": "1",
+            "method": "eth_getBalance",
+            "route": "anon-nym",
+            "sampleCount": 1,
+            "successfulSamples": 1,
+            "p50Ms": 1,
+            "p95Ms": 1
+          },
+          {
+            "endpointId": "endpoint-000001",
+            "chainId": "1",
+            "method": "eth_getTransactionReceipt",
+            "route": "direct-debug",
+            "sampleCount": 1,
+            "successfulSamples": 1,
+            "p50Ms": 1.0870000114664435,
+            "p95Ms": 1.0870000114664435
+          }
+        ]
+      },
+      "networkCaptures": [
+        {
+          "kind": "bootstrap",
+          "method": "eth_call",
+          "completed": true,
+          "status": 200,
+          "source": {
+            "file": "main.ts",
+            "line": 32,
+            "column": 25,
+            "function": "bootstrapFixture"
+          }
+        },
+        {
+          "kind": "direct",
+          "method": "eth_getTransactionReceipt",
+          "completed": true,
+          "status": 200,
+          "source": {
+            "file": "leak-widget.ts",
+            "line": 3,
+            "column": 25,
+            "function": "leakingReceipt"
+          }
+        }
+      ],
+      "violations": [
+        {
+          "method": "eth_getTransactionReceipt",
+          "callsite": {
+            "file": "leak-widget.ts",
+            "line": 3,
+            "column": 25,
+            "function": "leakingReceipt"
+          },
+          "seed": "mn012-regression-001"
+        }
+      ],
+      "scope": "Ordinary Chromium page HTTP at the two configured fixture RPC origins. Controlled fixture driver; no live worker/WebRTC/wallet/extension claim."
+    }
+  ],
+  "sourceHashes": {
+    ".node-version": "9185b9f67843cabfa8054f65ce47ce0b52036b0bfe07ae5a6b834d97cc127140",
+    "package.json": "c158c7ef05c9156de189606cf1a5c4a748ccfdba2c72409c6b8f985c92c74023",
+    "packages/privacy-analyzer/dist/analyze.d.ts": "1f1b8ee02e09c2d71c5bd8ad89819a5d3d52ae795df18414f1d04ccf70ee5694",
+    "packages/privacy-analyzer/dist/analyze.js": "87221619833c672b4729817660cc39602ecc301b57a6bc7bbfd6f3494cbe8b8f",
+    "packages/privacy-analyzer/dist/index.d.ts": "7e99bb5cdac11b8bb87fb850732b690b9d703d82426707259626860cf7b1ef5f",
+    "packages/privacy-analyzer/dist/index.js": "6ff105610a1cc15cf0e4d74444d4066c730bb3a996ad75eee8d40f30c36ac311",
+    "packages/privacy-analyzer/dist/types.d.ts": "6f5c1c828455c54fa6863f8b5781aca4c0e5cad67a4d43a7db9cd529dbd71ee9",
+    "packages/privacy-analyzer/dist/types.js": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881",
+    "packages/privacy-analyzer/dist/validation.d.ts": "cbed0d689c3bf48c991f680434d082594b111704111a67f602d3f8b7ba501f3d",
+    "packages/privacy-analyzer/dist/validation.js": "3d6e944e537fe80fa10c13c7f2069fd7b6707bb8a102b283adb6b47560a1cf50",
+    "packages/privacy-analyzer/package.json": "ed1fa89cdb3f6c824fcf0b69eb59049308977db0c14c64353ce1f0cef95e81ed",
+    "packages/privacy-analyzer/src/analyze.ts": "8a07d1706d6910011a87a66cef01d56423af837cb98416bc70ad04685fb95d14",
+    "packages/privacy-analyzer/src/index.ts": "ff643e37950e164157a3d436d25dc3426464ae5737a9fa221e5801637d5b248f",
+    "packages/privacy-analyzer/src/types.ts": "384f7fa35b31955bda2cceb9f6c185922230126be7493ec7e2565b850e157d80",
+    "packages/privacy-analyzer/src/validation.ts": "a451c9abbd4e0eadd2822622560b082c7000aa06ba8fb405257b0aef5daf4532",
+    "packages/shared/dist/errors.d.ts": "c6d37cb082fe64fe05c50a676f872504f1eed41d7393bfdb46a8fcbc6dd2e854",
+    "packages/shared/dist/errors.js": "75613d3a466c17efe0baa7d475cc970d44e4e85e32c00832c4a6e794d1fafe3a",
+    "packages/shared/dist/evidence.d.ts": "d91f6acfaeeb8b73fa4947dd6804342d7f350eca33c399b6b16990300c42c350",
+    "packages/shared/dist/evidence.js": "4d0139e1af30a657512a68288c34bbac9384820cd05c773b83b4f22facb4cdd3",
+    "packages/shared/dist/index.d.ts": "1dc6846a228aec3a98867bd7026d2299d343ddee6c564fe08bdaa939127bf3c1",
+    "packages/shared/dist/index.js": "39998d7079cb0bb342c5c6a9fb12492bd46e44680ae0e272e1fd943db58912c5",
+    "packages/shared/dist/observer.d.ts": "94a524391e02a06fb02df8366e1c53e128336828391fd53a6029c470c41e7d50",
+    "packages/shared/dist/observer.js": "f62d974b571f35f79c7ae8617b58632e342115cfa1bf2cc59aa3eca0086bac39",
+    "packages/shared/dist/payment.d.ts": "e729d05ed171ff0491afd15bb3cd3b5a266517d7a8b7ba4520f63024473a219e",
+    "packages/shared/dist/payment.js": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881",
+    "packages/shared/dist/primitives.d.ts": "f1d961d5e452a9a7e09843d97c928a62801b20dd4085f084def0a58a7e5575df",
+    "packages/shared/dist/primitives.js": "3256ed2dfbfaacc6f5c6f211d59a468df1191c6dafda9b9131209e8d8d702066",
+    "packages/shared/dist/registry.d.ts": "2e7b3f9df2c411617a64109ae568cf5686d6ebfd4892bc99c6e3bc7dc905d6a2",
+    "packages/shared/dist/registry.js": "4f1bbc750e74c63d6cdb2d1e38ff45a1f7b9b117d05acd84d8e2502172e917d4",
+    "packages/shared/dist/report.d.ts": "bd0449a42ac781472a159c3dc8efb6853c6343e2cb685dccefe14d3265c2e695",
+    "packages/shared/dist/report.js": "c2f14ebd9d65b22181806868fcff9b7e7237bb6836c94bc8af1157c3a5a7de1e",
+    "packages/shared/dist/rpc.d.ts": "30ad0667713881e6843323d5c6774d73fa2755c68092887dfbbc3c7a8dd050d3",
+    "packages/shared/dist/rpc.js": "fc668598722144e4c691bf8cb88e0b548c57885ac2bec2d5a3fc75900723f93a",
+    "packages/shared/dist/transport.d.ts": "6e9e04881027fc74365af0164a70d6b7f7c4ccd8c974819f03d95ea9ab509cb9",
+    "packages/shared/dist/transport.js": "17e2698dad1daf0d5bdf105d633c72163f39a971e4e24953828de09ae3675ef6",
+    "packages/shared/package.json": "33d66246d3d06435c922a6cfe10f6ad9a3922d8738d51b5d5aba433672837fbf",
+    "packages/shared/src/errors.ts": "973b400706d57af5eced5d9a0128d9beb040ae9e650f81751e7526404940d68b",
+    "packages/shared/src/evidence.ts": "c757c4c3f528fde7256300e39d76ae315e7f057b238d74ce374c2766ac4a4f4a",
+    "packages/shared/src/index.ts": "0cd9e827a3a7bed3efffdbaef7db7d410793298e10610e64c32d1a17261acbb0",
+    "packages/shared/src/observer.ts": "02f986594b59a423fe22a0639e3d6089548c3ed63dc9729e316e89d7dfe7acd2",
+    "packages/shared/src/payment.ts": "50d44c0e6f87afa59d0a4b989b0de4272f2d26ef8f26a30095d75b8201b59b88",
+    "packages/shared/src/primitives.ts": "01659721028e687f20e856ad09eb8964f7f098fc3cf271843f64ccd5f5d84cdc",
+    "packages/shared/src/registry.ts": "58a5605b6b05f45afa202fd999b71ff05651d9c54517308bfbcf8d27cf7fdde1",
+    "packages/shared/src/report.ts": "a21b73f81d9e76d6020d3de7f6b10fa65fbe8cb20005634f5ec9e34f4f96001b",
+    "packages/shared/src/rpc.ts": "bba2f58302254b1463469e4dbe12d0704cf2a5afb6a9dc1862a98d899bdebbd4",
+    "packages/shared/src/transport.ts": "c87baaf8c74efc2c9bc7969c2328b957dfa24dc188d60d6b21a4c0c7b5e494d4",
+    "packages/transport/dist/adapters/browser/direct-debug.d.ts": "e1dc0622734229b1ba3bbc22401d8961fb29d69e0553526af46ff73c60208dd7",
+    "packages/transport/dist/adapters/browser/direct-debug.js": "a474b237a2da149b41dec3663fc138db5b2b706ef2d73ce7fc4ed22704b5592c",
+    "packages/transport/dist/adapters/browser/driver.d.ts": "3696d1a7a8897a74c528bc1aa5be9110c0cd5abdc5717765aaf9ddf06d11c4d3",
+    "packages/transport/dist/adapters/browser/driver.js": "2ab4467bd1d98d4611a45bd3c4af921e2156f60873770d5e905187d041251cc9",
+    "packages/transport/dist/adapters/browser/host.d.ts": "6324b081eecaa9d4d2cee92c315f6e792d13fed82f9362e179dce418a7478329",
+    "packages/transport/dist/adapters/browser/host.js": "3b63ea9c2dea8df0b161c643cdb1228e9b60c139049c8f084653694666b780b5",
+    "packages/transport/dist/adapters/browser/io.d.ts": "4bed536dde0089307dccd30af9c2ae138ac37d6290fd7ffd01014e968cff1726",
+    "packages/transport/dist/adapters/browser/io.js": "a8b0c29322eb1efccd71b792562129b5d5f33c03765c96ab477082f5e86a5037",
+    "packages/transport/dist/adapters/browser/protocol.d.ts": "846869af9a62558013572918609a1e08deae78a3a53428687e25efcf1468a0c2",
+    "packages/transport/dist/adapters/browser/protocol.js": "1ba8d868f92b96f879d8f9a920b3919a0929ca40e3a3f0610e384cf204463841",
+    "packages/transport/dist/application/transport.d.ts": "a306de1880ae35157669ee07c57c002f332141b70fe3211871547a56c0a523d8",
+    "packages/transport/dist/application/transport.js": "8a2efba32409c8f7e8b365ef2f13c3c6f3c2182ce6afe773bcd9c9734edeff82",
+    "packages/transport/dist/browser.d.ts": "3305fb5b4b877648d58a5c6181b9d0f1408ec3639c135221ed01aa3adce3fc9a",
+    "packages/transport/dist/browser.js": "8048ead49bca5ece0fbde32b839f079436b3010e3b4af00628abaaf9b20f850f",
+    "packages/transport/dist/domain/configuration.d.ts": "67a1fd316f09e137f1d31596871c7b32537252d7792b0545217ef0d8615d654b",
+    "packages/transport/dist/domain/configuration.js": "637f615a8cc4548ed3b0e68000a7000dbd7085c1f2762df1f5414ed82cca7d1f",
+    "packages/transport/dist/domain/results.d.ts": "464f5ed092408356378666d18df93f467a6020bde03576e9fb8ab2edd0612adc",
+    "packages/transport/dist/domain/results.js": "7cf3b443a07ea65aa256302372e5041a15e945a9d8ab8a29c0c3a38de68290bb",
+    "packages/transport/dist/index.d.ts": "8222424e6e7c9db6f65771794b814c84e5cf175bf9614b426ebfe8919e0b519b",
+    "packages/transport/dist/index.js": "e251288f91e284c281338250ad818e4444d28eaa7d37de314cf5c285deb4b1c3",
+    "packages/transport/dist/ports/driver.d.ts": "d9d8bc7246b1d84576ab0e9536da49fede6eecfd582ff39bf257d4890a71873e",
+    "packages/transport/dist/ports/driver.js": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881",
+    "packages/transport/package.json": "029e350db714c011ccbaf6966e8e396b212a05635013fa39ff3d28dc2ab16af7",
+    "packages/transport/src/adapters/browser/direct-debug.ts": "ccab431652d18ff2f235ebc9668ccc5cb56ef2219c454e1b6c60d9875d5d8c0b",
+    "packages/transport/src/adapters/browser/driver.ts": "7b3c72865942c98bfb2df48eaecf906b7d813e8530ede13fa230b456a0d5494a",
+    "packages/transport/src/adapters/browser/host.ts": "becfc9ebc5113e6586c86423bf6b52d6426ff7c0134ee3c419bf2ffe6d66f677",
+    "packages/transport/src/adapters/browser/io.ts": "e08e8f01c6c0ff03d6c1afc232e709b315c7f4cf719affdae73c3c2f18788eb8",
+    "packages/transport/src/adapters/browser/protocol.ts": "b19a7571f18e2bb8e127d50760870f609eb7de8f238dd720c121e54a5e1bb103",
+    "packages/transport/src/application/transport.ts": "2f9fd82028697aed15c59966884951f149216c721681a8acd347ac06435b3073",
+    "packages/transport/src/browser.ts": "a21cfc7ecc9172e348f97cc678779c7322df5fdadcb237a39e4af3c986ec3990",
+    "packages/transport/src/domain/configuration.ts": "a55d2bb7034ff636bd4bf207818f189e9d43d48a79209cf72038da83abe2d293",
+    "packages/transport/src/domain/results.ts": "c5bcbe375c64b35351b078ba53fc4264a8c24958c9c7968adc513643c6a805e3",
+    "packages/transport/src/index.ts": "25716d7046c441665624001d631cb3d9d945aa87c84bcfed1241b04f0fec5bd6",
+    "packages/transport/src/ports/driver.ts": "83894bfd36c16b21c106bf4183ebfbb5d9c4e7bdae4529ad7568c83b4621cc74",
+    "pnpm-lock.yaml": "524520d2960a9baf77dca1d0512a34543cb9d83a32b7cfebc27db42a806f8224",
+    "tests/e2e/privacy/run.mjs": "5ebf8d549e13cace83c1e3d0448f353be5fb0c2a3cb65827dd7bbba7f66b2454",
+    "tests/fixtures/leak-widget/leak-widget.ts": "969df4258ec7d32ba0c67145027574ae8cf09dd59d2f8b349a336895e947245e",
+    "tests/fixtures/leak-widget/main.ts": "9ea674e2f099e7a325860d418643bac6d21ed69c1860cec764dd1e36d99e3155",
+    "tests/fixtures/leak-widget/manifest.json": "af1208549d0a673c787ebfc9a171878bb93d54a6b38944cb06c9f6fec46769e4",
+    "tests/privacy/egress/collector.mjs": "da28cc1c8e87f11234766838107db0b0a5b3f300392306a8946633a2f7aa228c",
+    "tests/privacy/egress/reviewed-adapters.json": "0e37f50167b0550f4b3faa6c4dfea86baba5ed87497761f0158364043478415b",
+    "tests/privacy/egress/static.mjs": "33cdd6bbd17de0e3e76f9fa41e4945d1ffc6536c36c8ff1c8247b14c26df21e6"
+  },
+  "sourceUnchangedAfterRun": true,
+  "externalRequests": [],
+  "pageErrors": [],
+  "limitations": [
+    "The test-owned driver returns authored responses. This is browser egress and transport policy regression evidence, not live anonymity.",
+    "CDP captures ordinary Chromium page requests at configured origins; worker WebRTC/KPS, wallets, extensions and uninstrumented apps are outside scope."
+  ]
+}
