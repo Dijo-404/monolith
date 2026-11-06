@@ -27,7 +27,9 @@ async function fixture() {
   const calls = [];
   const request = async (url, options) => {
     calls.push({ url, options });
-    return new Response(files.get(new URL(url).pathname), { status: 200 });
+    const path = new URL(url).pathname;
+    const mime = path === '/' || path.endsWith('.html') ? 'text/html' : path.endsWith('.js') ? 'text/javascript' : 'text/plain';
+    return new Response(files.get(path === '/' ? '/index.html' : path), { status: 200, headers: { 'content-type': mime } });
   };
   return { root, files, provenance, calls, request };
 }
@@ -36,7 +38,8 @@ describe('deployed static provenance verification', () => {
   it('checks every locally bound byte and distinct worker module with bounded, credential-free GETs', async () => {
     const f = await fixture();
     const result = await verifyStatic({ origin: 'https://monolith.host', snapshot: f.root, request: f.request });
-    expect(result.passed).toBe(true); expect(result.files).toHaveLength(5);
+    expect(result.passed).toBe(true); expect(result.files).toHaveLength(6);
+    expect(result.rootDocumentMatchesIndex).toBe(true);
     expect(result.workerHost.moduleVerified).toBe(true);
     expect(f.calls.every(({ options }) => options.redirect === 'error' && options.credentials === 'omit' && options.signal)).toBe(true);
   });
@@ -57,6 +60,29 @@ describe('deployed static provenance verification', () => {
     await rm(join(f.root, 'dist/assets'), { recursive: true });
     await symlink(tmpdir(), join(f.root, 'dist/assets'));
     await expect(verifyStatic({ origin: 'https://monolith.host', snapshot: f.root, request: f.request })).rejects.toThrow(/symlink/);
+    expect(f.calls).toHaveLength(0);
+  });
+  it('rejects a wrong root document even when index.html is correct', async () => {
+    const f = await fixture();
+    const request = (url, options) => new URL(url).pathname === '/'
+      ? new Response('<html>login</html>', { headers: { 'content-type': 'text/html' } }) : f.request(url, options);
+    await expect(verifyStatic({ origin: 'https://monolith.host', snapshot: f.root, request })).rejects.toThrow(/Published (?:size|bytes) differs/);
+  });
+  it('rejects non-executable worker HTML and JavaScript MIME types', async () => {
+    const f = await fixture();
+    for (const target of ['/assets/worker-host.html', '/assets/host.js']) {
+      const request = (url, options) => new URL(url).pathname === target
+        ? new Response(f.files.get(target), { headers: { 'content-type': 'text/plain' } }) : f.request(url, options);
+      await expect(verifyStatic({ origin: 'https://monolith.host', snapshot: f.root, request })).rejects.toThrow(/MIME required/);
+    }
+  });
+  it('rejects nonregular or oversized local artifacts before reading or contacting the site', async () => {
+    const f = await fixture();
+    const artifact = join(f.root, 'dist/assets/app.js');
+    await writeFile(artifact, 'x'.repeat(100_000));
+    await expect(verifyStatic({ origin: 'https://monolith.host', snapshot: f.root, request: f.request })).rejects.toThrow(/Regular artifact/);
+    await rm(artifact); await mkdir(artifact);
+    await expect(verifyStatic({ origin: 'https://monolith.host', snapshot: f.root, request: f.request })).rejects.toThrow(/Regular artifact/);
     expect(f.calls).toHaveLength(0);
   });
 });

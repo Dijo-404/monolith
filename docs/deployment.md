@@ -36,6 +36,6 @@ Use the Sites source workflow against that isolated artifact-only snapshot, pers
 
 ## Publication identity check
 
-`scripts/deploy/verify-static.mjs` compares every public distribution file with the retained snapshot's exact bytes, size and SHA-256. It also rejects a worker-host URL that resolves to the application shell, and requires the worker host's local module to be among the verified assets. Its four boundary tests and the eight packager tests passed with pinned tools; these are software checks until the command is run against an actual publication.
+`scripts/deploy/verify-static.mjs` compares every public distribution file and the root document with the retained snapshot's exact bytes, size and SHA-256. It checks executable content types, rejects a worker-host URL that resolves to the application shell, and requires the worker host's local module to be among the verified assets. Its seven boundary tests and the eight packager tests passed with pinned tools; these are software checks until the command is run against an actual publication.
 
 After that byte check, execute the production live UI workflow against the published HTTPS origin. Only the deployed browser can establish whether the platform permits the nested worker, bootstrap, blob/WASM/WebRTC runtime and useful protected reads. Record actual failures rather than treating successful static delivery as runtime acceptance.

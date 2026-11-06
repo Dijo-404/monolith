@@ -31,9 +31,14 @@ export async function verifyStatic({ origin, snapshot, request = fetch }) {
     totalBytes += row.bytes; assert(totalBytes <= 64 * 1024 * 1024, 'Oversized distribution.');
     // Check every parent too: a locally changed snapshot cannot redirect the verifier outside it.
     let parent = snapshot;
-    for (const part of row.path.split('/')) {
+    const parts = row.path.split('/');
+    for (const [index, part] of parts.entries()) {
       parent = join(parent, part);
-      assert(!(await lstat(parent)).isSymbolicLink(), 'Snapshot symlink rejected.');
+      const info = await lstat(parent);
+      assert(!info.isSymbolicLink(), 'Snapshot symlink rejected.');
+      if (index === parts.length - 1) {
+        assert(info.isFile() && info.size === row.bytes, 'Regular artifact with bound size required.');
+      } else assert(info.isDirectory(), 'Artifact parents must be directories.');
     }
     const local = await readFile(join(snapshot, row.path));
     assert.equal(local.length, row.bytes); assert.equal(sha(local), row.sha256);
@@ -44,15 +49,23 @@ export async function verifyStatic({ origin, snapshot, request = fetch }) {
     schemaVersion: 1, evidence: 'OBSERVED_LIVE', passed: false,
     generatedAt: null, siteOrigin: site, sourceCommit: provenance.source.commit,
     snapshotProvenanceSha256: sha(manifestBytes), files: [], workerHost: null,
+    rootDocumentMatchesIndex: false,
     limitations: ['Static byte identity only; browser worker execution and privacy acceptance require separate observations.'],
   };
   const bodies = new Map();
-  for (const row of provenance.artifacts) {
-    const path = row.path.slice('dist'.length);
+  const targets = provenance.artifacts.map((row) => ({ ...row, servedPath: row.path.slice('dist'.length) }));
+  targets.push({ ...provenance.artifacts.find((row) => row.path === 'dist/index.html'), servedPath: '/' });
+  for (const row of targets) {
+    const path = row.servedPath;
     const response = await request(`${site}${path}`, {
       redirect: 'error', credentials: 'omit', cache: 'no-store', signal: AbortSignal.timeout(30_000),
     });
     assert.equal(response.status, 200, `Unexpected status for ${path}.`);
+    const mime = (response.headers.get('content-type') ?? '').split(';')[0].trim().toLowerCase();
+    if (path === '/' || path.endsWith('.html')) assert.equal(mime, 'text/html', 'HTML MIME required.');
+    if (path.endsWith('.js') || path.endsWith('.mjs')) assert(['application/javascript', 'text/javascript'].includes(mime), 'JavaScript MIME required.');
+    if (path.endsWith('.wasm')) assert.equal(mime, 'application/wasm', 'WASM MIME required.');
+    if (path.endsWith('.css')) assert.equal(mime, 'text/css', 'CSS MIME required.');
     const contentLength = response.headers.get('content-length');
     if (contentLength) assert(Number(contentLength) <= 24 * 1024 * 1024, 'Oversized response.');
     const chunks = []; let bytes = 0;
@@ -62,7 +75,7 @@ export async function verifyStatic({ origin, snapshot, request = fetch }) {
     const body = Buffer.concat(chunks);
     assert.equal(body.length, row.bytes, `Published size differs for ${path}.`);
     assert.equal(sha(body), row.sha256, `Published bytes differ for ${path}.`);
-    result.files.push({ path, bytes: body.length, sha256: row.sha256, status: response.status });
+    result.files.push({ path, bytes: body.length, sha256: row.sha256, status: response.status, mime });
     bodies.set(path, body);
   }
   const worker = bodies.get('/assets/worker-host.html').toString('utf8');
@@ -71,6 +84,7 @@ export async function verifyStatic({ origin, snapshot, request = fetch }) {
   const module = /<script\b[^>]*type="module"[^>]*src="([^"]+)"/.exec(worker)?.[1];
   assert(module?.startsWith('/assets/') && bodies.has(module), 'Worker host must load a verified local module.');
   result.workerHost = { path: '/assets/worker-host.html', distinctFromIndex: true, module, moduleVerified: true };
+  result.rootDocumentMatchesIndex = true;
   result.passed = true; result.generatedAt = new Date().toISOString();
   return result;
 }
