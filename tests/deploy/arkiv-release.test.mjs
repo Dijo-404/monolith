@@ -4,11 +4,20 @@ import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
+import { fileURLToPath } from 'node:url';
 import { createSwarmRelease } from '@monolith/registry/swarm-release';
 import { parseReleaseArguments, runSwarmRelease } from '../../scripts/deploy/arkiv-release.ts';
 
+vi.mock('node:child_process', async (importOriginal) => ({
+  ...await importOriginal(), execFileSync: vi.fn(),
+}));
+
+const { execFileSync: realExecFileSync } = await vi.importActual('node:child_process');
 const directories = [];
-const sourceCommit = execFileSync('git', ['rev-parse', 'origin/main'], { encoding: 'utf8' }).trim();
+const checkoutRoot = fileURLToPath(new URL('../../', import.meta.url)).replace(/\/$/, '');
+let gitRepository;
+let sourceCommit;
+let descriptor;
 const publisher = `0x${'1'.repeat(40)}`;
 const entityKey = `0x${'2'.repeat(64)}`;
 const sentinel = 'SYNTHETIC_PRIVATE_VALUE_NOT_A_REAL_SIGNING_KEY';
@@ -16,8 +25,19 @@ const now = '2026-11-07T01:00:00.000Z';
 const files = ['index.html', 'assets/worker-host.html', 'assets/THIRD-PARTY-NOTICES.txt'].map((path) => ({
   path, bytes: 1, sha256: createHash('sha256').update(path).digest('hex'),
 }));
-const descriptor = createSwarmRelease({ sourceCommit, swarmReference: 'a'.repeat(64),
-  publishedAt: now, expiresAt: '2026-11-08T01:00:00.000Z', files });
+
+// Real Git operates only in a disposable repository, without inherited Git configuration or hooks.
+function fixtureGit(args, options = {}) {
+  return realExecFileSync('git', ['-c', 'core.hooksPath=/dev/null', '-c', 'commit.gpgSign=false', ...args], {
+    encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'], timeout: 5_000,
+    ...options, cwd: gitRepository,
+    env: { PATH: process.env.PATH, GIT_CONFIG_NOSYSTEM: '1', GIT_CONFIG_GLOBAL: '/dev/null',
+      GIT_CONFIG_SYSTEM: '/dev/null', GIT_TERMINAL_PROMPT: '0',
+      GIT_AUTHOR_NAME: 'Monolith test fixture', GIT_AUTHOR_EMAIL: 'fixture@example.invalid',
+      GIT_COMMITTER_NAME: 'Monolith test fixture', GIT_COMMITTER_EMAIL: 'fixture@example.invalid',
+      GIT_AUTHOR_DATE: now, GIT_COMMITTER_DATE: now },
+  });
+}
 
 async function fixture() {
   const directory = await mkdtemp(join(tmpdir(), 'monolith-release-cli-test-'));
@@ -46,7 +66,28 @@ function publishArgs(f, output = 'publish') {
     '--state', join(f.directory, 'state'), '--out', join(f.directory, output)];
 }
 
-beforeEach(() => { vi.stubEnv('DEBUG', ''); });
+function previewArgs(f, commit = sourceCommit, output = 'preview') {
+  return ['preview', '--inventory', f.inventory, '--reference', 'a'.repeat(64),
+    '--source', commit, '--expires-at', descriptor.expiresAt, '--out', join(f.directory, output)];
+}
+
+beforeEach(async () => {
+  vi.stubEnv('DEBUG', '');
+  vi.mocked(execFileSync).mockReset();
+  gitRepository = await mkdtemp(join(tmpdir(), 'monolith-release-git-fixture-'));
+  directories.push(gitRepository);
+  fixtureGit(['init', '--initial-branch=main']);
+  fixtureGit(['commit', '--allow-empty', '-m', 'Accepted fixture source']);
+  sourceCommit = fixtureGit(['rev-parse', 'HEAD']).trim();
+  fixtureGit(['update-ref', 'refs/remotes/origin/main', sourceCommit]);
+  descriptor = createSwarmRelease({ sourceCommit, swarmReference: 'a'.repeat(64),
+    publishedAt: now, expiresAt: '2026-11-08T01:00:00.000Z', files });
+  // Only the production CLI import uses this mock; its source policy still executes real Git.
+  vi.mocked(execFileSync).mockImplementation((command, args, options) => {
+    expect(command).toBe('git'); expect(options.cwd).toBe(checkoutRoot);
+    return fixtureGit(args, options);
+  });
+});
 
 afterEach(async () => {
   vi.unstubAllEnvs();
@@ -56,14 +97,15 @@ afterEach(async () => {
 describe('Swarm release operator boundary (SIMULATED)', () => {
   it('previews the exact inventory and accepted source without reading a signer or making a network call', async () => {
     const f = await fixture(); const dependencies = execution();
-    const result = await runSwarmRelease(['preview', '--inventory', f.inventory, '--reference', 'a'.repeat(64),
-      '--source', sourceCommit, '--expires-at', descriptor.expiresAt, '--out', join(f.directory, 'preview')], dependencies);
+    const result = await runSwarmRelease(previewArgs(f), dependencies);
     expect(result.status).toBe('DESCRIPTOR_PREVIEW_ONLY');
     expect(result.evidence).toBe('UNTESTED');
     expect(result.descriptor).toEqual(descriptor);
     expect(dependencies.loadSigningKey).not.toHaveBeenCalled();
     expect(dependencies.publish).not.toHaveBeenCalled(); expect(dependencies.read).not.toHaveBeenCalled();
     expect(JSON.parse(await readFile(join(f.directory, 'preview/descriptor.json'), 'utf8'))).toEqual(descriptor);
+    expect(execFileSync).toHaveBeenCalledWith('git', ['cat-file', '-t', sourceCommit], expect.any(Object));
+    expect(execFileSync).toHaveBeenCalledWith('git', ['merge-base', '--is-ancestor', sourceCommit, 'origin/main'], expect.any(Object));
   });
 
   it('rejects keys on preview/read, duplicate flags, missing values and relative output before execution', () => {
@@ -160,6 +202,7 @@ describe('Swarm release operator boundary (SIMULATED)', () => {
       expiresAt: descriptor.expiresAt, files })));
     await expect(runSwarmRelease(publishArgs(f), dependencies)).rejects.toThrow();
     expect(dependencies.loadSigningKey).not.toHaveBeenCalled();
+    expect(execFileSync).toHaveBeenCalledWith('git', ['cat-file', '-t', 'f'.repeat(40)], expect.any(Object));
     await mkdir(join(f.directory, 'already'));
     await expect(runSwarmRelease(['read', '--entity', entityKey, '--publisher', publisher,
       '--out', join(f.directory, 'already')], dependencies)).rejects.toThrow();
@@ -167,5 +210,33 @@ describe('Swarm release operator boundary (SIMULATED)', () => {
     await expect(runSwarmRelease(['read', '--entity', entityKey, '--publisher', publisher,
       '--out', join(f.directory, 'debug')], dependencies)).rejects.toThrow('SWARM_RELEASE_FAILED');
     expect(dependencies.loadSigningKey).not.toHaveBeenCalled();
+  });
+
+  it('rejects a real commit outside origin/main ancestry on preview and publish before signing', async () => {
+    const f = await fixture(); const dependencies = execution();
+    fixtureGit(['commit', '--allow-empty', '-m', 'Unaccepted fixture descendant']);
+    const unaccepted = fixtureGit(['rev-parse', 'HEAD']).trim();
+    expect(fixtureGit(['cat-file', '-t', unaccepted]).trim()).toBe('commit');
+    await writeFile(f.inventory, JSON.stringify({ sourceCommit: unaccepted, files }));
+    await writeFile(f.input, JSON.stringify(createSwarmRelease({ sourceCommit: unaccepted,
+      swarmReference: descriptor.swarmReference, publishedAt: descriptor.publishedAt,
+      expiresAt: descriptor.expiresAt, files })));
+    await expect(runSwarmRelease(previewArgs(f, unaccepted), dependencies)).rejects.toThrow('SWARM_RELEASE_FAILED');
+    await expect(runSwarmRelease(publishArgs(f), dependencies)).rejects.toThrow('SWARM_RELEASE_FAILED');
+    expect(execFileSync).toHaveBeenCalledWith('git', ['merge-base', '--is-ancestor', unaccepted, 'origin/main'], expect.any(Object));
+    expect(dependencies.loadSigningKey).not.toHaveBeenCalled();
+    expect(dependencies.publish).not.toHaveBeenCalled(); expect(dependencies.read).not.toHaveBeenCalled();
+  });
+
+  it('fails closed when origin/main is missing even for a valid local commit before signing', async () => {
+    const f = await fixture(); const dependencies = execution();
+    fixtureGit(['update-ref', '-d', 'refs/remotes/origin/main']);
+    expect(fixtureGit(['cat-file', '-t', sourceCommit]).trim()).toBe('commit');
+    await expect(runSwarmRelease(previewArgs(f), dependencies)).rejects.toThrow('SWARM_RELEASE_FAILED');
+    await expect(runSwarmRelease(publishArgs(f), dependencies)).rejects.toThrow('SWARM_RELEASE_FAILED');
+    expect(execFileSync).toHaveBeenCalledTimes(4);
+    expect(execFileSync).toHaveBeenCalledWith('git', ['merge-base', '--is-ancestor', sourceCommit, 'origin/main'], expect.any(Object));
+    expect(dependencies.loadSigningKey).not.toHaveBeenCalled();
+    expect(dependencies.publish).not.toHaveBeenCalled(); expect(dependencies.read).not.toHaveBeenCalled();
   });
 });
