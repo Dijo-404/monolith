@@ -1,4 +1,4 @@
-import type { ErrorCode, EvidenceKind, JsonValue, ObserverLabAllocation, ObserverRun, PrivacyReport, RegistryManifest, RpcTrace, WorkerState } from '@monolith/shared';
+import type { ErrorCode, EvidenceKind, ObserverLabAllocation, ObserverRun, PrivacyReport, RegistryManifest, RpcTrace, WorkerState } from '@monolith/shared';
 import type { WorkerMetadata } from '@monolith/transport/browser';
 import type { PrivacyAnalysis } from '@monolith/privacy-analyzer';
 import type { RegistrySelection } from '../../composition/transport.js';
@@ -20,7 +20,7 @@ export type LiveWireRead = {
   completedAt: string | null;
   durationMs: number;
   success: boolean;
-  result: JsonValue | null;
+  result: string | null;
   trace: RpcTrace | null;
   evidence: EvidenceKind;
 };

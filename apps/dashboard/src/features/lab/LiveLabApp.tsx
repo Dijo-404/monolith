@@ -144,7 +144,7 @@ function Activity({ state }: { state: LiveSnapshot }) {
       <span className="activity__callsite mono" title={read.rpcId}>{short(read.rpcId)}</span>
       <span className="activity__outcome">{read.completedAt ? read.success ? 'Returned' : 'Failed' : 'In flight'}</span>
     </li>)}</ol> : <p className="empty">No blockchain read has been sent. Start a private read to begin.</p>}
-    {balance?.result && <p className="card__note">Returned synthetic balance (wei, hexadecimal): <code className="mono live-wrap" data-testid="live-balance">{short(balance.result, 26)}</code></p>}
+    {balance && typeof balance.result === 'string' && <p className="card__note">Returned synthetic balance (wei, hexadecimal): <code className="mono live-wrap" data-testid="live-balance">{short(balance.result, 26)}</code></p>}
     {state.observedAt && <p className="card__note">Recorded {new Date(state.observedAt).toLocaleTimeString()}. Durations are actual browser round trips, not animation timings.</p>}
     {Boolean(state.correlation?.unmatchedObservations) && <p className="card__note card__note--exposed">
       {state.correlation?.unmatchedObservations} unexpected observer receipt(s) are also counted in the report. The run cannot pass.
