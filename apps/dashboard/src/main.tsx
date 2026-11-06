@@ -1,8 +1,8 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { App } from './App.js';
+import { LabApp } from './app/LabApp.js';
 import { parsePublicEnv } from './config/public-env.js';
-import './styles.css';
+import './styles/lab.css';
 
 const root = document.getElementById('root');
 if (root === null) {
@@ -15,6 +15,6 @@ const config = parsePublicEnv({
 
 createRoot(root).render(
   <StrictMode>
-    <App {...config} />
+    <LabApp observerUrl={config.observerUrl} />
   </StrictMode>,
 );
