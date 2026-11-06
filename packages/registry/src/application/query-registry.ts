@@ -18,12 +18,17 @@ export function createQueryRegistry(options: {
   admission: EndpointAdmission;
   now?: () => string;
   timeoutMs?: number;
+  generationTtlMs?: number;
 }): RegistryQuery {
   const policy = validatePublisherPolicy(options.policy);
   const { reader, hash, admission } = options;
   const now = options.now ?? (() => new Date().toISOString());
   const timeoutMs = options.timeoutMs ?? 10_000;
   if (!Number.isSafeInteger(timeoutMs) || timeoutMs < 1 || timeoutMs > 15_000) throw new Error('Registry limits are invalid.');
+  const generationTtlMs = options.generationTtlMs === undefined ? 30_000 : options.generationTtlMs;
+  if (!Number.isSafeInteger(generationTtlMs) || generationTtlMs < 1 || generationTtlMs > 300_000) {
+    throw new Error('Registry limits are invalid.');
+  }
   const generations = new Map<ChainId, Generation>();
   let inFlight = 0;
 
@@ -87,7 +92,7 @@ export function createQueryRegistry(options: {
     let generation = generations.get(chainId);
     if (!generation || generation.fingerprint !== fingerprint || Date.parse(generation.expiresAt) <= Date.parse(generatedNow)) {
       generation = { fingerprint, generatedAt: generatedNow,
-        expiresAt: new Date(Math.min(Date.parse(generatedNow) + 30_000, endpointDeadline)).toISOString() };
+        expiresAt: new Date(Math.min(Date.parse(generatedNow) + generationTtlMs, endpointDeadline)).toISOString() };
       if (generations.size >= 64 && !generations.has(chainId)) {
         const oldest = generations.keys().next().value;
         if (oldest !== undefined) generations.delete(oldest);
