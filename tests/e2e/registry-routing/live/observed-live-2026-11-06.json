@@ -1,0 +1,444 @@
+{
+  "schemaVersion": 1,
+  "sourceTask": "MN-013",
+  "evidence": "OBSERVED_LIVE",
+  "startedAt": "2026-11-06T15:14:19.889Z",
+  "generatedAt": "2026-11-06T15:14:40.143Z",
+  "reason": "ARKIV_DRIVEN_PROTECTED_READ_VERIFIED",
+  "environment": {
+    "node": "v24.22.2",
+    "browser": "158.0.8127.18",
+    "playwright": "1.65.0",
+    "nobleHashes": "1.8.0",
+    "harness": "0.4.0",
+    "observerSigningEnvironmentInherited": false,
+    "browserSigningEnvironmentInherited": false
+  },
+  "sourceBinding": {
+    "files": {
+      "packages/shared/src/errors.ts": "973b400706d57af5eced5d9a0128d9beb040ae9e650f81751e7526404940d68b",
+      "packages/shared/src/evidence.ts": "c757c4c3f528fde7256300e39d76ae315e7f057b238d74ce374c2766ac4a4f4a",
+      "packages/shared/src/index.ts": "0cd9e827a3a7bed3efffdbaef7db7d410793298e10610e64c32d1a17261acbb0",
+      "packages/shared/src/observer.ts": "02f986594b59a423fe22a0639e3d6089548c3ed63dc9729e316e89d7dfe7acd2",
+      "packages/shared/src/payment.ts": "50d44c0e6f87afa59d0a4b989b0de4272f2d26ef8f26a30095d75b8201b59b88",
+      "packages/shared/src/primitives.ts": "01659721028e687f20e856ad09eb8964f7f098fc3cf271843f64ccd5f5d84cdc",
+      "packages/shared/src/registry.ts": "58a5605b6b05f45afa202fd999b71ff05651d9c54517308bfbcf8d27cf7fdde1",
+      "packages/shared/src/report.ts": "a21b73f81d9e76d6020d3de7f6b10fa65fbe8cb20005634f5ec9e34f4f96001b",
+      "packages/shared/src/rpc.ts": "bba2f58302254b1463469e4dbe12d0704cf2a5afb6a9dc1862a98d899bdebbd4",
+      "packages/shared/src/transport.ts": "c87baaf8c74efc2c9bc7969c2328b957dfa24dc188d60d6b21a4c0c7b5e494d4",
+      "packages/shared/dist/errors.js": "75613d3a466c17efe0baa7d475cc970d44e4e85e32c00832c4a6e794d1fafe3a",
+      "packages/shared/dist/evidence.js": "4d0139e1af30a657512a68288c34bbac9384820cd05c773b83b4f22facb4cdd3",
+      "packages/shared/dist/index.js": "39998d7079cb0bb342c5c6a9fb12492bd46e44680ae0e272e1fd943db58912c5",
+      "packages/shared/dist/observer.js": "f62d974b571f35f79c7ae8617b58632e342115cfa1bf2cc59aa3eca0086bac39",
+      "packages/shared/dist/payment.js": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881",
+      "packages/shared/dist/primitives.js": "3256ed2dfbfaacc6f5c6f211d59a468df1191c6dafda9b9131209e8d8d702066",
+      "packages/shared/dist/registry.js": "4f1bbc750e74c63d6cdb2d1e38ff45a1f7b9b117d05acd84d8e2502172e917d4",
+      "packages/shared/dist/report.js": "c2f14ebd9d65b22181806868fcff9b7e7237bb6836c94bc8af1157c3a5a7de1e",
+      "packages/shared/dist/rpc.js": "fc668598722144e4c691bf8cb88e0b548c57885ac2bec2d5a3fc75900723f93a",
+      "packages/shared/dist/transport.js": "17e2698dad1daf0d5bdf105d633c72163f39a971e4e24953828de09ae3675ef6",
+      "packages/transport/src/adapters/browser/direct-debug.ts": "ccab431652d18ff2f235ebc9668ccc5cb56ef2219c454e1b6c60d9875d5d8c0b",
+      "packages/transport/src/adapters/browser/driver.ts": "7b3c72865942c98bfb2df48eaecf906b7d813e8530ede13fa230b456a0d5494a",
+      "packages/transport/src/adapters/browser/host.ts": "becfc9ebc5113e6586c86423bf6b52d6426ff7c0134ee3c419bf2ffe6d66f677",
+      "packages/transport/src/adapters/browser/io.ts": "e08e8f01c6c0ff03d6c1afc232e709b315c7f4cf719affdae73c3c2f18788eb8",
+      "packages/transport/src/adapters/browser/protocol.ts": "b19a7571f18e2bb8e127d50760870f609eb7de8f238dd720c121e54a5e1bb103",
+      "packages/transport/src/application/transport.ts": "2f9fd82028697aed15c59966884951f149216c721681a8acd347ac06435b3073",
+      "packages/transport/src/browser.ts": "a21cfc7ecc9172e348f97cc678779c7322df5fdadcb237a39e4af3c986ec3990",
+      "packages/transport/src/domain/configuration.ts": "a55d2bb7034ff636bd4bf207818f189e9d43d48a79209cf72038da83abe2d293",
+      "packages/transport/src/domain/results.ts": "c5bcbe375c64b35351b078ba53fc4264a8c24958c9c7968adc513643c6a805e3",
+      "packages/transport/src/index.ts": "25716d7046c441665624001d631cb3d9d945aa87c84bcfed1241b04f0fec5bd6",
+      "packages/transport/src/ports/driver.ts": "83894bfd36c16b21c106bf4183ebfbb5d9c4e7bdae4529ad7568c83b4621cc74",
+      "packages/transport/dist/adapters/browser/direct-debug.js": "a474b237a2da149b41dec3663fc138db5b2b706ef2d73ce7fc4ed22704b5592c",
+      "packages/transport/dist/adapters/browser/driver.js": "2ab4467bd1d98d4611a45bd3c4af921e2156f60873770d5e905187d041251cc9",
+      "packages/transport/dist/adapters/browser/host.js": "3b63ea9c2dea8df0b161c643cdb1228e9b60c139049c8f084653694666b780b5",
+      "packages/transport/dist/adapters/browser/io.js": "a8b0c29322eb1efccd71b792562129b5d5f33c03765c96ab477082f5e86a5037",
+      "packages/transport/dist/adapters/browser/protocol.js": "1ba8d868f92b96f879d8f9a920b3919a0929ca40e3a3f0610e384cf204463841",
+      "packages/transport/dist/application/transport.js": "8a2efba32409c8f7e8b365ef2f13c3c6f3c2182ce6afe773bcd9c9734edeff82",
+      "packages/transport/dist/browser.js": "8048ead49bca5ece0fbde32b839f079436b3010e3b4af00628abaaf9b20f850f",
+      "packages/transport/dist/domain/configuration.js": "637f615a8cc4548ed3b0e68000a7000dbd7085c1f2762df1f5414ed82cca7d1f",
+      "packages/transport/dist/domain/results.js": "7cf3b443a07ea65aa256302372e5041a15e945a9d8ab8a29c0c3a38de68290bb",
+      "packages/transport/dist/index.js": "e251288f91e284c281338250ad818e4444d28eaa7d37de314cf5c285deb4b1c3",
+      "packages/transport/dist/ports/driver.js": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881",
+      "packages/registry/src/adapters/arkiv/reader.ts": "7223cc90aca68ac78f7f846d545eb83cd5d68007007909b89419a0de8549f487",
+      "packages/registry/src/adapters/arkiv/schema.ts": "c30d5efff75c03a9434c5a5e96919c78727ec9631360094d11187978e11a39f6",
+      "packages/registry/src/adapters/arkiv/writer.ts": "5944186cb3355d960cf2e8664623e881d856c63d62b5b739c5fb7f0079c0f4c6",
+      "packages/registry/src/adapters/source/git-snapshot.ts": "4acaadc371151ef9499969a38ed21023d3e153898157f39d88e2fa68183d477b",
+      "packages/registry/src/application/import-registry.ts": "9cb3f6f911242723623f5f4803a2ab2fcdaaeee0b9b8a889b3ed903d378590c8",
+      "packages/registry/src/application/query-registry.ts": "c6eaa43f113abc0d9f862e91e52e9cef4aea684f5cc434c049d586cfee55e229",
+      "packages/registry/src/domain/endpoint-policy.ts": "05164cd74bbb9427b796fb47bea45186028adf4df70cdad41adde8f5169a7331",
+      "packages/registry/src/domain/freshness.ts": "6dbdfc1f820040dce99bea61afb726dd8cd7d4a8ee43f29b1282b7c88d08f246",
+      "packages/registry/src/domain/publisher-policy.ts": "3df32e3a496fad1d5aa9948f3695caf3fc1b8ce47b9ccc7d78bf6a9b1e59c33d",
+      "packages/registry/src/domain/source-policy.ts": "806e3ae099c1a4576c4fb787a74d688f58a0ab7a82a2ee123978c241f1cbe8b7",
+      "packages/registry/src/index.ts": "50b5f65abb4bfe2ce7bf11487d453d0b8aa04125d294189c8add8f21aaf7e80f",
+      "packages/registry/src/ports/entity-reader.ts": "16f209e497b007ca42d4ca03ec30237fb9793fcb6b7271c991de592c33022d8f",
+      "packages/registry/src/ports/entity-writer.ts": "d6aec13478b0f8bb28b8524bd764cb68f88dfe595f9178aeeb7bcb86d46dbd21",
+      "packages/registry/src/ports/source-snapshot.ts": "88c83204ee4b1d21209b75fc53d449026ff4c8b5e24a2ea144764ee62fe36630",
+      "packages/registry/dist/adapters/arkiv/reader.js": "0244f290fe6f478e46f666e60545b42cefb1ba6cc5abb3f13a8aa098ddac30eb",
+      "packages/registry/dist/adapters/arkiv/schema.js": "c8553e55cd25390c4386392616bd56a2b12f8a1362d1cf5e00164daf9100f25d",
+      "packages/registry/dist/adapters/arkiv/writer.js": "629335c396e3327f37a7154ba04fb09bcea2006b3dc2dc237229f775370e6e0f",
+      "packages/registry/dist/adapters/source/git-snapshot.js": "bcaac54c9408e3e61d034be73c23cd675f80b0bb8f2ec184c975e1c98bc932cd",
+      "packages/registry/dist/application/import-registry.js": "524bf905e85c80b92e905a0dd35a8d99f424eb7aeff46e60bacec5822e90ed3c",
+      "packages/registry/dist/application/query-registry.js": "88919d56525c158b6af840d5190f601dccdc6073035c05256880a8513a1e98e0",
+      "packages/registry/dist/domain/endpoint-policy.js": "57e820b1e916d6ec5f64765218123969a0015a183063b7ad58923f97f07c9413",
+      "packages/registry/dist/domain/freshness.js": "46006e40ffad003b34c1137a8414b9720c0b0fb6d50323991a1285b496da04ce",
+      "packages/registry/dist/domain/publisher-policy.js": "9e726086c8ca1e42effdc09ba812cd9761b53840a608fa03bd9861a99e08c9cd",
+      "packages/registry/dist/domain/source-policy.js": "82cfbf66a2c5ce5957fbbc3ba79d326a27502a0ba0f50134598e44835dbdf2e7",
+      "packages/registry/dist/index.js": "8e12012506b77ebb5b68f44afd7e16fe82ea3967cea1fab44263789454306a23",
+      "packages/registry/dist/ports/entity-reader.js": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881",
+      "packages/registry/dist/ports/entity-writer.js": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881",
+      "packages/registry/dist/ports/source-snapshot.js": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881",
+      "apps/observer/src/adapters/http/observer.ts": "44f5f4820b8d8142c424b4685cf3c9ca636e469f1b17b9fb9f45277d15386726",
+      "apps/observer/src/adapters/http/peer.ts": "db082192d2f2d48b9419208a16d241f403b1a59128b53616fc435e502814aee7",
+      "apps/observer/src/adapters/http/registry.ts": "23c3c574596daa7720ed1b3657e9699e6c4242aa88a012ace1d10e995a58fa2d",
+      "apps/observer/src/adapters/upstream/dns-resolver.ts": "e85003fdb91e99eb0766f44a04e18906669426c7309c87b7ec869208e045e391",
+      "apps/observer/src/adapters/upstream/https-reader.ts": "0419f14f7f95052f94ef085f9c2fa0619a2fdee2c1573b36dfc136f8c0f72040",
+      "apps/observer/src/adapters/upstream/public-address.ts": "b0335ef4b9e435930b9b34fccab5fc91f59c0dbc1d4018d4b4db39dcd479eb3c",
+      "apps/observer/src/application/get-diagnostics.ts": "485a5892356097accb3ba4732b32114eb04d34017a90f228161d6d975487ce43",
+      "apps/observer/src/application/observe-read.ts": "5cab5ceb208d1e7d6fdae5c21f770e5318315bd0fb3426b928dc1499aeec421a",
+      "apps/observer/src/composition/env.ts": "9a2bc93c4b217c8562aec0f892c125840c133ab01697f8b0cd53fe5a6c444d06",
+      "apps/observer/src/composition/registry.ts": "e20cfac6bb4b65f35bf596f4bf5c1b0f5e1bf8ba40d94b44b133f319023e5107",
+      "apps/observer/src/composition/server.ts": "10dee16c5d41e9b8bef425a5f067fa31c04ed76b82c54ba5c1a711be19b333ac",
+      "apps/observer/src/composition/start.ts": "dd221f6d63c40c59c027097ea713f921a2a87a13568d9a01d7ffe274e24f7da5",
+      "apps/observer/src/domain/diagnostics.ts": "d15b9cbfbde275c7f507378e6cc0ae716d4d02860170b28d51246540e0dca008",
+      "apps/observer/src/domain/observer-policy.ts": "2209895299832e7ae904901383db4bf64d25bd7ff0642d31b81b09cff31989c5",
+      "apps/observer/src/domain/ports.ts": "81ad5aad11ed9b7034928930e67baec97dd56ba064d6f27c10b77c9ddde43d7a",
+      "apps/observer/dist/adapters/http/observer.js": "7cd71132b57c47dc84544b754f3a011fa7627ff7c13dda1e4e2bdda28b9b4b2f",
+      "apps/observer/dist/adapters/http/peer.js": "d72e6ef4cbf4f49b724607f4d3025ff6f3e0e536de909597d0eb394698d223e9",
+      "apps/observer/dist/adapters/http/registry.js": "466fdb8f32821bac6105e162ed0f312995e891cf3a52b84aae3969075076b8c0",
+      "apps/observer/dist/adapters/upstream/dns-resolver.js": "0ec8853615f8c857da91fd68197b9cf5ad55ceaefc8f7763e4987a5a79a41df0",
+      "apps/observer/dist/adapters/upstream/https-reader.js": "62e6756645dc5fc9c7a0a5d90c4bb28ff58e6d2849c7a1ba45170e16daff2ec7",
+      "apps/observer/dist/adapters/upstream/public-address.js": "e2d130abef93fcf1ce2a985a52061c207e0e4078bde68f833547987e1a72622a",
+      "apps/observer/dist/application/get-diagnostics.js": "b6d3c7601f37f0a9e4df80b81179fc72029c86a3678e9f3ae152c1c63572cb9c",
+      "apps/observer/dist/application/observe-read.js": "4902642595f14363e879fa23a2aa8f26e2cee643adc6c4c3726e7114504dd4f1",
+      "apps/observer/dist/composition/env.js": "7a4cde7de4a9cfbd9fe8eec80c3219a374b174a834681d5b3d828c3f5c3eeb3b",
+      "apps/observer/dist/composition/registry.js": "13f26e5a9b44709419379508f382b14fa65933511fb0b2071efb618fb497320a",
+      "apps/observer/dist/composition/server.js": "3cd13f4a6588c1977292a82e1570a308556091d4c46d7d8a05f94547527856d0",
+      "apps/observer/dist/composition/start.js": "a012052e9c532d506fb8e8d50bf95c15ac7607679506724e10e1efcbe7828508",
+      "apps/observer/dist/domain/diagnostics.js": "3fad28881cd1d8679f12194edd5fb5e37a2d1af8504433f913100777478cb8ac",
+      "apps/observer/dist/domain/observer-policy.js": "3cd712b3124ffa6a9b53d90260eac74b91162cbea7750d99f5f9d641356c36b9",
+      "apps/observer/dist/domain/ports.js": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881",
+      "apps/dashboard/src/composition/registry.ts": "e41ea93e5ee598898f59200b0b97d0e528b22c333b029bff3b9edb77bf1dd96f",
+      "apps/dashboard/src/composition/transport.ts": "416a0075692f431da4cccfe2f4592c13bd7e021b73388f8b87d6cd6e7a38fad2",
+      "tests/e2e/registry-routing/live/main.ts": "c0d9b558ce6d7f566bb27c054265bbf6918f6fa42aac37d0e17c21365fbc0bf1",
+      "tests/e2e/registry-routing/live/host.ts": "a7e06423b824b95a551441877386dcbb22e7a3ffa428a0967e038e39d677bb45",
+      "tests/e2e/registry-routing/live/run.mjs": "d7139934bc447c5c130e4daf48433fe39bf26dedc903f607973f4e0be9a3895e",
+      "tests/e2e/registry-routing/live/index.html": "a173ab4dfadd62e5167ef342b680e114bfde192e58f5f17c4c6975700a7673ec",
+      "tests/e2e/registry-routing/live/host.html": "9a02f0868f475d1f5fd32d8f62792cd3554a49d360160fd5e70b492e9305f3db",
+      "tests/e2e/registry-routing/live/tsconfig.json": "5b8abb6ac557378647d854d65ebdf690ea6e2510db1067d5d26b655aa51ec172",
+      "packages/registry/test/importer/observed-live-2026-11-06/import-full100.json": "38728e8d02c845ab545b0bf83e450b04256bda5bb00b49cf09cb7e080cc85bb6",
+      "packages/registry/test/importer/observed-live-2026-11-06/selected-records.json": "4fed832c98adfe2f30d43e84cc69042656a7a0d63ae527bdb7c6a382f204ffeb"
+    },
+    "lockSha256": "524520d2960a9baf77dca1d0512a34543cb9d83a32b7cfebc27db42a806f8224",
+    "unchangedAfterRun": true
+  },
+  "operatorConfiguration": {
+    "chainId": "10",
+    "policy": {
+      "trustedPublishers": [
+        {
+          "creator": "0x93D1A42655F2B0BCFa126e3D2a33e4ab60a74CA4",
+          "owner": "0x93D1A42655F2B0BCFa126e3D2a33e4ab60a74CA4"
+        }
+      ],
+      "approvedOrigins": [
+        "https://mainnet.optimism.io"
+      ],
+      "source": {
+        "revision": "e17474286275730fb6b0490b1d7ea1c64a36ed9e",
+        "snapshotSha256": "2180efb0c0b38e76578ebd8d6470d1acbabb7f90463dd4134e7c6d90a692c952",
+        "licenseUrl": "https://github.com/ethereum-lists/chains/blob/e17474286275730fb6b0490b1d7ea1c64a36ed9e/LICENSE",
+        "urlPrefix": "https://github.com/ethereum-lists/chains/blob/e17474286275730fb6b0490b1d7ea1c64a36ed9e/_data/chains/eip155-"
+      },
+      "maxManifestAgeMs": 30000
+    }
+  },
+  "metadataContact": {
+    "anonymous": false,
+    "path": "/api/registry/chains?chainId=10",
+    "serverQuery": "Fixed public Arkiv Rabdi read-only SDK; no wallet or session parameter."
+  },
+  "liveRead": {
+    "schemaVersion": 1,
+    "observedAt": "2026-11-06T15:14:40.098Z",
+    "evidence": "OBSERVED_LIVE",
+    "phase": "READ_RETURNED",
+    "failure": null,
+    "result": "0x97d0a93",
+    "readState": "READY",
+    "durationMs": 19565,
+    "selectedAt": "2026-11-06T15:14:39.362Z",
+    "readReturnedAt": "2026-11-06T15:14:40.096Z",
+    "selection": {
+      "manifest": {
+        "schemaVersion": 1,
+        "revision": "registry_0e32b6885965145ce7c4ba3b2d529344b3d009a86862593ca1a5c68f9b18173d",
+        "generatedAt": "2026-11-06T15:14:33.465Z",
+        "expiresAt": "2026-11-06T15:15:03.465Z",
+        "evidence": "OBSERVED_LIVE",
+        "origin": "arkiv-query",
+        "endpoints": [
+          {
+            "endpointId": "rpc_6f661b1c6c9d0ee9f7b37c559a2285dd470a19f3378d7d610b8ec823f197a130",
+            "chainId": "10",
+            "chainName": "OP Mainnet",
+            "rpcUrl": "https://mainnet.optimism.io/",
+            "publisher": {
+              "creator": "0x93d1a42655f2b0bcfa126e3d2a33e4ab60a74ca4",
+              "owner": "0x93d1a42655f2b0bcfa126e3d2a33e4ab60a74ca4"
+            },
+            "entityKey": "0xc8d33bed907f23f9cddcf19fb151318dbe7758c5880a6378e8f6a50826010f07",
+            "expiresAt": "2026-11-07T13:42:00.547Z",
+            "source": {
+              "url": "https://github.com/ethereum-lists/chains/blob/e17474286275730fb6b0490b1d7ea1c64a36ed9e/_data/chains/eip155-10.json",
+              "revision": "e17474286275730fb6b0490b1d7ea1c64a36ed9e",
+              "licenseUrl": "https://github.com/ethereum-lists/chains/blob/e17474286275730fb6b0490b1d7ea1c64a36ed9e/LICENSE",
+              "snapshotSha256": "2180efb0c0b38e76578ebd8d6470d1acbabb7f90463dd4134e7c6d90a692c952"
+            }
+          }
+        ]
+      },
+      "endpoint": {
+        "endpointId": "rpc_6f661b1c6c9d0ee9f7b37c559a2285dd470a19f3378d7d610b8ec823f197a130",
+        "chainId": "10",
+        "chainName": "OP Mainnet",
+        "rpcUrl": "https://mainnet.optimism.io/",
+        "publisher": {
+          "creator": "0x93d1a42655f2b0bcfa126e3d2a33e4ab60a74ca4",
+          "owner": "0x93d1a42655f2b0bcfa126e3d2a33e4ab60a74ca4"
+        },
+        "entityKey": "0xc8d33bed907f23f9cddcf19fb151318dbe7758c5880a6378e8f6a50826010f07",
+        "expiresAt": "2026-11-07T13:42:00.547Z",
+        "source": {
+          "url": "https://github.com/ethereum-lists/chains/blob/e17474286275730fb6b0490b1d7ea1c64a36ed9e/_data/chains/eip155-10.json",
+          "revision": "e17474286275730fb6b0490b1d7ea1c64a36ed9e",
+          "licenseUrl": "https://github.com/ethereum-lists/chains/blob/e17474286275730fb6b0490b1d7ea1c64a36ed9e/LICENSE",
+          "snapshotSha256": "2180efb0c0b38e76578ebd8d6470d1acbabb7f90463dd4134e7c6d90a692c952"
+        }
+      },
+      "routingEndpointId": "registry_selection_1"
+    },
+    "selectionAtReadEnd": {
+      "manifest": {
+        "schemaVersion": 1,
+        "revision": "registry_0e32b6885965145ce7c4ba3b2d529344b3d009a86862593ca1a5c68f9b18173d",
+        "generatedAt": "2026-11-06T15:14:33.465Z",
+        "expiresAt": "2026-11-06T15:15:03.465Z",
+        "evidence": "OBSERVED_LIVE",
+        "origin": "arkiv-query",
+        "endpoints": [
+          {
+            "endpointId": "rpc_6f661b1c6c9d0ee9f7b37c559a2285dd470a19f3378d7d610b8ec823f197a130",
+            "chainId": "10",
+            "chainName": "OP Mainnet",
+            "rpcUrl": "https://mainnet.optimism.io/",
+            "publisher": {
+              "creator": "0x93d1a42655f2b0bcfa126e3d2a33e4ab60a74ca4",
+              "owner": "0x93d1a42655f2b0bcfa126e3d2a33e4ab60a74ca4"
+            },
+            "entityKey": "0xc8d33bed907f23f9cddcf19fb151318dbe7758c5880a6378e8f6a50826010f07",
+            "expiresAt": "2026-11-07T13:42:00.547Z",
+            "source": {
+              "url": "https://github.com/ethereum-lists/chains/blob/e17474286275730fb6b0490b1d7ea1c64a36ed9e/_data/chains/eip155-10.json",
+              "revision": "e17474286275730fb6b0490b1d7ea1c64a36ed9e",
+              "licenseUrl": "https://github.com/ethereum-lists/chains/blob/e17474286275730fb6b0490b1d7ea1c64a36ed9e/LICENSE",
+              "snapshotSha256": "2180efb0c0b38e76578ebd8d6470d1acbabb7f90463dd4134e7c6d90a692c952"
+            }
+          }
+        ]
+      },
+      "endpoint": {
+        "endpointId": "rpc_6f661b1c6c9d0ee9f7b37c559a2285dd470a19f3378d7d610b8ec823f197a130",
+        "chainId": "10",
+        "chainName": "OP Mainnet",
+        "rpcUrl": "https://mainnet.optimism.io/",
+        "publisher": {
+          "creator": "0x93d1a42655f2b0bcfa126e3d2a33e4ab60a74ca4",
+          "owner": "0x93d1a42655f2b0bcfa126e3d2a33e4ab60a74ca4"
+        },
+        "entityKey": "0xc8d33bed907f23f9cddcf19fb151318dbe7758c5880a6378e8f6a50826010f07",
+        "expiresAt": "2026-11-07T13:42:00.547Z",
+        "source": {
+          "url": "https://github.com/ethereum-lists/chains/blob/e17474286275730fb6b0490b1d7ea1c64a36ed9e/_data/chains/eip155-10.json",
+          "revision": "e17474286275730fb6b0490b1d7ea1c64a36ed9e",
+          "licenseUrl": "https://github.com/ethereum-lists/chains/blob/e17474286275730fb6b0490b1d7ea1c64a36ed9e/LICENSE",
+          "snapshotSha256": "2180efb0c0b38e76578ebd8d6470d1acbabb7f90463dd4134e7c6d90a692c952"
+        }
+      },
+      "routingEndpointId": "registry_selection_1"
+    },
+    "operatorPins": {
+      "chainId": "10",
+      "policy": {
+        "trustedPublishers": [
+          {
+            "creator": "0x93D1A42655F2B0BCFa126e3D2a33e4ab60a74CA4",
+            "owner": "0x93D1A42655F2B0BCFa126e3D2a33e4ab60a74CA4"
+          }
+        ],
+        "approvedOrigins": [
+          "https://mainnet.optimism.io"
+        ],
+        "source": {
+          "revision": "e17474286275730fb6b0490b1d7ea1c64a36ed9e",
+          "snapshotSha256": "2180efb0c0b38e76578ebd8d6470d1acbabb7f90463dd4134e7c6d90a692c952",
+          "licenseUrl": "https://github.com/ethereum-lists/chains/blob/e17474286275730fb6b0490b1d7ea1c64a36ed9e/LICENSE",
+          "urlPrefix": "https://github.com/ethereum-lists/chains/blob/e17474286275730fb6b0490b1d7ea1c64a36ed9e/_data/chains/eip155-"
+        },
+        "maxManifestAgeMs": 30000
+      }
+    },
+    "worker": {
+      "network": "nym",
+      "specifier": "0x3aCD9742C68F6d993066Ae25533e09b9e1f60eD0",
+      "workerHash": "0xf13a448a8721b9d0b20da3d5b80ffe00bf4c5bb3aae812a38d3d1e3bc81fceb8",
+      "harnessVersion": "0.4.0",
+      "verification": "harness-ready-after-specifier-lookup",
+      "bootstrap": "NON_ANONYMOUS_SPECIFIER_LOOKUP",
+      "bootstrapCalls": 2,
+      "privacyLabel": "ANONYMIZING_WORKER",
+      "observedAt": "2026-11-06T15:14:31.597Z"
+    },
+    "traces": [
+      {
+        "schemaVersion": 1,
+        "readId": "bootstrap_hash",
+        "attempt": 1,
+        "endpointId": "bootstrap_mainnet",
+        "chainId": "1",
+        "method": "eth_call",
+        "callsite": "transport.bootstrap.hash",
+        "route": "direct-bootstrap",
+        "durationMs": 389,
+        "success": true,
+        "bootstrap": true,
+        "evidence": "OBSERVED_LIVE",
+        "payloadVisibility": "rpc-endpoint-can-read"
+      },
+      {
+        "schemaVersion": 1,
+        "readId": "bootstrap_resolvers",
+        "attempt": 1,
+        "endpointId": "bootstrap_mainnet",
+        "chainId": "1",
+        "method": "eth_call",
+        "callsite": "transport.bootstrap.resolvers",
+        "route": "direct-bootstrap",
+        "durationMs": 246,
+        "success": true,
+        "bootstrap": true,
+        "evidence": "OBSERVED_LIVE",
+        "payloadVisibility": "rpc-endpoint-can-read"
+      },
+      {
+        "schemaVersion": 1,
+        "readId": "monolith_probe_1",
+        "attempt": 1,
+        "endpointId": "registry_selection_1",
+        "chainId": "10",
+        "method": "eth_chainId",
+        "callsite": "transport.chain-probe",
+        "route": "anon-nym",
+        "durationMs": 5887,
+        "success": true,
+        "bootstrap": false,
+        "evidence": "OBSERVED_LIVE",
+        "payloadVisibility": "rpc-endpoint-can-read"
+      },
+      {
+        "schemaVersion": 1,
+        "readId": "mn013_456f38d6-840d-4175-a7bd-caa61b6da82c",
+        "attempt": 1,
+        "endpointId": "registry_selection_1",
+        "chainId": "10",
+        "method": "eth_blockNumber",
+        "callsite": "registry.acceptance.block",
+        "route": "anon-nym",
+        "durationMs": 732,
+        "success": true,
+        "bootstrap": false,
+        "evidence": "OBSERVED_LIVE",
+        "payloadVisibility": "rpc-endpoint-can-read"
+      }
+    ],
+    "shutdown": {
+      "state": "CLOSED",
+      "iframeCount": 0,
+      "selectionCleared": true,
+      "metadataCleared": true,
+      "postCloseReadRejected": true,
+      "postCloseErrorCode": "WORKER_UNAVAILABLE"
+    },
+    "limitations": [
+      "Public chain metadata uses an ordinary same-origin HTTP request and server-side Arkiv query; neither is anonymous.",
+      "Worker bootstrap is non-anonymous and recorded separately.",
+      "The destination RPC can read JSON-RPC payloads.",
+      "Independent interception covers ordinary browser HTTP to the approved candidate origin; it excludes WebRTC/KPS.",
+      "MN-009 paired observer source evidence remains BLOCKED independently.",
+      "This run does not establish application-wide coverage, browser DNS pinning or sponsor eligibility."
+    ],
+    "directDetectionSelfCheck": true,
+    "metadataRequests": 1,
+    "metadataRequestTimes": [
+      "2026-11-06T15:14:31.600Z"
+    ],
+    "metadataResponses": [
+      {
+        "status": 200,
+        "observedAt": "2026-11-06T15:14:33.473Z",
+        "body": {
+          "schemaVersion": 1,
+          "ok": true,
+          "value": {
+            "schemaVersion": 1,
+            "revision": "registry_0e32b6885965145ce7c4ba3b2d529344b3d009a86862593ca1a5c68f9b18173d",
+            "generatedAt": "2026-11-06T15:14:33.465Z",
+            "expiresAt": "2026-11-06T15:15:03.465Z",
+            "evidence": "OBSERVED_LIVE",
+            "origin": "arkiv-query",
+            "endpoints": [
+              {
+                "endpointId": "rpc_6f661b1c6c9d0ee9f7b37c559a2285dd470a19f3378d7d610b8ec823f197a130",
+                "chainId": "10",
+                "chainName": "OP Mainnet",
+                "rpcUrl": "https://mainnet.optimism.io/",
+                "publisher": {
+                  "creator": "0x93d1a42655f2b0bcfa126e3d2a33e4ab60a74ca4",
+                  "owner": "0x93d1a42655f2b0bcfa126e3d2a33e4ab60a74ca4"
+                },
+                "entityKey": "0xc8d33bed907f23f9cddcf19fb151318dbe7758c5880a6378e8f6a50826010f07",
+                "expiresAt": "2026-11-07T13:42:00.547Z",
+                "source": {
+                  "url": "https://github.com/ethereum-lists/chains/blob/e17474286275730fb6b0490b1d7ea1c64a36ed9e/_data/chains/eip155-10.json",
+                  "revision": "e17474286275730fb6b0490b1d7ea1c64a36ed9e",
+                  "licenseUrl": "https://github.com/ethereum-lists/chains/blob/e17474286275730fb6b0490b1d7ea1c64a36ed9e/LICENSE",
+                  "snapshotSha256": "2180efb0c0b38e76578ebd8d6470d1acbabb7f90463dd4134e7c6d90a692c952"
+                }
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "independentHttpBoundary": {
+      "ordinaryTargetRequests": 0,
+      "scope": "Ordinary browser HTTP to mainnet.optimism.io; excludes WebRTC/KPS and disclosed specifier bootstrap."
+    },
+    "resolverResponses": [
+      {
+        "url": "https://cdn.jsdelivr.net/npm/@nymproject/anon-rpc-worker@0.1.0/dist/nym-anon-rpc-worker.js",
+        "status": 200,
+        "bytes": 18283862,
+        "receivedAt": "2026-11-06T15:14:22.508Z",
+        "keccak256": "0xf13a448a8721b9d0b20da3d5b80ffe00bf4c5bb3aae812a38d3d1e3bc81fceb8"
+      }
+    ],
+    "contextDestroyed": true
+  },
+  "shutdown": {
+    "observerStarted": true,
+    "observerStopped": true,
+    "browserStarted": true,
+    "browserClosed": true,
+    "viteStarted": true,
+    "viteStopped": true
+  }
+}

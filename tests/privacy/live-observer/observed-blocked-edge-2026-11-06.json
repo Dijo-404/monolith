@@ -1,0 +1,29 @@
+{
+  "evidence": "BLOCKED",
+  "sourceTask": "MN-009",
+  "startedAt": "2026-11-06T14:13:17.541Z",
+  "origin": "https://extra-lime-hospitality-personal.trycloudflare.com",
+  "status": 403,
+  "controls": {
+    "forwarded": 0,
+    "denied": 1,
+    "reasons": {
+      "unauthenticatedHost": 0,
+      "missingSource": 0,
+      "duplicateSource": 0,
+      "invalidSource": 0,
+      "workerSource": 1,
+      "routeOrHeader": 0,
+      "resource": 0
+    },
+    "markers": {
+      "workerHeader": 1,
+      "workerLoop": 0,
+      "workerSentinel": 0,
+      "edgeLoopMarker": 1
+    }
+  },
+  "generatedAt": "2026-11-06T14:14:24.824Z",
+  "scope": "Actual public HTTP source guard; SIMULATED local health target; no RPC or worker call.",
+  "originalObservationSha256": "672469d370012afd92b780863a8c3b96996f22c20daa820d845739eaee5f09fc"
+}

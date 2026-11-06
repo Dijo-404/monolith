@@ -1,0 +1,16 @@
+{
+  "extends": "../../../../tsconfig.base.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "lib": ["ES2023", "DOM", "DOM.Iterable"],
+    "types": ["node"],
+    "paths": {
+      "@monolith/shared": ["../../../../packages/shared/dist/index.d.ts"],
+      "@monolith/transport": ["../../../../packages/transport/dist/index.d.ts"],
+      "@monolith/transport/browser": ["../../../../packages/transport/dist/browser.d.ts"]
+    }
+  },
+  "include": ["main.ts", "host.ts"]
+}
