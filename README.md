@@ -8,7 +8,7 @@
 
 [![CI](https://img.shields.io/badge/CI-GitHub_Actions-555555?style=for-the-badge&logo=githubactions&logoColor=white)](https://github.com/Dijo-404/monolith/actions/workflows/ci.yml) [![License: MIT](https://img.shields.io/badge/License-MIT-555555?style=for-the-badge)](LICENSE) ![TypeScript](https://img.shields.io/badge/TypeScript-555555?style=for-the-badge&logo=typescript&logoColor=white)
 
-[Quick start](#quick-start) · [Usage](#usage) · [Documentation](#documentation) · [Contributing](#contributing)
+[Quick start](#quick-start) · [CLI and TUI](#cli-and-tui) · [Usage](#usage) · [Documentation](#documentation) · [Contributing](#contributing)
 
 </div>
 
@@ -21,7 +21,7 @@
 </p>
 
 > [!NOTE]
-> **Early development.** The default dashboard is wired for live reads through a verified Nym worker. It makes no API or RPC requests on page load; run actions block before worker bootstrap with the example local configuration. The separate `?mode=simulated` walkthrough uses local fixtures. Actual public dashboard and reusable-backend acceptance evidence remains pending, and payments are disabled.
+> **Development preview.** The default dashboard is wired for live reads through a verified Nym worker. It makes no API or RPC requests on page load; run actions block before worker bootstrap with the example local configuration. The separate `?mode=simulated` walkthrough uses local fixtures. A local CLI/TUI is available from source; npm publication, final public-workflow evidence and core release acceptance remain pending. Payments are disabled.
 
 ## Overview
 
@@ -34,6 +34,23 @@ Monolith helps wallet and checkout developers catch accidental direct-RPC reads.
 - **Check endpoint provenance.** Registry modules validate trusted publishers, source revisions, expiry and permitted origins before admitting candidates.
 - **Observe a controlled comparison.** The observer permits five read methods against configured upstreams and retains bounded synthetic-run diagnostics for five minutes.
 - **Catch regressions in CI.** Static boundary checks and independent Chromium capture detect direct bypasses; reports separate route protection from successful reads.
+- **Work from the terminal.** The `@monolith/cli` prerelease analyzes local captures, displays sanitized report counts, checks prerequisites and opens the browser lab through commands or an interactive TUI.
+- **Prepare a reproducible deployment.** Source-bound static packaging, served-asset verification and a bounded temporary public observer launcher support separate deployment and live-workflow checks.
+
+### Current status
+
+Snapshot: **7 November 2026 (IST)**. GitHub issues hold live acceptance status.
+
+| Area | Available now | Remaining work |
+| :--- | :--- | :--- |
+| **Protected reads** | Fail-closed transport and a [recorded real Nym/direct source comparison](docs/preflight/observer.md) from 6 November | Recheck worker and backend availability for each new run |
+| **Arkiv registry** | [100 distinct networks / 100 entities imported and independently queried](arkiv/data-quality.md), with publisher, provenance and expiry checks | Imported endpoints remain candidates; the import did not test their health or chain IDs |
+| **Dashboard** | Live Nym/registry/observer composition, explicit synthetic direct controls and a separate simulated walkthrough | [Accepted public workflow](https://github.com/Dijo-404/monolith/issues/14) and [complete leak/repair walkthrough](https://github.com/Dijo-404/monolith/issues/16) |
+| **CLI/TUI** | Merged source package, local analysis, JSON output and terminal menu | [npm publication and release acceptance](https://github.com/Dijo-404/monolith/issues/50) |
+| **Deployment** | Static packaging/verification and reusable temporary observer tooling | [Final hosted dashboard checks](https://github.com/Dijo-404/monolith/issues/36) and [public-backend acceptance](https://github.com/Dijo-404/monolith/issues/40) |
+| **New integrations** | Tracked work for [Uniswap quote privacy tests](https://github.com/Dijo-404/monolith/issues/55) and [protected provider selection](https://github.com/Dijo-404/monolith/issues/56) | Integrated UI/backend behavior and live evidence; neither is a completed product feature |
+
+Historical `OBSERVED_LIVE` records describe their exact past runs. The [core release](https://github.com/Dijo-404/monolith/issues/17) still requires its own accepted evidence bundle and clean-clone validation.
 
 ## Why Monolith
 
@@ -96,6 +113,24 @@ In the default live dashboard, follow the four steps: **Run private read**, **Co
 
 For the fixture walkthrough at `?mode=simulated`, send a direct read, compare the private route, inject a leaky widget, then try a worker outage. Its scenario controls use local fixtures and display `SIMULATED` labels.
 
+### CLI and TUI
+
+After installing the workspace, build the terminal package and run it from the repository root:
+
+```sh
+pnpm --filter @monolith/cli... build
+node packages/cli/dist/monolith.mjs --help
+node packages/cli/dist/monolith.mjs doctor --json
+node packages/cli/dist/monolith.mjs check --input tests/e2e/cli/fixtures/simulated-pass.json --json
+node packages/cli/dist/monolith.mjs tui
+```
+
+The check above uses a **SIMULATED** fixture. `check` analyzes local captured measurements; `report <file>` views sanitized report counts; `lab --url http://127.0.0.1:5173` asks the operating system to open the running browser app. `MONOLITH_LAB_URL` can supply the dashboard URL instead. The TUI requires an interactive terminal: use arrow keys or `j`/`k`, Enter to select, `?` for help and `q` to quit.
+
+Use `--json` for automation. A `check` exits **0** only for a nonempty input passing privacy and useful-read checks, **1** for a failed check and **2** for invalid or unavailable input. Local files remain unverified caller input; the CLI does not authenticate captures or establish live privacy. Protected reads run through the browser worker.
+
+The package is prepared as `@monolith/cli` **0.1.0**; npm publication and name availability remain unverified. See the [CLI guide](docs/cli.md) for local tarball installation, report format, CI behavior and release limits.
+
 ### Commands
 
 | Command | Description |
@@ -130,6 +165,12 @@ pnpm exec tsx scripts/registry-query-example.ts --help
 
 The [registry setup guide](docs/registry-setup.md) provides the live `--chain-id 10` command, trust pins, publisher references and failure behavior. That query contacts Arkiv directly for public metadata; expired or unavailable records fail without a saved-result fallback. It does not establish endpoint health or anonymity.
 
+### Deployment
+
+The [deployment guide](docs/deployment.md) and [static tooling guide](scripts/deploy/README.md) cover packaging an exact clean source commit, retaining licenses/provenance, verifying published asset bytes and checking deployed layout and worker-host failure behavior. The [public observer launcher](deploy/observer/README.md) exposes fixed approved routes, public registry metadata and fresh five-minute synthetic runs through a temporary HTTPS tunnel.
+
+The temporary backend depends on its operator host staying online; provider retention and hostname lifetime are unverified. Packaging, a reachable health endpoint and static verification each have separate scope. Final acceptance still needs the actual live browser workflow against the same reviewed backend and deployed dashboard. Follow [public observer deployment](docs/observer-deployment.md) for that gate.
+
 ## Configuration
 
 Both development apps read the root `.env`. Copy [.env.example](.env.example) for local startup. These defaults leave live actions blocked before worker bootstrap; the separate simulated walkthrough remains available:
@@ -156,6 +197,8 @@ MONOLITH_REGISTRY_CONFIG=
 | `MONOLITH_REGISTRY_CONFIG` | Server-only publisher, source-hash and origin policy for public discovery; disabled when empty |
 
 See the [observer guide](docs/observer.md), [registry setup](docs/registry-setup.md) and [live lab guide](tests/e2e/lab-ui/README.md) before enabling network integrations. A configured origin alone does not establish a working backend or accepted evidence: live actions also need fresh public-run allocation, matching approved upstream and registry policy, and a verified Nym worker. Automatic `VITE_` exports and prefix-based environment exports are disabled. Set `NODE_ENV` on the server process when deploying; keep signing keys out of browser configuration.
+
+The live dashboard retries public registry metadata at most **three fresh queries**, only for typed availability or timeout failures. Trust, expiry, policy, chain and explicit rate-limit failures block. Every returned manifest is checked again against current trust and expiry; there is no stale-result fallback or direct protected-RPC downgrade.
 
 ## Privacy and safety
 
@@ -191,6 +234,7 @@ Configured dashboard actions follow this worker/observer path. Registry discover
 | **Read-only API** | [Fastify](https://fastify.dev/) |
 | **Protected transport** | [Ethereum Anon-RPC browser harness](https://github.com/ethereum/anon-rpc) |
 | **Registry** | [Arkiv SDK](https://docs.arkiv.network/) · [viem](https://viem.sh/) |
+| **CLI/TUI** | Node.js terminal I/O · [esbuild](https://esbuild.github.io/) |
 | **Checks** | [Vitest](https://vitest.dev/) · [Playwright](https://playwright.dev/) · [ESLint](https://eslint.org/) |
 
 ## Project structure
@@ -201,6 +245,7 @@ Configured dashboard actions follow this worker/observer path. Registry discover
 │   ├── dashboard/            # React Leak Lab and browser composition
 │   └── observer/             # Read-only RPC observer and public registry API
 ├── packages/
+│   ├── cli/                  # Local analysis commands, report viewer and TUI
 │   ├── transport/            # Read policy, worker lifecycle and adapters
 │   ├── registry/             # Licensed import, trusted queries and endpoint policy
 │   ├── privacy-analyzer/     # Coverage, findings and report redaction
@@ -259,9 +304,14 @@ The default environment enables no upstream targets or registry trust configurat
 - [x] Fail-closed transport, controlled observer and trusted registry modules
 - [x] Independent direct-bypass regression checks
 - [x] Live dashboard composition with fail-closed configuration
+- [x] Source CLI/TUI with local analysis, JSON output and portable tarball support
+- [x] Source-bound deployment preparation and published-asset verification tooling
 - [ ] Accepted public dashboard workflow and reusable-backend evidence
 - [ ] Reproducible live leak, repair and rerun walkthrough
 - [ ] Accepted core evidence bundle and clean-clone release
+- [ ] Owner-approved npm CLI publication
+- [ ] Real protected Uniswap quote with bypass detection and useful repair
+- [ ] Protected endpoint diagnostics and explicit provider selection
 
 ## Documentation
 
@@ -272,9 +322,13 @@ The default environment enables no upstream targets or registry trust configurat
 | [Architecture](docs/architecture.md) · [Integration contracts](docs/contracts.md) | Module boundaries, shared interfaces and trust rules |
 | [Observer](docs/observer.md) | Read API, operator configuration, source topology and retention |
 | [Registry setup](docs/registry-setup.md) · [Arkiv schema](arkiv/schema.md) | Independent queries, provenance, publisher policy and expiry |
+| [Arkiv data quality](arkiv/data-quality.md) · [Independent consumer](arkiv/reach.md) | Recorded import counts, actual storage/query evidence and remaining endpoint limits |
+| [CLI and TUI](docs/cli.md) | Local build/tarball install, analysis input, JSON output and exit codes |
+| [Live lab](tests/e2e/lab-ui/README.md) | Nym/observer/registry wiring, bounded metadata retries and actual public-workflow acceptance |
 | [Anon-RPC preflight](docs/preflight/anon.md) · [Observer preflight](docs/preflight/observer.md) | Reproduction steps, recorded observations and limits |
 | [Egress checks](tests/privacy/egress/README.md) | Static boundaries and failing/passing browser regressions |
 | [Deployment](docs/deployment.md) | Source-bound packaging, hosting preparation and publication state |
+| [Static deployment tools](scripts/deploy/README.md) · [Public observer](deploy/observer/README.md) | Exact-source packaging, served-asset checks, temporary backend setup and teardown |
 
 ## Contributing
 

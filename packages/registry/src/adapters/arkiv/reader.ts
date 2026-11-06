@@ -169,10 +169,18 @@ export function createArkivEntityReader(options: {
 }
 
 /** Fixed public read-only Rabdi client. This module constructs no account, wallet or signer. */
-export function createRabdiEntityReader(options: { policy: PublisherPolicy }): EntityReader {
+export function createRabdiEntityReader(options: { policy: PublisherPolicy; accessKey?: string }): EntityReader {
+  const accessKey = options.accessKey;
+  if (accessKey !== undefined && (typeof accessKey !== 'string' || !/^[\x21-\x7e]{1,512}$/.test(accessKey))) {
+    throw new Error('Invalid server access key configuration.');
+  }
   const publicClient = createPublicClient({
+    // The SDK helper embeds supplied keys in chain URLs. Keep metadata public;
+    // the optional server credential belongs only to the fixed HTTP transport.
     chain: rabdi({ accessKey: '' }),
-    transport: http(RPC_URL, { timeout: 5_000, retryCount: 0 }),
+    transport: http(RPC_URL, { timeout: 5_000, retryCount: 0,
+      ...(accessKey === undefined ? {} : { fetchOptions: { redirect: 'error', headers: { 'X-API-KEY': accessKey } } }),
+    }),
   });
   const client: ArkivReaderClient = {
     getChainId: () => publicClient.getChainId(),
