@@ -1,8 +1,11 @@
+import { createHash } from 'node:crypto';
+import { makeError } from '@monolith/shared';
 import { createPublicLabEdge, type EdgeLimits } from '../adapters/http/public-lab-edge.js';
 import type { UpstreamReader } from '../domain/ports.js';
-import type { RegistryQuery } from '@monolith/registry';
+import { createQueryRegistry, type RegistryQuery, type EntityReader, type EndpointAdmission } from '@monolith/registry';
+import { createRabdiEntityReader } from '@monolith/registry/reader';
 import { buildServer } from './server.js';
-import { createConfiguredRegistry } from './registry.js';
+import { createRegistryDnsAdmission, parseRegistryConfig } from './registry.js';
 
 export const PUBLIC_DEMO_TARGET = Object.freeze({ endpointId: 'lab_optimism', chainId: '10', rpcUrl: 'https://mainnet.optimism.io/' });
 export const PUBLIC_REGISTRY_PINS = Object.freeze({
@@ -13,13 +16,47 @@ export const PUBLIC_REGISTRY_PINS = Object.freeze({
   allowedOrigins: ['https://mainnet.optimism.io'],
 });
 
+/** Each actual GET gets fresh generation metadata; true entity expiry is never extended. */
+export function createFreshPublicRegistry(options: { reader?: EntityReader; admission?: EndpointAdmission;
+  nowMs?: () => number; queryTimeoutMs?: number } = {}): RegistryQuery {
+  const policy = parseRegistryConfig({ MONOLITH_REGISTRY_CONFIG: JSON.stringify(PUBLIC_REGISTRY_PINS) });
+  if (!policy) throw new Error('Invalid public registry configuration.');
+  const timeoutMs = options.queryTimeoutMs ?? 10_000;
+  if (!Number.isSafeInteger(timeoutMs) || timeoutMs < 1 || timeoutMs > 15_000) throw new Error('Invalid public registry configuration.');
+  const reader = options.reader ?? createRabdiEntityReader({ policy });
+  const admission = options.admission ?? createRegistryDnsAdmission();
+  const nowMs = options.nowMs ?? Date.now;
+  let inFlight = 0;
+  return { async query(chainId) {
+    if (inFlight >= 16) return { ok: false, error: makeError('RATE_LIMITED') };
+    inFlight++;
+    let returned = false; let retained = 0; let released = false;
+    const release = () => { if (returned && retained === 0 && !released) { released = true; inFlight--; } };
+    const track = <T>(operation: () => Promise<T>): Promise<T> => {
+      retained++;
+      return Promise.resolve().then(operation).finally(() => { retained--; release(); });
+    };
+    try {
+      const query = createQueryRegistry({ policy, timeoutMs, now: () => new Date(nowMs()).toISOString(),
+        hash: (text) => createHash('sha256').update(text).digest('hex'),
+        reader: { readChain: (chain) => track(() => reader.readChain(chain)) },
+        admission: { check: (url) => track(() => admission.check(url)) },
+      });
+      return await query.query(chainId);
+    } finally {
+      // A timeout cannot release work retained by an unresponsive injected port.
+      returned = true; release();
+    }
+  } };
+}
+
 /** Explicit demo composition opts into synthetic allocation; normal server defaults stay disabled. */
 export async function createPublicDemo(options: { registry?: RegistryQuery; upstream?: UpstreamReader;
   nowMs?: () => number; edgeLimits?: Partial<EdgeLimits> } = {}) {
   const observer = buildServer({
     config: { endpoints: [{ ...PUBLIC_DEMO_TARGET, calls: [] }],
       sourcePolicy: { mode: 'trusted-proxy', trustedProxies: ['127.0.0.1'] }, labRuns: [] },
-    registry: options.registry ?? createConfiguredRegistry({ MONOLITH_REGISTRY_CONFIG: JSON.stringify(PUBLIC_REGISTRY_PINS) }),
+    registry: options.registry ?? createFreshPublicRegistry({ ...(options.nowMs ? { nowMs: options.nowMs } : {}) }),
     publicLabRuns: true,
     ...(options.upstream ? { upstream: options.upstream } : {}),
     ...(options.nowMs ? { nowMs: options.nowMs } : {}),

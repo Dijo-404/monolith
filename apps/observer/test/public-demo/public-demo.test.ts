@@ -1,9 +1,11 @@
 // SIMULATED sources and upstreams over actual loopback sockets. No external RPC.
 import { createConnection } from 'node:net';
-import { randomUUID } from 'node:crypto';
+import { createHash, randomUUID } from 'node:crypto';
 import { test, expect, afterEach } from 'vitest';
 import { makeError, type JsonRpcRequest, type ObserverLabAllocation } from '@monolith/shared';
-import { createPublicDemo } from '../../src/composition/public-demo.js';
+import type { EntityReader, EntityObservation, EndpointAdmission } from '@monolith/registry';
+import type { Result } from '@monolith/shared';
+import { createFreshPublicRegistry, createPublicDemo, PUBLIC_REGISTRY_PINS } from '../../src/composition/public-demo.js';
 import { parseProxyV2 } from '../../src/adapters/http/proxy-v2.js';
 import { publicRoute } from '../../src/adapters/http/public-lab-edge.js';
 
@@ -178,4 +180,61 @@ test('binary parser accepts bounded IPv6/TLV and refuses LOCAL, datagram and inv
   expect(parseProxyV2(six)).toMatchObject({ status: 'accepted', bytes: 55 });
   for (const [offset, value] of [[12, 0x20], [13, 0x12], [13, 0x31]]) { const invalid = frame(); invalid[offset!] = value!; expect(parseProxyV2(invalid).status).toBe('rejected'); }
   const excessive = frame(); excessive.writeUInt16BE(513, 14); expect(parseProxyV2(excessive).status).toBe('rejected');
+});
+
+function registryObservation(now: number, expiresAt: number): EntityObservation {
+  const pins = PUBLIC_REGISTRY_PINS;
+  const immutable = { chain_id: '10', chain_name: 'OP Mainnet', rpc_host: 'https://mainnet.optimism.io/',
+    network_type: 'evm', status: 'candidate', source_url: `https://github.com/ethereum-lists/chains/blob/${pins.sourceRevision}/_data/chains/eip155-10.json`,
+    source_commit: pins.sourceRevision, source_license: `https://github.com/ethereum-lists/chains/blob/${pins.sourceRevision}/LICENSE`,
+    license_sha256: pins.licenseSha256, snapshot_sha256: pins.snapshotSha256, measured_chain_id: '', importer_version: 'monolith-import-v1' } as const;
+  return { chainId: '10', blockNumber: '1000', observedAt: new Date(now).toISOString(), evidence: 'SIMULATED', entities: [{
+    entityKey: `0x${'a'.repeat(64)}`, creator: pins.creator, owner: pins.owner, expiresAtBlock: '2000', readonly: true,
+    permissionlessExtension: false, contentExpiresAt: new Date(expiresAt).toISOString(),
+    record: { ...immutable, record_id: createHash('sha256').update(JSON.stringify(immutable)).digest('hex'),
+      observed_at: new Date(now - 1000).toISOString() },
+  }] };
+}
+
+test('separate public GETs twenty seconds apart receive fresh windows clamped to the real entity deadline', async () => {
+  const began = Date.parse('2030-01-01T00:00:00.000Z'); let now = began; let reads = 0; let admissions = 0;
+  const registry = createFreshPublicRegistry({ nowMs: () => now,
+    reader: { readChain: async () => { reads++; return { ok: true, value: registryObservation(now, began + 120_000) }; } },
+    admission: { check: async () => { admissions++; return { ok: true, value: undefined }; } },
+  });
+  const demo = await setup({ registry, nowMs: () => now });
+  const metadata = async () => {
+    const response = await wire(demo.edgePort, request('GET', '/api/registry/chains?chainId=10'));
+    expect(response.status).toBe(200);
+    return (response.body as { value: { generatedAt: string; expiresAt: string; revision: string } }).value;
+  };
+  const first = await metadata(); expect(Date.parse(first.expiresAt)).toBe(began + 30_000);
+  now += 20_000;
+  const second = await metadata(); expect(second.revision).toBe(first.revision);
+  expect(Date.parse(second.generatedAt)).toBe(now); expect(Date.parse(second.expiresAt)).toBe(now + 30_000);
+  now = began + 110_000;
+  const last = await metadata(); expect(Date.parse(last.expiresAt)).toBe(began + 120_000);
+  expect(reads).toBe(3); expect(admissions).toBe(3); expect(demo.calls).toHaveLength(0);
+});
+
+test.each(['reader', 'admission'] as const)('fresh query factories retain the shared sixteen slots after an unresponsive %s times out', async (stage) => {
+  const now = Date.now(); let operations = 0; let settle: () => void = () => {};
+  const waitingRead = new Promise<Result<EntityObservation>>((resolve) => { if (stage === 'reader') settle = () => resolve({ ok: false, error: makeError('REGISTRY_UNAVAILABLE') }); });
+  const waitingAdmission = new Promise<Result<void>>((resolve) => { if (stage === 'admission') settle = () => resolve({ ok: true, value: undefined }); });
+  const reader: EntityReader = { readChain: async () => {
+    if (stage === 'reader') { operations++; return waitingRead; }
+    return { ok: true, value: registryObservation(now, now + 120_000) };
+  } };
+  const admission: EndpointAdmission = { check: async () => {
+    if (stage === 'admission') { operations++; return waitingAdmission; }
+    return { ok: true, value: undefined };
+  } };
+  const registry = createFreshPublicRegistry({ reader, admission, queryTimeoutMs: 30, nowMs: () => now });
+  const demo = await setup({ registry, nowMs: () => now });
+  const fetchMetadata = () => wire(demo.edgePort, request('GET', '/api/registry/chains?chainId=10'));
+  const first = await Promise.all(Array.from({ length: 16 }, fetchMetadata));
+  expect(first.every((response) => response.status === 503)).toBe(true); expect(operations).toBe(16);
+  expect((await fetchMetadata()).status).toBe(429); expect(operations).toBe(16);
+  settle(); await new Promise((resolve) => setTimeout(resolve, 10));
+  expect((await fetchMetadata()).status).not.toBe(429); expect(operations).toBe(17);
 });
