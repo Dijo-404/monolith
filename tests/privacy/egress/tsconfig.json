@@ -1,0 +1,16 @@
+{
+  "extends": "../../../tsconfig.base.json",
+  "compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "lib": ["ES2023", "DOM"],
+    "resolveJsonModule": true,
+    "noEmit": true,
+    "paths": {
+      "@monolith/shared": ["../../../packages/shared/dist/index.d.ts"],
+      "@monolith/transport": ["../../../packages/transport/dist/index.d.ts"],
+      "@monolith/privacy-analyzer": ["../../../packages/privacy-analyzer/dist/index.d.ts"]
+    }
+  },
+  "include": ["../../fixtures/leak-widget/*.ts", "../../fixtures/leak-widget/*.json"]
+}
