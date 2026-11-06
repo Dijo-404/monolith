@@ -1,0 +1,12 @@
+{
+  "observedAt": "2026-11-06T12:30:50.311Z",
+  "evidence": "OBSERVED_LIVE",
+  "scope": "Public Rabdi connectivity and empty scoped query only; no write or route validation",
+  "chainId": 7794095,
+  "blockNumber": "291241",
+  "publisher": "0x93D1A42655F2B0BCFa126e3D2a33e4ab60a74CA4",
+  "balanceWei": "0",
+  "query": "arkiv.schema = str('monolith.rpc.v1') AND run_id = str('mn005-connectivity-check') AND $owner = addr(0x93D1A42655F2B0BCFa126e3D2a33e4ab60a74CA4) AND $creator = addr(0x93D1A42655F2B0BCFa126e3D2a33e4ab60a74CA4)",
+  "rowCount": 0,
+  "funding": "BLOCKED_UNFUNDED_PUBLISHER"
+}
