@@ -1019,5 +1019,112 @@
     ],
     "gate": "MN-001, MN-002, MN-011 and MN-014 merged with accepted evidence; task unclaimed. Keep this P2 extension off MN-017's required dependency graph. Coordinate any lockfile edit with the current single editor and any shared API/browser-runner/README change on its owning issue before expanding scope. Registration is planning only; no implementation or npm publication is authorized by this task's creation.",
     "conditional": false
+  },
+  {
+    "id": "MN-027",
+    "title": "Add Uniswap quote privacy tests with a real protected quote",
+    "lane": "D",
+    "phase": "integration",
+    "priority": "P2",
+    "estimate": "2–4 hours for one fixed quote scenario; split broader routing or trading work",
+    "branch": "feat/mn-027-uniswap-quote-privacy",
+    "depends_on": [
+      "MN-017",
+      "MN-023",
+      "MN-025"
+    ],
+    "paths": [
+      "apps/dashboard/src/features/quote/**",
+      "apps/dashboard/src/composition/quote.ts",
+      "apps/dashboard/src/composition/lab.ts",
+      "apps/dashboard/src/features/lab/**",
+      "apps/observer/src/composition/public-demo.ts",
+      "apps/observer/test/public-demo/**",
+      "tests/e2e/quote-privacy/**",
+      "tests/fixtures/quote-privacy/**",
+      "tests/privacy/egress/reviewed-adapters.json",
+      "docs/uniswap-quote.md",
+      "FEEDBACK.md"
+    ],
+    "scope": [
+      "Add one useful fixed-public-pair, fixed-amount Uniswap quote scenario on an already approved chain where feasible. Verify the actual Quoter/pool deployments and ABI from official sources; encode and decode the quote through adapters and existing public package exports.",
+      "Send quote and supporting RPC reads through MonolithTransport and a real verified browser worker. Extend the mapped live driver for exact approved eth_call ABI bytes and fixed public metadata reads, with exact contract, selector, calldata-length and block-tag rules; keep the observer read-only and configured by its operator.",
+      "Show the decoded quote, observation time, separately sampled tip/range, protected route and residual calldata exposure; never infer its exact execution block from an eth_call result. Introduce an explicit fixed synthetic direct-quote negative control, independently detect it, repair it and rerun the same useful quote.",
+      "Extend the declared independent egress inventory for every new probe, metadata read and quote. Preserve useful-read denominators, trace correlation, bounded attempts, bootstrap disclosure and evidence labels. Adapter-review entries may identify only the exact newly reviewed adapters; they may not weaken scanner rules or exempt other files.",
+      "Document the reusable example, limitations and honest Uniswap feedback. Prepare the public-code and developer-feedback-form checklist without submitting forms, changing repository visibility or claiming prize eligibility. No swaps, approvals, keys, balances of private wallets, funding, relayer, arbitrary RPC/contract inputs, SDK default HTTP provider or Node anonymity transport."
+    ],
+    "acceptance": [
+      "An actual supported Uniswap quote returns a validated useful amount-out through the verified worker with exact chain, public pair/amount, contract/ABI and honest sampled tip/time context recorded; no exact execution block is inferred from quote output. Recorded or mocked fixtures are labelled separately; a logo, arbitrary eth_call success or hard-coded amount does not pass.",
+      "Every app-owned quote/metadata read and chain-ID probe uses the admitted protected capability or blocks. Exact target/selector/calldata bytes and result decoding are checked; malformed ABI output, wrong chain, expired/untrusted registry, forbidden calls and failed worker never produce success or a direct retry.",
+      "Independent browser interception detects the injected direct quote even without a transport trace. After repair, the same useful operation succeeds with zero unexpected direct egress; every eligible logical read, failed attempt and retry is accounted for without inflating coverage or permitting an empty useful-read pass.",
+      "Tests cover ABI encoding/decoding, exact request admission, direct bypass detection/repair, worker outage, cancellation and stale result handling. Real quote and failure/repair observations are exported with timestamps, source/tool bindings and redacted artifacts; no fixture is promoted to live evidence.",
+      "The UI and documentation state that RPC destinations still see calldata, token pair and amount, and that a quote is not a settled swap, private trade, MEV protection or verified state proof. No private wallet/order/IP/key material enters reports; the existing core walkthrough remains functional."
+    ],
+    "evidence": [
+      "Exact current workspace checks, focused quote/observer/ABI tests and independent browser privacy regression commands/results",
+      "Actual decoded quote plus independent injected-failure, repaired-success and worker-outage artifacts, with measured inventory and honest evidence provenance",
+      "Official deployment/ABI references, reproducible fixed scenario, FEEDBACK.md and Uniswap submission checklist with no claim that the form was submitted"
+    ],
+    "gate": "MN-017, MN-023 and MN-025 merged with accepted actual core/public deployment evidence, plus this registration merged; task unclaimed until normal fresh claim. Coordinate shared lab/composition/observer and exact adapter-review paths with their owners before editing. Keep this P2 extension off MN-017's required graph. Existing v1 shared schemas, root manifests/lockfile, scanner rules and deployment/runtime publication are outside these paths; any needed expansion requires separate ownership/interface coordination. Registration adds planned work only and does not authorize feature implementation, sponsor submission or source publication now.",
+    "conditional": false
+  },
+  {
+    "id": "MN-028",
+    "title": "Add protected endpoint diagnostics and explicit provider selection",
+    "lane": "A",
+    "phase": "integration",
+    "priority": "P2",
+    "estimate": "3–5 hours for two approved providers and explicit selection; split automatic failover or wider import changes",
+    "branch": "feat/mn-028-protected-provider-selection",
+    "depends_on": [
+      "MN-017",
+      "MN-023",
+      "MN-025",
+      "MN-027"
+    ],
+    "paths": [
+      "packages/registry/src/application/import-registry.ts",
+      "packages/registry/test/importer/**",
+      "scripts/import-evm-registry.ts",
+      "apps/dashboard/src/features/providers/**",
+      "apps/dashboard/src/composition/providers.ts",
+      "apps/dashboard/src/composition/quote.ts",
+      "apps/dashboard/src/composition/transport.ts",
+      "apps/dashboard/src/composition/registry.ts",
+      "apps/dashboard/src/composition/lab.ts",
+      "apps/dashboard/src/features/registry/live-policy.ts",
+      "apps/dashboard/src/features/lab/**",
+      "apps/dashboard/src/features/quote/**",
+      "apps/observer/src/composition/public-demo.ts",
+      "apps/observer/test/public-demo/**",
+      "tests/e2e/provider-selection/**",
+      "tests/e2e/registry-routing/**",
+      "tests/fixtures/provider-selection/**",
+      "tests/privacy/egress/reviewed-adapters.json",
+      "docs/registry-importer.md",
+      "docs/provider-selection.md"
+    ],
+    "scope": [
+      "Make two genuinely distinct approved same-chain provider candidates available from trusted licensed Arkiv records. Add only a bounded opt-in importer selection mode for that use: preserve the current first-safe-endpoint-per-network default, provenance, journal/idempotency, expiry and prior evidence. Two aliases or observer IDs pointing to the same upstream are not two providers.",
+      "Add bounded user-triggered diagnostics for approved candidates using public eth_chainId and eth_blockNumber reads through the verified worker. Show chain match, observed availability, latency, tip and check time/age. Bound candidate count, concurrency, timeout and resource use; no background telemetry, address-specific health requests or anonymity/uptime score.",
+      "Let the user explicitly choose a different admitted provider after an availability failure. Re-load and admit the current manifest, validate publisher/provenance/expiry/origin and perform a fresh protected chain-ID probe before useful reads. Give each choice an exact operator-approved observer upstream mapping and its own lifecycle-bound capability; never accept a client URL as authority.",
+      "Invalidate prior selections, in-flight results and cached probes on switch, worker replacement/close or expiry. Preserve the MonolithTransport facade and fixed-route driver boundary; choice is an application policy, never an SDK or transport direct fallback.",
+      "Demonstrate provider A unavailable, explicit selection of approved provider B and the original useful Uniswap quote from MN-027 succeeding via B with independent routing observations. Record all diagnostics/probes/attempts and remaining payload/correlation limits. Automatic failover, unapproved URLs, stale/unsigned snapshot recovery, block-hash consensus, new shared DTOs and arbitrary proxying are outside this first task."
+    ],
+    "acceptance": [
+      "Two distinct same-chain provider records have actual trusted Arkiv entity/write/query evidence, licensed source provenance, freshness and exact operator observer mappings. The bounded import mode is rerunnable without changing the existing default, weakening publisher/origin policy, duplicating journal identities or rewriting accepted historical evidence.",
+      "Diagnostics contact only admitted approved providers through the real verified worker; all chain-ID probes and public tip reads are inventoried. Display actual sample times and failures, never a cached result as present-day health or a short sample as an uptime/anonymity guarantee.",
+      "An unavailable selected provider blocks until an explicit user choice. Before useful traffic reaches B, fresh manifest admission and a protected B chain probe pass. Wrong-chain, forged/expired data, forbidden origins, absent worker and all-provider failure remain blocked; no trust/policy failure is converted into an automatic retry or ordinary HTTP fallback.",
+      "Race/cancellation tests prove switching aborts pending work, ignores late completions and permits no new sends through a deselected capability. Already dispatched traffic cannot be undone; its attempts remain inventoried. Old completions cannot update selection or revive expired capabilities. Widget requests cannot override selected endpoint IDs or URLs; worker lifecycle changes invalidate readiness and probes.",
+      "A real controlled outage plus explicit reselection preserves the MN-027 useful quote and shows independently observed protected traffic to B, with zero unexpected direct egress and complete logical-read/attempt accounting. Synthetic outage tests and actual observations stay distinct; a successful dropdown or mocked second provider alone does not pass.",
+      "Focused tests cover bounded import selection/default/idempotency, duplicate upstream aliases, diagnostics budgets, stale/untrusted/wrong-chain/unsafe candidates, selection races, mid-flight expiry and fail-closed outages. Existing registry, quote and core privacy checks remain valid; public artifacts omit raw IPs, keys, private wallet/order data and stable user identifiers."
+    ],
+    "evidence": [
+      "Current workspace and focused importer/registry/provider/lifecycle/independent browser privacy test commands and results",
+      "Actual two-provider Arkiv provenance/query evidence and operator route bindings, with default-import and rerun/idempotency results",
+      "Actual A-unavailable, explicit-B-selection and useful protected-quote evidence with timestamps, complete diagnostics/probe/read inventory and redacted artifacts"
+    ],
+    "gate": "MN-017, MN-023, MN-025 and MN-027 merged with accepted evidence, plus this registration merged; task unclaimed until normal fresh claim. MN-027 precedes this task to supply the useful quote and serialize shared lab/observer integration. Coordinate importer, registry/composition, observer and exact adapter-review paths with affected owners before editing. Keep this P2 extension off the core release graph. Root manifests/lockfile, trust-policy domain/reader, shared contracts, scanner rules, old observed-evidence files and publication/runtime operations are not granted by these paths; expand only through explicit coordination. Registration adds planning only, not active implementation ownership or deployment authority.",
+    "conditional": false
   }
 ]
