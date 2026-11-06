@@ -79,6 +79,7 @@ const artifact = { schemaVersion: 1, sourceTask: 'MN-014', evidence: 'BLOCKED', 
   gitHead: execFileSync('git', ['rev-parse', 'HEAD'], { cwd: repository, encoding: 'utf8' }).trim(),
   source, sourceUnchangedAfterRun: false, cases: [], layouts: [], resolverResponses: [], bootstrapRequests: [], metadata: [],
   hostingBootstrapRequests: [], frameChecks: [],
+  sandboxChecks: { repairInitiallyDisabled: false, fixtureOnlyDisclosure: false, completed: [] },
   controls: { ordinaryProtectedTargetRequests: 0, directDetectionSelfCheck: false, pageErrors: 0, forgedLeakLabels: [] },
   shutdown: { browserContextDestroyed: false, iframeRemovedOnNavigation: false,
     iframeScope: 'MONOLITH_DISPOSABLE_WORKER_HOST', globalFramesAfterNavigation: null }, failure: null,
@@ -188,6 +189,14 @@ try {
   page.on('pageerror', () => artifact.controls.pageErrors++);
   await page.goto(preview.href);
   await page.getByRole('heading', { name: 'Monolith live privacy lab' }).waitFor();
+  const sandbox = page.getByTestId('sandbox-walkthrough');
+  await sandbox.waitFor();
+  assert.equal(await sandbox.getByRole('button', { name: 'Run repaired fixture', exact: true }).isDisabled(), true);
+  assert.equal(await sandbox.getByTestId('sandbox-outcome').getAttribute('data-outcome'), 'untested');
+  assert.equal(await sandbox.getByText('This changes one fixed sandbox fixture. It does not edit arbitrary production code.', { exact: true }).count(), 1);
+  assert.equal(await sandbox.getByTestId('sandbox-patch').textContent(), "- route: 'direct-debug'\n+ route: 'anon-nym'");
+  artifact.sandboxChecks.repairInitiallyDisabled = true;
+  artifact.sandboxChecks.fixtureOnlyDisclosure = true;
   const startupFrames = await recordFrames('startup');
   assert(startupFrames.valid); assert.equal(startupFrames.monolith, 0);
   await page.evaluate(async (target) => { try { await fetch(target, { method: 'POST', body: '{}' }); } catch { /* Expected interception. */ } },
@@ -200,7 +209,12 @@ try {
     mode = selected; activeAllocation = null; latestDiagnostics = null; controlIds = new Set();
     process.stdout.write(`${JSON.stringify({ phase: `STARTING_${mode.toUpperCase()}` })}\n`);
     await page.locator('.steps button').nth(index).click();
-    await page.locator('.guide__actions .btn--primary').click();
+    const actionOrigin = ['leak', 'repair'].includes(mode) ? 'sandbox-presenter' : 'live-guide';
+    if (actionOrigin === 'sandbox-presenter') {
+      await sandbox.getByRole('button', { name: mode === 'leak' ? 'Run leaky fixture' : 'Run repaired fixture', exact: true }).click();
+    } else {
+      await page.getByRole('button', { name: mode === 'private' ? 'Run private read' : 'Compare direct and private', exact: true }).click();
+    }
     const previousRun = artifact.cases.at(-1)?.allocation.runId ?? null;
     await page.waitForFunction((previous) => {
       const main = document.querySelector('main[data-live-phase]');
@@ -260,11 +274,24 @@ try {
       assert.deepEqual(report.fixturePatch.operations, [{ op: 'test', path: '', value: leakFixture },
         { op: 'replace', path: '/route', value: 'anon-nym' }]);
     }
+    if (actionOrigin === 'sandbox-presenter') {
+      const expectedOutcome = mode === 'leak' ? 'leak-observed' : 'repaired';
+      assert.equal(await sandbox.getByTestId('sandbox-outcome').getAttribute('data-outcome'), expectedOutcome);
+      assert.equal(await sandbox.getByTestId('sandbox-evidence').textContent(), 'OBSERVED LIVE');
+      assert.equal(await sandbox.getByText(report.report.runId, { exact: true }).first().isVisible(), true);
+      assert.equal(await sandbox.getByRole('button', { name: 'Run repaired fixture', exact: true }).isEnabled(), true);
+      if (mode === 'repair') {
+        assert.notEqual(report.previousLeakReport.runId, report.report.runId);
+        assert.equal(await sandbox.getByText(report.previousLeakReport.runId, { exact: true }).first().isVisible(), true);
+      }
+      artifact.sandboxChecks.completed.push({ mode, outcome: expectedOutcome, evidence: 'OBSERVED_LIVE',
+        reportId: report.report.runId, previousLeakReportId: report.previousLeakReport?.runId ?? null });
+    }
     assert(artifact.resolverResponses.some((row) => row.keccak256 === report.worker.workerHash && row.status === 200));
     const screenshot = `${mode}.png`;
     await page.screenshot({ path: join(output, screenshot), fullPage: true });
     await writeFile(join(output, `${mode}-report.json`), `${JSON.stringify(report, null, 2)}\n`, { flag: 'wx' });
-    artifact.cases.push({ mode, passed: true, allocation: activeAllocation, inventory: rows,
+    artifact.cases.push({ mode, actionOrigin, passed: true, allocation: activeAllocation, inventory: rows,
       scenarioId: report.scenario.scenarioId, seed: report.scenario.seed,
       fixtureRoute: report.widgetFixture?.route ?? null,
       diagnostics: latestDiagnostics, reportSha256: sha(await readFile(join(output, `${mode}-report.json`))),

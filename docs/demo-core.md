@@ -4,16 +4,14 @@ Monolith detects a direct RPC read that bypasses the required transport, shows a
 bounded sandbox repair, and reruns the useful operation. This walkthrough requires
 no payment contract, relayer, wallet key or Whitechain integration.
 
-MN-016 currently has an explicitly authorized **isolated offline** implementation.
-Its exported [sandbox presenter](../apps/dashboard/src/features/sandbox/SandboxWalkthrough.tsx)
-is available for owner-coordinated integration; this change does not mount it in the
-production dashboard. The active MN-014 owner retains the live lab and composition
-files. Passing the offline walkthrough does not accept MN-014, the public backend
-or deployment, MN-016's complete live gate, or the core release.
+The [sandbox presenter](../apps/dashboard/src/features/sandbox/SandboxWalkthrough.tsx)
+is mounted in the live dashboard through the existing controller. Normal MN-012
+and MN-014 dependency acceptance preceded this integration; the earlier offline
+checkpoint and its recorded software evidence remain explicitly SIMULATED.
+Passing offline tests does not accept the mounted live walkthrough or core release.
 
-The coordinated integration contract is the existing controller's current snapshot
-and its `run` method. The MN-014 owner can mount the exported component in its
-existing subscription without introducing another controller or network adapter:
+The coordinated integration uses the existing controller's current snapshot and
+its `run` method, without introducing another controller or network adapter:
 
 ```tsx
 <SandboxWalkthrough state={state} onRun={(mode) => { void controller.run(mode); }} />
@@ -125,12 +123,18 @@ listed in this document have passed in the reader's environment.
 
 ## Walk through the configured live lab
 
-The existing [live dashboard](../apps/dashboard/src/features/lab/LiveLabApp.tsx)
-already exposes four actions. Its implementation is separate from acceptance of an
-actual full run. Follow this script only in a deployment prepared by the existing
-MN-014/MN-025/MN-023 owners; these instructions do not start, replace or publish a
-service. The current task's isolated offline authorization leaves those live gates
-pending. The [live acceptance runner and setup](../tests/e2e/lab-ui/README.md)
+The [live dashboard](../apps/dashboard/src/features/lab/LiveLabApp.tsx) exposes the
+four-step guide and a dedicated **Break, repair and rerun** card. Use **Run leaky
+fixture** and then **Run repaired fixture** in that card to exercise the mounted
+presenter. The repair action starts disabled and becomes available only after a
+measured failing report is retained. The card shows the bounded route diff, the
+earlier failure and the distinct current report; it never edits arbitrary source.
+
+Follow this script only in a deployment prepared by the MN-014/MN-025/MN-023
+owners; these instructions do not start, replace or publish a service. A final
+assembled build and genuine deployed presenter-button capture remain required
+before MN-016 or core release acceptance. The
+[live acceptance runner and setup](../tests/e2e/lab-ui/README.md)
 document how the owning sessions bind an actual capture to reviewed source and
 compiled assets.
 

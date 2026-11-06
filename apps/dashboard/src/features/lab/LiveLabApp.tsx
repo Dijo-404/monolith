@@ -7,6 +7,7 @@ import { Stage } from '../../components/stage/Stage.js';
 import type { StageScene } from '../../components/stage/renderer.js';
 import { usePrefersReducedMotion } from '../../app/use-lab.js';
 import type { LiveMode, LiveSnapshot, LiveWireRead } from './live-types.js';
+import { SandboxWalkthrough } from '../sandbox/SandboxWalkthrough.js';
 import './live.css';
 
 const PHASES: Record<LiveSnapshot['phase'], string> = {
@@ -232,6 +233,7 @@ export function LiveLabApp({ observerUrl }: { observerUrl: string }) {
         <p>Measured receipts, useful reads and explicit limits. Every action starts a fresh bounded run.</p></div>
         <button className="btn btn--secondary btn--small" disabled={!report || state.busy} onClick={exportReport}>Export measured report</button>
       </div><div className="details__grid">
+        <SandboxWalkthrough state={state} onRun={(mode) => { void controller.run(mode); }} />
         <LiveChecks state={state} /><Activity state={state} /><WorkerCard state={state} /><RegistryCard state={state} />
         <section className="card" aria-labelledby="coverage-title"><header className="card__head"><h3 id="coverage-title">Protected coverage</h3><EvidenceTag state={state} /></header>
           <p className="card__lead" data-testid="live-coverage">{measured ? `${report.protectedReads}/${report.eligibleReads}` : 'Source comparison not measured'}</p>
