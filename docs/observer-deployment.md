@@ -65,12 +65,14 @@ Evidence retains no raw source addresses, RPC parameters, credential or provider
 message. The original installed Nym/header limitation is bridged explicitly; no
 SDK/worker fix is claimed.
 
-The current service is `monolith-public-observer-mn025-20261107-6.service`, with a
+The capture-time service was `monolith-public-observer-mn025-20261107-6.service`, with a
 12-hour cap and an unprivileged sleep/idle inhibitor. Prior owned processes were
 fully stopped first; the [shutdown record](../deploy/observer/evidence/2026-11-07/prior-runtime-shutdown.json)
 preserves their last READY snapshot separately from actual inactive/PID0/cgroup0
-checks. A READY JSON is not current liveness proof: inspect the user service and
-bounded public health. Keep runtime6 active through final dashboard QA. Teardown:
+checks. These retained records do not establish current availability. Follow
+[the latest operational updates](https://github.com/Dijo-404/monolith/issues/40)
+and verify the current user service and backend origin before final dashboard QA;
+a READY JSON alone is not liveness proof. Historical runtime6 teardown:
 
 ```sh
 systemctl --user stop monolith-public-observer-mn025-20261107-6.service

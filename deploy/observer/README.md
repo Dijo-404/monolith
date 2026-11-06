@@ -135,6 +135,7 @@ manifest/lockfile is changed by this deployment task.
 
 The [actual deployment record](evidence/2026-11-07/deployment-record.json) binds
 runtime6 and the passing four-case MN014 browser capture. Its metadata/binding
-copies remain byte-identical; the current service is kept active through final
-dashboard QA. Its 12-hour cap and unprivileged sleep/idle inhibitor do not
-guarantee provider or hostname lifetime.
+copies remain byte-identical. This describes the capture-time runtime and is
+not current availability proof. Follow the [latest operational updates](https://github.com/Dijo-404/monolith/issues/40)
+and verify the current backend origin before final dashboard QA. The 12-hour cap
+and unprivileged sleep/idle inhibitor do not guarantee provider or hostname lifetime.
