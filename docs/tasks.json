@@ -213,7 +213,17 @@
     "paths": [
       "apps/dashboard/src/app/**",
       "apps/dashboard/src/components/**",
-      "apps/dashboard/src/styles/**"
+      "apps/dashboard/src/styles/**",
+      "apps/dashboard/index.html",
+      "apps/dashboard/src/main.tsx",
+      "apps/dashboard/src/App.tsx",
+      "apps/dashboard/src/styles.css",
+      "apps/dashboard/test/guide.test.ts",
+      "apps/dashboard/test/lab-reducer.test.ts",
+      "apps/dashboard/PRODUCT.md",
+      "apps/dashboard/DESIGN.md",
+      "apps/dashboard/.impeccable/**",
+      "apps/dashboard/docs/review/**"
     ],
     "scope": [
       "Build a single-screen privacy lab with route lanes, worker status, registry provenance and a run timeline.",
@@ -524,7 +534,13 @@
       "apps/dashboard/src/features/lab/**",
       "apps/dashboard/src/features/registry/**",
       "apps/dashboard/src/composition/lab.ts",
-      "tests/e2e/lab-ui/**"
+      "tests/e2e/lab-ui/**",
+      "apps/dashboard/src/main.tsx",
+      "apps/dashboard/vite.config.ts",
+      "apps/dashboard/assets/worker-host.html",
+      "apps/dashboard/src/components/Header.tsx",
+      "apps/dashboard/src/components/stage/Stage.tsx",
+      "apps/dashboard/src/components/stage/StageFallback.tsx"
     ],
     "scope": [
       "Replace the fixture adapters with reviewed transport, observer, registry and analyzer outputs.",
@@ -835,5 +851,128 @@
     ],
     "gate": "OPTIONAL: MN-017 and MN-021 passed; user retains all merges to main and final submission decisions.",
     "conditional": true
+  },
+  {
+    "id": "MN-023",
+    "title": "Prepare no-cost deployment and overnight release hosting",
+    "lane": "C",
+    "phase": "release",
+    "priority": "P0",
+    "estimate": "1–2 hours",
+    "branch": "feat/mn-023-no-cost-deployment",
+    "depends_on": [
+      "MN-001",
+      "MN-002"
+    ],
+    "paths": [
+      "deploy/**",
+      "scripts/deploy/**",
+      "tests/deploy/**",
+      ".openai/**",
+      "docs/deployment.md",
+      "docs/overnight-release.md",
+      "docs/tasks.json",
+      "docs/task-register.md"
+    ],
+    "scope": [
+      "Package the existing dashboard from an exact source commit using the pinned toolchain and explicit public configuration.",
+      "Prepare connected no-cost static hosting without deploying paid resources or uploading secrets.",
+      "Record actual publication URLs, source/content hashes, browser smoke checks and backend lifetime limits; preserve all core evidence gates."
+    ],
+    "acceptance": [
+      "Preparation can run independently after the accepted foundation; final publication uses the real tested application, never the scaffold.",
+      "A clean source-bound build and safe new output produce only declared public static files and reproducible provenance.",
+      "No .env, private keys, local cloud credentials or dependency trees enter the public artifact.",
+      "Public deployment does not convert blocked source proof, synthetic tests or optional payment work into accepted core or sponsor evidence."
+    ],
+    "evidence": [
+      "Exact build/package commands and content hashes",
+      "Actual deployment URL and browser smoke outcome with remaining limits"
+    ],
+    "gate": "MN-001 and MN-002 accepted for independent deployment preparation; final product publication preserves all outstanding application/live-evidence acceptance gates.",
+    "conditional": false
+  },
+  {
+    "id": "MN-024",
+    "title": "Allocate fresh bounded public synthetic observer runs",
+    "lane": "C",
+    "phase": "integration",
+    "priority": "P0",
+    "estimate": "1–2 hours",
+    "branch": "feat/mn-024-public-lab-runs",
+    "depends_on": [
+      "MN-001",
+      "MN-002",
+      "MN-004"
+    ],
+    "paths": [
+      "apps/observer/src/adapters/http/observer.ts",
+      "apps/observer/src/application/create-lab-run.ts",
+      "apps/observer/src/composition/server.ts",
+      "apps/observer/src/composition/env.ts",
+      "apps/observer/src/composition/start.ts",
+      "apps/observer/test/**",
+      "packages/shared/src/observer-lab.ts",
+      "packages/shared/src/index.ts",
+      "packages/shared/test/**",
+      "docs/observer.md",
+      "docs/contracts.md"
+    ],
+    "scope": [
+      "Add explicitly opt-in, default-disabled allocation of fresh bounded server-generated synthetic observer runs.",
+      "Export a strict additive shared allocation DTO and describe the HTTP boundary without changing existing v1 meanings.",
+      "Preserve source trust, read-only RPC policy, data retention and all existing default behavior."
+    ],
+    "acceptance": [
+      "Clients cannot choose run/baseline IDs, upstreams, source claims or payloads through allocation.",
+      "Allocation rate, active runs, lifetime, body shape and observation resources are bounded; runs remain isolated and expired baseline sources are erased.",
+      "No credentials or private source/payload data enter public logs or exports; allocation carries no anonymity success claim.",
+      "Disabled and operator-registered deployments remain compatible; tests cover configuration, abuse, expiry, isolation and HTTP/schema boundaries."
+    ],
+    "evidence": [
+      "Current lint/type/test/build results",
+      "HTTP allocation/expiry/isolation and abuse-boundary test output"
+    ],
+    "gate": "MN-001, MN-002 and MN-004 accepted; coordinate with active MN-009 owner without editing its live-proof paths or changing its unresolved source gate.",
+    "conditional": false
+  },
+  {
+    "id": "MN-025",
+    "title": "Deploy reusable no-cost public observer and registry API",
+    "lane": "C",
+    "phase": "release",
+    "priority": "P0",
+    "estimate": "1–2 hours",
+    "branch": "feat/mn-025-public-observer-deployment",
+    "depends_on": [
+      "MN-009",
+      "MN-010",
+      "MN-024"
+    ],
+    "paths": [
+      "apps/observer/src/adapters/http/public-lab-edge.ts",
+      "apps/observer/src/adapters/http/proxy-v2.ts",
+      "apps/observer/src/composition/public-demo.ts",
+      "apps/observer/test/public-demo/**",
+      "deploy/observer/**",
+      "docs/observer-deployment.md"
+    ],
+    "scope": [
+      "Compose a reusable no-cost public observer/registry process with the reviewed source-trust boundary.",
+      "Bridge only missing diagnostic run/content-type metadata through a strictly validated synthetic-run query; preserve RPC body, wire ID, result and source.",
+      "Record real startup/cleanup, endpoint/tool/input hashes, controls and explicit free-tunnel availability/retention limits."
+    ],
+    "acceptance": [
+      "Only configured health, registry, synthetic run allocation/diagnostics and read-only RPC routes are exposed with strict resource limits.",
+      "Caller forwarding/route headers never establish source; host-pinned SSH and loopback PROXYv2 trust plus TOFU/single-user-host limits are explicit.",
+      "Run query/header conflicts, duplicates, unsafe targets, oversized traffic and cross-run contamination are rejected; the actual observer remains authoritative for registration/expiry/upstream policy.",
+      "The actual public process and real-worker checks are recorded without raw IP/body/key logs or permanent-cloud claims."
+    ],
+    "evidence": [
+      "Source/HTTP/run isolation/expiry/abuse test results and current checks",
+      "Actual public endpoint, pinned-tool/input hashes, real-worker/source controls and cleanup/startup evidence"
+    ],
+    "gate": "MN-009, MN-010 and MN-024 merged with accepted evidence; coordinate deploy/observer subtree with MN-023 owner.",
+    "conditional": false
   }
 ]
