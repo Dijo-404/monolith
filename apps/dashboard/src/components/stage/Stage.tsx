@@ -23,6 +23,7 @@ export interface StageProps {
   readonly frame?: StageInsets;
   readonly onSelect: (target: StageTarget) => void;
   readonly children?: ReactNode;
+  readonly live?: boolean;
 }
 
 function detectWebGL2(): boolean {
@@ -74,7 +75,7 @@ type LabelSpec = {
   readonly align?: 'center' | 'start' | 'end';
 };
 
-function labelsFor(scene: StageScene): LabelSpec[] {
+function labelsFor(scene: StageScene, live: boolean): LabelSpec[] {
   const offline = scene.workerState === 'BLOCKED' || scene.workerState === 'CLOSED';
   const labels: LabelSpec[] = [
     { id: 'client', text: 'Your browser', short: 'Your browser', tone: 'neutral', target: 'transport' },
@@ -90,7 +91,7 @@ function labelsFor(scene: StageScene): LabelSpec[] {
   } else {
     labels.push({
       id: 'lane-anon',
-      text: offline ? 'Private route · offline' : 'Private route · three relays',
+      text: offline ? 'Private route · offline' : live ? 'Private route · Nym worker' : 'Private route · three relays',
       tone: 'anon',
     });
   }
@@ -110,6 +111,7 @@ export function Stage({
   frame = CARD_FRAME,
   onSelect,
   children,
+  live = false,
 }: StageProps) {
   const rootRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -191,7 +193,7 @@ export function Stage({
     rendererRef.current?.setReducedMotion(reducedMotion);
   }, [reducedMotion, webgl]);
 
-  const labels = labelsFor(scene);
+  const labels = labelsFor(scene, live);
 
   return (
     <div ref={rootRef} className="stage" data-webgl={webgl ? 'on' : 'off'}>
@@ -201,7 +203,9 @@ export function Stage({
             ref={canvasRef}
             className="stage__canvas"
             role="img"
-            aria-label="Simulated routes from your browser to the RPC endpoint, through Anon-RPC or directly. Readable route cards and worker panels describe the same state."
+            aria-label={live
+              ? 'Illustrative network paths. Actual read outcomes and observer receipts are listed below; the drawing is not a measured hop count.'
+              : 'Simulated routes from your browser to the RPC endpoint, through Anon-RPC or directly. Readable route cards and worker panels describe the same state.'}
           />
           <svg className="stage__leaders" aria-hidden="true">
             <path ref={leaderRef} d="" />
@@ -245,7 +249,7 @@ export function Stage({
           </div>
         </>
       ) : (
-        <StageFallback scene={scene} flights={flights} onSelect={onSelect} />
+        <StageFallback scene={scene} flights={flights} onSelect={onSelect} live={live} />
       )}
       {children}
     </div>
