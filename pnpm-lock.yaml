@@ -246,6 +246,18 @@ importers:
         specifier: 5.12.8
         version: 5.12.8
 
+  packages/cli:
+    devDependencies:
+      '@monolith/privacy-analyzer':
+        specifier: workspace:*
+        version: link:../privacy-analyzer
+      '@monolith/shared':
+        specifier: workspace:*
+        version: link:../shared
+      esbuild:
+        specifier: 0.28.2
+        version: 0.28.2
+
   packages/privacy-analyzer:
     dependencies:
       '@monolith/shared':
