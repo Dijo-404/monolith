@@ -39,3 +39,5 @@ Only MN-001 starts ready. Promote downstream tasks after prerequisite merges **a
 MN-023 was added for the owner-requested overnight no-cost deployment. Its preparation depends only on the accepted foundation; publication does not waive MN-017 or any live-evidence gate. MN-006's additional UI entrypoint, test and design paths were coordinated on issue #6 for the explicitly authorized takeover.
 
 MN-024 fixes the public demo lifecycle: startup-only operator runs expire after five minutes and cannot share a visitor baseline. It adds bounded opt-in allocation and preserves existing defaults plus MN-009's source-proof gate.
+
+MN-014 owns the two exact reviewed live-UI adapter entries in `tests/privacy/egress/reviewed-adapters.json`, coordinated with MN-012 on their issues. This path addition does not authorize scanner changes or exempt other files from review.
