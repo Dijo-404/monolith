@@ -1,5 +1,5 @@
 import { createHash } from 'node:crypto';
-import { readFile, readdir } from 'node:fs/promises';
+import { lstat, readFile, readdir } from 'node:fs/promises';
 import { createRequire } from 'node:module';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -61,14 +61,36 @@ export function inspectBrowserSource(source, filename) {
 }
 
 export async function checkRpcEgress(root = repository) {
-  const pins = JSON.parse(await readFile(join(root, 'tests/privacy/egress/reviewed-adapters.json'), 'utf8'));
+  root = resolve(root);
   const violations = [];
   const seen = new Set();
   let files = 0;
+  const result = () => ({ evidence: 'SIMULATED', files, violations, passed: violations.length === 0,
+    scope: 'Dashboard source and transport browser adapters; explicit whole-file pins for reviewed worker/bootstrap/direct-control/registry metadata boundaries. Not a universal JavaScript proof.' });
+  const rejectLink = (path) => violations.push({ file: path, line: 1, column: 1,
+    reason: 'Symbolic links are outside the reviewed browser source boundary.' });
+  // Inspect the link itself, including dangling links, before reading through it.
+  if ((await lstat(root)).isSymbolicLink()) {
+    rejectLink('.');
+    return result();
+  }
+  const pins = JSON.parse(await readFile(join(root, 'tests/privacy/egress/reviewed-adapters.json'), 'utf8'));
+  async function unlinkedSourceRoot(directory) {
+    const parts = directory.split('/');
+    for (let length = 1; length <= parts.length; length++) {
+      const path = parts.slice(0, length).join('/');
+      if ((await lstat(join(root, path))).isSymbolicLink()) {
+        rejectLink(path);
+        return false;
+      }
+    }
+    return true;
+  }
   async function walk(directory) {
     for (const entry of await readdir(join(root, directory), { withFileTypes: true })) {
       const path = `${directory}/${entry.name}`;
-      if (entry.isDirectory()) await walk(path);
+      if (entry.isSymbolicLink()) rejectLink(path);
+      else if (entry.isDirectory()) await walk(path);
       else if (/\.(?:ts|tsx|mts|cts|js|jsx|mjs|cjs)$/.test(entry.name)) {
         files++;
         const bytes = await readFile(join(root, path));
@@ -81,10 +103,11 @@ export async function checkRpcEgress(root = repository) {
       }
     }
   }
-  for (const directory of ['apps/dashboard/src', 'packages/transport/src/adapters/browser']) await walk(directory);
+  for (const directory of ['apps/dashboard/src', 'packages/transport/src/adapters/browser']) {
+    if (await unlinkedSourceRoot(directory)) await walk(directory);
+  }
   for (const file of Object.keys(pins.files)) if (!seen.has(file)) {
     violations.push({ file, line: 1, column: 1, reason: 'Reviewed adapter missing from scanned scope.' });
   }
-  return { evidence: 'SIMULATED', files, violations, passed: violations.length === 0,
-    scope: 'Dashboard source and transport browser adapters; explicit whole-file pins for reviewed worker/bootstrap/direct-control/registry metadata boundaries. Not a universal JavaScript proof.' };
+  return result();
 }
