@@ -12,7 +12,10 @@ const zeroAddressWord = '0'.repeat(64);
 const maxBytes = 1_048_576;
 const requestTimeoutMs = 8_000;
 const totalTimeoutMs = 60_000;
-const usage = 'pnpm exec tsx scripts/whitechain-preflight.ts --run | --self-test | --help';
+const usage = 'pnpm exec tsx scripts/whitechain-preflight.ts --run | --self-test | --help\n'
+  + 'pnpm exec tsx scripts/whitechain-preflight.ts --funding --shopper <public-demo-address> '
+  + '--merchant <public-demo-address> --relayer <public-demo-address> --admin <public-demo-address> '
+  + '--amount-base-units <positive-uint256>';
 type Evidence = 'OBSERVED_LIVE' | 'SIMULATED';
 type ErrorCode = 'INVALID_INPUT' | 'TIMEOUT' | 'HTTP_ERROR' | 'NETWORK_ERROR'
   | 'RESPONSE_INVALID' | 'RESPONSE_TOO_LARGE' | 'RPC_ERROR' | 'CHAIN_MISMATCH'
@@ -109,7 +112,7 @@ function client(fetcher: typeof fetch, limits = { requestMs: requestTimeoutMs, t
   return {
     get requestCount() { return requests; },
     get: (address: string) => json(`${explorerUrl}/api/v2/smart-contracts/${address}`),
-    async rpc(method: 'eth_chainId' | 'eth_blockNumber' | 'eth_getCode' | 'eth_getStorageAt' | 'eth_call', params: unknown[]) {
+    async rpc(method: 'eth_chainId' | 'eth_blockNumber' | 'eth_getCode' | 'eth_getStorageAt' | 'eth_getBalance' | 'eth_call', params: unknown[]) {
       const expectedId = `mn018-${requests + 1}`;
       const envelope = object(await json(rpcUrl, { method, params }));
       if (envelope['jsonrpc'] !== '2.0' || envelope['id'] !== expectedId
@@ -202,10 +205,92 @@ export async function inspectWhitechain(fetcher: typeof fetch, evidence: Evidenc
   };
 }
 
-function mode(args: string[]) {
-  if (args.length === 0) return '--help';
+const roleNames = ['shopper', 'merchant', 'relayer', 'admin'] as const;
+type FundingInput = { amount: string } & Record<typeof roleNames[number], string>;
+function fundingInput(input: unknown): FundingInput {
+  if (!input || typeof input !== 'object' || Array.isArray(input)) fail('INVALID_INPUT');
+  const value = object(input);
+  if (Object.keys(value).sort().join(',') !== 'admin,amount,merchant,relayer,shopper') fail('INVALID_INPUT');
+  const addresses = roleNames.map((role) => value[role]);
+  if (addresses.some((address) => typeof address !== 'string' || !/^0x[0-9a-fA-F]{40}$/.test(address)
+    || BigInt(address) === 0n)) fail('INVALID_INPUT');
+  const normalized = (addresses as string[]).map((address) => address.toLowerCase());
+  if (new Set(normalized).size !== roleNames.length) fail('INVALID_INPUT');
+  const amount = value['amount'];
+  if (typeof amount !== 'string' || !/^[1-9][0-9]{0,77}$/.test(amount) || BigInt(amount) >= 2n ** 256n) fail('INVALID_INPUT');
+  return { shopper: normalized[0]!, merchant: normalized[1]!, relayer: normalized[2]!, admin: normalized[3]!, amount };
+}
+
+/** Public synthetic demo roles only. This snapshot proves neither key control nor a sufficient gas budget. */
+export async function inspectFunding(fetcher: typeof fetch, input: unknown, evidence: Evidence) {
+  const funding = fundingInput(input); // Admission completes before constructing a network client.
+  const startedAt = new Date().toISOString();
+  const http = client(fetcher);
+  const observations: Record<string, unknown> = {};
+  const balances: Partial<Record<typeof roleNames[number], { wbtBaseUnits: string; testUsdtBaseUnits: string }>> = {};
+  const diagnostics: Array<{ stage: string; code: string; httpStatus?: number }> = [];
+  let stage = 'chain';
+  let complete = false;
+  try {
+    const chain = quantity(await http.rpc('eth_chainId', []));
+    observations['chainId'] = BigInt(chain).toString();
+    if (BigInt(chain) !== 1874n) fail('CHAIN_MISMATCH');
+    stage = 'block';
+    const block = quantity(await http.rpc('eth_blockNumber', []));
+    observations['blockNumber'] = BigInt(block).toString(); observations['blockTag'] = block;
+    stage = 'tokenCode';
+    observations[stage] = codeSummary(await http.rpc('eth_getCode', [token, block]));
+    stage = 'decimals';
+    const decimals = BigInt(word(await http.rpc('eth_call', [{ to: token, data: '0x313ce567' }, block])));
+    if (decimals !== 6n) fail('RESPONSE_INVALID');
+    observations[stage] = 6;
+    for (const role of roleNames) {
+      stage = `${role}Wbt`;
+      const wbt = quantity(await http.rpc('eth_getBalance', [funding[role], block]));
+      stage = `${role}TestUsdt`;
+      const testUsdt = word(await http.rpc('eth_call', [{ to: token,
+        data: `0x70a08231${funding[role].slice(2).padStart(64, '0')}` }, block]));
+      balances[role] = { wbtBaseUnits: BigInt(wbt).toString(), testUsdtBaseUnits: BigInt(testUsdt).toString() };
+    }
+    complete = true;
+  } catch (error) { diagnostics.push({ stage, ...safeFailure(error) }); }
+  return {
+    schemaVersion: 1, sourceTask: 'MN-018', evidence, startedAt, completedAt: new Date().toISOString(),
+    scope: 'operator-direct-public-demo-funding-snapshot', rpcUrl, token,
+    requestCount: http.requestCount, amountBaseUnits: funding.amount, observations, balances, diagnostics,
+    snapshotChecks: {
+      distinctPublicRoleAddresses: true,
+      shopperHasZeroWbt: balances.shopper ? BigInt(balances.shopper.wbtBaseUnits) === 0n : null,
+      shopperHasRequestedTestUsdt: balances.shopper ? BigInt(balances.shopper.testUsdtBaseUnits) >= BigInt(funding.amount) : null,
+      relayerHasPositiveWbt: balances.relayer ? BigInt(balances.relayer.wbtBaseUnits) > 0n : null,
+      adminHasPositiveWbt: balances.admin ? BigInt(balances.admin.wbtBaseUnits) > 0n : null,
+      allBalancesObserved: complete,
+    },
+    readiness: 'BLOCKED', gates: { roleKeyControl: 'UNTESTED', sufficientGasBudget: 'UNTESTED',
+      signedNativeAuthorization: 'UNTESTED', sponsoredSettlement: 'UNTESTED', protectedBrowserRead: 'UNTESTED' },
+    limits: 'Public demo addresses are sent directly to the fixed RPC for these operator reads and are omitted from output. '
+      + 'Distinct addresses do not prove independent keys or control. Positive WBT does not prove enough gas; a funded '
+      + 'token balance does not prove official allocation provenance, authorization or settlement. No key, signature, '
+      + 'transaction or private user account is accepted. Payment activation remains blocked.',
+  };
+}
+
+function mode(args: string[]): { kind: '--help' | '--run' | '--self-test' } | { kind: '--funding'; funding: FundingInput } {
+  if (args.length === 0) return { kind: '--help' };
+  if (args[0] === '--funding') {
+    const options: Record<string, string> = {};
+    const approved = ['--shopper', '--merchant', '--relayer', '--admin', '--amount-base-units'];
+    if (args.length !== 11) fail('INVALID_INPUT');
+    for (let index = 1; index < args.length; index += 2) {
+      const option = args[index]!; const value = args[index + 1];
+      if (!approved.includes(option) || Object.hasOwn(options, option) || value === undefined) fail('INVALID_INPUT');
+      options[option] = value;
+    }
+    return { kind: '--funding', funding: fundingInput({ shopper: options['--shopper'], merchant: options['--merchant'],
+      relayer: options['--relayer'], admin: options['--admin'], amount: options['--amount-base-units'] }) };
+  }
   if (args.length !== 1 || !['--run', '--self-test', '--help'].includes(args[0]!)) fail('INVALID_INPUT');
-  return args[0]!;
+  return { kind: args[0] as '--run' | '--self-test' | '--help' };
 }
 
 /** Deterministic boundary checks, entirely in memory. No mock becomes live evidence. */
@@ -247,7 +332,7 @@ async function selfTest() {
   for (const args of [['--unknown'], ['--run', '--run'], ['--rpc-url', 'https://private.invalid'], ['--run', '--help']]) {
     assert.throws(() => mode(args), (error: unknown) => error instanceof PreflightFailure && error.code === 'INVALID_INPUT'); passed++;
   }
-  assert.equal(mode([]), '--help'); assert.equal(mode(['--help']), '--help'); passed++;
+  assert.equal(mode([]).kind, '--help'); assert.equal(mode(['--help']).kind, '--help'); passed++;
   const rejects = async (mutate: Mutate, code: string, requests = 1) => {
     const result = await inspectWhitechain(fake(mutate), 'SIMULATED');
     assert.equal(result.diagnostics[0]?.code, code); assert.equal(result.requestCount, requests);
@@ -308,14 +393,94 @@ async function selfTest() {
   await assert.rejects(client(stalledFetch, { requestMs: 5, totalMs: 10 }).rpc('eth_chainId', []),
     (error: unknown) => error instanceof PreflightFailure && error.code === 'TIMEOUT');
   assert.equal(stalledCancelled, 1); passed++;
+  const funding: FundingInput = { shopper: `0x${'11'.repeat(20)}`, merchant: `0x${'22'.repeat(20)}`,
+    relayer: `0x${'33'.repeat(20)}`, admin: `0x${'44'.repeat(20)}`, amount: '1000000' };
+  const fundingArgs = ['--funding', '--shopper', funding.shopper, '--merchant', funding.merchant,
+    '--relayer', funding.relayer, '--admin', funding.admin, '--amount-base-units', funding.amount];
+  assert.equal(mode(fundingArgs).kind, '--funding'); passed++;
+  for (const args of [fundingArgs.slice(0, -1), [...fundingArgs, '--run'],
+    fundingArgs.map((value) => value === '--merchant' ? '--shopper' : value),
+    fundingArgs.map((value) => value === '--amount-base-units' ? '--rpc-url' : value)]) {
+    assert.throws(() => mode(args), (error: unknown) => error instanceof PreflightFailure && error.code === 'INVALID_INPUT'); passed++;
+  }
+  let fundingCalls = 0;
+  const fundingFake: typeof fetch = async (url, init) => {
+    fundingCalls++; assert.equal(String(url), rpcUrl);
+    const request = object(JSON.parse(String(init?.body)));
+    const params = request['params'] as unknown[];
+    let result: string;
+    switch (request['method']) {
+      case 'eth_chainId': result = '0x752'; break;
+      case 'eth_blockNumber': result = '0x123'; break;
+      case 'eth_getCode': result = '0x6000'; assert.equal(params[1], '0x123'); break;
+      case 'eth_getBalance': result = params[0] === funding.shopper ? '0x0' : '0x1'; assert.equal(params[1], '0x123'); break;
+      case 'eth_call': result = (params[0] as { data: string }).data === '0x313ce567' ? wordOf(6) : wordOf(1000000);
+        assert.equal(params[1], '0x123'); break;
+      default: throw new Error('Unapproved funding method');
+    }
+    return Response.json({ jsonrpc: '2.0', id: request['id'], result });
+  };
+  const funded = await inspectFunding(fundingFake, funding, 'SIMULATED');
+  assert.equal(funded.requestCount, 12); assert.equal(funded.snapshotChecks.allBalancesObserved, true);
+  assert.ok(Object.values(funded.snapshotChecks).every((value) => value === true));
+  assert.equal(funded.readiness, 'BLOCKED'); assert.ok(Object.values(funded.gates).every((value) => value === 'UNTESTED'));
+  assert.ok(roleNames.every((role) => !JSON.stringify(funded).includes(funding[role]))); passed++;
+  for (const invalid of [null, [], { ...funding, shopper: `0x${'ab'.repeat(20)}`, merchant: `0x${'AB'.repeat(20)}` },
+    { ...funding, shopper: `0x${'0'.repeat(40)}` }, { ...funding, admin: `0x${'12'.repeat(32)}` },
+    { ...funding, amount: '0' }, { ...funding, amount: '-1' }, { ...funding, amount: '01' },
+    { ...funding, amount: (2n ** 256n).toString() }, { ...funding, extra: 'PRIVATE_MARKER' }]) {
+    const before = fundingCalls;
+    await assert.rejects(inspectFunding(fundingFake, invalid, 'SIMULATED'),
+      (error: unknown) => error instanceof PreflightFailure && error.code === 'INVALID_INPUT');
+    assert.equal(fundingCalls, before); passed++;
+  }
+  const wrongFunding = await inspectFunding(fake((_request, envelope) => ({ ...envelope, result: '0x1' })), funding, 'SIMULATED');
+  assert.equal(wrongFunding.requestCount, 1); assert.equal(wrongFunding.snapshotChecks.allBalancesObserved, false);
+  assert.equal(wrongFunding.snapshotChecks.shopperHasZeroWbt, null); passed++;
+  const mutateFunding = (mutate: (request: Record<string, unknown>, envelope: Record<string, unknown>) => unknown): typeof fetch =>
+    async (url, init) => {
+      const envelope = object(await (await fundingFake(url, init)).json());
+      return Response.json(mutate(object(JSON.parse(String(init?.body))), envelope));
+    };
+  const fundingCall = (request: Record<string, unknown>, address: string, method: string) => {
+    const params = request['params'] as unknown[];
+    return request['method'] === method && (method === 'eth_getBalance' ? params[0] === address
+      : (params[0] as { data: string }).data === `0x70a08231${address.slice(2).padStart(64, '0')}`);
+  };
+  for (const [role, method, value, flag] of [
+    ['shopper', 'eth_getBalance', '0x1', 'shopperHasZeroWbt'],
+    ['shopper', 'eth_call', wordOf(0), 'shopperHasRequestedTestUsdt'],
+    ['relayer', 'eth_getBalance', '0x0', 'relayerHasPositiveWbt'],
+    ['admin', 'eth_getBalance', '0x0', 'adminHasPositiveWbt'],
+  ] as const) {
+    const result = await inspectFunding(mutateFunding((request, envelope) => fundingCall(request, funding[role], method)
+      ? { ...envelope, result: value } : envelope), funding, 'SIMULATED');
+    assert.equal(result.snapshotChecks[flag], false); assert.equal(result.snapshotChecks.allBalancesObserved, true);
+    assert.equal(result.readiness, 'BLOCKED'); passed++;
+  }
+  const lateFundingError = await inspectFunding(mutateFunding((request, envelope) => fundingCall(request, funding.relayer, 'eth_call')
+    ? { jsonrpc: '2.0', id: envelope['id'], error: { code: -1, message: 'PRIVATE_MARKER', data: funding.relayer } }
+    : envelope), funding, 'SIMULATED');
+  assert.equal(lateFundingError.requestCount, 10); assert.equal(lateFundingError.diagnostics[0]?.code, 'RPC_ERROR');
+  assert.equal(lateFundingError.snapshotChecks.allBalancesObserved, false);
+  assert.equal(lateFundingError.snapshotChecks.relayerHasPositiveWbt, null);
+  assert.equal(lateFundingError.snapshotChecks.adminHasPositiveWbt, null);
+  assert.ok(!JSON.stringify(lateFundingError).includes('PRIVATE_MARKER')); passed++;
+  const malformedFunding = await inspectFunding(mutateFunding((request, envelope) => fundingCall(request, funding.admin, 'eth_getBalance')
+    ? { ...envelope, result: '0x00' } : envelope), funding, 'SIMULATED');
+  assert.equal(malformedFunding.requestCount, 11); assert.equal(malformedFunding.diagnostics[0]?.code, 'RESPONSE_INVALID');
+  assert.equal(malformedFunding.snapshotChecks.allBalancesObserved, false); passed++;
+  assert.equal(fundingInput({ ...funding, amount: (2n ** 256n - 1n).toString() }).amount, (2n ** 256n - 1n).toString()); passed++;
   console.log(JSON.stringify({ evidence: 'SIMULATED', status: 'PASS', checks: passed, externalNetworkCalls: 0 }));
 }
 
 async function main() {
   const selected = mode(process.argv.slice(2));
-  if (selected === '--help') { console.log(usage); return; }
-  if (selected === '--self-test') { await selfTest(); return; }
-  console.log(JSON.stringify(await inspectWhitechain(fetch, 'OBSERVED_LIVE'), null, 2));
+  if (selected.kind === '--help') { console.log(usage); return; }
+  if (selected.kind === '--self-test') { await selfTest(); return; }
+  const report = selected.kind === '--funding' ? await inspectFunding(fetch, selected.funding, 'OBSERVED_LIVE')
+    : await inspectWhitechain(fetch, 'OBSERVED_LIVE');
+  console.log(JSON.stringify(report, null, 2));
   // This preflight deliberately cannot approve funding, protected reads, signing or settlement.
   process.exitCode = 2;
 }
