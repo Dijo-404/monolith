@@ -1,0 +1,13 @@
+{
+  "extends": "../tsconfig.base.json",
+  "compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "noEmit": true,
+    "types": ["node"],
+    "paths": {
+      "@monolith/shared": ["../packages/shared/dist/index"]
+    }
+  },
+  "include": ["export-evidence.ts", "export-evidence.test.ts"]
+}
