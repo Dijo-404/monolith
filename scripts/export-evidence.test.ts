@@ -24,6 +24,7 @@ type Fixture = {
 };
 
 const runId = 'run-00000000-0000-4000-8000-000000000001';
+const reportId = 'report_00000000-0000-4000-8000-000000000001';
 const generatedAt = '2026-11-06T00:00:00.000Z';
 const nowISO = '2026-11-07T00:00:00.000Z';
 const futureISO = '2026-11-08T00:00:00.000Z';
@@ -164,6 +165,107 @@ test('exports original validated bytes and a matching manifest without changing 
   });
 });
 
+test('exports a canonical report identity without rewriting it as a server run', async () => {
+  await withFixture(async (fixture) => {
+    fixture.plan.manifest.runId = reportId;
+    await put(fixture, 'reports/privacy.json', 'privacy-report', { ...report(), runId: reportId });
+    const original = await readFile(join(fixture.inputDirectory, 'reports/privacy.json'));
+    const result = await validateBundle(fixture);
+    assert.equal(result.manifest.runId, reportId);
+    const manifest = await exportBundle(fixture);
+    assert.equal(manifest.runId, reportId);
+    const exported = await readFile(join(fixture.outputDirectory, 'reports/privacy.json'));
+    assert.deepEqual(exported, original);
+    assert.equal(JSON.parse(exported.toString()).runId, reportId);
+    assert.deepEqual(await readFile(join(fixture.inputDirectory, 'reports/privacy.json')), original);
+  });
+});
+
+for (const identity of [
+  'report-00000000-0000-4000-8000-000000000001',
+  'run_00000000-0000-4000-8000-000000000001',
+  'Report_00000000-0000-4000-8000-000000000001',
+  'report_ABCDEF00-0000-4000-8000-000000000001',
+  'report_00000000-0000-1000-8000-000000000001',
+  'report_00000000-0000-4000-7000-000000000001',
+  'report_00000000-0000-4000-8000-00000000001',
+  'report_00000000-0000-4000-8000-000000000001-extra',
+  'report_persistent-user-session',
+]) {
+  test(`rejects malformed report identity before reading artifacts: ${identity}`, async () => {
+    await withFixture(async (fixture) => {
+      fixture.plan.manifest.runId = identity;
+      await savePlan(fixture);
+      await assert.rejects(() => exportBundle(fixture), new EvidenceFailure('INVALID_PLAN'));
+      assert.ok(!(await readdir(fixture.root)).includes('bundle'));
+    });
+  });
+}
+
+for (const [manifestId, artifactId] of [
+  [reportId, 'report_00000000-0000-4000-8000-000000000002'],
+  [reportId, runId],
+  [runId, reportId],
+] as const) {
+  test(`rejects a report identity mismatch without prefix substitution: ${manifestId} / ${artifactId}`, async () => {
+    await withFixture(async (fixture) => {
+      fixture.plan.manifest.runId = manifestId;
+      await put(fixture, 'reports/privacy.json', 'privacy-report', { ...report(), runId: artifactId });
+      await assert.rejects(() => exportBundle(fixture), new EvidenceFailure('ARTIFACT_INVALID'));
+      assert.ok(!(await readdir(fixture.root)).includes('bundle'));
+    });
+  });
+}
+
+test('report identities retain label, hash, timestamp and redaction checks', async (context) => {
+  const cases: Array<[string, (fixture: Fixture) => Promise<void>, EvidenceFailure['code']]> = [
+    ['label', async (fixture) => {
+      await put(fixture, 'reports/privacy.json', 'privacy-report', { ...report(), runId: reportId, evidence: 'BLOCKED' });
+    }, 'ARTIFACT_INVALID'],
+    ['hash', async (fixture) => { fixture.plan.manifest.artifacts[0]!.sha256 = '0'.repeat(64); }, 'HASH_MISMATCH'],
+    ['timestamp', async (fixture) => { fixture.plan.manifest.artifacts[0]!.generatedAt = futureISO; }, 'INVALID_PLAN'],
+    ['redaction', async (fixture) => {
+      const payload = { ...report(), runId: reportId };
+      payload.findings[0]!.message = 'Synthetic source 198.51.100.44';
+      await put(fixture, 'reports/privacy.json', 'privacy-report', payload);
+    }, 'REDACTION_REQUIRED'],
+  ];
+  for (const [name, mutate, code] of cases) {
+    await context.test(name, async () => {
+      await withFixture(async (fixture) => {
+        fixture.plan.manifest.runId = reportId;
+        await put(fixture, 'reports/privacy.json', 'privacy-report', { ...report(), runId: reportId });
+        await mutate(fixture);
+        await savePlan(fixture);
+        await assert.rejects(() => exportBundle(fixture), new EvidenceFailure(code));
+        assert.ok(!(await readdir(fixture.root)).includes('bundle'));
+      });
+    });
+  }
+});
+
+test('rejects a whole download wrapper even when its nested report identity matches', async () => {
+  await withFixture(async (fixture) => {
+    fixture.plan.manifest.runId = reportId;
+    await put(fixture, 'reports/privacy.json', 'privacy-report', {
+      schemaVersion: 1, observedAt: generatedAt, mode: 'repair', report: { ...report(), runId: reportId },
+    });
+    await assert.rejects(() => exportBundle(fixture), new EvidenceFailure('ARTIFACT_INVALID'));
+    assert.ok(!(await readdir(fixture.root)).includes('bundle'));
+  });
+});
+
+test('rejects observer projections with an omitted duration instead of filling one', async () => {
+  await withFixture(async (fixture) => {
+    const payload = observer();
+    const observation: Record<string, unknown> = { ...payload.observations[0]! };
+    delete observation['durationMs'];
+    await put(fixture, 'observer.json', 'observer-run', { ...payload, observations: [observation] });
+    await assert.rejects(() => exportBundle(fixture), new EvidenceFailure('ARTIFACT_INVALID'));
+    assert.ok(!(await readdir(fixture.root)).includes('bundle'));
+  });
+});
+
 for (const label of ['BLOCKED', 'UNTESTED'] as const) {
   test(`preserves ${label} labels without upgrading them`, async () => {
     await withFixture(async (fixture) => {
@@ -190,7 +292,7 @@ const badPlans: Array<[string, (plan: Plan) => void]> = [
   ['wrong declared DTO kind', (plan) => { plan.kinds['reports/privacy.json'] = 'observer-run'; }],
   ['duplicate artifact path', (plan) => { plan.manifest.artifacts.push({ ...plan.manifest.artifacts[0]! }); }],
   ['noncanonical run identifier', (plan) => { plan.manifest.runId = 'persistent-user-session'; }],
-  ['UUID without required run prefix', (plan) => { plan.manifest.runId = runId.slice(4); }],
+  ['UUID without a supported identity prefix', (plan) => { plan.manifest.runId = runId.slice(4); }],
   ['UUID without version four', (plan) => { plan.manifest.runId = runId.replace('-4000-', '-1000-'); }],
   ['future manifest timestamp', (plan) => { plan.manifest.generatedAt = futureISO; }],
   ['future artifact timestamp', (plan) => { plan.manifest.artifacts[0]!.generatedAt = futureISO; }],

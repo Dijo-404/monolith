@@ -15,7 +15,7 @@ const MAX_PLAN = 256 * 1024;
 const MAX_FILE = 1024 * 1024;
 const MAX_TOTAL = 8 * MAX_FILE;
 const MAX_FILES = 64;
-const RUN_ID = /^run-[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/;
+const BUNDLE_ID = /^(?:run-|report_)[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/;
 const MANIFEST_NAME = 'verification-manifest.json';
 const schemas = {
   'privacy-report': privacyReportSchema,
@@ -102,7 +102,7 @@ function readPlan(value: unknown, nowISO: string): { manifest: VerificationManif
   const parsed = verificationManifestSchema.safeParse(value['manifest']);
   if (!parsed.success) fail('INVALID_PLAN');
   const manifest = parsed.data;
-  if (!RUN_ID.test(manifest.runId) || Date.parse(manifest.generatedAt) > Date.parse(nowISO)
+  if (!BUNDLE_ID.test(manifest.runId) || Date.parse(manifest.generatedAt) > Date.parse(nowISO)
     || manifest.artifacts.length === 0 || manifest.artifacts.length > MAX_FILES) fail('INVALID_PLAN');
   const kinds = value['kinds'];
   if (Object.keys(kinds).length !== manifest.artifacts.length) fail('INVALID_PLAN');

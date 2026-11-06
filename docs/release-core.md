@@ -50,6 +50,8 @@ The tests use temporary synthetic inputs. They must preserve the `SIMULATED` lab
 
 Export only supported, reviewed public DTOs using [the evidence policy](evidence-policy.md). A successful `--verify` or `--export` does not prove a bundle includes every required core artifact. Worker/independent browser/Arkiv source artifacts outside the first exporter's supported DTOs still need their separate original references and review. Do not discard them or force them into an incompatible DTO.
 
+Keep report identities distinct from server allocations. A supported privacy report with an original `report_<UUIDv4>` ID belongs in a bundle with that exact ID; an observer's `run-<UUIDv4>` belongs in a separate matching bundle. If the original UI download wraps the public DTO, use only the separately reviewed [structural projection procedure](evidence-policy.md#reviewing-a-nested-privacy-report). Preserve the complete original wrapper, capture hash and `/report` pointer in the original-proof index, with the exact server-run/report-ID mapping and projected-byte hash. Do not rewrite IDs, fabricate missing observer durations, relabel a measured failure or count a metadata-only empty observer DTO as paired application proof.
+
 Privacy reporting must disclose the measured read denominator, retries, injected bypass, unexplained traffic and bootstrap exclusions. Zero eligible reads is `null` coverage and cannot pass functional acceptance. The destination continues to see RPC payloads, and worker bootstrap is separately disclosed as non-anonymous. A recorded screenshot or report must show its observation time and scope.
 
 ## EF and Arkiv submission checklist

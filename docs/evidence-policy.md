@@ -26,7 +26,9 @@ The tool consumes a plan with exactly two properties:
 }
 ```
 
-The `kinds` keys must exactly match the manifest's unique artifact paths. Each artifact entry supplies its original-byte SHA-256, generation time, evidence label and `MN-xxx` source task. The manifest supplies a canonical lowercase synthetic `run-<UUIDv4>` identifier, generation time and evidence label. Generate a new random run identifier for each execution; never reuse a wallet, account, order or stable browser identifier.
+The `kinds` keys must exactly match the manifest's unique artifact paths. Each artifact entry supplies its original-byte SHA-256, generation time, evidence label and `MN-xxx` source task. The manifest supplies an original canonical lowercase synthetic `run-<UUIDv4>` or `report_<UUIDv4>` identifier, generation time and evidence label. These are random execution/report identities; never use a wallet, account, order or stable browser identifier. The bundle does not rename an existing identity.
+
+A privacy report can have a `report_<UUIDv4>` identity distinct from its server's `run-<UUIDv4>` allocation. Its bundle must use that exact original report identity. An observer DTO must likewise match its bundle's identity. Package artifacts with different identities separately; do not replace prefixes or rewrite IDs to combine them.
 
 Plans and artifacts must use canonical UTF-8 JSON: exactly `JSON.stringify(value, null, 2) + '\n'`. Duplicate-key spellings, alternate whitespace and alternate escape encodings are refused. Prepare and review the canonical public input before calculating its hash. The exporter does not rewrite bytes to make an input pass.
 
@@ -39,7 +41,19 @@ Plans and artifacts must use canonical UTF-8 JSON: exactly `JSON.stringify(value
 
 The exporter uses the public shared validators through the built `@monolith/shared` entry point. The local [TypeScript configuration](../scripts/tsconfig.evidence.json) resolves that existing public entry without changing workspace manifests or the lockfile.
 
-Raw browser captures, importer journals, worker bundles, screenshots, arbitrary text, whole API wrappers and conditional settlement artifacts are outside this first exporter. Accepted historical evidence remains in its original task locations. A future reviewed projection can produce a supported public DTO, preserving its source links, truthful label and limitations; this tool neither performs nor authorizes that projection.
+Raw browser captures, importer journals, worker bundles, screenshots, arbitrary text, whole API wrappers and conditional settlement artifacts are outside this first exporter. Accepted historical evidence remains in its original task locations. A separately reviewed projection can produce a supported public DTO, preserving its source links, truthful label and limitations; this tool neither performs nor authorizes that projection.
+
+## Reviewing a nested privacy report
+
+A downloaded report wrapper is not itself a `privacy-report` artifact. When a producer has retained a supported public PrivacyReport at JSON pointer `/report`, a reviewed structural projection can select that object unchanged:
+
+1. Identify the original wrapper by its pinned source commit/path and whole-file SHA-256. Review the original bytes and their actual execution evidence, including any separate browser capture. If the capture has a per-case report hash, require it to equal the wrapper hash.
+2. Record the exact `/report` pointer and the original report ID. When a server allocation exists, record its separate server-run ID and the capture case that binds the report hash to that allocation. A shared ID spelling or a caller label alone does not establish that relationship.
+3. Prepare a new standalone DTO using exactly `JSON.stringify(wrapper.report, null, 2) + '\n'`. Preserve every nested value, including its ID, evidence label, counts, findings and scope. Hash and review these new canonical bytes; their hash is not the hash of the original wrapper, nor are they claimed to be the standalone bytes originally downloaded.
+4. Retain a separate original-proof index containing the original path/commit/hash, JSON pointer, projected path/hash/byte length, recorded observation time, report identity and server-run/capture mapping. Keep the original wrapper and capture unchanged and accessible through that index. The exporter does not include the plan automatically or validate this external provenance; release review must check it.
+5. Make a separate bundle for each original report identity. The artifact entry uses the recorded observation time; manifest generation uses the actual packaging time and does not renew the observation. Preserve an earlier leak report in its own bundle and original wrapper/index rather than assigning it the repaired report's identity.
+
+This is an explicit producer/reviewer workflow, not an exporter projection feature or permission to bypass release prerequisites. A detected privacy failure can still be `OBSERVED_LIVE`; preserve its failing result. If retained observer observations omit required `durationMs`, they cannot be passed as `observer-run`: do not invent durations or infer them from summary percentiles. Do not reconstruct a full registry manifest from a partial UI summary. Unsupported original proofs remain linked separately; the exporter does not certify that the supported subset is a complete core release.
 
 ## Validation and file boundaries
 
