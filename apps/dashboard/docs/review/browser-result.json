@@ -1,0 +1,31 @@
+{
+  "evidence": "SIMULATED",
+  "scope": "Production-build UI shell with local fixture data. No live RPC, registry or privacy measurement.",
+  "generatedAt": "2026-11-06T15:54:19.849Z",
+  "passed": true,
+  "playwright": "1.65.0",
+  "preview": "http://127.0.0.1:5194",
+  "checks": [
+    "Desktop initial: private default, simulated badge, disabled payment, no horizontal overflow",
+    "Receipt bypass fails GT03 and reports transaction-hash exposure, not an address",
+    "Full four-step direct/protected/leak/repair/outage fixture walkthrough recomputes outcomes",
+    "Active bypass during outage is explicitly disclosed while the managed read remains blocked",
+    "mobile: no overflow, usable without animation",
+    "narrow: no overflow, usable without animation",
+    "fallback: no overflow, usable without animation, WebGL2 unavailable fallback works",
+    "Zero page errors, external network requests or application API requests across all contexts"
+  ],
+  "pageErrors": [],
+  "externalRequests": [],
+  "apiRequests": [],
+  "assets": [
+    {
+      "path": "/assets/index-o5ToO-P5.css",
+      "sha256": "ffe055f3c157edfd901fbea993d71aa5eed301330ed872ca14c0fd961e26a434"
+    },
+    {
+      "path": "/assets/index-C937WR3z.js",
+      "sha256": "5a232bf06894bb18561237aa530b43ce99dd88a64ea2fe5664a9ff5017a7d40b"
+    }
+  ]
+}

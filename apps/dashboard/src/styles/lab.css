@@ -1344,6 +1344,10 @@ code {
 }
 
 @media (max-width: 520px) {
+  .card__head {
+    flex-wrap: wrap;
+  }
+
   .compare {
     grid-template-columns: minmax(0, 1fr);
   }

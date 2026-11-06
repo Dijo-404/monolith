@@ -201,7 +201,7 @@ export function Stage({
             ref={canvasRef}
             className="stage__canvas"
             role="img"
-            aria-label="Route stage: your browser on the left, the RPC endpoint on the right, with the Anon-RPC, direct and Whitechain lanes between them. Every state shown here is also listed in the panels."
+            aria-label="Simulated routes from your browser to the RPC endpoint, through Anon-RPC or directly. Readable route cards and worker panels describe the same state."
           />
           <svg className="stage__leaders" aria-hidden="true">
             <path ref={leaderRef} d="" />

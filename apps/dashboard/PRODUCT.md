@@ -24,7 +24,7 @@ Route-coverage contracts plus adversarial, replayable privacy tests: a privacy-r
 
 ## Operating Context
 
-- Single-screen lab (docs/idea.md §11): route lanes (Direct RPC, Anon-RPC via Tor/Nym, Whitechain settlement), worker status, Arkiv registry provenance, and a run timeline with privacy tests.
+- Guided four-step lab: direct comparison, private routing, a bypass and repair, and a worker outage. Route cards and an interactive stage lead into detailed checks, worker state, registry provenance and activity.
 - Demo arc (docs/idea.md §15): direct read exposed → private read via worker with Arkiv-selected endpoint → reveal residual payload exposure and bootstrap note → inject leak, test fails → sandbox repair, rerun passes → optional Whitechain checkout → report.
 - Browser-only Anon-RPC harness; worker bootstrap is slow and observable as BOOTSTRAPPING / READY / DEGRADED / BLOCKED / CLOSED.
 
@@ -37,17 +37,18 @@ Route-coverage contracts plus adversarial, replayable privacy tests: a privacy-r
 - Coverage shows its denominator and scope and exists only for a measured run; zero eligible reads is "unavailable", never 100 percent.
 - Whitechain checkout is conditional (MN-018–MN-022) and stays disabled until its gates pass; the payment path is never depicted as anonymous.
 - The browser bundle receives only `MONOLITH_PUBLIC_OBSERVER_URL`. No third-party requests from the page (fonts are self-hosted).
-- Undecided: the final observer/registry/transport adapters (MN-007, MN-010, MN-014) replace the shell's fixtures.
+- MN-014 owns connecting the accepted observer/registry/transport composition to this shell. MN-006 is an offline fixture demonstration, including its routing and repair controls.
 
 ## Brand Commitments
 
 - Name: Monolith (`monolith`, `@monolith/*`). Tagline: "Break your checkout's privacy. Fix the leak. Prove the payment still works."
-- Visual references supplied by the owner: activetheory.net, phantom.com, igloo.inc, earthwallet.com, genesisfxmarkets.com — immersive dark WebGL stages, particle fields, light leaking through seams. Phantom's ghost mascot is their brand and is not reused.
+- The owner requested a light Phantom-inspired redesign: lavender-grey ground, white cards, restrained purple actions and a contained dark WebGL route stage. Original Monolith geometry and mark; no other product's mascot.
+- Self-hosted Wix Madefor Text/Display and Fragment Mono, with their OFL notices beside the font assets.
 
 ## Evidence on Hand
 
-- Synthetic contract fixtures from MN-002 (in flight, `tests/fixtures/contracts`), all `SIMULATED`.
-- No live Anon-RPC read, observer run, Arkiv entity or Whitechain settlement exists yet. The dashboard must not display any of these as observed.
+- This shell uses local `SIMULATED` scenarios and authored timing; no page control dispatches an RPC request. Coverage stays unmeasured and payment stays disabled.
+- Other accepted tasks have real worker and Arkiv evidence; those records are not inputs to this shell and do not upgrade its displayed states to live. The genuine paired-source gate is still separate.
 
 ## Product Principles
 

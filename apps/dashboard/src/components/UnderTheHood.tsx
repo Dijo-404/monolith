@@ -169,7 +169,7 @@ function TransportCard({
         </div>
         <div>
           <dt>Privacy required</dt>
-          <dd>{state.privateMode ? 'Yes. Reads use the worker or are blocked.' : 'No. Reads go straight to the endpoint.'}</dd>
+          <dd>{state.privateMode ? 'Yes. Managed reads use the worker or are blocked.' : 'No. Managed reads go straight to the endpoint.'}</dd>
         </div>
       </dl>
       <p className="card__note card__note--exposed">
@@ -284,7 +284,7 @@ function ControlsCard(props: ControlsProps) {
               Private mode
             </p>
             <p id={ids.privateHelp} className="control__help">
-              Every read uses the worker or is blocked.
+              Managed reads use the worker or are blocked. The injected widget bypasses this policy.
             </p>
           </div>
           <Switch checked={state.privateMode} onChange={props.onPrivateMode} labelledBy={ids.privateMode} describedBy={ids.privateHelp} />

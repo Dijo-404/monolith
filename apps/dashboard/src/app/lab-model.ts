@@ -1,26 +1,18 @@
 /**
  * Presentation model for the Leak Lab shell.
  *
- * The literal vocabularies (worker states, routes, evidence kinds, read methods, error codes)
- * follow docs/contracts.md. They are kept local only until the MN-002 shared package is merged;
- * MN-014 replaces them with imports from `@monolith/shared` and maps real adapter output into
- * these view shapes.
+ * Contract vocabulary comes from the frozen public shared package. Local fields describe
+ * fixture animation and presentation only. MN-014 owns binding actual adapter output.
  */
+import type { ErrorCode, EvidenceKind, ReadMethod, Route as TransportRoute, WorkerState } from '@monolith/shared';
 
-export type WorkerState = 'BOOTSTRAPPING' | 'READY' | 'DEGRADED' | 'BLOCKED' | 'CLOSED';
-export type EvidenceKind = 'OBSERVED_LIVE' | 'SIMULATED' | 'UNTESTED' | 'BLOCKED';
-export type Route = 'anon-tor' | 'anon-nym' | 'direct-debug' | 'passthrough' | 'blocked';
-export type ReadMethod =
-  | 'eth_chainId'
-  | 'eth_blockNumber'
-  | 'eth_getBalance'
-  | 'eth_call'
-  | 'eth_getTransactionReceipt';
-export type LabErrorCode =
+export type { EvidenceKind, ReadMethod, WorkerState } from '@monolith/shared';
+export type Route = Exclude<TransportRoute, 'direct-bootstrap'>;
+export type LabErrorCode = Extract<ErrorCode,
   | 'WORKER_UNAVAILABLE'
   | 'POLICY_DENIED'
   | 'REGISTRY_EXPIRED'
-  | 'UPSTREAM_UNAVAILABLE';
+  | 'UPSTREAM_UNAVAILABLE'>;
 
 export const WORKER_STATES: readonly WorkerState[] = [
   'BOOTSTRAPPING',
