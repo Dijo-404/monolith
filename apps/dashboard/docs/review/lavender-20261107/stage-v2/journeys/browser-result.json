@@ -1,0 +1,362 @@
+{
+  "schemaVersion": 1,
+  "sourceTask": "#86",
+  "evidence": "SIMULATED",
+  "scope": "Actual production-preview usability, local fixtures and disabled live configuration. No real RPC, worker, registry or source-anonymity acceptance.",
+  "livePrivacyAcceptance": false,
+  "startedAt": "2026-11-06T21:52:16.689Z",
+  "passed": true,
+  "node": "v24.22.2",
+  "playwright": "1.65.0",
+  "browser": "158.0.8127.18",
+  "checks": [
+    {
+      "name": "Live opening: clear next action, no measured coverage, disabled export",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Keyboard skip link is first; next Tab reaches the primary action with a visible focus ring",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Desktop live: visible section navigation tracks both directions",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Keyboard mode switch opens clearly simulated practice with private default and payment disabled",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Fixture direct/private sequence changes origin while retaining payload visibility",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Fixture leak is caught; repair creates a fresh useful run and removes bypass",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Fixture outage blocks managed reads; explicit recovery restores the worker",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "An unrepaired direct bypass remains visibly disclosed during a managed-worker outage",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Desktop offline: visible section navigation tracks both directions",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Stage browser action reaches the readable transport panel",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Stage endpoint action reaches the trusted registry detail",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Live configuration failure and explicit retry stay blocked before bootstrap; export remains unavailable",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "narrow: visible section navigation tracks both directions",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "narrow: live/offline controls and result fit 320×740",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "mobile: visible section navigation tracks both directions",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "mobile: live/offline controls and result fit 390×844",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "tablet: visible section navigation tracks both directions",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "tablet: live/offline controls and result fit 768×1024",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "laptop: visible section navigation tracks both directions",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "laptop: live/offline controls and result fit 1280×800",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "desktop: visible section navigation tracks both directions",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "desktop: live/offline controls and result fit 1440×1000",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "200% equivalent viewport reflow preserves visible controls and avoids horizontal overflow",
+      "passed": true,
+      "detail": "720×500 CSS viewport at2x device scale represents1440×1000 output. This is a layout-reflow approximation, not an OS/browser zoom setting claim."
+    },
+    {
+      "name": "Reduced motion removes smooth scrolling and leaves content available",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "WebGL unavailable schematic and the same fixture action remain usable",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Zero browser errors, external requests or application API requests; source/build stayed stable",
+      "passed": true,
+      "detail": ""
+    }
+  ],
+  "screenshots": [
+    {
+      "path": "desktop-live-initial.png",
+      "sha256": "075c63dc77cdfcc494b450cd6fbd4c344087c17fbcee58c70d456c3e7f34e98e"
+    },
+    {
+      "path": "desktop-live-viewport.png",
+      "sha256": "1cfcf00205437d5daca2e11f0af7a9b30166c7a2df3984508959286929c4810a"
+    },
+    {
+      "path": "desktop-offline-initial.png",
+      "sha256": "4f86e0a9d9462a43494e11bb4d387f72de71aba746d4ccedf07028296dda93c1"
+    },
+    {
+      "path": "desktop-offline-leak.png",
+      "sha256": "cdb3ebec110bbb0ab4388dc1b984e01ddb7f0f92461e284bd01488c5ee5e70f9"
+    },
+    {
+      "path": "desktop-offline-outage.png",
+      "sha256": "92f9c6c644f8397021c5285226e2e67a8735b535d5a1fba3fe604c5ebe4b45b8"
+    },
+    {
+      "path": "desktop-live-blocked.png",
+      "sha256": "4e02d44f5cc604bd39e6b0cd8b502d9b0246c1ae58f68c679fca47aa858011fe"
+    },
+    {
+      "path": "narrow-live-stage.png",
+      "sha256": "0613b8409c885f02dc5381a30341722b49c8738289a2480ec5efd650b4694b2d"
+    },
+    {
+      "path": "narrow-live-full.png",
+      "sha256": "b26f5ea40934a795fa2be400af505ce4ebcf9ae9262f061766151df8e0bf11ca"
+    },
+    {
+      "path": "mobile-live-stage.png",
+      "sha256": "13947190214b729e0a091a66651d22d1d801062ecc2cf118cb87fe113c469762"
+    },
+    {
+      "path": "mobile-live-full.png",
+      "sha256": "9051a4e32e86ba0e20eebf7d7473451808f537135d2b93e47e7a6bb11ebcda0d"
+    },
+    {
+      "path": "mobile-live-viewport.png",
+      "sha256": "2d2e31ec2305b3a560c806e2e15ea142458d12bb98e1995e9030929157ab87e0"
+    },
+    {
+      "path": "tablet-live-stage.png",
+      "sha256": "766c1b28a6735294041e767bc7bb272f4fada5bd8009a7eac7eeda5d621eac18"
+    },
+    {
+      "path": "tablet-live-full.png",
+      "sha256": "bb3bef31eb5d52b417976cecc362df7e7dec4ceb25de686c7d7abf2d1fd8457b"
+    },
+    {
+      "path": "tablet-live-viewport.png",
+      "sha256": "5020b3ec821cbb901910699f7ab54482e08b77646df1510269d1c36e10857d29"
+    },
+    {
+      "path": "laptop-live-full.png",
+      "sha256": "a582dbd8d542ddb362336fc9ac52ab9c4e6e782b112a2914abd8ea856569ab68"
+    },
+    {
+      "path": "desktop-live-full.png",
+      "sha256": "075c63dc77cdfcc494b450cd6fbd4c344087c17fbcee58c70d456c3e7f34e98e"
+    },
+    {
+      "path": "zoom-200-percent.png",
+      "sha256": "3b59418bbe1b6b37d033014b9cc4878aeef6343e4609cb4b0890b05350707849"
+    },
+    {
+      "path": "webgl-fallback.png",
+      "sha256": "0542a322eda125b25cb263421b458899c613df589a8400e0008b1b903028d265"
+    }
+  ],
+  "pageErrors": [],
+  "externalRequests": [],
+  "applicationApiRequests": [],
+  "sourceBefore": {
+    "source": {
+      "app/LabApp.tsx": "2bd0f0b813dd64b8c411a219dbf00746a3a1a7bc9263cef88c634f0719fb03e6",
+      "app/guide.ts": "c13eebbbaf6567ef14ff4967c70b548c488a4f86091aa6e67a4b5f629ddbd204",
+      "app/lab-fixtures.ts": "d68275afc445277fc324cd70981c73c05fe09d65e76dfdbb3beed4925f9894e5",
+      "app/lab-model.ts": "b8ef594b55f459fe061f5c22a2c7d59e468c30d92d04bafa98b8a0438cbf9ada",
+      "app/lab-reducer.ts": "7c5f42b30276407fe76c46eeeb057b36a678d4bac61ddd5f33ce2c0b2463ae9e",
+      "app/use-lab.ts": "02303e3d3302120c13b61a938c6e218d9c9333ebd5eade7af46a236cf573c49e",
+      "components/Comparison.tsx": "dbd9c74b075eaff981618136b3def91493481043b8280bca9f5f2b9f9afb9fb9",
+      "components/Guide.tsx": "a8a6a96a5fc77c95996bb644709c382f15e7030a82f4c64ec67c90b3ff64d7fe",
+      "components/Header.tsx": "1190173d0dc184f2291b4ccd95ad81dff795a01fb541ae8b84f9e805352f52f9",
+      "components/Icon.tsx": "ffe7c4a93033730b773da5818435966932e23aad74caa4f3a187af592ceb07da",
+      "components/StageCard.tsx": "b7a02f2891d09e4423ee0a3ce28ed486c169b30f32b620b5f6d0a33c79b6c42b",
+      "components/Switch.tsx": "6974a12d8ec20358e9d1ba91162d570115889666df7e9d8e1196193c851529bd",
+      "components/Tag.tsx": "c43df271299a76a75b2ddce3e9871783859829050290e964a2d4dac5c48be441",
+      "components/UnderTheHood.tsx": "fa9425cc6b0f2c5a930b72dac9a047455dfe13df2e3fe3fc052e838f68485bfa",
+      "components/format.ts": "340e576dfde3d8f183c6936e2116e97ccad2ef8555e72af66e4d95317c6142f8",
+      "components/stage/Stage.tsx": "46741197a3ec4c8aca26b1eb15979933b991a336303504a929fd0bc9e51e13c4",
+      "components/stage/StageFallback.tsx": "999ff8af6d51cb08cf6edd6ff2bad895b5c6be3fe9000995842c88a77201f0c1",
+      "components/stage/geometry.ts": "d8fa78108fcd328a69d3f500d321c85a8c55faf88cee6aa57b39a6eacd67dd89",
+      "components/stage/math.ts": "940d135ec0af004d32869eaddca99b412db8f3d3b59925d46250c742725da274",
+      "components/stage/renderer.ts": "5badcbb9d99808224e9aca73d01d2e72e77ee63853ba7f09e12683653e727f99",
+      "components/stage/scene-layout.ts": "d35a3764a5f5dce9efc5105d4c3cb9c142435efb437d64aa5c3dd06bd4a9108f",
+      "components/stage/shaders.ts": "ec60475a61578096b02933e3358d76b0c3a75ffa6fd8d6c37acdc29d57f8b864",
+      "composition/lab.ts": "10d8a5a7b538464dfa33b9652031a84f2ede6bf43e1e38c038e887dded8802e5",
+      "composition/registry.ts": "e41ea93e5ee598898f59200b0b97d0e528b22c333b029bff3b9edb77bf1dd96f",
+      "composition/transport.ts": "416a0075692f431da4cccfe2f4592c13bd7e021b73388f8b87d6cd6e7a38fad2",
+      "config/public-env.ts": "0c6eb98d0ce147875818d14b7b0f0140493dbd739da61593dda425c0d785f401",
+      "features/lab/LiveLabApp.tsx": "ce27dfba4c98b97616552fe357ac9124fe029d06d5d7a07e61258f9dc5bc9b5c",
+      "features/lab/correlate.ts": "7f4e082cc971f016a9c1c41be256e0e700640c173d566c6d5e7dc6b9b5b8efea",
+      "features/lab/direct-fixture.ts": "b2afba31bf8f440cd6fe248a033cb7d3f7d18328bf60f626e360a6f0bec88326",
+      "features/lab/live-controller.ts": "e4869d296a57ea6a78ddecac925e03ef51446f850c85ec766b2483b943f9d0e7",
+      "features/lab/live-types.ts": "107e2b7eee951604e12db33bef28a032668dc3d260fbf5fb047fbc1e288fb827",
+      "features/lab/live.css": "694453dea3b61378a910d7a5cec16d4ce4a859bc7b46c3b4c5dde72bd94e905a",
+      "features/lab/scenario.ts": "e1c02984f4d49ec71cfa091c0290d974348a5b9cc95b8cb1f763570b20eb6d1b",
+      "features/lab/wire-driver.ts": "c419106f54bb25dd70c602b9d6bbdd283a3ea13a2bbe6a58fb14e148490b8d14",
+      "features/registry/live-policy.ts": "f729250f388eb84ed6de44bfcdd6d1a411a26d4df67f6ba18e4f13627315b184",
+      "main.tsx": "c114b7c3be6592db34885f96c050872d18824ceb071bcd01a9434ed9771f4af0",
+      "spikes/anon/index.html": "8fda235a27120212585737d3cf6f830e32c06d07d7e95c003b3900762944d3e2",
+      "spikes/anon/main.ts.txt": "d1bcdb69f1ad53114eca0302e49a127d37858758b599690194af14aeafc6516a",
+      "spikes/anon/observed-2026-11-06.json": "4522287d860335100b29e26155d03dfc60cfa394602ccae39b481373cdc37fdd",
+      "spikes/anon/packaging-smoke-2026-11-06.json": "016c8c33aaef1a275a28d8d555ffb834fd644fdc128aa13247aa9ec1b52e9a68",
+      "spikes/anon/post-foundation-nym-2026-11-06.json": "6221bdb015838bb0844326c7eca286870a6402e651db95d00ae8eacc29cdb177",
+      "spikes/anon/run.mjs.txt": "9494bf94ec3f9ed135cb383b9fdbc5490b379e05e7476da927b1f51bc7e20699",
+      "spikes/anon/run.sh": "6fe6420e89cecce72d8de9fb02774d388a9c1bb8b729c981120302170cbf3308",
+      "styles/fonts/OFL-FragmentMono.txt": "04e68eeb550895a2f5c3558510a7e83505b73159d6a3e4b841c365e9c9005461",
+      "styles/fonts/OFL-WixMadeforDisplay.txt": "5167ab9754b56678f7363976eee0576a52782b1f225af2635c505406cd14dd67",
+      "styles/fonts/OFL-WixMadeforText.txt": "5167ab9754b56678f7363976eee0576a52782b1f225af2635c505406cd14dd67",
+      "styles/fonts/fragment-mono-latin.woff2": "44c4e39bff5e76652a24a872cbebabccbcfb20f62c4633b27c1f2745cba86b56",
+      "styles/fonts/wix-madefor-display-latin.woff2": "19bf2f2f1eaa10b2a047a8a1e624a1e12008ab5e3c50ad199ac968f8324f5f4d",
+      "styles/fonts/wix-madefor-text-latin.woff2": "cbd90a79e04d153fd521d90b08e9962628e3139313af330bd898001fe5b36e1a",
+      "styles/lab.css": "e028ad695ed88d6e6d1d963ec28634663df4a8134a517cbc2501a0d7b57f7155",
+      "styles/tokens.css": "cdc686f64d11b175e197d95085bcadccee79071502a0be737cf0873e96501992",
+      "vite-env.d.ts": "493f46be45455ec7a882bf649cff161f7e2cad6b7e532f75008a852d60fabfac"
+    },
+    "dist": {
+      "assets/app-BQPXX-bb.css": "66488375bf23dd307018e621840bc3b148cb0558eb108a4881accf8a0b1ee2ac",
+      "assets/app-CwVjvhe7.js": "228776d1ad47a13b879c9399cb146a1b705f86cde23211cc9e96cbc11b0bcb00",
+      "assets/browser-BV4R2-sQ.js": "71eb5d7ba875e25ad922eab59d944b3fe0d4cd0756395512f303158f52f5dca1",
+      "assets/fragment-mono-latin-yxdJ5AmL.woff2": "44c4e39bff5e76652a24a872cbebabccbcfb20f62c4633b27c1f2745cba86b56",
+      "assets/wix-madefor-display-latin-Blzrepd3.woff2": "19bf2f2f1eaa10b2a047a8a1e624a1e12008ab5e3c50ad199ac968f8324f5f4d",
+      "assets/wix-madefor-text-latin-M4ts_BV7.woff2": "cbd90a79e04d153fd521d90b08e9962628e3139313af330bd898001fe5b36e1a",
+      "assets/worker-host.html": "844c700df979d2bdb16ff70650c1b68b6f51512602dfadeaee94433a3ea6cebe",
+      "assets/workerHost-BKrclfgn.js": "be79dfb1b101571e15515125b2769d96b1d5d13a2001ca51e0b4684afdcaa35d",
+      "index.html": "1f5ca8860e0b716e97498e6556aa9afd7d5b379e15bed872bf2dde104e175d94"
+    },
+    "package": "6a76d101b960f66de7681953b6057388abf0d65bcd8735b9b1a1405f420af319",
+    "lockfile": "dd52d17efe95f178c5de765f06d4dfdd3f73545ed11d7491602c6fc17da489f5",
+    "runner": "3cb44139a9522e8581869c018b915d3a43fe5802adfc363865d80bd551d1f1bc"
+  },
+  "sourceAfter": {
+    "source": {
+      "app/LabApp.tsx": "2bd0f0b813dd64b8c411a219dbf00746a3a1a7bc9263cef88c634f0719fb03e6",
+      "app/guide.ts": "c13eebbbaf6567ef14ff4967c70b548c488a4f86091aa6e67a4b5f629ddbd204",
+      "app/lab-fixtures.ts": "d68275afc445277fc324cd70981c73c05fe09d65e76dfdbb3beed4925f9894e5",
+      "app/lab-model.ts": "b8ef594b55f459fe061f5c22a2c7d59e468c30d92d04bafa98b8a0438cbf9ada",
+      "app/lab-reducer.ts": "7c5f42b30276407fe76c46eeeb057b36a678d4bac61ddd5f33ce2c0b2463ae9e",
+      "app/use-lab.ts": "02303e3d3302120c13b61a938c6e218d9c9333ebd5eade7af46a236cf573c49e",
+      "components/Comparison.tsx": "dbd9c74b075eaff981618136b3def91493481043b8280bca9f5f2b9f9afb9fb9",
+      "components/Guide.tsx": "a8a6a96a5fc77c95996bb644709c382f15e7030a82f4c64ec67c90b3ff64d7fe",
+      "components/Header.tsx": "1190173d0dc184f2291b4ccd95ad81dff795a01fb541ae8b84f9e805352f52f9",
+      "components/Icon.tsx": "ffe7c4a93033730b773da5818435966932e23aad74caa4f3a187af592ceb07da",
+      "components/StageCard.tsx": "b7a02f2891d09e4423ee0a3ce28ed486c169b30f32b620b5f6d0a33c79b6c42b",
+      "components/Switch.tsx": "6974a12d8ec20358e9d1ba91162d570115889666df7e9d8e1196193c851529bd",
+      "components/Tag.tsx": "c43df271299a76a75b2ddce3e9871783859829050290e964a2d4dac5c48be441",
+      "components/UnderTheHood.tsx": "fa9425cc6b0f2c5a930b72dac9a047455dfe13df2e3fe3fc052e838f68485bfa",
+      "components/format.ts": "340e576dfde3d8f183c6936e2116e97ccad2ef8555e72af66e4d95317c6142f8",
+      "components/stage/Stage.tsx": "46741197a3ec4c8aca26b1eb15979933b991a336303504a929fd0bc9e51e13c4",
+      "components/stage/StageFallback.tsx": "999ff8af6d51cb08cf6edd6ff2bad895b5c6be3fe9000995842c88a77201f0c1",
+      "components/stage/geometry.ts": "d8fa78108fcd328a69d3f500d321c85a8c55faf88cee6aa57b39a6eacd67dd89",
+      "components/stage/math.ts": "940d135ec0af004d32869eaddca99b412db8f3d3b59925d46250c742725da274",
+      "components/stage/renderer.ts": "5badcbb9d99808224e9aca73d01d2e72e77ee63853ba7f09e12683653e727f99",
+      "components/stage/scene-layout.ts": "d35a3764a5f5dce9efc5105d4c3cb9c142435efb437d64aa5c3dd06bd4a9108f",
+      "components/stage/shaders.ts": "ec60475a61578096b02933e3358d76b0c3a75ffa6fd8d6c37acdc29d57f8b864",
+      "composition/lab.ts": "10d8a5a7b538464dfa33b9652031a84f2ede6bf43e1e38c038e887dded8802e5",
+      "composition/registry.ts": "e41ea93e5ee598898f59200b0b97d0e528b22c333b029bff3b9edb77bf1dd96f",
+      "composition/transport.ts": "416a0075692f431da4cccfe2f4592c13bd7e021b73388f8b87d6cd6e7a38fad2",
+      "config/public-env.ts": "0c6eb98d0ce147875818d14b7b0f0140493dbd739da61593dda425c0d785f401",
+      "features/lab/LiveLabApp.tsx": "ce27dfba4c98b97616552fe357ac9124fe029d06d5d7a07e61258f9dc5bc9b5c",
+      "features/lab/correlate.ts": "7f4e082cc971f016a9c1c41be256e0e700640c173d566c6d5e7dc6b9b5b8efea",
+      "features/lab/direct-fixture.ts": "b2afba31bf8f440cd6fe248a033cb7d3f7d18328bf60f626e360a6f0bec88326",
+      "features/lab/live-controller.ts": "e4869d296a57ea6a78ddecac925e03ef51446f850c85ec766b2483b943f9d0e7",
+      "features/lab/live-types.ts": "107e2b7eee951604e12db33bef28a032668dc3d260fbf5fb047fbc1e288fb827",
+      "features/lab/live.css": "694453dea3b61378a910d7a5cec16d4ce4a859bc7b46c3b4c5dde72bd94e905a",
+      "features/lab/scenario.ts": "e1c02984f4d49ec71cfa091c0290d974348a5b9cc95b8cb1f763570b20eb6d1b",
+      "features/lab/wire-driver.ts": "c419106f54bb25dd70c602b9d6bbdd283a3ea13a2bbe6a58fb14e148490b8d14",
+      "features/registry/live-policy.ts": "f729250f388eb84ed6de44bfcdd6d1a411a26d4df67f6ba18e4f13627315b184",
+      "main.tsx": "c114b7c3be6592db34885f96c050872d18824ceb071bcd01a9434ed9771f4af0",
+      "spikes/anon/index.html": "8fda235a27120212585737d3cf6f830e32c06d07d7e95c003b3900762944d3e2",
+      "spikes/anon/main.ts.txt": "d1bcdb69f1ad53114eca0302e49a127d37858758b599690194af14aeafc6516a",
+      "spikes/anon/observed-2026-11-06.json": "4522287d860335100b29e26155d03dfc60cfa394602ccae39b481373cdc37fdd",
+      "spikes/anon/packaging-smoke-2026-11-06.json": "016c8c33aaef1a275a28d8d555ffb834fd644fdc128aa13247aa9ec1b52e9a68",
+      "spikes/anon/post-foundation-nym-2026-11-06.json": "6221bdb015838bb0844326c7eca286870a6402e651db95d00ae8eacc29cdb177",
+      "spikes/anon/run.mjs.txt": "9494bf94ec3f9ed135cb383b9fdbc5490b379e05e7476da927b1f51bc7e20699",
+      "spikes/anon/run.sh": "6fe6420e89cecce72d8de9fb02774d388a9c1bb8b729c981120302170cbf3308",
+      "styles/fonts/OFL-FragmentMono.txt": "04e68eeb550895a2f5c3558510a7e83505b73159d6a3e4b841c365e9c9005461",
+      "styles/fonts/OFL-WixMadeforDisplay.txt": "5167ab9754b56678f7363976eee0576a52782b1f225af2635c505406cd14dd67",
+      "styles/fonts/OFL-WixMadeforText.txt": "5167ab9754b56678f7363976eee0576a52782b1f225af2635c505406cd14dd67",
+      "styles/fonts/fragment-mono-latin.woff2": "44c4e39bff5e76652a24a872cbebabccbcfb20f62c4633b27c1f2745cba86b56",
+      "styles/fonts/wix-madefor-display-latin.woff2": "19bf2f2f1eaa10b2a047a8a1e624a1e12008ab5e3c50ad199ac968f8324f5f4d",
+      "styles/fonts/wix-madefor-text-latin.woff2": "cbd90a79e04d153fd521d90b08e9962628e3139313af330bd898001fe5b36e1a",
+      "styles/lab.css": "e028ad695ed88d6e6d1d963ec28634663df4a8134a517cbc2501a0d7b57f7155",
+      "styles/tokens.css": "cdc686f64d11b175e197d95085bcadccee79071502a0be737cf0873e96501992",
+      "vite-env.d.ts": "493f46be45455ec7a882bf649cff161f7e2cad6b7e532f75008a852d60fabfac"
+    },
+    "dist": {
+      "assets/app-BQPXX-bb.css": "66488375bf23dd307018e621840bc3b148cb0558eb108a4881accf8a0b1ee2ac",
+      "assets/app-CwVjvhe7.js": "228776d1ad47a13b879c9399cb146a1b705f86cde23211cc9e96cbc11b0bcb00",
+      "assets/browser-BV4R2-sQ.js": "71eb5d7ba875e25ad922eab59d944b3fe0d4cd0756395512f303158f52f5dca1",
+      "assets/fragment-mono-latin-yxdJ5AmL.woff2": "44c4e39bff5e76652a24a872cbebabccbcfb20f62c4633b27c1f2745cba86b56",
+      "assets/wix-madefor-display-latin-Blzrepd3.woff2": "19bf2f2f1eaa10b2a047a8a1e624a1e12008ab5e3c50ad199ac968f8324f5f4d",
+      "assets/wix-madefor-text-latin-M4ts_BV7.woff2": "cbd90a79e04d153fd521d90b08e9962628e3139313af330bd898001fe5b36e1a",
+      "assets/worker-host.html": "844c700df979d2bdb16ff70650c1b68b6f51512602dfadeaee94433a3ea6cebe",
+      "assets/workerHost-BKrclfgn.js": "be79dfb1b101571e15515125b2769d96b1d5d13a2001ca51e0b4684afdcaa35d",
+      "index.html": "1f5ca8860e0b716e97498e6556aa9afd7d5b379e15bed872bf2dde104e175d94"
+    },
+    "package": "6a76d101b960f66de7681953b6057388abf0d65bcd8735b9b1a1405f420af319",
+    "lockfile": "dd52d17efe95f178c5de765f06d4dfdd3f73545ed11d7491602c6fc17da489f5",
+    "runner": "3cb44139a9522e8581869c018b915d3a43fe5802adfc363865d80bd551d1f1bc"
+  },
+  "generatedAt": "2026-11-06T21:53:01.401Z"
+}

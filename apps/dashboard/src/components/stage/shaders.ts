@@ -49,7 +49,7 @@ out vec3 vNormal;
 out vec3 vLocal;
 void main() {
   vec4 w = uModel * vec4(aPos, 1.0);
-  vec3 n = mat3(uModel) * aNormal;
+  vec3 n = transpose(inverse(mat3(uModel))) * aNormal;
   if (uMirror > 0.5) { w.y = -w.y; n.y = -n.y; }
   vWorld = w.xyz;
   vNormal = n;
@@ -64,7 +64,7 @@ in vec3 vNormal;
 in vec3 vLocal;
 out vec4 outColor;
 uniform vec3 uEye;
-uniform int uMaterial;      // 0 satin endpoint slab, 1 emissive body, 2 dashed emissive ring
+uniform int uMaterial;      // 0 satin body, 1 lit metal, 2 dashed worker ring, 3 recessed display
 uniform vec3 uColor;
 uniform vec3 uGlow;
 uniform float uGlowAmount;
@@ -99,7 +99,12 @@ void main() {
   float fill = max(dot(N, F), 0.0);
   vec3 H = normalize(L + V);
   vec3 col;
-  if (uMaterial == 0) {
+  if (uMaterial == 3) {
+    vec2 q = abs(vLocal.xy) / uHalf.xy;
+    float edge = smoothstep(0.65, 1.0, max(q.x, q.y));
+    col = uColor * (0.75 + key * 0.25) + vec3(0.08, 0.075, 0.15) * edge;
+    col += uGlow * uGlowAmount * exp(-dot(vLocal.xy, vLocal.xy) * 1.4);
+  } else if (uMaterial == 0) {
     vec3 R = reflect(-V, N);
     // Satin lavender metal: broad faces carry form and bevels catch the key light.
     col = uColor * (0.28 + 0.66 * key + 0.24 * fill) + sky(R) * (0.20 + 0.42 * fres);
@@ -157,15 +162,21 @@ uniform vec3 uCenter;
 uniform vec3 uLightPos[4];
 uniform vec3 uLightColor[4];
 uniform float uLightPower[4];
+uniform vec3 uShadowPos[5];
+uniform vec2 uShadowSize[5];
 void main() {
   float r = length((vWorld.xz - uCenter.xz) * vec2(0.62, 1.0));
-  vec3 col = vec3(0.035, 0.038, 0.075) * (1.0 - smoothstep(0.0, 13.0, r) * 0.7);
+  vec3 col = vec3(0.055, 0.06, 0.105) * (1.0 - smoothstep(0.0, 13.0, r) * 0.7);
+  // Soft illustrative contact shadows belong to the bodies and follow the studio key.
+  for (int i = 0; i < 5; i++) {
+    vec2 origin = uShadowPos[i].xz + vec2(0.22, -0.12) * uShadowPos[i].y;
+    vec2 delta = (vWorld.xz - origin) / uShadowSize[i];
+    col *= 1.0 - 0.7 * exp(-dot(delta, delta) * 1.5);
+  }
   for (int i = 0; i < 4; i++) {
     vec2 d = vWorld.xz - uLightPos[i].xz;
     col += uLightColor[i] * uLightPower[i] * exp(-dot(d, d) * 0.9);
   }
-  float ring = abs(fract(r * 0.5) - 0.5);
-  col += vec3(0.5, 0.56, 0.9) * 0.012 * smoothstep(0.03, 0.0, ring) * (1.0 - smoothstep(4.0, 11.0, r));
   float alpha = mix(0.84, 0.0, smoothstep(4.0, 19.0, r));
   outColor = vec4(col * alpha, alpha);
 }`;
@@ -220,9 +231,10 @@ void main() {
   float s = abs(vSide);
   float core = exp(-s * s * 10.0);
   float glow = exp(-s * s * 3.2) * 0.22;
-  float flow = 0.7 + 0.3 * sin((vT * 22.0 - uTime * uFlow) * 1.5708);
+  // Idle paths are stationary schematics. Only an actual StageFlight adds a traveling wave.
+  float flow = 1.0;
   float dash = 1.0;
-  if (uDashed > 0.5) dash = step(0.5, fract(vT * 46.0 - uTime * 0.25));
+  if (uDashed > 0.5) dash = step(0.5, fract(vT * 32.0));
   float wave = uPulse * exp(-pow((vT - uPulseT) * 11.0, 2.0));
   float reveal = smoothstep(uReveal, uReveal - 0.02, vT);
   float i = (core + glow) * uIntensity * flow * dash * reveal + wave * (core * 2.6 + glow * 1.4);

@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 1,
+  "sourceTask": "#86",
+  "status": "INTEGRATED_SOFTWARE_CHECKS_PASSED_OWNER_REVIEW_PENDING",
+  "evidence": "SIMULATED",
+  "livePrivacyAcceptance": false,
+  "scope": "Actual production-preview rendering and UI journeys after accepted-main integration. Network and worker examples are simulated or blocked by unconfigured live policy.",
+  "sourceFiles": 54,
+  "distFiles": [
+    "assets/app-DBCLKKsN.css",
+    "assets/app-Dw5fWw7-.js",
+    "assets/browser-BV4R2-sQ.js",
+    "assets/fragment-mono-latin-yxdJ5AmL.woff2",
+    "assets/wix-madefor-display-latin-Blzrepd3.woff2",
+    "assets/wix-madefor-text-latin-M4ts_BV7.woff2",
+    "assets/worker-host.html",
+    "assets/workerHost-BKrclfgn.js",
+    "index.html"
+  ],
+  "results": [
+    {
+      "path": "integration-interactions/stage-result.json",
+      "sha256": "6ac954ff87c159e167154193df1e803b4a671796b96343ab5062272bb31bf570"
+    },
+    {
+      "path": "integration-journeys/browser-result.json",
+      "sha256": "6fdd00ba6d9a1ccfb9cc3863310cb3c7dbf477a149015593a7fb06213370e665"
+    },
+    {
+      "path": "integration-navigation/navigation-result.json",
+      "sha256": "e76f9ff26c5189c4abc1b3c0ed2cbf899188f37ef85f3f08b46f038cda52defe"
+    },
+    {
+      "path": "integration-native/transition-result.json",
+      "sha256": "466d33d675b9322fc23b85fd6d8e7e035953a129cae6b93179a25c51bec6accd"
+    }
+  ],
+  "runnerSha256": {
+    "stageInteractions": "c19965ede95a7625113234db8d5a7d66f3396e6041051795247999b862ebbfa0",
+    "originalJourneys": "3cb44139a9522e8581869c018b915d3a43fe5802adfc363865d80bd551d1f1bc",
+    "nativeTransition": "75d32af226b01a0b2a910f02d67be9e3524a6b502eead9cd26b1b315c91a4d73",
+    "integratedNavigation": "8c486501f67cbf28906e0c0e20f25ffb20995572ddbad5c2a02f728b043a35bb"
+  },
+  "coverage": {
+    "stageInteractions": 13,
+    "userJourneys": 26,
+    "postAnchorViewports": [
+      320,
+      390,
+      768
+    ],
+    "fallbackBoundsViewports": [
+      320,
+      390
+    ],
+    "tabletOverlayViewports": [
+      521,
+      768,
+      899
+    ],
+    "nativeTransitionFrames": 5,
+    "bootstrapDisclosureViewport": 320
+  },
+  "limits": [
+    "Native-frame timestamps and model matrices are in integration-native; settled Playwright transition captures are not precise animation timing evidence.",
+    "Headless tab switching did not expose native document.hidden. Visibility handler uses an explicitly simulated property/event; no OS background-throttling claim.",
+    "WebGL initialization fallback is deliberately injected; runtime context loss is forced through WEBGL_lose_context.",
+    "200% equivalent reflow uses a 720x500 CSS viewport at 2x device scale; this is not an OS/browser zoom-setting claim.",
+    "Draw counts/timing are local bounded browser observations, not device FPS or general GPU performance claims.",
+    "Earlier JSON summaries and scripts remain historical checkpoints or preliminary diagnostics. Superseded pre-integration PNGs were removed after review. One earlier bootstrap capture showed Ready and is superseded by the Starting capture in integration-native/bootstrap-320.png."
+  ],
+  "contactSheets": {
+    "integration-native-contact.png": "Derived with ImageMagick montage from integration-native PNGs, without content edits.",
+    "integration-interactions-contact.png": "Derived with ImageMagick montage from integration-interactions PNGs, without content edits.",
+    "integration-journeys-contact.png": "Derived with ImageMagick montage from integration-journeys PNGs, without content edits."
+  }
+}

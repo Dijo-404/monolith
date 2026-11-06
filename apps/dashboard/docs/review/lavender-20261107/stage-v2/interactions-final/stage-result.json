@@ -1,0 +1,382 @@
+{
+  "schemaVersion": 1,
+  "sourceTask": "#86",
+  "evidence": "SIMULATED",
+  "scope": "Local production-preview WebGL rendering, controls and fixture transitions. Instrumented browser draw counts are local observations; no real RPC, anonymity, device FPS or general GPU performance claim.",
+  "livePrivacyAcceptance": false,
+  "startedAt": "2026-11-06T21:59:51.720Z",
+  "passed": true,
+  "node": "v24.22.2",
+  "playwright": "1.65.0",
+  "browser": "158.0.8127.18",
+  "checks": [
+    {
+      "name": "Real WebGL programs compile and normal-preference scene renders successive frames",
+      "status": "PASS",
+      "detail": {
+        "frames": 6,
+        "draws": 294,
+        "requestedWaitMs": 400,
+        "elapsedMs": 502
+      }
+    },
+    {
+      "name": "Stage-local pointer parallax responds, and keyboard Reset view restores the camera",
+      "status": "PASS",
+      "detail": {
+        "baselineEye": [
+          0.7042182480324776,
+          5,
+          12.8
+        ],
+        "leftEye": [
+          0.35892350228401854,
+          4.9634794502877595,
+          12.8
+        ],
+        "rightEye": [
+          1.0520474306371819,
+          4.960208500481287,
+          12.8
+        ],
+        "resetEye": [
+          0.7033548703545964,
+          5,
+          12.8
+        ]
+      }
+    },
+    {
+      "name": "Pointer movement outside the stage does not steer its view",
+      "status": "PASS",
+      "detail": {
+        "outsideBefore": [
+          0.7166752371082061,
+          5,
+          12.8
+        ],
+        "outsideAfter": [
+          0.7240324369347214,
+          5,
+          12.8
+        ],
+        "caveat": "Small ambient camera drift remains allowed."
+      }
+    },
+    {
+      "name": "Keyboard Pause stops ambient draw frames and preserves an identical rendered image",
+      "status": "PASS",
+      "detail": {
+        "frames": 0,
+        "draws": 0,
+        "requestedWaitMs": 450,
+        "elapsedMs": 460
+      }
+    },
+    {
+      "name": "Resume restores ambient motion",
+      "status": "PASS",
+      "detail": {
+        "frames": 10,
+        "draws": 490,
+        "requestedWaitMs": 400,
+        "elapsedMs": 444
+      }
+    },
+    {
+      "name": "Actual offscreen scrolling parks drawing and returning restarts it",
+      "status": "PASS",
+      "detail": {
+        "offscreen": {
+          "frames": 0,
+          "draws": 0,
+          "requestedWaitMs": 400,
+          "elapsedMs": 407
+        },
+        "returned": {
+          "frames": 8,
+          "draws": 392,
+          "requestedWaitMs": 400,
+          "elapsedMs": 443
+        }
+      }
+    },
+    {
+      "name": "Document-visibility handling parks the scene under a controlled browser event",
+      "status": "PASS",
+      "detail": {
+        "method": "SIMULATED document.hidden getter + visibilitychange; headless tab switching did not expose native hidden state",
+        "hiddenDelta": {
+          "frames": 0,
+          "draws": 0,
+          "requestedWaitMs": 400,
+          "elapsedMs": 409
+        },
+        "limit": "This does not prove browser/OS background throttling."
+      }
+    },
+    {
+      "name": "Reduced motion is a clear static view with an explicit note and no Pause control",
+      "status": "PASS",
+      "detail": {
+        "frames": 0,
+        "draws": 0,
+        "requestedWaitMs": 400,
+        "elapsedMs": 403
+      }
+    },
+    {
+      "name": "Touch layout hides mouse-only Reset, keeps Pause usable and does not require pointer parallax",
+      "status": "PASS",
+      "detail": {
+        "mobileBefore": [
+          0.7096897724216908,
+          5,
+          12.8
+        ]
+      }
+    },
+    {
+      "name": "Fixture worker-state transition has real before/mid/after rendered captures",
+      "status": "PASS",
+      "detail": {
+        "evidence": "SIMULATED",
+        "intervalMs": [
+          0,
+          180,
+          980
+        ]
+      }
+    },
+    {
+      "name": "Pause preserves useful fixture reads and application-state updates",
+      "status": "PASS",
+      "detail": {
+        "evidence": "SIMULATED"
+      }
+    },
+    {
+      "name": "WebGL-unavailable schematic preserves readable routes, fixture actions and keyboard detail links",
+      "status": "PASS",
+      "detail": {}
+    },
+    {
+      "name": "Runtime GPU-context loss outcome",
+      "status": "PASS",
+      "detail": {
+        "eventObserved": true,
+        "fallbackActive": true,
+        "keyboardDetailAction": "PASS"
+      }
+    }
+  ],
+  "screenshots": [
+    {
+      "path": "desktop-motion-before.png",
+      "sha256": "343376938e97721e9a707c7151fcda2ae401133daf716f0efe396149d5d5c6c5"
+    },
+    {
+      "path": "desktop-motion-mid.png",
+      "sha256": "0faf9ce3aefc0d7feda3edb532c4707a42b138b7fa80fb67dffa4a7668bcf1da"
+    },
+    {
+      "path": "desktop-motion-after.png",
+      "sha256": "7f9c292dfe0be6e187198db7535c2294031f37d86412318090b70a06013247db"
+    },
+    {
+      "path": "desktop-pointer-view.png",
+      "sha256": "246a1479346c11dad3cfd75963565053687ab337f6c508017da011e2cd4b57b4"
+    },
+    {
+      "path": "desktop-paused-before.png",
+      "sha256": "6297ea8b32b07d40dc0f7e720e8e4be7053eaec88cba75f6b92d08347cd005c9"
+    },
+    {
+      "path": "desktop-paused-after.png",
+      "sha256": "6297ea8b32b07d40dc0f7e720e8e4be7053eaec88cba75f6b92d08347cd005c9"
+    },
+    {
+      "path": "desktop-reduced-motion.png",
+      "sha256": "812e12c588a479b5b58a87eedbfbd4c0759f09662ea286dbf9404e71507715f2"
+    },
+    {
+      "path": "mobile-stage-controls.png",
+      "sha256": "5a90462a59d01225d722b50a26be511e7d1deee67f45302af7f9704c59d200f5"
+    },
+    {
+      "path": "transition-ready.png",
+      "sha256": "9a06ed0de781afeb17bdcdca85ef732839b448554a4e37fcde577d0f18e36a40"
+    },
+    {
+      "path": "transition-outage-before.png",
+      "sha256": "d6573a2f4df8d6b681070a704d318aa561bb116b8d60a8f71f8f0dfaa8d6b5f7"
+    },
+    {
+      "path": "transition-outage-mid.png",
+      "sha256": "a8f1fd19237429bde8651b3b264a7894471a1be2e910fe87687ce7565553916f"
+    },
+    {
+      "path": "transition-outage-after.png",
+      "sha256": "657cc4b0c868e3e921f5da53a73789ae6f87bbae9179d5e4a847f82249a58033"
+    },
+    {
+      "path": "paused-fixture-read-result.png",
+      "sha256": "d34dfb6067466e9665d92b35049382850e80396c18793d40e80f83e6c5e330bf"
+    },
+    {
+      "path": "fallback-schematic.png",
+      "sha256": "f70def28acf5dff9327579bf3fb67045f7b62e34614f0bb2a4739d446b909e37"
+    },
+    {
+      "path": "runtime-context-loss.png",
+      "sha256": "11b3bb40a2595ab7a4358c1a4d8e9934844f336ce7cb8f2bff5cf6daef890046"
+    }
+  ],
+  "pageErrors": [],
+  "shaderErrors": [],
+  "externalRequests": [],
+  "applicationApiRequests": [],
+  "sourceBefore": {
+    "source": {
+      "app/LabApp.tsx": "2bd0f0b813dd64b8c411a219dbf00746a3a1a7bc9263cef88c634f0719fb03e6",
+      "app/guide.ts": "c13eebbbaf6567ef14ff4967c70b548c488a4f86091aa6e67a4b5f629ddbd204",
+      "app/lab-fixtures.ts": "d68275afc445277fc324cd70981c73c05fe09d65e76dfdbb3beed4925f9894e5",
+      "app/lab-model.ts": "b8ef594b55f459fe061f5c22a2c7d59e468c30d92d04bafa98b8a0438cbf9ada",
+      "app/lab-reducer.ts": "7c5f42b30276407fe76c46eeeb057b36a678d4bac61ddd5f33ce2c0b2463ae9e",
+      "app/use-lab.ts": "02303e3d3302120c13b61a938c6e218d9c9333ebd5eade7af46a236cf573c49e",
+      "components/Comparison.tsx": "dbd9c74b075eaff981618136b3def91493481043b8280bca9f5f2b9f9afb9fb9",
+      "components/Guide.tsx": "a8a6a96a5fc77c95996bb644709c382f15e7030a82f4c64ec67c90b3ff64d7fe",
+      "components/Header.tsx": "1190173d0dc184f2291b4ccd95ad81dff795a01fb541ae8b84f9e805352f52f9",
+      "components/Icon.tsx": "ffe7c4a93033730b773da5818435966932e23aad74caa4f3a187af592ceb07da",
+      "components/StageCard.tsx": "b7a02f2891d09e4423ee0a3ce28ed486c169b30f32b620b5f6d0a33c79b6c42b",
+      "components/Switch.tsx": "6974a12d8ec20358e9d1ba91162d570115889666df7e9d8e1196193c851529bd",
+      "components/Tag.tsx": "c43df271299a76a75b2ddce3e9871783859829050290e964a2d4dac5c48be441",
+      "components/UnderTheHood.tsx": "fa9425cc6b0f2c5a930b72dac9a047455dfe13df2e3fe3fc052e838f68485bfa",
+      "components/format.ts": "340e576dfde3d8f183c6936e2116e97ccad2ef8555e72af66e4d95317c6142f8",
+      "components/stage/Stage.tsx": "f0d49d6270986219ad115ec3e7f51101435e5fb917c678477b8d4c88b2ac4f17",
+      "components/stage/StageFallback.tsx": "58f7eafc328b295e701ba6fe05967a20639d081cba2d96c93b33fc6f4ad1cc5b",
+      "components/stage/geometry.ts": "d8fa78108fcd328a69d3f500d321c85a8c55faf88cee6aa57b39a6eacd67dd89",
+      "components/stage/math.ts": "940d135ec0af004d32869eaddca99b412db8f3d3b59925d46250c742725da274",
+      "components/stage/renderer.ts": "5badcbb9d99808224e9aca73d01d2e72e77ee63853ba7f09e12683653e727f99",
+      "components/stage/scene-layout.ts": "d35a3764a5f5dce9efc5105d4c3cb9c142435efb437d64aa5c3dd06bd4a9108f",
+      "components/stage/shaders.ts": "ec60475a61578096b02933e3358d76b0c3a75ffa6fd8d6c37acdc29d57f8b864",
+      "composition/lab.ts": "10d8a5a7b538464dfa33b9652031a84f2ede6bf43e1e38c038e887dded8802e5",
+      "composition/registry.ts": "e41ea93e5ee598898f59200b0b97d0e528b22c333b029bff3b9edb77bf1dd96f",
+      "composition/transport.ts": "416a0075692f431da4cccfe2f4592c13bd7e021b73388f8b87d6cd6e7a38fad2",
+      "config/public-env.ts": "0c6eb98d0ce147875818d14b7b0f0140493dbd739da61593dda425c0d785f401",
+      "features/lab/LiveLabApp.tsx": "ce27dfba4c98b97616552fe357ac9124fe029d06d5d7a07e61258f9dc5bc9b5c",
+      "features/lab/correlate.ts": "7f4e082cc971f016a9c1c41be256e0e700640c173d566c6d5e7dc6b9b5b8efea",
+      "features/lab/direct-fixture.ts": "b2afba31bf8f440cd6fe248a033cb7d3f7d18328bf60f626e360a6f0bec88326",
+      "features/lab/live-controller.ts": "e4869d296a57ea6a78ddecac925e03ef51446f850c85ec766b2483b943f9d0e7",
+      "features/lab/live-types.ts": "107e2b7eee951604e12db33bef28a032668dc3d260fbf5fb047fbc1e288fb827",
+      "features/lab/live.css": "694453dea3b61378a910d7a5cec16d4ce4a859bc7b46c3b4c5dde72bd94e905a",
+      "features/lab/scenario.ts": "e1c02984f4d49ec71cfa091c0290d974348a5b9cc95b8cb1f763570b20eb6d1b",
+      "features/lab/wire-driver.ts": "c419106f54bb25dd70c602b9d6bbdd283a3ea13a2bbe6a58fb14e148490b8d14",
+      "features/registry/live-policy.ts": "f729250f388eb84ed6de44bfcdd6d1a411a26d4df67f6ba18e4f13627315b184",
+      "main.tsx": "c114b7c3be6592db34885f96c050872d18824ceb071bcd01a9434ed9771f4af0",
+      "spikes/anon/index.html": "8fda235a27120212585737d3cf6f830e32c06d07d7e95c003b3900762944d3e2",
+      "spikes/anon/main.ts.txt": "d1bcdb69f1ad53114eca0302e49a127d37858758b599690194af14aeafc6516a",
+      "spikes/anon/observed-2026-11-06.json": "4522287d860335100b29e26155d03dfc60cfa394602ccae39b481373cdc37fdd",
+      "spikes/anon/packaging-smoke-2026-11-06.json": "016c8c33aaef1a275a28d8d555ffb834fd644fdc128aa13247aa9ec1b52e9a68",
+      "spikes/anon/post-foundation-nym-2026-11-06.json": "6221bdb015838bb0844326c7eca286870a6402e651db95d00ae8eacc29cdb177",
+      "spikes/anon/run.mjs.txt": "9494bf94ec3f9ed135cb383b9fdbc5490b379e05e7476da927b1f51bc7e20699",
+      "spikes/anon/run.sh": "6fe6420e89cecce72d8de9fb02774d388a9c1bb8b729c981120302170cbf3308",
+      "styles/fonts/OFL-FragmentMono.txt": "04e68eeb550895a2f5c3558510a7e83505b73159d6a3e4b841c365e9c9005461",
+      "styles/fonts/OFL-WixMadeforDisplay.txt": "5167ab9754b56678f7363976eee0576a52782b1f225af2635c505406cd14dd67",
+      "styles/fonts/OFL-WixMadeforText.txt": "5167ab9754b56678f7363976eee0576a52782b1f225af2635c505406cd14dd67",
+      "styles/fonts/fragment-mono-latin.woff2": "44c4e39bff5e76652a24a872cbebabccbcfb20f62c4633b27c1f2745cba86b56",
+      "styles/fonts/wix-madefor-display-latin.woff2": "19bf2f2f1eaa10b2a047a8a1e624a1e12008ab5e3c50ad199ac968f8324f5f4d",
+      "styles/fonts/wix-madefor-text-latin.woff2": "cbd90a79e04d153fd521d90b08e9962628e3139313af330bd898001fe5b36e1a",
+      "styles/lab.css": "73ae38ced32d501523b9c4e0255af2370e598822eaa948e2fe1a6b4ef468927d",
+      "styles/tokens.css": "cdc686f64d11b175e197d95085bcadccee79071502a0be737cf0873e96501992",
+      "vite-env.d.ts": "493f46be45455ec7a882bf649cff161f7e2cad6b7e532f75008a852d60fabfac"
+    },
+    "dist": {
+      "assets/app-CMqRLn7b.js": "098dc9468dd99312ebacbbd439a8fe5b1dd6f59880d59851863cf58740eeba77",
+      "assets/app-DBCLKKsN.css": "b846f7cdf61bc393c031b56bc8337fd3e90751c2180451f78db1b063beaa540f",
+      "assets/browser-BV4R2-sQ.js": "71eb5d7ba875e25ad922eab59d944b3fe0d4cd0756395512f303158f52f5dca1",
+      "assets/fragment-mono-latin-yxdJ5AmL.woff2": "44c4e39bff5e76652a24a872cbebabccbcfb20f62c4633b27c1f2745cba86b56",
+      "assets/wix-madefor-display-latin-Blzrepd3.woff2": "19bf2f2f1eaa10b2a047a8a1e624a1e12008ab5e3c50ad199ac968f8324f5f4d",
+      "assets/wix-madefor-text-latin-M4ts_BV7.woff2": "cbd90a79e04d153fd521d90b08e9962628e3139313af330bd898001fe5b36e1a",
+      "assets/worker-host.html": "844c700df979d2bdb16ff70650c1b68b6f51512602dfadeaee94433a3ea6cebe",
+      "assets/workerHost-BKrclfgn.js": "be79dfb1b101571e15515125b2769d96b1d5d13a2001ca51e0b4684afdcaa35d",
+      "index.html": "528c390c955ffcd88b2006f65810b750431f569e4882cd0cb56dd96c5e9a423a"
+    },
+    "package": "6a76d101b960f66de7681953b6057388abf0d65bcd8735b9b1a1405f420af319",
+    "lockfile": "dd52d17efe95f178c5de765f06d4dfdd3f73545ed11d7491602c6fc17da489f5",
+    "originalJourneyRunner": "3cb44139a9522e8581869c018b915d3a43fe5802adfc363865d80bd551d1f1bc",
+    "stageRunner": "c19965ede95a7625113234db8d5a7d66f3396e6041051795247999b862ebbfa0"
+  },
+  "sourceAfter": {
+    "source": {
+      "app/LabApp.tsx": "2bd0f0b813dd64b8c411a219dbf00746a3a1a7bc9263cef88c634f0719fb03e6",
+      "app/guide.ts": "c13eebbbaf6567ef14ff4967c70b548c488a4f86091aa6e67a4b5f629ddbd204",
+      "app/lab-fixtures.ts": "d68275afc445277fc324cd70981c73c05fe09d65e76dfdbb3beed4925f9894e5",
+      "app/lab-model.ts": "b8ef594b55f459fe061f5c22a2c7d59e468c30d92d04bafa98b8a0438cbf9ada",
+      "app/lab-reducer.ts": "7c5f42b30276407fe76c46eeeb057b36a678d4bac61ddd5f33ce2c0b2463ae9e",
+      "app/use-lab.ts": "02303e3d3302120c13b61a938c6e218d9c9333ebd5eade7af46a236cf573c49e",
+      "components/Comparison.tsx": "dbd9c74b075eaff981618136b3def91493481043b8280bca9f5f2b9f9afb9fb9",
+      "components/Guide.tsx": "a8a6a96a5fc77c95996bb644709c382f15e7030a82f4c64ec67c90b3ff64d7fe",
+      "components/Header.tsx": "1190173d0dc184f2291b4ccd95ad81dff795a01fb541ae8b84f9e805352f52f9",
+      "components/Icon.tsx": "ffe7c4a93033730b773da5818435966932e23aad74caa4f3a187af592ceb07da",
+      "components/StageCard.tsx": "b7a02f2891d09e4423ee0a3ce28ed486c169b30f32b620b5f6d0a33c79b6c42b",
+      "components/Switch.tsx": "6974a12d8ec20358e9d1ba91162d570115889666df7e9d8e1196193c851529bd",
+      "components/Tag.tsx": "c43df271299a76a75b2ddce3e9871783859829050290e964a2d4dac5c48be441",
+      "components/UnderTheHood.tsx": "fa9425cc6b0f2c5a930b72dac9a047455dfe13df2e3fe3fc052e838f68485bfa",
+      "components/format.ts": "340e576dfde3d8f183c6936e2116e97ccad2ef8555e72af66e4d95317c6142f8",
+      "components/stage/Stage.tsx": "f0d49d6270986219ad115ec3e7f51101435e5fb917c678477b8d4c88b2ac4f17",
+      "components/stage/StageFallback.tsx": "58f7eafc328b295e701ba6fe05967a20639d081cba2d96c93b33fc6f4ad1cc5b",
+      "components/stage/geometry.ts": "d8fa78108fcd328a69d3f500d321c85a8c55faf88cee6aa57b39a6eacd67dd89",
+      "components/stage/math.ts": "940d135ec0af004d32869eaddca99b412db8f3d3b59925d46250c742725da274",
+      "components/stage/renderer.ts": "5badcbb9d99808224e9aca73d01d2e72e77ee63853ba7f09e12683653e727f99",
+      "components/stage/scene-layout.ts": "d35a3764a5f5dce9efc5105d4c3cb9c142435efb437d64aa5c3dd06bd4a9108f",
+      "components/stage/shaders.ts": "ec60475a61578096b02933e3358d76b0c3a75ffa6fd8d6c37acdc29d57f8b864",
+      "composition/lab.ts": "10d8a5a7b538464dfa33b9652031a84f2ede6bf43e1e38c038e887dded8802e5",
+      "composition/registry.ts": "e41ea93e5ee598898f59200b0b97d0e528b22c333b029bff3b9edb77bf1dd96f",
+      "composition/transport.ts": "416a0075692f431da4cccfe2f4592c13bd7e021b73388f8b87d6cd6e7a38fad2",
+      "config/public-env.ts": "0c6eb98d0ce147875818d14b7b0f0140493dbd739da61593dda425c0d785f401",
+      "features/lab/LiveLabApp.tsx": "ce27dfba4c98b97616552fe357ac9124fe029d06d5d7a07e61258f9dc5bc9b5c",
+      "features/lab/correlate.ts": "7f4e082cc971f016a9c1c41be256e0e700640c173d566c6d5e7dc6b9b5b8efea",
+      "features/lab/direct-fixture.ts": "b2afba31bf8f440cd6fe248a033cb7d3f7d18328bf60f626e360a6f0bec88326",
+      "features/lab/live-controller.ts": "e4869d296a57ea6a78ddecac925e03ef51446f850c85ec766b2483b943f9d0e7",
+      "features/lab/live-types.ts": "107e2b7eee951604e12db33bef28a032668dc3d260fbf5fb047fbc1e288fb827",
+      "features/lab/live.css": "694453dea3b61378a910d7a5cec16d4ce4a859bc7b46c3b4c5dde72bd94e905a",
+      "features/lab/scenario.ts": "e1c02984f4d49ec71cfa091c0290d974348a5b9cc95b8cb1f763570b20eb6d1b",
+      "features/lab/wire-driver.ts": "c419106f54bb25dd70c602b9d6bbdd283a3ea13a2bbe6a58fb14e148490b8d14",
+      "features/registry/live-policy.ts": "f729250f388eb84ed6de44bfcdd6d1a411a26d4df67f6ba18e4f13627315b184",
+      "main.tsx": "c114b7c3be6592db34885f96c050872d18824ceb071bcd01a9434ed9771f4af0",
+      "spikes/anon/index.html": "8fda235a27120212585737d3cf6f830e32c06d07d7e95c003b3900762944d3e2",
+      "spikes/anon/main.ts.txt": "d1bcdb69f1ad53114eca0302e49a127d37858758b599690194af14aeafc6516a",
+      "spikes/anon/observed-2026-11-06.json": "4522287d860335100b29e26155d03dfc60cfa394602ccae39b481373cdc37fdd",
+      "spikes/anon/packaging-smoke-2026-11-06.json": "016c8c33aaef1a275a28d8d555ffb834fd644fdc128aa13247aa9ec1b52e9a68",
+      "spikes/anon/post-foundation-nym-2026-11-06.json": "6221bdb015838bb0844326c7eca286870a6402e651db95d00ae8eacc29cdb177",
+      "spikes/anon/run.mjs.txt": "9494bf94ec3f9ed135cb383b9fdbc5490b379e05e7476da927b1f51bc7e20699",
+      "spikes/anon/run.sh": "6fe6420e89cecce72d8de9fb02774d388a9c1bb8b729c981120302170cbf3308",
+      "styles/fonts/OFL-FragmentMono.txt": "04e68eeb550895a2f5c3558510a7e83505b73159d6a3e4b841c365e9c9005461",
+      "styles/fonts/OFL-WixMadeforDisplay.txt": "5167ab9754b56678f7363976eee0576a52782b1f225af2635c505406cd14dd67",
+      "styles/fonts/OFL-WixMadeforText.txt": "5167ab9754b56678f7363976eee0576a52782b1f225af2635c505406cd14dd67",
+      "styles/fonts/fragment-mono-latin.woff2": "44c4e39bff5e76652a24a872cbebabccbcfb20f62c4633b27c1f2745cba86b56",
+      "styles/fonts/wix-madefor-display-latin.woff2": "19bf2f2f1eaa10b2a047a8a1e624a1e12008ab5e3c50ad199ac968f8324f5f4d",
+      "styles/fonts/wix-madefor-text-latin.woff2": "cbd90a79e04d153fd521d90b08e9962628e3139313af330bd898001fe5b36e1a",
+      "styles/lab.css": "73ae38ced32d501523b9c4e0255af2370e598822eaa948e2fe1a6b4ef468927d",
+      "styles/tokens.css": "cdc686f64d11b175e197d95085bcadccee79071502a0be737cf0873e96501992",
+      "vite-env.d.ts": "493f46be45455ec7a882bf649cff161f7e2cad6b7e532f75008a852d60fabfac"
+    },
+    "dist": {
+      "assets/app-CMqRLn7b.js": "098dc9468dd99312ebacbbd439a8fe5b1dd6f59880d59851863cf58740eeba77",
+      "assets/app-DBCLKKsN.css": "b846f7cdf61bc393c031b56bc8337fd3e90751c2180451f78db1b063beaa540f",
+      "assets/browser-BV4R2-sQ.js": "71eb5d7ba875e25ad922eab59d944b3fe0d4cd0756395512f303158f52f5dca1",
+      "assets/fragment-mono-latin-yxdJ5AmL.woff2": "44c4e39bff5e76652a24a872cbebabccbcfb20f62c4633b27c1f2745cba86b56",
+      "assets/wix-madefor-display-latin-Blzrepd3.woff2": "19bf2f2f1eaa10b2a047a8a1e624a1e12008ab5e3c50ad199ac968f8324f5f4d",
+      "assets/wix-madefor-text-latin-M4ts_BV7.woff2": "cbd90a79e04d153fd521d90b08e9962628e3139313af330bd898001fe5b36e1a",
+      "assets/worker-host.html": "844c700df979d2bdb16ff70650c1b68b6f51512602dfadeaee94433a3ea6cebe",
+      "assets/workerHost-BKrclfgn.js": "be79dfb1b101571e15515125b2769d96b1d5d13a2001ca51e0b4684afdcaa35d",
+      "index.html": "528c390c955ffcd88b2006f65810b750431f569e4882cd0cb56dd96c5e9a423a"
+    },
+    "package": "6a76d101b960f66de7681953b6057388abf0d65bcd8735b9b1a1405f420af319",
+    "lockfile": "dd52d17efe95f178c5de765f06d4dfdd3f73545ed11d7491602c6fc17da489f5",
+    "originalJourneyRunner": "3cb44139a9522e8581869c018b915d3a43fe5802adfc363865d80bd551d1f1bc",
+    "stageRunner": "c19965ede95a7625113234db8d5a7d66f3396e6041051795247999b862ebbfa0"
+  },
+  "generatedAt": "2026-11-06T22:00:43.575Z"
+}

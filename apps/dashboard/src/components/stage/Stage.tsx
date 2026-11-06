@@ -8,6 +8,7 @@ import {
   type StageScene,
 } from './renderer.js';
 import type { AnchorId } from './scene-layout.js';
+import { Icon } from '../Icon.js';
 
 export type StageTarget = 'transport' | 'endpoint';
 
@@ -38,7 +39,7 @@ function detectWebGL2(): boolean {
 }
 
 const NO_OVERLAYS: ReadonlyArray<RefObject<HTMLElement | null>> = [];
-const CARD_FRAME: StageInsets = { top: 52, right: 20, bottom: 48, left: 20 };
+const CARD_FRAME: StageInsets = { top: 78, right: 20, bottom: 48, left: 20 };
 
 function measureInsets(stage: HTMLElement, overlays: ReadonlyArray<RefObject<HTMLElement | null>>): StageInsets {
   const s = stage.getBoundingClientRect();
@@ -79,7 +80,7 @@ function labelsFor(scene: StageScene, live: boolean): LabelSpec[] {
   const offline = scene.workerState === 'BLOCKED' || scene.workerState === 'CLOSED';
   const labels: LabelSpec[] = [
     { id: 'client', text: 'Your browser', short: 'Your browser', tone: 'neutral', target: 'transport' },
-    { id: 'endpoint', text: 'RPC endpoint', short: 'RPC endpoint', tone: 'neutral', target: 'endpoint', align: 'end' },
+    { id: 'endpoint', text: 'RPC endpoint', short: 'RPC endpoint', tone: 'neutral', target: 'endpoint' },
     {
       id: 'lane-direct',
       text: scene.privateMode ? 'Direct route' : 'Direct route · in use',
@@ -97,7 +98,7 @@ function labelsFor(scene: StageScene, live: boolean): LabelSpec[] {
   }
   if (scene.leakInjected) labels.push({ id: 'widget', text: 'Leaky checkout widget', short: 'Leaky widget', tone: 'leak' });
   if (scene.workerState === 'BOOTSTRAPPING') {
-    labels.push({ id: 'bootstrap', text: 'Bootstrap lookup · not anonymous', tone: 'leak', minor: true, align: 'start' });
+    labels.push({ id: 'bootstrap', text: 'Bootstrap lookup · not anonymous', short: 'Bootstrap · not anonymous', tone: 'leak', minor: true, align: 'start' });
   }
   return labels;
 }
@@ -120,6 +121,7 @@ export function Stage({
   const leaderRef = useRef<SVGPathElement>(null);
   const [supported] = useState(detectWebGL2);
   const [failed, setFailed] = useState(false);
+  const [motionPaused, setMotionPaused] = useState(false);
   const webgl = supported && !failed;
 
   useEffect(() => {
@@ -132,14 +134,28 @@ export function Stage({
       return () => cancelAnimationFrame(frame);
     }
     rendererRef.current = renderer;
+    const handleContextLost = () => setFailed(true);
+    canvas.addEventListener('webglcontextlost', handleContextLost);
     const labels = labelRefs.current;
     renderer.setAnchorListener((anchors: AnchorPositions) => {
+      const stageWidth = root.clientWidth;
       for (const [id, el] of labels) {
         const a = anchors[id];
         if (a === undefined) continue;
+        if (id === 'bootstrap' && stageWidth < 520) {
+          // This is a disclosure, so reserve its own row above narrow scene geometry.
+          el.style.transform = 'translate3d(20px, 70px, 0)';
+          el.dataset['visible'] = 'true';
+          continue;
+        }
         const align = el.dataset['align'];
         const shift = align === 'end' ? '-100%' : align === 'start' ? '0%' : '-50%';
-        el.style.transform = `translate3d(${a.x.toFixed(1)}px, ${a.y.toFixed(1)}px, 0) translate(${shift}, -50%)`;
+        const fraction = align === 'end' ? 1 : align === 'start' ? 0 : 0.5;
+        const width = el.offsetWidth;
+        const minimum = 8 + width * fraction;
+        const maximum = stageWidth - 8 - width * (1 - fraction);
+        const x = Math.max(minimum, Math.min(maximum, a.x));
+        el.style.transform = `translate3d(${x.toFixed(1)}px, ${a.y.toFixed(1)}px, 0) translate(${shift}, -50%)`;
         el.dataset['visible'] = a.visible ? 'true' : 'false';
       }
       const leader = leaderRef.current;
@@ -166,16 +182,24 @@ export function Stage({
     for (const ref of overlays) if (ref.current !== null) resize.observe(ref.current);
     updateInsets();
 
-    const visibility = new IntersectionObserver(([entry]) => {
-      if (entry?.isIntersecting) renderer.start();
+    let inView = true;
+    const synchronizeVisibility = () => {
+      if (inView && !document.hidden) renderer.start();
       else renderer.stop();
+    };
+    const visibility = new IntersectionObserver(([entry]) => {
+      inView = entry?.isIntersecting === true;
+      synchronizeVisibility();
     });
     visibility.observe(root);
-    renderer.start();
+    document.addEventListener('visibilitychange', synchronizeVisibility);
+    synchronizeVisibility();
 
     return () => {
       visibility.disconnect();
+      document.removeEventListener('visibilitychange', synchronizeVisibility);
       resize.disconnect();
+      canvas.removeEventListener('webglcontextlost', handleContextLost);
       renderer.dispose();
       rendererRef.current = null;
     };
@@ -193,10 +217,15 @@ export function Stage({
     rendererRef.current?.setReducedMotion(reducedMotion);
   }, [reducedMotion, webgl]);
 
+  useEffect(() => {
+    rendererRef.current?.setMotionPaused(motionPaused);
+  }, [motionPaused, webgl]);
+
   const labels = labelsFor(scene, live);
 
   return (
-    <div ref={rootRef} className="stage" data-webgl={webgl ? 'on' : 'off'}>
+    <div ref={rootRef} className="stage" data-webgl={webgl ? 'on' : 'off'}
+      data-motion={reducedMotion ? 'reduced' : motionPaused ? 'paused' : 'animated'}>
       {webgl ? (
         <>
           <canvas
@@ -216,7 +245,7 @@ export function Stage({
                 if (el === null) labelRefs.current.delete(label.id);
                 else labelRefs.current.set(label.id, el);
               };
-              const className = `stage-label stage-label--${label.tone}${label.minor ? ' stage-label--minor' : ''}${label.short === undefined ? ' stage-label--wide-only' : ''}`;
+              const className = `stage-label stage-label--${label.tone}${label.minor ? ' stage-label--minor' : ''}${label.id === 'bootstrap' ? ' stage-label--bootstrap' : ''}${label.short === undefined ? ' stage-label--wide-only' : ''}`;
               const text = (
                 <>
                   <span className="stage-label__long">{label.text}</span>
@@ -246,6 +275,22 @@ export function Stage({
                 </span>
               );
             })}
+          </div>
+          <div className="stage__tools" aria-label="3D view controls">
+            {reducedMotion ? <span className="stage__motion-note" role="status" aria-label="Reduced motion is enabled"
+              title="Your system preference reduces scene motion"><Icon name="info" size={16} /><span>Reduced motion</span></span>
+              : <button type="button" className="stage__tool" aria-pressed={motionPaused}
+                aria-label={motionPaused ? 'Resume scene motion' : 'Pause scene motion'}
+                title={motionPaused ? 'Resume scene motion' : 'Pause decorative scene motion'}
+                onClick={() => setMotionPaused((paused) => !paused)}>
+                {motionPaused ? <Icon name="play" size={16} />
+                  : <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true"><path d="M6.5 4v12M13.5 4v12" /></svg>}
+                <span>{motionPaused ? 'Resume' : 'Pause'}</span>
+              </button>}
+            <button type="button" className="stage__tool stage__tool--reset" aria-label="Reset 3D view"
+              title="Reset the 3D view" onClick={() => rendererRef.current?.resetView()}>
+              <Icon name="reset" size={16} /><span>Reset view</span>
+            </button>
           </div>
         </>
       ) : (

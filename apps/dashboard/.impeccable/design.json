@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-11-06T21:35:38Z",
+  "generatedAt": "2026-11-06T22:05:40Z",
   "title": "Design System: Monolith Leak Lab",
   "extensions": {
     "colorMeta": {
@@ -455,6 +455,16 @@
         "name": "reduced-motion",
         "value": "0.01ms",
         "purpose": "CSS animation/transition duration under prefers-reduced-motion: reduce; one animation iteration and no smooth scrolling."
+      },
+      {
+        "name": "stage-control-color",
+        "value": "160ms",
+        "purpose": "Text and background feedback on stage view controls."
+      },
+      {
+        "name": "stage-control-press",
+        "value": "200ms var(--ease-out)",
+        "purpose": "Stage control press feedback to scale 0.96."
       }
     ],
     "breakpoints": [
@@ -540,15 +550,23 @@
       "description": "A current step uses white fill and a dark marker; the sample does not execute a lab action.",
       "html": "<button type=\"button\" class=\"ds-step\" aria-current=\"step\"><span class=\"ds-step-marker\">1</span>Read privately</button>",
       "css": ".ds-step{display:flex;align-items:center;gap:14px;width:100%;min-height:48px;padding:8px 12px;border:0;border-radius:var(--radius-md);background:none;color:var(--ink-2);font-family:var(--font-text);font-size:.9375rem;font-weight:500;line-height:1.55;text-align:left;cursor:pointer;transition:background-color .2s;}.ds-step:hover{background:rgb(255 255 255 / .6);}.ds-step[aria-current=\"step\"]{background:var(--surface);color:var(--ink);font-weight:600;box-shadow:var(--shadow-float);}.ds-step-marker{display:grid;place-items:center;width:26px;height:26px;flex:none;border-radius:50%;background:var(--ink);color:#fff;font-size:.8125rem;font-weight:600;}.ds-step:focus-visible{outline:2px solid var(--protected);outline-offset:3px;}@media(max-width:899px){.ds-step{align-items:flex-start;gap:10px;height:100%;font-size:.875rem;}}@media(prefers-reduced-motion:reduce){.ds-primary,.ds-secondary,.ds-nav a,.ds-switch,.ds-thumb,.ds-step{transition-duration:0.01ms!important;animation-duration:0.01ms!important;animation-iteration-count:1!important;}}"
+    },
+    {
+      "name": "Stage View Controls",
+      "kind": "custom",
+      "refersTo": "stage-view-control",
+      "description": "Presentation preview of Pause/Resume and Reset view. Actual controls affect the illustration, while authoritative state and supplied flights continue; reduced motion replaces Pause with an accessible status.",
+      "html": "<div class=\"ds-stage-controls\" aria-label=\"3D view controls\"><button type=\"button\" class=\"ds-stage-control ds-scene-motion\" aria-pressed=\"false\" aria-label=\"Pause scene motion\" title=\"Pause decorative scene motion\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 20 20\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" aria-hidden=\"true\"><path d=\"M6.5 4v12M13.5 4v12\"/></svg><span>Pause</span></button><span class=\"ds-stage-control ds-motion-note\" role=\"status\" aria-label=\"Reduced motion is enabled\" title=\"Your system preference reduces scene motion\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 20 20\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M10 17a7 7 0 1 0 0-14 7 7 0 0 0 0 14zM10 9.2V14M10 6.3v.3\"/></svg><span>Reduced motion</span></span><button type=\"button\" class=\"ds-stage-control ds-stage-reset\" aria-label=\"Reset 3D view\" title=\"Reset the 3D view\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 20 20\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M4.5 10a5.5 5.5 0 1 0 1.7-4M6 2.8V6.4h3.6\"/></svg><span>Reset view</span></button></div>",
+      "css": ".ds-stage-controls{display:inline-flex;align-items:center;gap:6px;}.ds-stage-control{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:44px;min-width:44px;padding:8px 12px;border:0;border-radius:12px;background:rgb(14 14 27 / .74);color:var(--stage-ink-2);font-family:var(--font-text);font-size:.8125rem;font-weight:500;line-height:1.55;}.ds-stage-controls button{cursor:pointer;transition:color 160ms,background-color 160ms,transform 200ms var(--ease-out);}.ds-stage-controls button:hover{color:var(--stage-ink);background:rgb(114 96 162 / .3);}.ds-stage-controls button:active{transform:scale(.96);}.ds-stage-controls button[aria-pressed=\"true\"]{color:var(--stage-anon);}.ds-stage-controls button:focus-visible{outline:2px solid var(--stage-anon);outline-offset:3px;}.ds-motion-note{display:none;}@media(max-width:1180px){.ds-stage-control span{display:none;}}@media(max-width:520px){.ds-stage-reset{display:none;}}@media(prefers-reduced-motion:reduce){.ds-stage-controls .ds-scene-motion{display:none;}.ds-stage-controls .ds-motion-note{display:inline-flex;}.ds-stage-controls button{transition-duration:.01ms!important;animation-duration:.01ms!important;animation-iteration-count:1!important;}}"
     }
   ],
   "narrative": {
     "northStar": "The Guided Lab",
-    "overview": "The light guided surface preserves the owner's requested Phantom-inspired direction: a lavender-grey page, white cards, a restrained purple action, and an original dark route stage. Dark ink and readable labels keep the surrounding interface clear in a lit room; the contained stage carries the expressive geometry. The Monolith mark and route model remain original.\n\nThe visual system makes the next action easy to find and keeps results, residual exposure and provenance readable together. [PRODUCT.md](PRODUCT.md) carries product truth; [the guided-lab brief](.impeccable/guided-lab.md) carries this surface's mode and composition. This document merges the established MN-006 shell guidance with the implemented refinement, extracting values from [tokens.css](src/styles/tokens.css), [lab.css](src/styles/lab.css) and the existing components. The frontmatter records implemented primitives; it does not add CSS variables. Sidecar tonal ramps are derived preview swatches, not additional application tokens.\n\nThe default app is now the live composition; `?mode=simulated` opens the separate offline fixture walkthrough. The persistent mode badge names the selected mode, while result badges establish a run's provenance. The original [MN-006 review](docs/review/README.md) remains historical SIMULATED shell evidence. Its desktop, 390px, 320px and WebGL-fallback screenshots, and screenshots made for this refinement, establish presentation behavior only; they provide no new live anonymity, registry, payment or sponsor evidence.",
+    "overview": "The light guided surface preserves the owner's requested Phantom-inspired direction: a lavender-grey page, white cards, a restrained purple action, and an original dark route stage. Dark ink and readable labels keep the surrounding interface clear in a lit room. Inside the stage, a pearl browser device, open relay assemblies and a recessed endpoint share silver edges, dark cavities and restrained lavender light. The Monolith mark and route model remain original.\n\nThe visual system makes the next action easy to find and keeps results, residual exposure and provenance readable together. [PRODUCT.md](PRODUCT.md) carries product truth; [the guided-lab brief](.impeccable/guided-lab.md) carries this surface's mode and composition. This document merges the established MN-006 shell guidance with the implemented refinement, extracting values from [tokens.css](src/styles/tokens.css), [lab.css](src/styles/lab.css) and the existing components. The frontmatter records implemented primitives; it does not add CSS variables. Sidecar tonal ramps are derived preview swatches, not additional application tokens.\n\nThe default app is now the live composition; `?mode=simulated` opens the separate offline fixture walkthrough. The persistent mode badge names the selected mode, while result badges establish a run's provenance. The original [MN-006 review](docs/review/README.md) remains historical SIMULATED shell evidence. Its desktop, 390px, 320px and WebGL-fallback screenshots, and screenshots made for this refinement, establish presentation behavior only; they provide no new live anonymity, registry, payment or sponsor evidence.",
     "keyCharacteristics": [
       "Pale lavender ground with dark readable ink and white result surfaces.",
       "Purple actions and protected-route labels; red exposure and amber simulation labels.",
-      "A contained dark route stage with a readable text counterpart.",
+      "A contained sculptural route stage with a readable text counterpart.",
       "Self-hosted typography, visible keyboard focus and reduced-motion support."
     ],
     "rules": [
@@ -570,7 +588,8 @@
       "**Don't** turn unavailable or unmeasured results into green success, full coverage or a fabricated score.",
       "**Don't** hide a direct bypass when a managed read fails closed during an outage.",
       "**Don't** depict payment as anonymous or activate it from visual styling alone.",
-      "**Don't** copy another product's mascot, mark or visual assets into the original Monolith stage."
+      "**Don't** copy another product's mascot, mark or visual assets into the original Monolith stage.",
+      "**Don't** animate invented packet traffic or treat decorative bars and relay geometry as measured requests or topology."
     ]
   }
 }

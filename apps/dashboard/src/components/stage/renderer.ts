@@ -1,4 +1,4 @@
-import { bevelledBox, dustField, octahedron, ribbon, sphere, torus, type MeshData } from './geometry.js';
+import { arcBand, bevelledBox, dustField, octahedron, ribbon, sphere, torus, type MeshData } from './geometry.js';
 import {
   clamp01,
   easeInOutCubic,
@@ -73,6 +73,9 @@ const RGB = {
   payload: [1.0, 0.95, 0.88] as Vec3,
   grey: [0.75, 0.75, 0.8] as Vec3,
   idleSeam: [0.64, 0.62, 0.94] as Vec3,
+  pearl: [0.8, 0.8, 0.88] as Vec3,
+  silver: [0.52, 0.56, 0.68] as Vec3,
+  inset: [0.055, 0.057, 0.095] as Vec3,
 };
 
 interface Program {
@@ -137,7 +140,8 @@ export class StageRenderer {
   private readonly gl: WebGL2RenderingContext;
   private readonly canvas: HTMLCanvasElement;
   private readonly programs: Record<'bg' | 'mesh' | 'floor' | 'ribbon' | 'point' | 'dust', Program>;
-  private readonly meshes: Record<'slab' | 'orb' | 'ring' | 'relay' | 'widget', MeshBuffers>;
+  private readonly meshes: Record<'portalSide' | 'portalCross' | 'portalInset' | 'rimSide' | 'rimCross' |
+    'browser' | 'screen' | 'bar' | 'orb' | 'ring' | 'band' | 'relay' | 'widget', MeshBuffers>;
   private readonly lanes: Record<LaneKey, RibbonBuffers>;
   private readonly floor: WebGLVertexArrayObject;
   private readonly dust: { vao: WebGLVertexArrayObject; count: number };
@@ -156,6 +160,9 @@ export class StageRenderer {
   private flights = new Map<string, ActiveFlight>();
   private insets: StageInsets = { top: 0, right: 0, bottom: 0, left: 0 };
   private reducedMotion = false;
+  private motionPaused = false;
+  private motionTime = 0;
+  private lastFrameAt = performance.now();
   private width = 1;
   private height = 1;
   private dpr = 1;
@@ -195,21 +202,30 @@ export class StageRenderer {
       dust: compile(gl, glsl.dustVert, glsl.dustFrag),
     };
     this.meshes = {
-      slab: this.uploadMesh(bevelledBox(SLAB_HALF[0], SLAB_HALF[1], SLAB_HALF[2], 0.065)),
-      orb: this.uploadMesh(sphere(0.38)),
-      ring: this.uploadMesh(torus(0.62, 0.04)),
-      relay: this.uploadMesh(octahedron(0.29)),
-      widget: this.uploadMesh(bevelledBox(0.3, 0.19, 0.04, 0.025)),
+      portalSide: this.uploadMesh(bevelledBox(0.16, 1.65, 0.38, 0.1)),
+      portalCross: this.uploadMesh(bevelledBox(0.64, 0.16, 0.38, 0.1)),
+      portalInset: this.uploadMesh(bevelledBox(0.65, 1.31, 0.07, 0.05)),
+      rimSide: this.uploadMesh(bevelledBox(0.025, 1.28, 0.035, 0.02)),
+      rimCross: this.uploadMesh(bevelledBox(0.62, 0.025, 0.035, 0.02)),
+      browser: this.uploadMesh(bevelledBox(0.96, 0.74, 0.25, 0.12)),
+      screen: this.uploadMesh(bevelledBox(0.82, 0.52, 0.035, 0.035)),
+      bar: this.uploadMesh(bevelledBox(0.48, 0.045, 0.025, 0.025)),
+      orb: this.uploadMesh(sphere(0.15)),
+      ring: this.uploadMesh(torus(1.08, 0.035)),
+      band: this.uploadMesh(arcBand(0.56, 0.22, 0.14)),
+      relay: this.uploadMesh(octahedron(0.13)),
+      widget: this.uploadMesh(bevelledBox(0.38, 0.25, 0.08, 0.06)),
     };
     const lanes = {} as Record<LaneKey, RibbonBuffers>;
     for (const key of Object.keys(LANE_CURVES) as LaneKey[]) lanes[key] = this.uploadRibbon(LANE_CURVES[key]);
     this.lanes = lanes;
     this.floor = this.uploadFloor();
-    this.dust = this.uploadDust(96);
+    this.dust = this.uploadDust(32);
     this.points = this.createPointBuffer(256);
     this.empty = gl.createVertexArray();
     this.relayT = RELAYS.map((relay) => fractionNearest(LANE_CURVES.anon, relay));
-    window.addEventListener('pointermove', this.handlePointer, { passive: true });
+    canvas.addEventListener('pointermove', this.handlePointer, { passive: true });
+    canvas.addEventListener('pointerleave', this.handlePointerLeave, { passive: true });
   }
 
   setAnchorListener(listener: ((anchors: AnchorPositions) => void) | null) {
@@ -243,6 +259,20 @@ export class StageRenderer {
 
   setReducedMotion(reduced: boolean) {
     this.reducedMotion = reduced;
+    if (reduced) this.resetView();
+    this.requestFrame();
+  }
+
+  /** Pause only the illustration's ambient motion; incoming state and real flights still update. */
+  setMotionPaused(paused: boolean) {
+    this.motionPaused = paused;
+    this.lastFrameAt = performance.now();
+    this.requestFrame();
+  }
+
+  resetView() {
+    this.pointer = { x: 0, y: 0, tx: 0, ty: 0 };
+    this.motionTime = 0;
     this.requestFrame();
   }
 
@@ -262,6 +292,7 @@ export class StageRenderer {
 
   start() {
     this.running = true;
+    this.lastFrameAt = performance.now();
     this.requestFrame();
   }
 
@@ -273,13 +304,24 @@ export class StageRenderer {
 
   dispose() {
     this.stop();
-    window.removeEventListener('pointermove', this.handlePointer);
+    this.canvas.removeEventListener('pointermove', this.handlePointer);
+    this.canvas.removeEventListener('pointerleave', this.handlePointerLeave);
     this.gl.getExtension('WEBGL_lose_context')?.loseContext();
   }
 
   private handlePointer = (event: PointerEvent) => {
-    this.pointer.tx = (event.clientX / window.innerWidth) * 2 - 1;
-    this.pointer.ty = (event.clientY / window.innerHeight) * 2 - 1;
+    if (event.pointerType === 'touch' || this.reducedMotion || this.motionPaused) return;
+    const rect = this.canvas.getBoundingClientRect();
+    this.pointer.tx = Math.max(-1, Math.min(1, (event.clientX - rect.left) / rect.width * 2 - 1));
+    this.pointer.ty = Math.max(-1, Math.min(1, (event.clientY - rect.top) / rect.height * 2 - 1));
+    this.requestFrame();
+  };
+
+  private handlePointerLeave = () => {
+    if (this.motionPaused) return;
+    this.pointer.tx = 0;
+    this.pointer.ty = 0;
+    this.requestFrame();
   };
 
   private now() {
@@ -292,9 +334,10 @@ export class StageRenderer {
   }
 
   private needsContinuousFrames() {
-    if (!this.reducedMotion) return true;
-    if (this.flights.size > 0) return true;
-    return this.now() - this.slabFlash.at < 2;
+    if (!this.reducedMotion && !this.motionPaused) return true;
+    const now = Date.now();
+    if ([...this.flights.values()].some((flight) => now < flight.start + (flight.durationMs ?? 900))) return true;
+    return this.now() - this.slabFlash.at < 1.7;
   }
 
   // ---------------------------------------------------------------- uploads
@@ -416,13 +459,13 @@ export class StageRenderer {
 
   // ---------------------------------------------------------------- camera
 
-  private updateCamera(time: number) {
+  private updateCamera(time: number, elapsed: number) {
     const p = this.pointer;
-    const follow = this.reducedMotion ? 0 : 0.045;
+    const follow = this.reducedMotion || this.motionPaused ? 0 : 1 - Math.exp(-elapsed * 6);
     p.x += (p.tx - p.x) * follow;
     p.y += (p.ty - p.y) * follow;
-    const drift = this.reducedMotion ? 0 : Math.sin(time * 0.11) * 0.25;
-    const eye: Vec3 = [CAMERA_EYE[0] + p.x * 0.7 + drift, CAMERA_EYE[1] - p.y * 0.35, CAMERA_EYE[2]];
+    const drift = this.reducedMotion ? 0 : Math.sin(time * 0.15) * 0.1;
+    const eye: Vec3 = [CAMERA_EYE[0] + p.x * 0.65 + drift, CAMERA_EYE[1] - p.y * 0.4, CAMERA_EYE[2]];
     this.eye = eye;
     const view = lookAt(eye, CAMERA_TARGET, [0, 1, 0]);
     const aspect = this.width / this.height;
@@ -473,22 +516,27 @@ export class StageRenderer {
   private render = () => {
     this.frame = 0;
     const { gl } = this;
-    const time = this.reducedMotion ? 4 : this.now();
+    const frameAt = performance.now();
+    const elapsed = Math.min(0.1, Math.max(0, (frameAt - this.lastFrameAt) / 1000));
+    this.lastFrameAt = frameAt;
+    if (!this.reducedMotion && !this.motionPaused) this.motionTime += elapsed;
+    const time = this.reducedMotion ? 0 : this.motionTime;
     const clock = this.now();
     this.resize();
-    this.updateCamera(time);
+    this.updateCamera(time, elapsed);
 
     const scene = this.scene;
-    const ease = this.reducedMotion ? 1 : 0.08;
+    const ease = this.reducedMotion || this.motionPaused ? 1 : 1 - Math.exp(-elapsed * 7);
     const s = this.smooth;
     s.hops += (scene.hopsReady - s.hops) * ease;
     s.leak += ((scene.leakInjected ? 1 : 0) - s.leak) * ease;
     s.private += ((scene.privateMode ? 1 : 0) - s.private) * ease;
-    const ringTarget = scene.workerState === 'BLOCKED' ? 0.62 : scene.workerState === 'CLOSED' ? 0 : 1;
+    const ringTarget = scene.workerState === 'READY' || scene.workerState === 'DEGRADED' ? 1
+      : scene.workerState === 'BLOCKED' ? 0.3 : scene.workerState === 'CLOSED' ? 0 : 0.55;
     s.ring += (ringTarget - s.ring) * ease;
 
     gl.viewport(0, 0, this.width, this.height);
-    gl.clearColor(0.012, 0.009, 0.022, 1);
+    gl.clearColor(0.022, 0.026, 0.054, 1);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
     const packets = this.advanceFlights(clock);
@@ -622,12 +670,16 @@ export class StageRenderer {
     if (lp) gl.uniform3fv(lp, new Float32Array(lightPos));
     if (lc) gl.uniform3fv(lc, new Float32Array(lightColor));
     if (lw) gl.uniform1fv(lw, new Float32Array(lightPower));
+    const shadowPos = p.uniforms.get('uShadowPos');
+    const shadowSize = p.uniforms.get('uShadowSize');
+    if (shadowPos) gl.uniform3fv(shadowPos, new Float32Array([...CLIENT, ...SLAB_CENTER, ...RELAYS.flat()]));
+    if (shadowSize) gl.uniform2fv(shadowSize, new Float32Array([1.4, 0.8, 1.05, 0.65, 0.75, 0.65, 0.75, 0.65, 0.75, 0.65]));
     gl.bindVertexArray(this.floor);
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
   }
 
   private drawMesh(mesh: MeshBuffers, matrix: Mat4, opts: {
-    material: 0 | 1 | 2;
+    material: 0 | 1 | 2 | 3;
     color: Vec3;
     glow?: Vec3;
     glowAmount?: number;
@@ -637,6 +689,7 @@ export class StageRenderer {
     seamColor?: Vec3;
     scan?: number;
     band?: number;
+    half?: Vec3;
     time: number;
   }) {
     const { gl } = this;
@@ -652,7 +705,7 @@ export class StageRenderer {
     this.set3(p, 'uSeamColor', opts.seamColor ?? RGB.idleSeam);
     this.set1(p, 'uScan', opts.scan ?? 0.5);
     this.set1(p, 'uBand', opts.band ?? -9);
-    this.set3(p, 'uHalf', SLAB_HALF);
+    this.set3(p, 'uHalf', opts.half ?? SLAB_HALF);
     this.set1(p, 'uTime', opts.time);
     gl.bindVertexArray(mesh.vao);
     gl.drawElements(gl.TRIANGLES, mesh.count, gl.UNSIGNED_SHORT, 0);
@@ -666,116 +719,116 @@ export class StageRenderer {
     this.set3(p, 'uEye', this.eye);
     const scene = this.scene;
     const s = this.smooth;
-
-    // Endpoint slab.
+    const blocked = scene.workerState === 'BLOCKED' || scene.workerState === 'CLOSED';
     const sinceFlash = clock - this.slabFlash.at;
     const flash = Math.max(0, 1 - sinceFlash / 1.5);
-    const seamColor = this.slabFlash.dim ? [0.3, 0.3, 0.34] as Vec3 : flash > 0 ? this.slabFlash.color : RGB.idleSeam;
-    const scan = this.reducedMotion ? 0.62 : clamp01(1 - easeOutExpo(Math.min(1, sinceFlash / 1.2)));
-    // The specular band rests where the camera puts it and sweeps across the slab on arrival.
-    const sweep = this.reducedMotion ? 1 : easeOutExpo(Math.min(1, sinceFlash / 1.1));
-    const restBand = -0.1 + this.pointer.x * 0.35;
-    const band = flash > 0 && !this.slabFlash.dim ? -1.3 + sweep * 2.6 : restBand;
-    this.drawMesh(this.meshes.slab, model(SLAB_CENTER, SLAB_YAW), {
-      material: 0,
-      color: [0.47, 0.44, 0.65],
-      mirror,
-      seam: 0.1 + flash * (this.slabFlash.dim ? 0.15 : 0.9),
-      seamColor,
-      scan,
-      band,
-      time,
-    });
+    const arrivalColor = this.slabFlash.dim ? RGB.steel : this.slabFlash.color;
+    const rimColor = flash > 0 ? arrivalColor : RGB.anon;
+    const portal = model(SLAB_CENTER, SLAB_YAW);
+    const part = (parent: Mat4, position: Vec3, size: Vec3 = [1, 1, 1], yaw = 0, pitch = 0) =>
+      multiply(parent, model(position, yaw, size, pitch));
+    const satin = { material: 1 as const, color: RGB.pearl, mirror, time };
 
-    // Only the slab is tall enough to read as a reflection; the small bodies float too high to.
+    // A solid pearl chassis surrounds the dark recessed destination. Four separate rails
+    // leave a physical aperture; the inner light is a rim, never a fabricated receipt.
+    for (const x of [-0.8, 0.8]) {
+      this.drawMesh(this.meshes.portalSide, part(portal, [x, 0, 0]), satin);
+    }
+    for (const y of [-1.49, 1.49]) {
+      this.drawMesh(this.meshes.portalCross, part(portal, [0, y, 0]), satin);
+    }
+    this.drawMesh(this.meshes.portalInset, part(portal, [0, 0, -0.22]), {
+      material: 3, color: RGB.inset, glow: rimColor, glowAmount: flash * 0.2,
+      half: [0.65, 1.31, 0.07], mirror, time,
+    });
+    // Brushed silver side returns expose the thickness of the portal.
+    for (const x of [-0.655, 0.655]) {
+      this.drawMesh(this.meshes.rimSide, part(portal, [x, 0, 0.32]), {
+        material: 1, color: RGB.silver, glow: rimColor,
+        glowAmount: 0.25 + flash * 0.9, mirror, time,
+      });
+    }
+    for (const y of [-1.28, 1.28]) {
+      this.drawMesh(this.meshes.rimCross, part(portal, [0, y, 0.32]), {
+        material: 1, color: RGB.silver, glow: rimColor,
+        glowAmount: 0.25 + flash * 0.9, mirror, time,
+      });
+    }
+    // The payload remains readable at the destination: a fixed three-bar aperture mark.
+    for (let i = 0; i < 3; i++) {
+      this.drawMesh(this.meshes.bar, part(portal, [-0.12 + i * 0.06, 0.3 - i * 0.3, -0.13], [0.68 - i * 0.12, 0.6, 0.5]), {
+        material: 1, color: [0.25, 0.27, 0.4], glow: rimColor,
+        glowAmount: 0.08 + flash * 0.3, mirror, time,
+      });
+    }
     if (mirror) return;
 
-    // The browser and its worker ring.
-    const blocked = scene.workerState === 'BLOCKED';
-    const orbGlow: Vec3 = blocked ? RGB.steel : RGB.payload;
-    const bob = this.reducedMotion ? 0 : Math.sin(time * 1.1) * 0.05;
-    const clientPos: Vec3 = [CLIENT[0], CLIENT[1] + bob, CLIENT[2]];
-    this.drawMesh(this.meshes.orb, model(clientPos), {
-      material: 1,
-      color: [0.62, 0.63, 0.8],
-      glow: orbGlow,
-      glowAmount: 0.28,
-      mirror,
-      time,
+    // The browser is a tangible, slightly tilted device with a dark inset window.
+    // All internal marks are fixed illustrative geometry, not invented read measurements.
+    const tilt = this.pointer.x * 0.05;
+    const browser = model(CLIENT, 0.36 + tilt, [1, 1, 1], -0.08 + this.pointer.y * 0.025);
+    this.drawMesh(this.meshes.browser, browser, satin);
+    this.drawMesh(this.meshes.screen, part(browser, [0, -0.08, 0.262]), {
+      material: 3, color: RGB.inset, half: [0.82, 0.52, 0.035], mirror, time,
     });
-
-    const ringColor: Vec3 = scene.passthrough
-      ? RGB.grey
-      : blocked
-        ? RGB.steel
-        : scene.workerState === 'DEGRADED'
-          ? RGB.degraded
-          : RGB.anon;
-    const ringScale = 0.6 + 0.4 * s.ring;
-    const ringMaterial = scene.workerState === 'BOOTSTRAPPING' ? 2 : 1;
-    if (s.ring > 0.02) {
-      const spin = this.reducedMotion ? 0.3 : time * 0.6;
-      this.drawMesh(this.meshes.ring, model(clientPos, spin, [ringScale, ringScale, ringScale], 0.42), {
-        material: ringMaterial,
-        color: ringColor,
-        glow: ringColor,
-        glowAmount: 0.4 * (0.35 + 0.65 * s.private),
-        opacity: 1,
-        mirror,
-        time,
+    for (let i = 0; i < 3; i++) {
+      this.drawMesh(this.meshes.orb, part(browser, [-0.66 + i * 0.19, 0.56, 0.27], [0.23, 0.23, 0.23]), {
+        material: 1, color: i === 0 ? RGB.anon : RGB.silver,
+        glow: RGB.anon, glowAmount: i === 0 ? 0.2 : 0, mirror, time,
       });
-      if (blocked) {
-        this.drawMesh(this.meshes.ring, model(clientPos, -spin * 0.5, [0.7, 0.7, 0.7], -0.9), {
-          material: 1,
-          color: RGB.steel,
-          glow: RGB.steel,
-          glowAmount: 0.7,
-          mirror,
-          time,
-        });
-      }
+      this.drawMesh(this.meshes.bar, part(browser, [-0.12 + i * 0.06, 0.23 - i * 0.26, 0.31], [1 - i * 0.2, 0.7, 0.5]), {
+        material: 1, color: i === 0 ? RGB.anon : RGB.silver,
+        glow: RGB.anon, glowAmount: 0.1, mirror, time,
+      });
+    }
+    const ringColor = scene.passthrough ? RGB.grey : blocked ? RGB.steel
+      : scene.workerState === 'DEGRADED' ? RGB.degraded : RGB.anon;
+    if (s.ring > 0.01) {
+      const ringScale = 0.86 + s.ring * 0.18;
+      this.drawMesh(this.meshes.ring, part(browser, [0, 0, -0.1], [ringScale, ringScale, ringScale], 0, Math.PI * 0.5), {
+        material: scene.workerState === 'BOOTSTRAPPING' ? 2 : 1,
+        color: RGB.silver, glow: ringColor,
+        glowAmount: 0.2 + s.private * 0.35, opacity: 0.35 + s.ring * 0.65,
+        mirror, time,
+      });
     }
 
-    // Relays of the circuit.
+    // Each relay is an open pair of protective metal bands. State changes align or
+    // separate the layers; slow pose drift shows volume without pretending a request.
     if (!scene.passthrough) {
       RELAYS.forEach((relay, i) => {
         const ready = clamp01(s.hops - i);
         const pulse = Math.max(0, 1 - (clock - (this.relayFlash[i] ?? -1e9)) / 0.7);
-        const spin = this.reducedMotion ? 0.5 : time * (0.5 + i * 0.13);
-        const color: Vec3 = blocked ? [0.3, 0.32, 0.4] : RGB.anon;
-        this.drawMesh(this.meshes.relay, model(relay, spin), {
-          material: 1,
-          color: [0.42, 0.41, 0.57],
-          glow: color,
-          glowAmount: 0.08 + ready * 0.55 * (0.4 + 0.6 * s.private) + pulse * 1.2,
-          mirror,
-          time,
+        const drift = this.reducedMotion ? 0 : Math.sin(time * 0.35 + i * 1.3) * 0.08;
+        const yaw = [-0.5, 0.4, -0.25][i] ?? 0;
+        const pose = model(relay, yaw + drift + this.pointer.x * 0.03);
+        const alignment = 0.5 + ready * 0.45;
+        this.drawMesh(this.meshes.band, part(pose, [0, 0, 0], [1, 1, 1], -0.15, alignment), {
+          material: 1, color: blocked ? RGB.silver : RGB.pearl,
+          glow: ringColor, glowAmount: 0.02 + ready * 0.12 + pulse * 0.75,
+          mirror, time,
+        });
+        this.drawMesh(this.meshes.band, part(pose, [0.04, 0.02, -0.09], [0.72, 0.82, 0.72], 1.6 - ready * 0.6, -0.6 - alignment * 0.4), {
+          material: 1, color: RGB.silver, glow: ringColor,
+          glowAmount: 0.05 + ready * 0.3 + pulse * 0.7, mirror, time,
+        });
+        this.drawMesh(this.meshes.orb, part(pose, [0, 0, 0], [0.65, 0.65, 0.65]), {
+          material: 1, color: blocked ? RGB.silver : RGB.anon,
+          glow: ringColor, glowAmount: ready * 0.4 + pulse * 0.9, mirror, time,
         });
       });
     }
 
-    // Checkout status widget that bypasses the transport when the leak is injected.
     if (s.leak > 0.02) {
       this.drawMesh(this.meshes.widget, model(WIDGET, 0.25), {
-        material: 1,
-        color: [0.35, 0.1, 0.08],
-        glow: RGB.leak,
-        glowAmount: 1.1 * s.leak,
-        opacity: s.leak,
-        mirror,
-        time,
+        material: 1, color: [0.45, 0.22, 0.24], glow: RGB.leak,
+        glowAmount: 0.45 * s.leak, opacity: s.leak, mirror, time,
       });
     }
-
-    // Bootstrap specifier lookup (non-anonymous) while the worker starts.
     if (scene.workerState === 'BOOTSTRAPPING') {
-      this.drawMesh(this.meshes.relay, model(BOOTSTRAP, time * 0.4, [0.7, 0.7, 0.7]), {
-        material: 1,
-        color: [0.2, 0.08, 0.07],
-        glow: RGB.leak,
-        glowAmount: 0.5,
-        mirror,
-        time,
+      this.drawMesh(this.meshes.relay, model(BOOTSTRAP, 0.4), {
+        material: 1, color: RGB.silver, glow: RGB.leak,
+        glowAmount: 0.25, mirror, time,
       });
     }
   }

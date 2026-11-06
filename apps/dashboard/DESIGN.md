@@ -140,6 +140,14 @@ components:
   stage-card:
     backgroundColor: "{colors.stage}"
     rounded: "{rounded.xl}"
+  stage-view-control:
+    backgroundColor: "rgb(14 14 27 / 0.74)"
+    textColor: "{colors.stage-ink-2}"
+    rounded: "12px"
+    padding: "8px 12px"
+  stage-view-control-hover:
+    backgroundColor: "rgb(114 96 162 / 0.3)"
+    textColor: "{colors.stage-ink}"
   scenario-selector:
     backgroundColor: "{colors.surface-2}"
     textColor: "{colors.ink}"
@@ -166,7 +174,7 @@ components:
 
 **Creative North Star: "The Guided Lab"**
 
-The light guided surface preserves the owner's requested Phantom-inspired direction: a lavender-grey page, white cards, a restrained purple action, and an original dark route stage. Dark ink and readable labels keep the surrounding interface clear in a lit room; the contained stage carries the expressive geometry. The Monolith mark and route model remain original.
+The light guided surface preserves the owner's requested Phantom-inspired direction: a lavender-grey page, white cards, a restrained purple action, and an original dark route stage. Dark ink and readable labels keep the surrounding interface clear in a lit room. Inside the stage, a pearl browser device, open relay assemblies and a recessed endpoint share silver edges, dark cavities and restrained lavender light. The Monolith mark and route model remain original.
 
 The visual system makes the next action easy to find and keeps results, residual exposure and provenance readable together. [PRODUCT.md](PRODUCT.md) carries product truth; [the guided-lab brief](.impeccable/guided-lab.md) carries this surface's mode and composition. This document merges the established MN-006 shell guidance with the implemented refinement, extracting values from [tokens.css](src/styles/tokens.css), [lab.css](src/styles/lab.css) and the existing components. The frontmatter records implemented primitives; it does not add CSS variables. Sidecar tonal ramps are derived preview swatches, not additional application tokens.
 
@@ -176,7 +184,7 @@ The default app is now the live composition; `?mode=simulated` opens the separat
 
 - Pale lavender ground with dark readable ink and white result surfaces.
 - Purple actions and protected-route labels; red exposure and amber simulation labels.
-- A contained dark route stage with a readable text counterpart.
+- A contained sculptural route stage with a readable text counterpart.
 - Self-hosted typography, visible keyboard focus and reduced-motion support.
 
 ## Colors
@@ -225,10 +233,12 @@ Main content and the introduction are centered within a maximum width of 1520px.
 
 The wide lab grid gives the guide `minmax(340px, 0.83fr)` and the stage `minmax(0, 1.5fr)`, separated by `clamp(24px, 3vw, 48px)`. The stage column places two equal comparison cards below its scene. Evidence cards use three columns, with designated cards spanning two columns.
 
-- **Up to 1180px:** the introduction stacks, the guide/stage ratio changes to 0.9fr/1.3fr with a 300px guide minimum, and evidence becomes two columns.
-- **Up to 899px:** the lab becomes one column, steps form a compact two-column sequence, and evidence becomes one column. Section navigation moves to a second header row and stays visible. Stage height becomes `clamp(300px, 62vw, 460px)`; compact labels replace long stage labels.
+- **Up to 1180px:** the introduction stacks, the guide/stage ratio changes to 0.9fr/1.3fr with a 300px guide minimum, and evidence becomes two columns. Stage view controls show icons while retaining their accessible names.
+- **Up to 899px:** the lab becomes one column, steps form a compact two-column sequence, and evidence becomes one column. Section navigation moves to a second header row and stays visible. Stage height becomes `clamp(300px, 62vw, 460px)`; compact labels replace long stage labels. The tablet run-status HUD sits at the bottom right, clear of the top view controls.
 - **Up to 640px:** existing live-only error/footer and activity layouts adapt to narrow widths in [live.css](src/features/lab/live.css).
-- **Up to 520px:** comparison cards stack, guide actions fill the available width, evidence-card padding becomes 20px and controls wrap. The mode badge and explicit mode link remain available beside the brand.
+- **Up to 520px:** comparison cards stack, guide actions fill the available width, evidence-card padding becomes 20px and controls wrap. The mode badge and explicit mode link remain available beside the brand. Reset view and the bottom-right stage HUD are hidden; the compact motion control and readable result cards remain.
+
+When the stage itself is narrower than 520px, the bootstrap disclosure gets its own row at 20px from the left and 70px from the top, above the geometry. The WebGL-unavailable schematic reserves a 390px minimum card height; its drawing is capped at 190px, its action labels wrap and its explanatory note remains readable.
 
 The sticky header stays above content. A focusable skip link leads to the lab. A ResizeObserver in the header publishes its actual border-box height to `--lab-header-height`; anchor scrolling reserves that measured height plus 16px, with a 94px fallback before measurement. Status, comparison and evidence text remain usable independently of the 3D scene.
 
@@ -242,17 +252,23 @@ White cards and soft shadows separate working surfaces from lavender paper. The 
 - **Stage:** `shadow-stage` anchors the contained dark scene.
 - **Float:** `shadow-float` supports section navigation and the current guide step.
 
-Motion follows the implemented `ease-out`. Buttons transition over 0.2s and press to scale 0.98; toggles change fill over 0.25s and move their thumb over 0.3s. Bootstrapping uses a 1.4s pulse, and a focused evidence card has a temporary 1.6s outline animation. Reduced motion disables smooth scrolling and reduces CSS animation/transition duration to 0.01ms with one iteration; the renderer also receives the reduced-motion state. The stage pauses while offscreen.
+Interface motion follows the implemented `ease-out`. Buttons transition over 0.2s and press to scale 0.98; toggles change fill over 0.25s and move their thumb over 0.3s. Stage view controls change fill/text over 160ms and press to scale 0.96 over 200ms. Bootstrapping uses a 1.4s pulse, and a focused evidence card has a temporary 1.6s outline animation.
+
+Inside the stage, broad lighting, beveled surfaces, contact shadows and a restrained floor reflection reveal the device, open bands and portal recess. Worker readiness aligns the relay assemblies through elapsed-time state interpolation. Stage-local mouse or pen movement gently adjusts the camera and device angle; touch needs no hover or parallax. Idle routes stay stationary. Traveling packet heads come only from supplied flight events, retaining the run's live or simulated provenance.
+
+Pause stops decorative drift and parallax while incoming state and supplied flights continue to update. Reset view recenters the illustration without changing the run. Reduced motion uses settled poses, suppresses parallax and replaces Pause with a named status; CSS smooth scrolling is disabled and animation/transition duration becomes 0.01ms with one iteration. Rendering parks while the stage is offscreen or the document is hidden.
 
 ## Shapes
 
-The stage uses the large `xl` radius; cards and guide rows use `md`; fields, notes and the skip link use `sm`. Primary actions, section navigation, tags and switches use pill ends. The declared 20px `radius-lg` has no current consumer and is intentionally absent from the extracted frontmatter. Keep the original slab, browser orb and relay geometry in the stage; no reference mascot or branding is copied.
+The stage uses the large `xl` radius; cards and guide rows use `md`; fields, notes and the skip link use `sm`. Primary actions, section navigation, tags and switches use pill ends. The declared 20px `radius-lg` has no current consumer and is intentionally absent from the extracted frontmatter.
+
+The sculptural revision replaces the earlier orb/diamond/slab arrangement with a beveled browser device, paired open relay bands and a thick four-rail endpoint chassis around a recessed aperture. The direct path stays below and closer to the viewer. Preserve this shared material language and readable silhouettes; no reference mascot, mark or asset is copied. The [stage design brief](docs/review/lavender-20261107/stage-v2/scene-design.md) records the composition. Fixed bars inside the browser and endpoint are authored illustration marks, not requests or results; relay count and spacing are not measured topology.
 
 ## Components
 
 ### Buttons
 
-Primary actions have soft lavender fill, dark purple text, pill ends, a minimum height of 52px and the frontmatter padding. Hover darkens the lavender; press uses the deeper fill and scale feedback. Disabled actions use muted lavender/ink and a not-allowed cursor. Secondary actions use white fill and an inset lavender outline; hover uses the pale surface. Small actions have a 44px minimum height, 16px horizontal padding and 0.875rem text. All keyboard-focusable controls inherit a 2px protected-purple outline with 3px offset.
+Primary actions have soft lavender fill, dark purple text, pill ends, a minimum height of 52px and the frontmatter padding. Hover darkens the lavender; press uses the deeper fill and scale feedback. Disabled actions use muted lavender/ink and a not-allowed cursor. Secondary actions use white fill and an inset lavender outline; hover uses the pale surface. Small actions have a 44px minimum height, 16px horizontal padding and 0.875rem text. General controls use a 2px protected-purple focus outline with 3px offset; controls on the dark stage use the lighter `stage-anon` outline.
 
 ### Chips
 
@@ -274,7 +290,11 @@ The white pill contains “The lab” and “Evidence”. Its current-location f
 
 Guide rows have a minimum height of 48px. The current step gets a white surface, float shadow and dark number marker; completed markers become green with an icon. Preserve labels and state text rather than relying on their color alone.
 
-The original dark route stage has a desktop minimum height of 410px, bright labels, readable HUD text and explicit direct/private routes. Its drawn path and hop geometry are illustrative, never measured traffic credit. Clickable endpoint and transport labels remain accessible controls. When WebGL2 is unavailable, the SVG schematic preserves route controls and state; text panels carry the same information. Payment geometry remains hidden while the feature is disabled.
+The dark route stage has a desktop minimum height of 410px, bright labels, readable HUD text and explicit direct/private routes. Its drawn path and hop geometry are illustrative, never measured traffic credit. Clickable endpoint and transport labels remain accessible controls. WebGL2 unavailability or context loss switches to the matching SVG schematic; “Browser & worker” retains the full accessible name “Your browser and worker”. Text panels carry the same state and evidence. Payment geometry remains hidden while the feature is disabled.
+
+### Stage View Controls
+
+Quiet translucent controls sit in the stage's upper-right corner, with 12px corners and minimum 44px width/height. Pause/Resume uses `aria-pressed` and explicit accessible names to control decorative motion. Reset 3D view changes only the illustration. Under reduced motion, a status named “Reduced motion is enabled” replaces Pause and remains named when its visible text is hidden at compact widths. These controls never start a network read, change run results or grant protected credit.
 
 The historical MN-006 fixture walkthrough still shows a direct control, protected fixture read, bypass/repair and managed outage. A bypass can continue during that outage, which the guide and checks disclose. Receipt payloads expose a transaction hash; balance payloads expose an address. In that offline mode route origins, timings, registry entries and checks remain SIMULATED, coverage is unmeasured, payment is disabled and no action contacts the observer, Arkiv or an RPC endpoint. The shared worker/method/error vocabulary continues to use public `@monolith/shared` exports. Live composition supplies actual controller state under the same visual system; the selected live-mode badge alone is not proof of a successful run.
 
@@ -295,3 +315,4 @@ The historical MN-006 fixture walkthrough still shows a direct control, protecte
 - **Don't** hide a direct bypass when a managed read fails closed during an outage.
 - **Don't** depict payment as anonymous or activate it from visual styling alone.
 - **Don't** copy another product's mascot, mark or visual assets into the original Monolith stage.
+- **Don't** animate invented packet traffic or treat decorative bars and relay geometry as measured requests or topology.

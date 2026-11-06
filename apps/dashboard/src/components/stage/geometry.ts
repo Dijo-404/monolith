@@ -125,6 +125,59 @@ export function torus(major: number, minor: number, segments = 96, sides = 14): 
   return { positions: new Float32Array(positions), normals: new Float32Array(normals), indices: new Uint16Array(indices) };
 }
 
+/** Open protective band with a broad face and rounded metal edges, in the XZ plane. */
+export function arcBand(radius: number, width: number, depth: number, sweep = Math.PI * 1.65, segments = 64): MeshData {
+  const positions: number[] = [];
+  const normals: number[] = [];
+  const indices: number[] = [];
+  const sides = 24;
+  const section = (angle: number) => {
+    const c = Math.cos(angle), s = Math.sin(angle);
+    return [Math.sign(c) * Math.pow(Math.abs(c), 0.42) * width * 0.5,
+      Math.sign(s) * Math.pow(Math.abs(s), 0.42) * depth * 0.5] as const;
+  };
+  for (let i = 0; i <= segments; i++) {
+    const angle = -sweep * 0.5 + i / segments * sweep;
+    const ca = Math.cos(angle), sa = Math.sin(angle);
+    for (let j = 0; j <= sides; j++) {
+      const v = j / sides * Math.PI * 2;
+      const [r, y] = section(v);
+      const prev = section(v - 0.001), next = section(v + 0.001);
+      const nr = next[1] - prev[1], ny = prev[0] - next[0];
+      const length = Math.hypot(nr, ny) || 1;
+      positions.push((radius + r) * ca, y, (radius + r) * sa);
+      normals.push(nr / length * ca, ny / length, nr / length * sa);
+    }
+  }
+  for (let i = 0; i < segments; i++) {
+    for (let j = 0; j < sides; j++) {
+      const a = i * (sides + 1) + j;
+      const b = a + sides + 1;
+      indices.push(a, a + 1, b, b, a + 1, b + 1);
+    }
+  }
+  // The cut ends are capped rather than pretending the open bands are translucent.
+  for (const end of [0, 1]) {
+    const angle = (end - 0.5) * sweep;
+    const ca = Math.cos(angle), sa = Math.sin(angle);
+    const offset = positions.length / 3;
+    const direction = end === 0 ? -1 : 1;
+    const normal = [-sa * direction, 0, ca * direction];
+    positions.push(radius * ca, 0, radius * sa);
+    normals.push(...normal);
+    for (let j = 0; j <= sides; j++) {
+      const [r, y] = section(j / sides * Math.PI * 2);
+      positions.push((radius + r) * ca, y, (radius + r) * sa);
+      normals.push(...normal);
+      if (j < sides) {
+        if (end === 0) indices.push(offset, offset + j + 2, offset + j + 1);
+        else indices.push(offset, offset + j + 1, offset + j + 2);
+      }
+    }
+  }
+  return { positions: new Float32Array(positions), normals: new Float32Array(normals), indices: new Uint16Array(indices) };
+}
+
 /** Flat-shaded octahedron. */
 export function octahedron(radius: number): MeshData {
   const v: Vec3[] = [

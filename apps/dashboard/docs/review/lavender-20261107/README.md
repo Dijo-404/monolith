@@ -1,5 +1,7 @@
 # Guided lavender lab review
 
+This is the initial `77c79be` presentation record. The owner subsequently rejected its 3D stage. The current replacement, integrated-build checks and fresh review are in the [stage revision report](stage-v2/README.md) and [scene design](stage-v2/scene-design.md). The original captures and results below remain historical evidence for their named source; they are not current visual approval.
+
 Presentation follow-up [#86](https://github.com/Dijo-404/monolith/issues/86), based on accepted main `79054dc`. The owner requested a light Phantom-inspired interface and confirmed a guided lab with a clear next action.
 
 The shared presentation now explains the lab immediately, exposes live/offline mode switching, keeps section navigation available on mobile, and gives the original WebGL stage readable lavender materials. Long results wrap; interactive targets, focus, disabled states, fallback and reduced motion retain the same working flows. Navigation reserves the measured sticky-header height plus 16px so the step indicator stays visible.

@@ -1,0 +1,259 @@
+{
+  "schemaVersion": 1,
+  "sourceTask": "#86",
+  "evidence": "UNTESTED",
+  "scope": "Actual local production-preview keyboard navigation and sticky-header bounds only. No live RPC or privacy acceptance.",
+  "startedAt": "2026-11-06T22:03:19.904Z",
+  "passed": true,
+  "node": "v24.22.2",
+  "playwright": "1.65.0",
+  "browser": "158.0.8127.18",
+  "baselineResultSha256": "22a12ddd0f1600184a6f3f971aef2d8476c3365d2ae4fa60e2b97522ca3b2a43",
+  "originalJourneyRunnerSha256": "3cb44139a9522e8581869c018b915d3a43fe5802adfc363865d80bd551d1f1bc",
+  "captureRunnerSha256": "2e1d7a0fd14184ba83d4bd2b7bc3c79fc48ff87fefbabef295e268421a21704b",
+  "sourceBefore": {
+    "source": {
+      "app/LabApp.tsx": "2bd0f0b813dd64b8c411a219dbf00746a3a1a7bc9263cef88c634f0719fb03e6",
+      "app/guide.ts": "c13eebbbaf6567ef14ff4967c70b548c488a4f86091aa6e67a4b5f629ddbd204",
+      "app/lab-fixtures.ts": "d68275afc445277fc324cd70981c73c05fe09d65e76dfdbb3beed4925f9894e5",
+      "app/lab-model.ts": "b8ef594b55f459fe061f5c22a2c7d59e468c30d92d04bafa98b8a0438cbf9ada",
+      "app/lab-reducer.ts": "7c5f42b30276407fe76c46eeeb057b36a678d4bac61ddd5f33ce2c0b2463ae9e",
+      "app/use-lab.ts": "02303e3d3302120c13b61a938c6e218d9c9333ebd5eade7af46a236cf573c49e",
+      "components/Comparison.tsx": "dbd9c74b075eaff981618136b3def91493481043b8280bca9f5f2b9f9afb9fb9",
+      "components/Guide.tsx": "a8a6a96a5fc77c95996bb644709c382f15e7030a82f4c64ec67c90b3ff64d7fe",
+      "components/Header.tsx": "1190173d0dc184f2291b4ccd95ad81dff795a01fb541ae8b84f9e805352f52f9",
+      "components/Icon.tsx": "ffe7c4a93033730b773da5818435966932e23aad74caa4f3a187af592ceb07da",
+      "components/StageCard.tsx": "b7a02f2891d09e4423ee0a3ce28ed486c169b30f32b620b5f6d0a33c79b6c42b",
+      "components/Switch.tsx": "6974a12d8ec20358e9d1ba91162d570115889666df7e9d8e1196193c851529bd",
+      "components/Tag.tsx": "c43df271299a76a75b2ddce3e9871783859829050290e964a2d4dac5c48be441",
+      "components/UnderTheHood.tsx": "fa9425cc6b0f2c5a930b72dac9a047455dfe13df2e3fe3fc052e838f68485bfa",
+      "components/format.ts": "340e576dfde3d8f183c6936e2116e97ccad2ef8555e72af66e4d95317c6142f8",
+      "components/stage/Stage.tsx": "f0d49d6270986219ad115ec3e7f51101435e5fb917c678477b8d4c88b2ac4f17",
+      "components/stage/StageFallback.tsx": "58f7eafc328b295e701ba6fe05967a20639d081cba2d96c93b33fc6f4ad1cc5b",
+      "components/stage/geometry.ts": "d8fa78108fcd328a69d3f500d321c85a8c55faf88cee6aa57b39a6eacd67dd89",
+      "components/stage/math.ts": "940d135ec0af004d32869eaddca99b412db8f3d3b59925d46250c742725da274",
+      "components/stage/renderer.ts": "5badcbb9d99808224e9aca73d01d2e72e77ee63853ba7f09e12683653e727f99",
+      "components/stage/scene-layout.ts": "d35a3764a5f5dce9efc5105d4c3cb9c142435efb437d64aa5c3dd06bd4a9108f",
+      "components/stage/shaders.ts": "ec60475a61578096b02933e3358d76b0c3a75ffa6fd8d6c37acdc29d57f8b864",
+      "composition/lab.ts": "10d8a5a7b538464dfa33b9652031a84f2ede6bf43e1e38c038e887dded8802e5",
+      "composition/registry.ts": "e41ea93e5ee598898f59200b0b97d0e528b22c333b029bff3b9edb77bf1dd96f",
+      "composition/transport.ts": "416a0075692f431da4cccfe2f4592c13bd7e021b73388f8b87d6cd6e7a38fad2",
+      "config/public-env.ts": "0c6eb98d0ce147875818d14b7b0f0140493dbd739da61593dda425c0d785f401",
+      "features/lab/LiveLabApp.tsx": "ce27dfba4c98b97616552fe357ac9124fe029d06d5d7a07e61258f9dc5bc9b5c",
+      "features/lab/correlate.ts": "7f4e082cc971f016a9c1c41be256e0e700640c173d566c6d5e7dc6b9b5b8efea",
+      "features/lab/direct-fixture.ts": "b2afba31bf8f440cd6fe248a033cb7d3f7d18328bf60f626e360a6f0bec88326",
+      "features/lab/live-controller.ts": "e4869d296a57ea6a78ddecac925e03ef51446f850c85ec766b2483b943f9d0e7",
+      "features/lab/live-types.ts": "107e2b7eee951604e12db33bef28a032668dc3d260fbf5fb047fbc1e288fb827",
+      "features/lab/live.css": "694453dea3b61378a910d7a5cec16d4ce4a859bc7b46c3b4c5dde72bd94e905a",
+      "features/lab/scenario.ts": "e1c02984f4d49ec71cfa091c0290d974348a5b9cc95b8cb1f763570b20eb6d1b",
+      "features/lab/wire-driver.ts": "c419106f54bb25dd70c602b9d6bbdd283a3ea13a2bbe6a58fb14e148490b8d14",
+      "features/registry/live-policy.ts": "f729250f388eb84ed6de44bfcdd6d1a411a26d4df67f6ba18e4f13627315b184",
+      "main.tsx": "c114b7c3be6592db34885f96c050872d18824ceb071bcd01a9434ed9771f4af0",
+      "spikes/anon/index.html": "8fda235a27120212585737d3cf6f830e32c06d07d7e95c003b3900762944d3e2",
+      "spikes/anon/main.ts.txt": "d1bcdb69f1ad53114eca0302e49a127d37858758b599690194af14aeafc6516a",
+      "spikes/anon/observed-2026-11-06.json": "4522287d860335100b29e26155d03dfc60cfa394602ccae39b481373cdc37fdd",
+      "spikes/anon/packaging-smoke-2026-11-06.json": "016c8c33aaef1a275a28d8d555ffb834fd644fdc128aa13247aa9ec1b52e9a68",
+      "spikes/anon/post-foundation-nym-2026-11-06.json": "6221bdb015838bb0844326c7eca286870a6402e651db95d00ae8eacc29cdb177",
+      "spikes/anon/run.mjs.txt": "9494bf94ec3f9ed135cb383b9fdbc5490b379e05e7476da927b1f51bc7e20699",
+      "spikes/anon/run.sh": "6fe6420e89cecce72d8de9fb02774d388a9c1bb8b729c981120302170cbf3308",
+      "styles/fonts/OFL-FragmentMono.txt": "04e68eeb550895a2f5c3558510a7e83505b73159d6a3e4b841c365e9c9005461",
+      "styles/fonts/OFL-WixMadeforDisplay.txt": "5167ab9754b56678f7363976eee0576a52782b1f225af2635c505406cd14dd67",
+      "styles/fonts/OFL-WixMadeforText.txt": "5167ab9754b56678f7363976eee0576a52782b1f225af2635c505406cd14dd67",
+      "styles/fonts/fragment-mono-latin.woff2": "44c4e39bff5e76652a24a872cbebabccbcfb20f62c4633b27c1f2745cba86b56",
+      "styles/fonts/wix-madefor-display-latin.woff2": "19bf2f2f1eaa10b2a047a8a1e624a1e12008ab5e3c50ad199ac968f8324f5f4d",
+      "styles/fonts/wix-madefor-text-latin.woff2": "cbd90a79e04d153fd521d90b08e9962628e3139313af330bd898001fe5b36e1a",
+      "styles/lab.css": "73ae38ced32d501523b9c4e0255af2370e598822eaa948e2fe1a6b4ef468927d",
+      "styles/tokens.css": "cdc686f64d11b175e197d95085bcadccee79071502a0be737cf0873e96501992",
+      "vite-env.d.ts": "493f46be45455ec7a882bf649cff161f7e2cad6b7e532f75008a852d60fabfac"
+    },
+    "dist": {
+      "assets/app-CMqRLn7b.js": "098dc9468dd99312ebacbbd439a8fe5b1dd6f59880d59851863cf58740eeba77",
+      "assets/app-DBCLKKsN.css": "b846f7cdf61bc393c031b56bc8337fd3e90751c2180451f78db1b063beaa540f",
+      "assets/browser-BV4R2-sQ.js": "71eb5d7ba875e25ad922eab59d944b3fe0d4cd0756395512f303158f52f5dca1",
+      "assets/fragment-mono-latin-yxdJ5AmL.woff2": "44c4e39bff5e76652a24a872cbebabccbcfb20f62c4633b27c1f2745cba86b56",
+      "assets/wix-madefor-display-latin-Blzrepd3.woff2": "19bf2f2f1eaa10b2a047a8a1e624a1e12008ab5e3c50ad199ac968f8324f5f4d",
+      "assets/wix-madefor-text-latin-M4ts_BV7.woff2": "cbd90a79e04d153fd521d90b08e9962628e3139313af330bd898001fe5b36e1a",
+      "assets/worker-host.html": "844c700df979d2bdb16ff70650c1b68b6f51512602dfadeaee94433a3ea6cebe",
+      "assets/workerHost-BKrclfgn.js": "be79dfb1b101571e15515125b2769d96b1d5d13a2001ca51e0b4684afdcaa35d",
+      "index.html": "528c390c955ffcd88b2006f65810b750431f569e4882cd0cb56dd96c5e9a423a"
+    },
+    "package": "6a76d101b960f66de7681953b6057388abf0d65bcd8735b9b1a1405f420af319",
+    "lockfile": "dd52d17efe95f178c5de765f06d4dfdd3f73545ed11d7491602c6fc17da489f5",
+    "runner": "3cb44139a9522e8581869c018b915d3a43fe5802adfc363865d80bd551d1f1bc"
+  },
+  "sourceAfter": {
+    "source": {
+      "app/LabApp.tsx": "2bd0f0b813dd64b8c411a219dbf00746a3a1a7bc9263cef88c634f0719fb03e6",
+      "app/guide.ts": "c13eebbbaf6567ef14ff4967c70b548c488a4f86091aa6e67a4b5f629ddbd204",
+      "app/lab-fixtures.ts": "d68275afc445277fc324cd70981c73c05fe09d65e76dfdbb3beed4925f9894e5",
+      "app/lab-model.ts": "b8ef594b55f459fe061f5c22a2c7d59e468c30d92d04bafa98b8a0438cbf9ada",
+      "app/lab-reducer.ts": "7c5f42b30276407fe76c46eeeb057b36a678d4bac61ddd5f33ce2c0b2463ae9e",
+      "app/use-lab.ts": "02303e3d3302120c13b61a938c6e218d9c9333ebd5eade7af46a236cf573c49e",
+      "components/Comparison.tsx": "dbd9c74b075eaff981618136b3def91493481043b8280bca9f5f2b9f9afb9fb9",
+      "components/Guide.tsx": "a8a6a96a5fc77c95996bb644709c382f15e7030a82f4c64ec67c90b3ff64d7fe",
+      "components/Header.tsx": "1190173d0dc184f2291b4ccd95ad81dff795a01fb541ae8b84f9e805352f52f9",
+      "components/Icon.tsx": "ffe7c4a93033730b773da5818435966932e23aad74caa4f3a187af592ceb07da",
+      "components/StageCard.tsx": "b7a02f2891d09e4423ee0a3ce28ed486c169b30f32b620b5f6d0a33c79b6c42b",
+      "components/Switch.tsx": "6974a12d8ec20358e9d1ba91162d570115889666df7e9d8e1196193c851529bd",
+      "components/Tag.tsx": "c43df271299a76a75b2ddce3e9871783859829050290e964a2d4dac5c48be441",
+      "components/UnderTheHood.tsx": "fa9425cc6b0f2c5a930b72dac9a047455dfe13df2e3fe3fc052e838f68485bfa",
+      "components/format.ts": "340e576dfde3d8f183c6936e2116e97ccad2ef8555e72af66e4d95317c6142f8",
+      "components/stage/Stage.tsx": "f0d49d6270986219ad115ec3e7f51101435e5fb917c678477b8d4c88b2ac4f17",
+      "components/stage/StageFallback.tsx": "58f7eafc328b295e701ba6fe05967a20639d081cba2d96c93b33fc6f4ad1cc5b",
+      "components/stage/geometry.ts": "d8fa78108fcd328a69d3f500d321c85a8c55faf88cee6aa57b39a6eacd67dd89",
+      "components/stage/math.ts": "940d135ec0af004d32869eaddca99b412db8f3d3b59925d46250c742725da274",
+      "components/stage/renderer.ts": "5badcbb9d99808224e9aca73d01d2e72e77ee63853ba7f09e12683653e727f99",
+      "components/stage/scene-layout.ts": "d35a3764a5f5dce9efc5105d4c3cb9c142435efb437d64aa5c3dd06bd4a9108f",
+      "components/stage/shaders.ts": "ec60475a61578096b02933e3358d76b0c3a75ffa6fd8d6c37acdc29d57f8b864",
+      "composition/lab.ts": "10d8a5a7b538464dfa33b9652031a84f2ede6bf43e1e38c038e887dded8802e5",
+      "composition/registry.ts": "e41ea93e5ee598898f59200b0b97d0e528b22c333b029bff3b9edb77bf1dd96f",
+      "composition/transport.ts": "416a0075692f431da4cccfe2f4592c13bd7e021b73388f8b87d6cd6e7a38fad2",
+      "config/public-env.ts": "0c6eb98d0ce147875818d14b7b0f0140493dbd739da61593dda425c0d785f401",
+      "features/lab/LiveLabApp.tsx": "ce27dfba4c98b97616552fe357ac9124fe029d06d5d7a07e61258f9dc5bc9b5c",
+      "features/lab/correlate.ts": "7f4e082cc971f016a9c1c41be256e0e700640c173d566c6d5e7dc6b9b5b8efea",
+      "features/lab/direct-fixture.ts": "b2afba31bf8f440cd6fe248a033cb7d3f7d18328bf60f626e360a6f0bec88326",
+      "features/lab/live-controller.ts": "e4869d296a57ea6a78ddecac925e03ef51446f850c85ec766b2483b943f9d0e7",
+      "features/lab/live-types.ts": "107e2b7eee951604e12db33bef28a032668dc3d260fbf5fb047fbc1e288fb827",
+      "features/lab/live.css": "694453dea3b61378a910d7a5cec16d4ce4a859bc7b46c3b4c5dde72bd94e905a",
+      "features/lab/scenario.ts": "e1c02984f4d49ec71cfa091c0290d974348a5b9cc95b8cb1f763570b20eb6d1b",
+      "features/lab/wire-driver.ts": "c419106f54bb25dd70c602b9d6bbdd283a3ea13a2bbe6a58fb14e148490b8d14",
+      "features/registry/live-policy.ts": "f729250f388eb84ed6de44bfcdd6d1a411a26d4df67f6ba18e4f13627315b184",
+      "main.tsx": "c114b7c3be6592db34885f96c050872d18824ceb071bcd01a9434ed9771f4af0",
+      "spikes/anon/index.html": "8fda235a27120212585737d3cf6f830e32c06d07d7e95c003b3900762944d3e2",
+      "spikes/anon/main.ts.txt": "d1bcdb69f1ad53114eca0302e49a127d37858758b599690194af14aeafc6516a",
+      "spikes/anon/observed-2026-11-06.json": "4522287d860335100b29e26155d03dfc60cfa394602ccae39b481373cdc37fdd",
+      "spikes/anon/packaging-smoke-2026-11-06.json": "016c8c33aaef1a275a28d8d555ffb834fd644fdc128aa13247aa9ec1b52e9a68",
+      "spikes/anon/post-foundation-nym-2026-11-06.json": "6221bdb015838bb0844326c7eca286870a6402e651db95d00ae8eacc29cdb177",
+      "spikes/anon/run.mjs.txt": "9494bf94ec3f9ed135cb383b9fdbc5490b379e05e7476da927b1f51bc7e20699",
+      "spikes/anon/run.sh": "6fe6420e89cecce72d8de9fb02774d388a9c1bb8b729c981120302170cbf3308",
+      "styles/fonts/OFL-FragmentMono.txt": "04e68eeb550895a2f5c3558510a7e83505b73159d6a3e4b841c365e9c9005461",
+      "styles/fonts/OFL-WixMadeforDisplay.txt": "5167ab9754b56678f7363976eee0576a52782b1f225af2635c505406cd14dd67",
+      "styles/fonts/OFL-WixMadeforText.txt": "5167ab9754b56678f7363976eee0576a52782b1f225af2635c505406cd14dd67",
+      "styles/fonts/fragment-mono-latin.woff2": "44c4e39bff5e76652a24a872cbebabccbcfb20f62c4633b27c1f2745cba86b56",
+      "styles/fonts/wix-madefor-display-latin.woff2": "19bf2f2f1eaa10b2a047a8a1e624a1e12008ab5e3c50ad199ac968f8324f5f4d",
+      "styles/fonts/wix-madefor-text-latin.woff2": "cbd90a79e04d153fd521d90b08e9962628e3139313af330bd898001fe5b36e1a",
+      "styles/lab.css": "73ae38ced32d501523b9c4e0255af2370e598822eaa948e2fe1a6b4ef468927d",
+      "styles/tokens.css": "cdc686f64d11b175e197d95085bcadccee79071502a0be737cf0873e96501992",
+      "vite-env.d.ts": "493f46be45455ec7a882bf649cff161f7e2cad6b7e532f75008a852d60fabfac"
+    },
+    "dist": {
+      "assets/app-CMqRLn7b.js": "098dc9468dd99312ebacbbd439a8fe5b1dd6f59880d59851863cf58740eeba77",
+      "assets/app-DBCLKKsN.css": "b846f7cdf61bc393c031b56bc8337fd3e90751c2180451f78db1b063beaa540f",
+      "assets/browser-BV4R2-sQ.js": "71eb5d7ba875e25ad922eab59d944b3fe0d4cd0756395512f303158f52f5dca1",
+      "assets/fragment-mono-latin-yxdJ5AmL.woff2": "44c4e39bff5e76652a24a872cbebabccbcfb20f62c4633b27c1f2745cba86b56",
+      "assets/wix-madefor-display-latin-Blzrepd3.woff2": "19bf2f2f1eaa10b2a047a8a1e624a1e12008ab5e3c50ad199ac968f8324f5f4d",
+      "assets/wix-madefor-text-latin-M4ts_BV7.woff2": "cbd90a79e04d153fd521d90b08e9962628e3139313af330bd898001fe5b36e1a",
+      "assets/worker-host.html": "844c700df979d2bdb16ff70650c1b68b6f51512602dfadeaee94433a3ea6cebe",
+      "assets/workerHost-BKrclfgn.js": "be79dfb1b101571e15515125b2769d96b1d5d13a2001ca51e0b4684afdcaa35d",
+      "index.html": "528c390c955ffcd88b2006f65810b750431f569e4882cd0cb56dd96c5e9a423a"
+    },
+    "package": "6a76d101b960f66de7681953b6057388abf0d65bcd8735b9b1a1405f420af319",
+    "lockfile": "dd52d17efe95f178c5de765f06d4dfdd3f73545ed11d7491602c6fc17da489f5",
+    "runner": "3cb44139a9522e8581869c018b915d3a43fe5802adfc363865d80bd551d1f1bc"
+  },
+  "frames": [
+    {
+      "path": "320.png",
+      "viewport": {
+        "width": 320,
+        "height": 844
+      },
+      "action": "Keyboard Tab focuses skip link, then Enter follows #demo; capture without resetting scroll.",
+      "bounds": {
+        "header": {
+          "top": 0,
+          "bottom": 151.59375,
+          "height": 151.59375
+        },
+        "progress": {
+          "top": 176,
+          "bottom": 180,
+          "height": 4
+        },
+        "count": {
+          "top": 194,
+          "bottom": 217.25,
+          "height": 23.25
+        },
+        "title": {
+          "top": 227.25,
+          "bottom": 297.625,
+          "height": 70.375
+        },
+        "scrollY": 258,
+        "viewportHeight": 844
+      },
+      "sha256": "55e5a5df6803d991b4666d609513fcfcf35bba96ce71794f632428250c3a8a48"
+    },
+    {
+      "path": "390.png",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "action": "Keyboard Tab focuses skip link, then Enter follows #demo; capture without resetting scroll.",
+      "bounds": {
+        "header": {
+          "top": 0,
+          "bottom": 151.59375,
+          "height": 151.59375
+        },
+        "progress": {
+          "top": 176,
+          "bottom": 180,
+          "height": 4
+        },
+        "count": {
+          "top": 194,
+          "bottom": 217.25,
+          "height": 23.25
+        },
+        "title": {
+          "top": 227.25,
+          "bottom": 297.625,
+          "height": 70.375
+        },
+        "scrollY": 258,
+        "viewportHeight": 844
+      },
+      "sha256": "0368ef130ef8bc84ed8af1e86eedc5029e3525fd4d763676692408e10cb74fbd"
+    },
+    {
+      "path": "768.png",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "action": "Keyboard Tab focuses skip link, then Enter follows #demo; capture without resetting scroll.",
+      "bounds": {
+        "header": {
+          "top": 0,
+          "bottom": 127,
+          "height": 127
+        },
+        "progress": {
+          "top": 151.109375,
+          "bottom": 155.109375,
+          "height": 4
+        },
+        "count": {
+          "top": 169.109375,
+          "bottom": 192.359375,
+          "height": 23.25
+        },
+        "title": {
+          "top": 202.359375,
+          "bottom": 281.546875,
+          "height": 79.1875
+        },
+        "scrollY": 183,
+        "viewportHeight": 1024
+      },
+      "sha256": "75edf3ae8af53f3472452b2929ab033dfef7fcdb5df9cfc58f5c9967c5fc0fa5"
+    }
+  ],
+  "pageErrors": [],
+  "externalRequests": [],
+  "applicationApiRequests": [],
+  "generatedAt": "2026-11-06T22:03:22.554Z"
+}
