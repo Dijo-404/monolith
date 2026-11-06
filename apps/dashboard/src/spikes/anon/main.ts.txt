@@ -1,7 +1,7 @@
 import { AnonRpcWorker } from '@anon-rpc/browser-harness';
 import { readSpecifier } from '@anon-rpc/harness-core';
 
-// Temporary experiment, deliberately independent of the unfinished shared contracts.
+// Isolated SDK preflight; the production MonolithTransport adapter belongs to MN-007.
 // No wallet data, keys, payment methods, or passthrough worker are used.
 const NETWORKS = {
   tor: {

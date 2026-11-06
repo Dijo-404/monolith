@@ -1,5 +1,5 @@
 // Self-contained, explicitly live runner. All installs/builds/results stay in /tmp.
-// Run with the MN-001 Node version; no monorepo manifest/lockfile is needed.
+// Run with the pinned workspace Node version; no monorepo manifest/lockfile is needed.
 import { mkdtemp, copyFile, writeFile, readFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import { tmpdir } from 'node:os';
@@ -175,6 +175,13 @@ try {
 }
 console.log(`Redacted observations: ${join(environment, 'observed.json')}`);
 if (artifact.attempts.some((a) => a.independentHttpBoundary.directAppRequests !== 0 ||
-    !a.directDetectionSelfCheck || !a.shutdown.futureReadRejected ||
+    !a.directDetectionSelfCheck || !a.shutdown.closeCalled || !a.shutdown.futureReadRejected ||
+    a.shutdown.rejectionCode !== 'WORKER_CLOSED' || !a.shutdown.contextDestroyed ||
     a.shutdown.iframeCountAfterClose !== 0)) process.exitCode = 2;
-else if (!artifact.attempts.some((a) => a.evidence === 'OBSERVED_LIVE')) process.exitCode = 1;
+else if (!artifact.attempts.some((a) => a.evidence === 'OBSERVED_LIVE' &&
+    a.harnessReadyObserved && a.result === '0x1' && a.failure === null &&
+    a.bootstrap.calls.length === 2 && a.bootstrap.calls.every((call) => call.success && call.nonAnonymous) &&
+    a.resolverResponses.some((reply) => reply.status === 200 && reply.bytes > 0 &&
+      reply.matchesCapturedSpecifier && reply.keccak256 === a.specifierMetadata?.workerHash))) {
+  process.exitCode = 1;
+}
