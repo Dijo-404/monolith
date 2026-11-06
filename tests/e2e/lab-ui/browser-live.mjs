@@ -173,6 +173,7 @@ try {
     const report = JSON.parse(await readFile(await downloaded.path(), 'utf8'));
     assert.equal(report.mode, mode); assert.equal(report.failure, null);
     assert.equal(report.report.evidence, 'OBSERVED_LIVE');
+    assert.match(await page.getByTestId('live-balance').textContent(), /^0x[0-9a-f]+(?:…[0-9a-f]+)?$/);
     assert(activeAllocation && latestDiagnostics && latestDiagnostics.runId === activeAllocation.runId);
     const rows = await page.locator('.activity__row').evaluateAll((elements) => elements.map((element) => ({
       rpcId: element.getAttribute('data-rpc-id'), logicalReadId: element.getAttribute('data-read-id'),

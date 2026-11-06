@@ -132,6 +132,7 @@ function EvidenceTag({ state }: { state: LiveSnapshot }) {
 
 function Activity({ state }: { state: LiveSnapshot }) {
   const route = (read: LiveWireRead) => read.role === 'leak' ? 'Direct bypass' : read.role === 'direct-control' ? 'Direct control' : 'Nym worker';
+  const balance = [...state.reads].reverse().find((read) => ['private', 'repair'].includes(read.role) && read.success && read.result);
   return <section className="card card--wide" aria-labelledby="activity-title"><header className="card__head"><h3 id="activity-title">Activity</h3><EvidenceTag state={state} /></header>
     {state.reads.length ? <ol className="activity">{state.reads.map((read) => <li key={read.rpcId}
       data-rpc-id={read.rpcId} data-read-id={read.logicalReadId} data-role={read.role}
@@ -143,6 +144,7 @@ function Activity({ state }: { state: LiveSnapshot }) {
       <span className="activity__callsite mono" title={read.rpcId}>{short(read.rpcId)}</span>
       <span className="activity__outcome">{read.completedAt ? read.success ? 'Returned' : 'Failed' : 'In flight'}</span>
     </li>)}</ol> : <p className="empty">No blockchain read has been sent. Start a private read to begin.</p>}
+    {balance?.result && <p className="card__note">Returned synthetic balance (wei, hexadecimal): <code className="mono live-wrap" data-testid="live-balance">{short(balance.result, 26)}</code></p>}
     {state.observedAt && <p className="card__note">Recorded {new Date(state.observedAt).toLocaleTimeString()}. Durations are actual browser round trips, not animation timings.</p>}
     {Boolean(state.correlation?.unmatchedObservations) && <p className="card__note card__note--exposed">
       {state.correlation?.unmatchedObservations} unexpected observer receipt(s) are also counted in the report. The run cannot pass.
