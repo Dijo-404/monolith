@@ -1,5 +1,5 @@
 import { createHash } from 'node:crypto';
-import { mkdir, mkdtemp, rm, writeFile } from 'node:fs/promises';
+import { mkdir, mkdtemp, rename, rm, symlink, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
@@ -54,6 +54,93 @@ describe('browser source discovery, SIMULATED filesystem fixtures', () => {
       ]));
     });
   }
+});
+
+describe('source discovery rejects symbolic links without following targets', () => {
+  const linkReason = 'Symbolic links are outside the reviewed browser source boundary.';
+
+  async function targetDirectory() {
+    const target = await mkdtemp(join(tmpdir(), 'monolith-private-target-sentinel-'));
+    temporaryRoots.push(target);
+    return target;
+  }
+
+  function expectRejectedLink(result, path) {
+    expect(result.passed).toBe(false);
+    expect(result.files).toBe(0);
+    expect(result.violations).toContainEqual({ file: path, line: 1, column: 1, reason: linkReason });
+    expect(JSON.stringify(result)).not.toContain('monolith-private-target-sentinel');
+  }
+
+  for (const sourceRoot of sourceRoots) {
+    it.each(['external directory', 'in-tree directory', 'dangling directory', 'directory cycle'])(
+      'rejects %s links under '+sourceRoot, async (kind) => {
+        const root = await fixture();
+        const path = `${sourceRoot}/nested/linked`;
+        await mkdir(dirname(join(root, path)), { recursive: true });
+        let target;
+        if (kind === 'directory cycle') target = '.';
+        else if (kind === 'in-tree directory') {
+          target = join(root, 'unscanned-target');
+          await mkdir(target);
+        } else {
+          target = await targetDirectory();
+          if (kind === 'dangling directory') target = join(target, 'missing');
+        }
+        if (!['directory cycle', 'dangling directory'].includes(kind)) {
+          await writeFile(join(target, 'wallet.ts'), 'fetch("https://rpc.example.com");\n');
+        }
+        await symlink(target, join(root, path), 'dir');
+
+        expectRejectedLink(await checkRpcEgress(root), path);
+      },
+    );
+
+    it.each(['unreviewed', 'pinned', 'dangling'])('rejects %s source-file links under '+sourceRoot, async (kind) => {
+      const path = `${sourceRoot}/linked.ts`;
+      const source = 'fetch("https://rpc.example.com");\n';
+      const root = await fixture({}, kind === 'pinned' ? { [path]: adapterPin(source) } : {});
+      const target = join(await targetDirectory(), 'wallet.ts');
+      if (kind !== 'dangling') await writeFile(target, kind === 'unreviewed' ? 'export const safe = true;\n' : source);
+      await symlink(target, join(root, path), 'file');
+
+      const result = await checkRpcEgress(root);
+      expectRejectedLink(result, path);
+      if (kind === 'pinned') expect(result.violations).toContainEqual({
+        file: path, line: 1, column: 1, reason: 'Reviewed adapter missing from scanned scope.',
+      });
+    });
+  }
+
+  it.each([
+    'apps', 'apps/dashboard', 'apps/dashboard/src',
+    'packages', 'packages/transport', 'packages/transport/src',
+    'packages/transport/src/adapters', 'packages/transport/src/adapters/browser',
+  ])('rejects the source root or its repository ancestor %s', async (path) => {
+    const root = await fixture();
+    const target = join(await targetDirectory(), 'moved-source');
+    await rename(join(root, path), target);
+    await symlink(target, join(root, path), 'dir');
+
+    expectRejectedLink(await checkRpcEgress(root), path);
+  });
+
+  it('rejects a linked repository root before reading its targets', async () => {
+    const parent = await targetDirectory();
+    const linkedRoot = join(parent, 'repository-link');
+    await symlink(join(parent, 'missing-repository'), linkedRoot, 'dir');
+
+    expectRejectedLink(await checkRpcEgress(linkedRoot), '.');
+  });
+
+  it('rejects an existing repository-root link even with a trailing separator', async () => {
+    const target = await fixture();
+    const parent = await targetDirectory();
+    const linkedRoot = join(parent, 'repository-link');
+    await symlink(target, linkedRoot, 'dir');
+
+    expectRejectedLink(await checkRpcEgress(linkedRoot+'/'), '.');
+  });
 });
 
 describe('JSX syntax preserves the network review boundary', () => {
