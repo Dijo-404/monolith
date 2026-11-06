@@ -1,5 +1,5 @@
 // SIMULATED real-shaped ports: no browser worker, Arkiv or external HTTP contact.
-import { describe, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { createLiveLabController } from '../../../apps/dashboard/src/features/lab/live-controller.ts';
 import { LIVE_REGISTRY_POLICY, LIVE_RPC_URL } from '../../../apps/dashboard/src/features/registry/live-policy.ts';
 
@@ -10,6 +10,9 @@ const ok = (value) => ({ ok: true, value });
 const fail = (code) => ({ ok: false, error: { code, retryable: true,
   message: code === 'WORKER_UNAVAILABLE' ? 'The anonymity worker is unavailable.' : 'The upstream is unavailable.' } });
 const deferred = () => { let resolve; const promise = new Promise((done) => { resolve = done; }); return { promise, resolve }; };
+// The adapter has already decoded the public DTO. Retryability cannot widen the code allowlist.
+const registryFailure = (code) => ({ ok: false, error: { code, message: 'SIMULATED port failure.', retryable: true } });
+afterEach(() => { vi.useRealTimers(); });
 
 function fixture(faults = {}) {
   let time = START;
@@ -130,6 +133,58 @@ describe('live controller lifecycle and independent accounting', () => {
     expect(f.allocate).toHaveBeenCalledTimes(1);
     expect(f.directFetch).not.toHaveBeenCalled();
     await f.controller.close();
+  });
+  it('retries only fresh transient metadata before sending any application request', async () => {
+    vi.useFakeTimers();
+    const f = fixture();
+    f.registry.load.mockImplementationOnce(async () => registryFailure('REGISTRY_UNAVAILABLE'))
+      .mockImplementationOnce(async () => registryFailure('UPSTREAM_TIMEOUT'));
+    const running = f.controller.run('private');
+    await vi.advanceTimersByTimeAsync(0);
+    expect(f.registry.load).toHaveBeenCalledTimes(1); expect(f.calls).toEqual([]);
+    expect(f.controller.getSnapshot().phase).toBe('REGISTRY_RETRY');
+    await vi.advanceTimersByTimeAsync(999);
+    expect(f.registry.load).toHaveBeenCalledTimes(1);
+    await vi.advanceTimersByTimeAsync(1);
+    expect(f.registry.load).toHaveBeenCalledTimes(2); expect(f.calls).toEqual([]);
+    await vi.advanceTimersByTimeAsync(1999);
+    expect(f.registry.load).toHaveBeenCalledTimes(2);
+    await vi.advanceTimersByTimeAsync(1); await running;
+    expect(f.registry.load).toHaveBeenCalledTimes(3);
+    expect(f.controller.getSnapshot().phase).toBe('READY'); expect(f.calls).toHaveLength(2);
+    expect(f.directFetch).not.toHaveBeenCalled();
+    await f.controller.close(); expect(vi.getTimerCount()).toBe(0);
+  });
+  it('bounds exhausted metadata retries and blocks with zero application RPC or direct control', async () => {
+    vi.useFakeTimers();
+    const f = fixture(); f.registry.load.mockResolvedValue(registryFailure('REGISTRY_UNAVAILABLE'));
+    const running = f.controller.run('compare');
+    await vi.advanceTimersByTimeAsync(3000); await running;
+    expect(f.registry.load).toHaveBeenCalledTimes(3);
+    expect(f.controller.getSnapshot()).toMatchObject({ phase: 'BLOCKED', error: 'REGISTRY_UNAVAILABLE', reads: [] });
+    expect(f.calls).toEqual([]); expect(f.directFetch).not.toHaveBeenCalled();
+    await f.controller.close(); expect(vi.getTimerCount()).toBe(0);
+  });
+  it.each(['REGISTRY_UNTRUSTED', 'REGISTRY_EXPIRED', 'POLICY_DENIED', 'TARGET_DENIED', 'CHAIN_MISMATCH', 'RATE_LIMITED', 'INVALID_INPUT'])(
+    'never retries %s even if a port marks it retryable', async (code) => {
+      const f = fixture(); f.registry.load.mockResolvedValue(registryFailure(code));
+      await f.controller.run('compare');
+      expect(f.registry.load).toHaveBeenCalledTimes(1);
+      expect(f.controller.getSnapshot()).toMatchObject({ phase: 'BLOCKED', error: code, reads: [] });
+      expect(f.calls).toEqual([]); expect(f.directFetch).not.toHaveBeenCalled();
+      await f.controller.close();
+    },
+  );
+  it('aborts the metadata backoff on close without a late fetch or restored readiness', async () => {
+    vi.useFakeTimers();
+    const f = fixture(); f.registry.load.mockResolvedValue(registryFailure('REGISTRY_UNAVAILABLE'));
+    const running = f.controller.run('private');
+    await vi.advanceTimersByTimeAsync(0);
+    expect(f.controller.getSnapshot().phase).toBe('REGISTRY_RETRY');
+    await f.controller.close(); await running; await vi.advanceTimersByTimeAsync(5000);
+    expect(f.registry.load).toHaveBeenCalledTimes(1);
+    expect(f.controller.getSnapshot()).toMatchObject({ phase: 'CLOSED', reads: [] });
+    expect(f.calls).toEqual([]); expect(vi.getTimerCount()).toBe(0);
   });
   it('retains one synthetic intent and a route-only fixture patch across distinct leak/repair allocations', async () => {
     const f = fixture();

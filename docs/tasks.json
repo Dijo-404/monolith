@@ -956,7 +956,9 @@
       "apps/observer/src/composition/public-demo.ts",
       "apps/observer/test/public-demo/**",
       "deploy/observer/**",
-      "docs/observer-deployment.md"
+      "docs/observer-deployment.md",
+      "packages/registry/src/adapters/arkiv/reader.ts",
+      "packages/registry/test/reader/access-key.test.ts"
     ],
     "scope": [
       "Compose a reusable no-cost public observer/registry process with the reviewed source-trust boundary.",
@@ -996,7 +998,9 @@
       "docs/cli.md",
       "pnpm-lock.yaml",
       "docs/tasks.json",
-      "docs/task-register.md"
+      "docs/task-register.md",
+      "tooling/eslint/architecture.mjs",
+      "tests/tooling/architecture.test.mjs"
     ],
     "scope": [
       "Prepare an npm-distributable @monolith/cli package exposing the monolith executable, using existing public shared/analyzer exports and one set of command handlers for CLI and TUI.",

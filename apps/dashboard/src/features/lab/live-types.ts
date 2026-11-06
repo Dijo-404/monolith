@@ -5,7 +5,7 @@ import type { RegistrySelection } from '../../composition/transport.js';
 
 export type LiveMode = 'private' | 'compare' | 'leak' | 'repair';
 export type LiveRole = 'probe' | 'private' | 'direct-control' | 'leak' | 'repair';
-export type LivePhase = 'IDLE' | 'WARMING' | 'ALLOCATING' | 'REGISTRY' | 'SELECTING'
+export type LivePhase = 'IDLE' | 'WARMING' | 'ALLOCATING' | 'REGISTRY' | 'REGISTRY_RETRY' | 'SELECTING'
   | 'READING' | 'VERIFYING' | 'READY' | 'BLOCKED' | 'CLOSED';
 export type LiveAllocation = ObserverLabAllocation;
 
