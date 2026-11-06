@@ -288,7 +288,14 @@
       "packages/registry/src/ports/source-snapshot.ts",
       "packages/registry/src/ports/entity-writer.ts",
       "scripts/import-evm-registry.ts",
-      "packages/registry/test/importer/**"
+      "scripts/importer-key-file.ts",
+      "packages/registry/test/importer/**",
+      "packages/registry/src/index.ts",
+      "packages/registry/package.json",
+      "packages/registry/tsconfig.json",
+      "package.json",
+      "pnpm-lock.yaml",
+      "docs/tasks.json"
     ],
     "scope": [
       "Import an immutable ethereum-lists/chains snapshot with its license notices, source SHA and manifest hash.",
