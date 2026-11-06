@@ -5,6 +5,16 @@ allocation enabled. Its ordinary registry API queries the accepted public Arkiv
 reader. Its only upstream mapping is `lab_optimism` → chain `10` →
 `https://mainnet.optimism.io/`. No account or signing key is used.
 
+Only this public lab opts into a 120-second registry-generation lifetime; the
+normal reader's 30-second default is unchanged. Actual storage, publisher,
+current-block and DNS checks still run on each query, and the publisher's true
+content deadline clamps every generated window. Existing received generations
+are never retimestamped or extended. This explicit policy covers measured worker
+latency and the lab's bounded operations. The separately configured browser lab
+uses a 60-second chain-probe validation lifetime and still checks authority before
+and after each asynchronous exchange. Historical blocked attempts using the
+30-second policy remain blocked.
+
 Build with the repository's pinned Node 24.22.2 and pnpm 12.18.0, then run:
 
 ```sh

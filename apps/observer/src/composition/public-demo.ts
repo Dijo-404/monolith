@@ -8,6 +8,8 @@ import { buildServer } from './server.js';
 import { createRegistryDnsAdmission, parseRegistryConfig } from './registry.js';
 
 export const PUBLIC_DEMO_TARGET = Object.freeze({ endpointId: 'lab_optimism', chainId: '10', rpcUrl: 'https://mainnet.optimism.io/' });
+// Explicit lab policy covers bounded real worker exchanges; actual entity deadlines still clamp it.
+export const PUBLIC_DEMO_GENERATION_TTL_MS = 120_000;
 export const PUBLIC_REGISTRY_PINS = Object.freeze({
   creator: '0x93D1A42655F2B0BCFa126e3D2a33e4ab60a74CA4', owner: '0x93D1A42655F2B0BCFa126e3D2a33e4ab60a74CA4',
   sourceRevision: 'e17474286275730fb6b0490b1d7ea1c64a36ed9e',
@@ -39,7 +41,8 @@ export function createFreshPublicRegistry(options: { reader?: EntityReader; admi
       return Promise.resolve().then(operation).finally(() => { retained--; release(); });
     };
     try {
-      const query = createQueryRegistry({ policy, timeoutMs, now: () => new Date(nowMs()).toISOString(),
+      const query = createQueryRegistry({ policy, timeoutMs, generationTtlMs: PUBLIC_DEMO_GENERATION_TTL_MS,
+        now: () => new Date(nowMs()).toISOString(),
         hash: (text) => createHash('sha256').update(text).digest('hex'),
         reader: { readChain: (chain) => track(() => reader.readChain(chain)) },
         admission: { check: (url) => track(() => admission.check(url)) },
