@@ -958,7 +958,9 @@
       "deploy/observer/**",
       "docs/observer-deployment.md",
       "packages/registry/src/adapters/arkiv/reader.ts",
-      "packages/registry/test/reader/access-key.test.ts"
+      "packages/registry/test/reader/access-key.test.ts",
+      "packages/registry/src/application/query-registry.ts",
+      "packages/registry/test/reader/generation-policy.test.ts"
     ],
     "scope": [
       "Compose a reusable no-cost public observer/registry process with the reviewed source-trust boundary.",
