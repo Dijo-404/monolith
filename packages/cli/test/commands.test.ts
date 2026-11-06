@@ -89,6 +89,50 @@ describe('offline command and browser-launch boundaries', () => {
     expect(JSON.parse(json.stdout).data.findings).toEqual([{ code: 'UNRECOGNIZED_FINDING', count: 1 }]);
   });
 
+  it.each([
+    ['future version', 2, 'UNSUPPORTED_VERSION'],
+    ['largest safe version', Number.MAX_SAFE_INTEGER, 'UNSUPPORTED_VERSION'],
+    ['missing version', undefined, 'INVALID_INPUT'],
+    ['null version', null, 'INVALID_INPUT'],
+    ['zero version', 0, 'INVALID_INPUT'],
+    ['negative version', -1, 'INVALID_INPUT'],
+    ['fractional version', 1.5, 'INVALID_INPUT'],
+    ['string version', '2', 'INVALID_INPUT'],
+    ['unsafe integer version', Number.MAX_SAFE_INTEGER + 1, 'INVALID_INPUT'],
+    ['malformed version-one payload', 1, 'INVALID_INPUT'],
+  ] as const)('report and check classify %s on both output streams', async (_label, version, code) => {
+    // Deliberately malformed private fields ensure version errors never project
+    // submitted data, and a version-one envelope still requires valid content.
+    const value = {
+      ...(version === undefined ? {} : { schemaVersion: version }),
+      input: 'private-input-sentinel', scope: 'private-scope-sentinel',
+    };
+    const message = code === 'UNSUPPORTED_VERSION'
+      ? 'This input schema version is unsupported.'
+      : 'Invalid command or input. Use monolith --help.';
+    for (const command of ['report', 'check']) {
+      for (const json of [false, true]) {
+        const args = command === 'report' ? [command, 'private-file.json']
+          : [command, '--input', 'private-file.json'];
+        const ctx = context(value);
+        const result = await executeCommand([...args, ...(json ? ['--json'] : [])], ctx);
+        expect(result.exitCode).toBe(2);
+        expect(ctx.readJson).toHaveBeenCalledExactlyOnceWith('private-file.json');
+        expect(ctx.openLab).not.toHaveBeenCalled();
+        expect(result.stdout + result.stderr).not.toContain('private-');
+        if (json) {
+          expect(result.stderr).toBe('');
+          expect(JSON.parse(result.stdout)).toEqual({
+            schemaVersion: 1, command, status: 'error', error: { code, message },
+          });
+        } else {
+          expect(result.stdout).toBe('');
+          expect(result.stderr).toBe(`${message}\n`);
+        }
+      }
+    }
+  });
+
   it('sanitizes unknown commands, repeated flags and file errors on the documented streams', async () => {
     const ctx = context();
     ctx.readJson = vi.fn(async () => { throw new Error('192.0.2.88 private-key-sentinel'); });

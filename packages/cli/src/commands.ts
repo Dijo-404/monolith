@@ -1,5 +1,5 @@
 import { analyzePrivacyRun } from '@monolith/privacy-analyzer';
-import { privacyReportSchema } from '@monolith/shared';
+import { parseContract, privacyReportSchema } from '@monolith/shared';
 import type { PrivacyReport } from '@monolith/shared';
 
 export const VERSION = '0.1.0';
@@ -153,10 +153,10 @@ export async function executeCommand(argv: readonly string[], context: CommandCo
   catch { return commandError(command, 'FILE_UNAVAILABLE', json); }
   try {
     if (report) {
-      const parsed = privacyReportSchema.safeParse(value);
-      if (!parsed.success) return commandError(command, 'INVALID_INPUT', json);
-      return output(command, 'viewed', reportData(parsed.data), 0, json,
-        reportText(parsed.data)+'\nReport viewing does not verify artifact hashes, redaction or live provenance.');
+      const parsed = parseContract(privacyReportSchema, value);
+      if (!parsed.ok) return commandError(command, parsed.error.code === 'UNSUPPORTED_VERSION' ? 'UNSUPPORTED_VERSION' : 'INVALID_INPUT', json);
+      return output(command, 'viewed', reportData(parsed.value), 0, json,
+        reportText(parsed.value)+'\nReport viewing does not verify artifact hashes, redaction or live provenance.');
     }
     if (!envelope(value)) {
       const version = value && typeof value === 'object' ? (value as Record<string, unknown>)['schemaVersion'] : undefined;
