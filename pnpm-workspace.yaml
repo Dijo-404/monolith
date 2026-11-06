@@ -1,0 +1,10 @@
+packages:
+  - apps/dashboard
+  - apps/observer
+  - packages/*
+
+engineStrict: true
+strictPeerDependencies: true
+saveExact: true
+allowBuilds:
+  esbuild: true

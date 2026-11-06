@@ -17,7 +17,19 @@
       ".env.example",
       "LICENSE",
       "apps/*/package.json",
-      "packages/*/package.json"
+      "packages/*/package.json",
+      ".node-version",
+      "eslint.config.mjs",
+      "vitest.config.ts",
+      "tooling/**",
+      "tests/tooling/**",
+      "apps/dashboard/**",
+      "apps/observer/**",
+      "packages/*/tsconfig.json",
+      "packages/*/src/index.ts",
+      "README.md",
+      ".gitignore",
+      "CONTRIBUTING.md"
     ],
     "scope": [
       "Create the React/Vite dashboard, Fastify observer and shared TypeScript package manifests matching the architecture; keep the optional relayer and Solidity toolchain disabled.",
