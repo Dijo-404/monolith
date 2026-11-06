@@ -1,0 +1,144 @@
+{
+  "schemaVersion": 1,
+  "importerVersion": "monolith-import-v1",
+  "generatedAt": "2026-11-06T13:41:58.863Z",
+  "source": {
+    "repository": "https://github.com/ethereum-lists/chains",
+    "revision": "e17474286275730fb6b0490b1d7ea1c64a36ed9e",
+    "snapshotSha256": "2180efb0c0b38e76578ebd8d6470d1acbabb7f90463dd4134e7c6d90a692c952",
+    "retrievedAt": "2026-11-06T13:41:58.596Z",
+    "licenseUrl": "https://github.com/ethereum-lists/chains/blob/e17474286275730fb6b0490b1d7ea1c64a36ed9e/LICENSE",
+    "licenseSha256": "1126322e2cc8d165adc4c792eeb195717de2bcc7b39be1ce77959d78e87ef685"
+  },
+  "publisher": "0x93D1A42655F2B0BCFa126e3D2a33e4ab60a74CA4",
+  "storageEvidence": "OBSERVED_LIVE",
+  "endpointValidation": "UNTESTED",
+  "status": "COMPLETE",
+  "reason": "NONE",
+  "selection": "first-safe-endpoint-per-network",
+  "counts": {
+    "sourceNetworks": 2855,
+    "sourceRpcEntries": 4220,
+    "eligibleNetworks": 2238,
+    "eligibleRecords": 2942,
+    "rejected": 1277,
+    "duplicates": 1,
+    "reasons": {
+      "UNSAFE_HTTPS_URL": 738,
+      "CUSTOM_PATH_REQUIRES_REVIEW": 375,
+      "INACTIVE_OR_REUSED_CHAIN": 162,
+      "QUERY_REQUIRES_REVIEW": 2,
+      "DUPLICATE_WITHIN_CHAIN": 1
+    },
+    "selectedNetworks": 10,
+    "selectedRecords": 10,
+    "written": 10,
+    "reused": 0,
+    "uncertain": 0,
+    "remaining": 0,
+    "transactions": 1
+  },
+  "records": [
+    {
+      "recordId": "cae960418a661e7b3cde31c1e22c83c77db6f86f804fd44b4dd35c6d9a97bff4",
+      "entityKey": "0x77eb7c1e22c6552d7f085f8a1c2313121dfbff3a4abb682608ca5ff2c8cd7b43",
+      "transactionHash": "0x90b084611bc5850c066e1101938b4fe76e350f658d543cb0fa64cf66ca4e69ca",
+      "creator": "0x93D1A42655F2B0BCFa126e3D2a33e4ab60a74CA4",
+      "owner": "0x93D1A42655F2B0BCFa126e3D2a33e4ab60a74CA4",
+      "expiresAtBlock": "336579",
+      "contentExpiresAt": "2026-11-07T13:42:00.547Z",
+      "outcome": "written"
+    },
+    {
+      "recordId": "6f661b1c6c9d0ee9f7b37c559a2285dd470a19f3378d7d610b8ec823f197a130",
+      "entityKey": "0xc8d33bed907f23f9cddcf19fb151318dbe7758c5880a6378e8f6a50826010f07",
+      "transactionHash": "0x90b084611bc5850c066e1101938b4fe76e350f658d543cb0fa64cf66ca4e69ca",
+      "creator": "0x93D1A42655F2B0BCFa126e3D2a33e4ab60a74CA4",
+      "owner": "0x93D1A42655F2B0BCFa126e3D2a33e4ab60a74CA4",
+      "expiresAtBlock": "336579",
+      "contentExpiresAt": "2026-11-07T13:42:00.547Z",
+      "outcome": "written"
+    },
+    {
+      "recordId": "41873f4396fc74f83fc8de1e940240a0b283cc45164674fad93f8d10fa4ee17c",
+      "entityKey": "0x31fc08b4b658e194f210f1d7aa0df4af761dbd1efb9dc057cf34efaa134726ae",
+      "transactionHash": "0x90b084611bc5850c066e1101938b4fe76e350f658d543cb0fa64cf66ca4e69ca",
+      "creator": "0x93D1A42655F2B0BCFa126e3D2a33e4ab60a74CA4",
+      "owner": "0x93D1A42655F2B0BCFa126e3D2a33e4ab60a74CA4",
+      "expiresAtBlock": "336579",
+      "contentExpiresAt": "2026-11-07T13:42:00.547Z",
+      "outcome": "written"
+    },
+    {
+      "recordId": "2078e398d9c02a81475e81e318ab4a25b95786c3b8549fb265634d78a952eb6b",
+      "entityKey": "0xfad1fd96968fda88a6b369fb5ded24273948e4cf8937af14a57d731404581d54",
+      "transactionHash": "0x90b084611bc5850c066e1101938b4fe76e350f658d543cb0fa64cf66ca4e69ca",
+      "creator": "0x93D1A42655F2B0BCFa126e3D2a33e4ab60a74CA4",
+      "owner": "0x93D1A42655F2B0BCFa126e3D2a33e4ab60a74CA4",
+      "expiresAtBlock": "336579",
+      "contentExpiresAt": "2026-11-07T13:42:00.547Z",
+      "outcome": "written"
+    },
+    {
+      "recordId": "3f4bed3f85256b7ef38019a5bd8ed05ae293d1b6d956a5adc2d930e5ab8bfe96",
+      "entityKey": "0xf319a5a02a5801eb70c3160038f4b9115f7877a9b8d359c6973330b3a8866868",
+      "transactionHash": "0x90b084611bc5850c066e1101938b4fe76e350f658d543cb0fa64cf66ca4e69ca",
+      "creator": "0x93D1A42655F2B0BCFa126e3D2a33e4ab60a74CA4",
+      "owner": "0x93D1A42655F2B0BCFa126e3D2a33e4ab60a74CA4",
+      "expiresAtBlock": "336579",
+      "contentExpiresAt": "2026-11-07T13:42:00.547Z",
+      "outcome": "written"
+    },
+    {
+      "recordId": "74ecd3018e803aed98197bf5d24f18cea1bb87ef6cf8d809639d0d5c9cafe29e",
+      "entityKey": "0xd84c515043b09d30c1353e35d596fb93e827b15f9ed7e643294d323c31b741af",
+      "transactionHash": "0x90b084611bc5850c066e1101938b4fe76e350f658d543cb0fa64cf66ca4e69ca",
+      "creator": "0x93D1A42655F2B0BCFa126e3D2a33e4ab60a74CA4",
+      "owner": "0x93D1A42655F2B0BCFa126e3D2a33e4ab60a74CA4",
+      "expiresAtBlock": "336579",
+      "contentExpiresAt": "2026-11-07T13:42:00.547Z",
+      "outcome": "written"
+    },
+    {
+      "recordId": "f84eba0c525b9b32109130ee534cb2fd7e8dc761b86b81633fd1f3486bfa7914",
+      "entityKey": "0xdc8b6843c5522c40cccbaaff23f0f74eaeecf27054816c789feb94fee25d6ba6",
+      "transactionHash": "0x90b084611bc5850c066e1101938b4fe76e350f658d543cb0fa64cf66ca4e69ca",
+      "creator": "0x93D1A42655F2B0BCFa126e3D2a33e4ab60a74CA4",
+      "owner": "0x93D1A42655F2B0BCFa126e3D2a33e4ab60a74CA4",
+      "expiresAtBlock": "336579",
+      "contentExpiresAt": "2026-11-07T13:42:00.547Z",
+      "outcome": "written"
+    },
+    {
+      "recordId": "58113b8d1950d26478197f286b439f5936ae7ebdb88db499d8670005a801a098",
+      "entityKey": "0x3caa04a6ae304f7c4ce70abf10b0d31f926ae49e575db51d0198d404790d4e1c",
+      "transactionHash": "0x90b084611bc5850c066e1101938b4fe76e350f658d543cb0fa64cf66ca4e69ca",
+      "creator": "0x93D1A42655F2B0BCFa126e3D2a33e4ab60a74CA4",
+      "owner": "0x93D1A42655F2B0BCFa126e3D2a33e4ab60a74CA4",
+      "expiresAtBlock": "336579",
+      "contentExpiresAt": "2026-11-07T13:42:00.547Z",
+      "outcome": "written"
+    },
+    {
+      "recordId": "ee9b54ff86e0be71a56755ade87906f4584ec8b6af186325af06f892e6d91565",
+      "entityKey": "0x58e6fb33f68d6a10acb0472420567a154576bc0aeb580e4e52073dca2c6e21dc",
+      "transactionHash": "0x90b084611bc5850c066e1101938b4fe76e350f658d543cb0fa64cf66ca4e69ca",
+      "creator": "0x93D1A42655F2B0BCFa126e3D2a33e4ab60a74CA4",
+      "owner": "0x93D1A42655F2B0BCFa126e3D2a33e4ab60a74CA4",
+      "expiresAtBlock": "336579",
+      "contentExpiresAt": "2026-11-07T13:42:00.547Z",
+      "outcome": "written"
+    },
+    {
+      "recordId": "11488da0ed3420fd415f4b197a08498815cb128ee1ce9cd1a0186ac7aae2f39f",
+      "entityKey": "0x2b9fb96a2ebbaf8348b0234e3e02600cdfe1ea7897c741ddbcdb50bb91ea3b62",
+      "transactionHash": "0x90b084611bc5850c066e1101938b4fe76e350f658d543cb0fa64cf66ca4e69ca",
+      "creator": "0x93D1A42655F2B0BCFa126e3D2a33e4ab60a74CA4",
+      "owner": "0x93D1A42655F2B0BCFa126e3D2a33e4ab60a74CA4",
+      "expiresAtBlock": "336579",
+      "contentExpiresAt": "2026-11-07T13:42:00.547Z",
+      "outcome": "written"
+    }
+  ],
+  "limits": "Licensed source metadata only. Candidate endpoints are unprobed; storage is not permission to contact them. Block expiry is not an ISO timestamp. Counts describe this bounded selection."
+}
