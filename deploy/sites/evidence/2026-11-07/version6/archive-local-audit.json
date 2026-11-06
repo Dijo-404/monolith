@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "scope": "LOCAL_ARCHIVE_AND_RETURNED_STORAGE_METADATA",
+  "generatedAt": "2026-11-06T21:53:41.896294+00:00",
+  "localArchive": {
+    "path": "/tmp/monolith-release-static-20261107-attempt7.tar.gz",
+    "bytes": 244268,
+    "sha256": "95bc33759ad188e043f755d060c68a1145401daeee29f13f41f70e9144e81687",
+    "decompressedTarBytes": 686080,
+    "decompressedTarSha256": "5c58df0ba9abaf4589bda150306df092f1fcfaeb1719eaa1a0d1e2e035ca1017",
+    "regularFileCount": 11,
+    "snapshotFilesByteVerified": [
+      "dist/assets/app-oJns301g.js",
+      "dist/assets/workerHost-BKrclfgn.js",
+      "dist/assets/browser-BV4R2-sQ.js",
+      "dist/assets/app-CICXmcEX.css",
+      "dist/assets/fragment-mono-latin-yxdJ5AmL.woff2",
+      "dist/assets/wix-madefor-display-latin-Blzrepd3.woff2",
+      "dist/assets/wix-madefor-text-latin-M4ts_BV7.woff2",
+      "dist/assets/worker-host.html",
+      "dist/assets/THIRD-PARTY-NOTICES.txt",
+      "dist/index.html"
+    ]
+  },
+  "nativeSavedVersionId": "appgprj_6aedf7106c2081919627f07802438881~appgver_5dcbd7e6bbd081918609a1907425c6c1",
+  "nativeReturnedStorageMetadata": {
+    "archive_format": "tar",
+    "sediment_file_id": "file_00000000aebc820898bf25212ce6451b",
+    "content_hash": "sha256:7e94bc76317d04e0977787b48810c6159bb21689b0518ee507a776eacd605390",
+    "size_bytes": 686080,
+    "file_count": 11
+  },
+  "serviceObjectRetrieved": false,
+  "containerByteIdentityVerified": false,
+  "limitations": [
+    "The service storage object was not independently retrieved and container identity is unverified; local and returned hashes are recorded separately.",
+    "Actual served authored-file bytes were independently verified over HTTPS."
+  ]
+}
