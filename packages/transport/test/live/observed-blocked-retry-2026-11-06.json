@@ -1,0 +1,195 @@
+{
+  "schemaVersion": 1,
+  "sourceTask": "MN-007",
+  "startedAt": "2026-11-06T13:09:40.575Z",
+  "generatedAt": "2026-11-06T13:10:39.254Z",
+  "evidence": "BLOCKED",
+  "node": "v24.22.2",
+  "browser": "158.0.8127.18",
+  "packages": {
+    "playwright": "1.65.0",
+    "@noble/hashes": "1.8.0",
+    "@anon-rpc/browser-harness": "0.4.0",
+    "@anon-rpc/harness-core": "0.4.0"
+  },
+  "transportSourceSha256": {
+    "adapters/browser/direct-debug.ts": "ccab431652d18ff2f235ebc9668ccc5cb56ef2219c454e1b6c60d9875d5d8c0b",
+    "adapters/browser/driver.ts": "7b3c72865942c98bfb2df48eaecf906b7d813e8530ede13fa230b456a0d5494a",
+    "adapters/browser/host.ts": "897b0c6e9d910694ee63111438ff9d2a97e0483d81433b9e18e35bd5ed0b616d",
+    "adapters/browser/io.ts": "e08e8f01c6c0ff03d6c1afc232e709b315c7f4cf719affdae73c3c2f18788eb8",
+    "adapters/browser/protocol.ts": "b19a7571f18e2bb8e127d50760870f609eb7de8f238dd720c121e54a5e1bb103",
+    "application/transport.ts": "d37ab4dd1e93f0b72c7646fa59165deb3684d97ebc4cd737c652206b6e62fe69",
+    "browser.ts": "a21cfc7ecc9172e348f97cc678779c7322df5fdadcb237a39e4af3c986ec3990",
+    "domain/configuration.ts": "a55d2bb7034ff636bd4bf207818f189e9d43d48a79209cf72038da83abe2d293",
+    "domain/results.ts": "c5bcbe375c64b35351b078ba53fc4264a8c24958c9c7968adc513643c6a805e3",
+    "index.ts": "25716d7046c441665624001d631cb3d9d945aa87c84bcfed1241b04f0fec5bd6",
+    "ports/driver.ts": "83894bfd36c16b21c106bf4183ebfbb5d9c4e7bdae4529ad7568c83b4621cc74"
+  },
+  "compiledTransportSha256": {
+    "adapters/browser/direct-debug.js": "a474b237a2da149b41dec3663fc138db5b2b706ef2d73ce7fc4ed22704b5592c",
+    "adapters/browser/driver.js": "2ab4467bd1d98d4611a45bd3c4af921e2156f60873770d5e905187d041251cc9",
+    "adapters/browser/host.js": "43b8f3184453b0d272450e7448f94f1676432033f4141abe2296cd2e637f629f",
+    "adapters/browser/io.js": "a8b0c29322eb1efccd71b792562129b5d5f33c03765c96ab477082f5e86a5037",
+    "adapters/browser/protocol.js": "1ba8d868f92b96f879d8f9a920b3919a0929ca40e3a3f0610e384cf204463841",
+    "application/transport.js": "e72eeae4e632f61efdb020b5af2144d4c9504edeb0436b24f75910d46e2a3c12",
+    "browser.js": "8048ead49bca5ece0fbde32b839f079436b3010e3b4af00628abaaf9b20f850f",
+    "domain/configuration.js": "637f615a8cc4548ed3b0e68000a7000dbd7085c1f2762df1f5414ed82cca7d1f",
+    "domain/results.js": "7cf3b443a07ea65aa256302372e5041a15e945a9d8ab8a29c0c3a38de68290bb",
+    "index.js": "e251288f91e284c281338250ad818e4444d28eaa7d37de314cf5c285deb4b1c3",
+    "ports/driver.js": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881"
+  },
+  "lockfileSha256": "85bbc81967f815d361ffd58adf4c65eeb404aa2617d2846c4277b56adb44d9a5",
+  "cleanupControl": {
+    "evidence": "SIMULATED",
+    "initializationRejected": true,
+    "errorCode": "WORKER_UNAVAILABLE",
+    "iframeCount": 0,
+    "metadataCleared": true,
+    "scenario": "close-during-pending-resolver",
+    "iframeCountBeforeClose": 1,
+    "iframeCountAfterRelease": 0,
+    "lateFrameObserved": false,
+    "expectedBundleHash": "0x2507f38332780812ddee4accc262e00e246419911c2c00cab4ae6e57922667e1",
+    "bundleEvidence": "SIMULATED-never-used-for-live-read"
+  },
+  "liveRead": {
+    "schemaVersion": 1,
+    "observedAt": "2026-11-06T13:10:39.225Z",
+    "evidence": "BLOCKED",
+    "stage": "PROTECTED_CHAIN_PROBE",
+    "failure": "UPSTREAM_UNAVAILABLE",
+    "result": null,
+    "endpointValidated": false,
+    "readState": "DEGRADED",
+    "durationMs": 57945,
+    "endpointConfiguration": {
+      "evidence": "SIMULATED",
+      "origin": "local-configuration",
+      "description": "Synthetic fixture identity and provenance; target manually approved. No Arkiv claim."
+    },
+    "target": {
+      "origin": "https://ethereum-rpc.publicnode.com",
+      "expectedChainId": "1",
+      "method": "eth_chainId"
+    },
+    "worker": {
+      "network": "nym",
+      "specifier": "0x3aCD9742C68F6d993066Ae25533e09b9e1f60eD0",
+      "workerHash": "0xf13a448a8721b9d0b20da3d5b80ffe00bf4c5bb3aae812a38d3d1e3bc81fceb8",
+      "harnessVersion": "0.4.0",
+      "verification": "harness-ready-after-specifier-lookup",
+      "bootstrap": "NON_ANONYMOUS_SPECIFIER_LOOKUP",
+      "bootstrapCalls": 2,
+      "privacyLabel": "ANONYMIZING_WORKER",
+      "observedAt": "2026-11-06T13:09:51.205Z"
+    },
+    "traces": [
+      {
+        "schemaVersion": 1,
+        "readId": "bootstrap_hash",
+        "attempt": 1,
+        "endpointId": "bootstrap_mainnet",
+        "chainId": "1",
+        "method": "eth_call",
+        "callsite": "transport.bootstrap.hash",
+        "route": "direct-bootstrap",
+        "durationMs": 391,
+        "success": true,
+        "bootstrap": true,
+        "evidence": "OBSERVED_LIVE",
+        "payloadVisibility": "rpc-endpoint-can-read"
+      },
+      {
+        "schemaVersion": 1,
+        "readId": "bootstrap_resolvers",
+        "attempt": 1,
+        "endpointId": "bootstrap_mainnet",
+        "chainId": "1",
+        "method": "eth_call",
+        "callsite": "transport.bootstrap.resolvers",
+        "route": "direct-bootstrap",
+        "durationMs": 202,
+        "success": true,
+        "bootstrap": true,
+        "evidence": "OBSERVED_LIVE",
+        "payloadVisibility": "rpc-endpoint-can-read"
+      },
+      {
+        "schemaVersion": 1,
+        "readId": "monolith_probe_1",
+        "attempt": 1,
+        "endpointId": "mn007_configured_ethereum",
+        "chainId": "1",
+        "method": "eth_chainId",
+        "callsite": "transport.chain-probe",
+        "route": "anon-nym",
+        "durationMs": 24011,
+        "success": false,
+        "bootstrap": false,
+        "evidence": "OBSERVED_LIVE",
+        "payloadVisibility": "rpc-endpoint-can-read",
+        "errorCode": "UPSTREAM_UNAVAILABLE"
+      },
+      {
+        "schemaVersion": 1,
+        "readId": "monolith_probe_1",
+        "attempt": 2,
+        "endpointId": "mn007_configured_ethereum",
+        "chainId": "1",
+        "method": "eth_chainId",
+        "callsite": "transport.chain-probe",
+        "route": "anon-nym",
+        "durationMs": 24005,
+        "success": false,
+        "bootstrap": false,
+        "evidence": "OBSERVED_LIVE",
+        "payloadVisibility": "rpc-endpoint-can-read",
+        "errorCode": "UPSTREAM_UNAVAILABLE"
+      },
+      {
+        "schemaVersion": 1,
+        "readId": "mn007_49ff3ea1-74b9-4ca3-889e-d6b61d195219",
+        "attempt": 1,
+        "endpointId": "mn007_configured_ethereum",
+        "chainId": "1",
+        "method": "eth_chainId",
+        "callsite": "transport.acceptance.read",
+        "route": "blocked",
+        "durationMs": 0,
+        "success": false,
+        "bootstrap": false,
+        "evidence": "OBSERVED_LIVE",
+        "payloadVisibility": "rpc-endpoint-can-read",
+        "errorCode": "ENDPOINT_REJECTED"
+      }
+    ],
+    "shutdown": {
+      "state": "CLOSED",
+      "iframeCount": 0,
+      "postCloseReadRejected": true,
+      "postCloseErrorCode": "ENDPOINT_REJECTED",
+      "metadataCleared": true
+    },
+    "limitations": [
+      "MN-009 paired observer source evidence remains UNTESTED.",
+      "The destination can read JSON-RPC payloads.",
+      "Worker bootstrap is non-anonymous and reported separately.",
+      "Independent interception covers ordinary browser HTTP to the configured target; excludes WebRTC/KPS.",
+      "No Arkiv product-use or application-wide coverage claim."
+    ],
+    "directDetectionSelfCheck": true,
+    "independentHttpBoundary": {
+      "ordinaryTargetRequests": 0,
+      "scope": "Ordinary browser HTTP to configured target; excludes WebRTC/KPS and disclosed bootstrap."
+    },
+    "resolverResponses": [
+      {
+        "url": "https://cdn.jsdelivr.net/npm/@nymproject/anon-rpc-worker@0.1.0/dist/nym-anon-rpc-worker.js",
+        "status": 200,
+        "bytes": 18283862,
+        "keccak256": "0xf13a448a8721b9d0b20da3d5b80ffe00bf4c5bb3aae812a38d3d1e3bc81fceb8"
+      }
+    ],
+    "contextDestroyed": true
+  }
+}
