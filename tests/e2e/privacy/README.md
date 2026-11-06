@@ -2,7 +2,7 @@
 
 All artifacts here are **SIMULATED software regression evidence**. Chromium actually executed the fixture and the CDP collector actually observed its ordinary HTTP requests, but the driver/results are test-controlled. There is no real anonymity worker, onchain result or payment in this test.
 
-On 6 November 2026, the pinned Node 24.22.2 / pnpm 12.18.0 workspace passed `pnpm install --frozen-lockfile` and `pnpm check`: **1,188 tests in 31 files**, lint, all public/package/app types and production builds. The additional strict fixture check `pnpm exec tsc -p tests/privacy/egress/tsconfig.json` passed. `pnpm exec tsx scripts/check-rpc-egress.ts` passed all 32 actual browser source files. There are 23 new deterministic policy regressions.
+On 6 November 2026, the pinned Node 24.22.2 / pnpm 12.18.0 workspace passed `pnpm install --frozen-lockfile` and `pnpm check`: **1,213 tests in 32 files**, lint, all public/package/app types and production builds, after integrating accepted MN009 main `9b749fd`. The additional strict fixture check `pnpm exec tsc -p tests/privacy/egress/tsconfig.json` passed. `pnpm exec tsx scripts/check-rpc-egress.ts` passed all 32 actual browser source files. There are 23 new deterministic policy regressions.
 
 The following commands used the existing isolated Playwright 1.65.0 installation at `/tmp/monolith-mn003-env` and generated new immutable output paths. Replace that path for reproduction; keep output names new to preserve earlier observations.
 
