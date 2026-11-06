@@ -534,7 +534,13 @@
       "apps/dashboard/src/features/lab/**",
       "apps/dashboard/src/features/registry/**",
       "apps/dashboard/src/composition/lab.ts",
-      "tests/e2e/lab-ui/**"
+      "tests/e2e/lab-ui/**",
+      "apps/dashboard/src/main.tsx",
+      "apps/dashboard/vite.config.ts",
+      "apps/dashboard/assets/worker-host.html",
+      "apps/dashboard/src/components/Header.tsx",
+      "apps/dashboard/src/components/stage/Stage.tsx",
+      "apps/dashboard/src/components/stage/StageFallback.tsx"
     ],
     "scope": [
       "Replace the fixture adapters with reviewed transport, observer, registry and analyzer outputs.",
