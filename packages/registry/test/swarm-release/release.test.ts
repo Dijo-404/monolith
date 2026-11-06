@@ -1,4 +1,5 @@
 import { createHash } from 'node:crypto';
+import { readFile as readPublicFixture } from 'node:fs/promises';
 import { bytes } from '@arkiv-network/sdk/schema';
 import { describe, expect, it } from 'vitest';
 import {
@@ -186,6 +187,57 @@ describe('trusted Arkiv discovery and useful content reads (SIMULATED)', () => {
     await expect(readSwarmRelease({ entityKey, publisher }, { ...h, readFile: async (url, length) => {
       const found = await h.readFile(url, length); return { ...found, mime: url.endsWith('.woff2') ? 'something-else' : found.mime };
     } })).rejects.toThrow();
+  });
+});
+
+describe('accepted dashboard logo inventory content (SIMULATED)', () => {
+  const logos = [
+    { path: 'assets/brand/monolith-mark.svg', mime: 'image/svg+xml' },
+    { path: 'assets/brand/monolith-mark.png', mime: 'image/png' },
+  ] as const;
+  async function logoHarness(logo: typeof logos[number]) {
+    const image = await readPublicFixture(new URL('../../../../apps/dashboard/public/'+logo.path, import.meta.url));
+    const release = createSwarmRelease({ ...releaseInput(descriptor()), files: [
+      ...descriptor().files, { path: logo.path, bytes: image.byteLength, sha256: sha(image) },
+    ] });
+    const h = harness(); h.setRow(row(release));
+    const readFile = async (url: string, length: number) => {
+      if (url === `${swarmReleaseOrigin(reference)}/${logo.path}`) {
+        expect(length).toBe(image.byteLength);
+        return { bytes: new Uint8Array(image), mime: logo.mime };
+      }
+      return h.readFile(url, length);
+    };
+    return { h, image, readFile };
+  }
+  it.each(logos)('reads exact accepted $path bytes and MIME', async (logo) => {
+    const { h, image, readFile } = await logoHarness(logo);
+    const result = await readSwarmRelease({ entityKey, publisher }, { ...h, readFile });
+    expect(result.files).toHaveLength(6);
+    expect(result.files.find((file) => file.path === logo.path)).toMatchObject({
+      path: logo.path, bytes: image.byteLength, sha256: sha(image), mime: logo.mime, mimeVerified: true,
+    });
+    expect(result.evidence).toBe('SIMULATED'); expect(h.counts().createCount).toBe(0);
+  });
+  it.each(logos)('rejects wrong MIME for exact accepted $path bytes', async (logo) => {
+    const { h, readFile } = await logoHarness(logo);
+    for (const mime of ['text/html', 'application/octet-stream', logo.mime === 'image/png' ? 'image/svg+xml' : 'image/png']) {
+      await expect(readSwarmRelease({ entityKey, publisher }, { ...h, readFile: async (url, length) => {
+        const found = await readFile(url, length);
+        return url.endsWith('/'+logo.path) ? { ...found, mime } : found;
+      } })).rejects.toThrow('SWARM_RELEASE_READ_FAILED');
+    }
+    expect(h.counts().createCount).toBe(0);
+  });
+  it.each(logos)('rejects same-length byte/hash changes for $path with correct MIME', async (logo) => {
+    const { h, readFile } = await logoHarness(logo);
+    await expect(readSwarmRelease({ entityKey, publisher }, { ...h, readFile: async (url, length) => {
+      const found = await readFile(url, length);
+      if (!url.endsWith('/'+logo.path)) return found;
+      const changed = new Uint8Array(found.bytes); changed[0] = changed[0]! ^ 1;
+      return { ...found, bytes: changed };
+    } })).rejects.toThrow('SWARM_RELEASE_READ_FAILED');
+    expect(h.counts().createCount).toBe(0);
   });
 });
 

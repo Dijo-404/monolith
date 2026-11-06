@@ -166,6 +166,7 @@ function contentType(path: string, mime: string): { mime: string; mimeVerified: 
   const extension = path.slice(path.lastIndexOf('.') + 1).toLowerCase();
   const allowed: Record<string, readonly string[]> = {
     html: ['text/html'], js: ['text/javascript', 'application/javascript'], css: ['text/css'], txt: ['text/plain'],
+    svg: ['image/svg+xml'], png: ['image/png'],
     json: ['application/json'], wasm: ['application/wasm'], woff2: ['font/woff2', 'application/font-woff2', 'application/octet-stream'],
   };
   // Observed gateway quirk only for exact-hash WOFF2 assets. It grants no executable MIME exception.
