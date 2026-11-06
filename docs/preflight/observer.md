@@ -182,12 +182,12 @@ not a documented source-authentication guarantee. Here the separate
 `CF-Worker` marker was actually present; the guard remains conservative and has
 not been relaxed to obtain a passing result.
 
-Unblock requirement: an operator-controlled HTTPS observer with verified direct
+Historical Cloudflare unblock requirement: an operator-controlled HTTPS observer with verified direct
 TLS/socket source or an explicitly authenticated, reviewed edge whose source
 transformation is established. Reuse this runner's exact inventory, baseline,
 forgery controls, real-worker capture and redaction rules when integrating that
-deployment. That integration and an actual successful pair remain unfinished;
-this task must not be accepted or marked done from its draft PR or unit tests.
+deployment. In that original topology, integration and an actual successful pair
+remain unfinished; its draft PR or unit tests alone cannot establish acceptance.
 
 The unit suite covers edge authentication, forged/duplicate forwarding fields,
 Worker ambiguity, URL/method/resource limits, exact wire-ID restoration,
