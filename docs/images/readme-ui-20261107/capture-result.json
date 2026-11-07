@@ -1,0 +1,23 @@
+{
+  "capturedAt": "2026-11-07T02:32:21.555Z",
+  "browserVersion": "158.0.8127.18",
+  "viewport": {
+    "width": 1440,
+    "height": 1050
+  },
+  "externalAttempts": [],
+  "pageErrors": [],
+  "consoleErrors": [],
+  "captures": [
+    {
+      "file": "dashboard-simulated.png",
+      "path": "/?mode=simulated",
+      "title": "Monolith Leak Lab"
+    },
+    {
+      "file": "developer-docs.png",
+      "path": "/?page=docs",
+      "title": "Monolith Docs"
+    }
+  ]
+}

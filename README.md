@@ -8,17 +8,19 @@
 
 [![CI](https://img.shields.io/badge/CI-GitHub_Actions-555555?style=for-the-badge&logo=githubactions&logoColor=white)](https://github.com/Dijo-404/monolith/actions/workflows/ci.yml) [![License: MIT](https://img.shields.io/badge/License-MIT-555555?style=for-the-badge)](LICENSE) ![TypeScript](https://img.shields.io/badge/TypeScript-555555?style=for-the-badge&logo=typescript&logoColor=white)
 
-[Quick start](#quick-start) · [CLI and TUI](#cli-and-tui) · [Usage](#usage) · [Documentation](#documentation) · [Contributing](#contributing)
+[Quick start](#quick-start) · [Dashboard](#dashboard-and-docs) · [CLI and TUI](#cli-and-tui) · [Agent harness](#agent-regression-harness) · [Documentation](#documentation)
 
 </div>
 
 <br/>
 
 <p align="center">
-  <img src="apps/dashboard/docs/review/desktop-initial.png" alt="Monolith Leak Lab showing its simulated RPC routes, privacy checks and endpoint registry" width="820" />
+  <img src="docs/images/readme-ui-20261107/dashboard-simulated.png" alt="Monolith report-style dashboard with a four-step guide, explanatory request route and explicit payload visibility limits" width="1100" />
   <br/>
-  <sub>SIMULATED dashboard walkthrough. This screenshot contains fixture data.</sub>
+  <sub>Latest dashboard preview · SIMULATED fixture walkthrough, before running a scenario. <a href="docs/images/readme-ui-20261107/README.md">Capture details</a>; presentation only.</sub>
 </p>
+
+The report-style dashboard, in-app Docs and optional wallet shown here are in [PR #112](https://github.com/Dijo-404/monolith/pull/112), currently under review. Use its `feat/instrument-ui-docs-wallet` branch to try them before merge; the existing lab remains available on `main`.
 
 > [!NOTE]
 > **Development preview.** The default dashboard is wired for live reads through a verified Nym worker. It makes no API or RPC requests on page load; run actions block before worker bootstrap with the example local configuration. The separate `?mode=simulated` walkthrough uses local fixtures. The CLI/TUI is available from source and on npm as `@dijo-404/monolith-cli` **0.1.0**; the public workflow (MN-014), leak/repair walkthrough (MN-016) and reusable backend (MN-025) are accepted for their recorded C11/Site7/runtime10 observation. The [core evidence package](docs/release-core.md) (MN-017) and hosted-release task (MN-023) still await normal owner acceptance. Payments are disabled.
@@ -29,12 +31,16 @@ Monolith helps wallet and checkout developers catch accidental direct-RPC reads.
 
 ### Features
 
+- **Follow the request.** The latest UI pairs a four-step guide with a report-style request figure, explicit mode labels, direct/private result cards and inspectable read evidence. Its route explanations send nothing.
 - **Explore the leak.** Configured live actions read through Nym, compare network sources, inject a fixed synthetic bypass, then reroute and rerun. A separate `SIMULATED` walkthrough includes local fixtures and worker-outage scenarios.
 - **Enforce required privacy.** The transport validates supported reads and chain IDs through a verified Anon-RPC worker, or blocks without a direct fallback.
 - **Check endpoint provenance.** Registry modules validate trusted publishers, source revisions, expiry and permitted origins before admitting candidates.
 - **Observe a controlled comparison.** The observer permits five read methods against configured upstreams and retains bounded synthetic-run diagnostics for five minutes.
 - **Catch regressions in CI.** Static boundary checks and independent Chromium capture detect direct bypasses; reports separate route protection from successful reads.
 - **Work from the terminal.** The `@monolith/cli` prerelease analyzes local captures, displays sanitized report counts, checks prerequisites and opens the browser lab through commands or an interactive TUI.
+- **Read the developer docs.** The new **Docs** view covers local setup, transport, contracts, registry trust, observer APIs, reports and the agent harness inside the dashboard.
+- **Connect an installed wallet.** The optional EIP-6963 picker connects only after a choice, with account copy and disconnect. Wallet traffic is outside Monolith's protected read path; the lab keeps its synthetic address.
+- **Review a bounded agent repair.** The repository-local harness detects a direct bypass, evaluates a candidate patch in a disposable copy and checks useful reads against the same independent privacy gate. Its available adapter is `SIMULATED`.
 - **Prepare a reproducible deployment.** Source-bound static packaging, served-asset verification and a bounded temporary public observer launcher support separate deployment and live-workflow checks.
 
 ### Current status
@@ -45,8 +51,9 @@ Snapshot: **7 November 2026 (IST)**. GitHub issues hold live acceptance status.
 | :--- | :--- | :--- |
 | **Protected reads** | Fail-closed transport and a [recorded real Nym/direct source comparison](docs/release-core.md#what-is-preserved) for C11/Site7/runtime10 | Recheck worker, registry freshness and backend availability for each new run |
 | **Arkiv registry** | [100 distinct networks / 100 entities imported and independently queried](arkiv/data-quality.md), with publisher, provenance and expiry checks | Imported endpoints remain candidates; the import did not test their health or chain IDs |
-| **Dashboard** | Accepted [public workflow](https://github.com/Dijo-404/monolith/issues/14) and [leak/repair walkthrough](https://github.com/Dijo-404/monolith/issues/16) at C11/Site7/runtime10; a separate simulated walkthrough remains available | [Core release acceptance](https://github.com/Dijo-404/monolith/issues/17); later runtime revisions need their own source-bound evidence |
+| **Dashboard** | Accepted [public workflow](https://github.com/Dijo-404/monolith/issues/14) and [leak/repair walkthrough](https://github.com/Dijo-404/monolith/issues/16) at C11/Site7/runtime10; new report-style UI, Docs and optional wallet in [PR #112](https://github.com/Dijo-404/monolith/pull/112) | PR112 review; [core release acceptance](https://github.com/Dijo-404/monolith/issues/17); later runtime revisions need their own source-bound evidence |
 | **CLI/TUI** | Published `@dijo-404/monolith-cli` **0.1.0**, local analysis, JSON output and terminal menu | [Core release acceptance](https://github.com/Dijo-404/monolith/issues/17) |
+| **Agent harness** | [Repository-local simulated regression and patch verification](docs/agent-harness.md) for one maintained example app | Real worker/observer adapter and genuine external-agent live trial; [MN-029 acceptance](https://github.com/Dijo-404/monolith/issues/69) |
 | **Deployment** | Accepted [reusable temporary backend](https://github.com/Dijo-404/monolith/issues/40) and retained Site7 asset/layout/fault checks | [Final hosted-release acceptance](https://github.com/Dijo-404/monolith/issues/36); workstation and free-provider continuity remain limited |
 | **New integrations** | Tracked work for [Uniswap quote privacy tests](https://github.com/Dijo-404/monolith/issues/55) and [protected provider selection](https://github.com/Dijo-404/monolith/issues/56) | Integrated UI/backend behavior and live evidence; neither is a completed product feature |
 | **Whitechain tracks** | Activated [Scale, Operate and Tokenize completion plan](docs/track-completion-plan.md#whitechain-shared-work) | Finish protected sponsored checkout, reusable merchant integration, asset lifecycle and track demonstrations |
@@ -108,11 +115,38 @@ pnpm dev    # start the dashboard and observer with file watching
 
 Open **http://127.0.0.1:5173** for the live Leak Lab. Its run actions block with the example configuration; open **http://127.0.0.1:5173/?mode=simulated** for the offline fixture walkthrough. The local observer listens at **http://127.0.0.1:3001**; check `GET /api/health` for its configured state. Local startup needs no wallet, signing key or live-network credentials. Live actions require the public HTTPS observer, fresh public-run allocation, trusted Arkiv discovery and real Nym setup described in the [live lab guide](tests/e2e/lab-ui/README.md).
 
+On the [latest UI branch](https://github.com/Dijo-404/monolith/pull/112), open **http://127.0.0.1:5173/?page=docs** for the developer reference. The Docs view runs without mounting the lab or starting network requests.
+
 ## Usage
 
 In the default live dashboard, follow the four steps: **Run private read**, **Compare direct and private**, **Send the leaky widget**, then **Reroute widget and rerun**. Each action opens a fresh bounded observer run. Comparison, leak and repair actions explicitly send a fixed synthetic direct control; the leak action adds a deliberate direct bypass. These requests expose your network source. Ordinary private reads use the verified worker or fail closed. Inspect **Under the hood** for receipts, activity and remaining payload exposure. See the [live lab guide](tests/e2e/lab-ui/README.md) for setup and the separate public-workflow evidence gate.
 
 For the fixture walkthrough at `?mode=simulated`, send a direct read, compare the private route, inject a leaky widget, then try a worker outage. Its scenario controls use local fixtures and display `SIMULATED` labels.
+
+### Dashboard and docs
+
+The latest dashboard uses warm report paper, ink rules, authored line icons and compact annotations. Violet identifies the protected route; red identifies exposure. **Lab**, **Evidence** and **Docs** keep the walkthrough, actual run details and developer reference within reach, including on narrow screens.
+
+**Fig. 1 — Request route** explains **Your app → Monolith policy → Private worker → RPC endpoint**. Select a stop or compare the Private/Direct explanations to see what each boundary changes. Balance and receipt examples use zeroed identifiers and show the method and payload the destination can still read. These controls are local explanations: actual requests come from the lab's run actions. **Inspect read** exposes a recorded read's route, outcome and evidence label without rendering raw RPC parameters.
+
+The **Docs** view includes CLI quickstart, local setup, `MonolithTransport`, shared contracts/errors, registry trust, observer API, privacy reports, the agent harness, wallet connection and residual visibility. It is bundled with the app and works at `?page=docs` on a static host.
+
+<details>
+<summary>Preview the developer docs</summary>
+
+<p align="center">
+  <img src="docs/images/readme-ui-20261107/developer-docs.png" alt="Monolith developer documentation with section navigation and transport, CLI and verification references" width="1100" />
+  <br/>
+  <sub>Local documentation preview. No lab run or live integration result is shown.</sub>
+</p>
+
+</details>
+
+### Wallet connection
+
+Choose **Connect wallet**, select an installed EIP-6963 wallet and approve the account request. The account dialog shows the selected network and offers address copy and disconnect. Connection is optional, does not reconnect automatically and never substitutes your address into the lab's synthetic requests.
+
+The wallet manages its own RPC traffic outside Monolith's protection. Connecting it enables no signing, transaction submission or checkout payment. Whitechain settlement remains separately gated by its [preflight and completion work](docs/track-completion-plan.md#whitechain-shared-work).
 
 ### CLI and TUI
 
@@ -131,6 +165,12 @@ The check above uses a **SIMULATED** fixture. `check` analyzes local captured me
 Use `--json` for automation. A `check` exits **0** only for a nonempty input passing privacy and useful-read checks, **1** for a failed check and **2** for invalid or unavailable input. Local files remain unverified caller input; the CLI does not authenticate captures or establish live privacy. Protected reads run through the browser worker.
 
 The published package is [`@dijo-404/monolith-cli` **0.1.0**](https://www.npmjs.com/package/@dijo-404/monolith-cli). The internal workspace package remains `@monolith/cli`. See the [CLI guide](docs/cli.md) for installation, report format, CI behavior and release limits.
+
+### Agent regression harness
+
+The [agent harness guide](docs/agent-harness.md) walks through collecting a direct-bypass failure, giving an existing coding agent the diagnostic, then rerunning its bounded patch against the unchanged privacy and useful-read checks. The controller permits one specific example-file repair in a disposable copy, binds source/artifact hashes and leaves maintained source for human review.
+
+This is a repository-local workflow through `scripts/agent-harness/main.mjs`, separate from the published CLI. Its browser scenarios use `SIMULATED` responses. Live mode currently returns `BLOCKED` before provider contact; the real adapter and live agent trial remain pending. A verified artifact manifest establishes byte consistency, not live anonymity.
 
 ### Commands
 
@@ -210,6 +250,7 @@ The live dashboard retries public registry metadata at most **three fresh querie
 
 - Required protected reads and chain-ID probes use a verified anonymizing worker or fail closed. Retries cannot silently downgrade to direct RPC. Passthrough earns no protected credit.
 - Worker bootstrap is non-anonymous. Run allocation, public registry metadata and diagnostics use ordinary page/backend connections; Anon-RPC does not conceal them automatically. Comparison, leak and repair actions explicitly send fixed synthetic direct requests; those direct requests earn no protected credit.
+- Optional wallet connection uses the wallet's own provider outside Monolith's protection. The lab continues to use synthetic identifiers, and a connected wallet enables no checkout payment.
 - RPC destinations can read request methods and payloads. Public blockchain transfers remain visible. Protection applies only to the configured, measured read paths.
 - The observer accepts configured endpoint IDs, with restricted read methods and contract calls. Client-supplied URLs, forwarding headers or route labels cannot establish destination trust or anonymity.
 - Controlled comparisons temporarily retain source data in memory. Public diagnostics contain coarse source classes and synthetic IDs, expire after five minutes, and omit raw IPs and RPC bodies; deployment edges must also suppress raw-IP logs.
@@ -248,7 +289,7 @@ Configured dashboard actions follow this worker/observer path. Registry discover
 ```text
 .
 ├── apps/
-│   ├── dashboard/            # React Leak Lab and browser composition
+│   ├── dashboard/            # React Leak Lab, docs, optional wallet and browser composition
 │   └── observer/             # Read-only RPC observer and public registry API
 ├── packages/
 │   ├── cli/                  # Local analysis commands, report viewer and TUI
@@ -329,6 +370,9 @@ AI coding assistants contributed planning, implementation, tests, documentation 
 - [x] Source-bound deployment preparation and published-asset verification tooling
 - [x] Accepted public dashboard workflow and reusable-backend evidence
 - [x] Recorded live leak, repair and rerun walkthrough with source-bound reproduction instructions
+- [ ] Merge the report-style dashboard, developer docs and optional wallet ([PR #112](https://github.com/Dijo-404/monolith/pull/112))
+- [x] Repository-local simulated agent regression and bounded patch-verification harness
+- [ ] Real worker/observer adapter and external-agent live trial for that harness
 - [ ] Accepted core evidence bundle and clean-clone release
 - [x] Owner-approved npm CLI publication as `@dijo-404/monolith-cli` **0.1.0**
 - [ ] Real protected Uniswap quote with bypass detection and useful repair
@@ -352,12 +396,15 @@ AI coding assistants contributed planning, implementation, tests, documentation 
 | [Arkiv data quality](arkiv/data-quality.md) · [Independent consumer](arkiv/reach.md) | Recorded import counts, actual storage/query evidence and remaining endpoint limits |
 | [How Arkiv is used](arkiv/how-you-use-arkiv.md) | Query fields, entity permissions, expiry and visible product behavior |
 | [CLI and TUI](docs/cli.md) | Local build/tarball install, analysis input, JSON output and exit codes |
+| [Agent harness](docs/agent-harness.md) | Bounded candidate patches, independent privacy/useful-read checks, artifact verification and live-mode limits |
+| [Dashboard product](apps/dashboard/PRODUCT.md) · [Design](apps/dashboard/DESIGN.md) | UI behavior, presentation rules and evidence boundaries; latest revision is in PR #112 until merged |
 | [Live lab](tests/e2e/lab-ui/README.md) | Nym/observer/registry wiring, bounded metadata retries and actual public-workflow acceptance |
 | [Anon-RPC preflight](docs/preflight/anon.md) · [Observer preflight](docs/preflight/observer.md) | Reproduction steps, recorded observations and limits |
 | [Egress checks](tests/privacy/egress/README.md) | Static boundaries and failing/passing browser regressions |
 | [Core evidence](docs/release-core.md) | Named C11 observation, unchanged report bundles, exact-candidate validation and remaining release limits |
 | [Deployment](docs/deployment.md) | Source-bound packaging, hosting preparation and publication state |
 | [Static deployment tools](scripts/deploy/README.md) · [Public observer](deploy/observer/README.md) | Exact-source packaging, served-asset checks, temporary backend setup and teardown |
+| [Swarm deployment](deploy/swarm/README.md) · [Swarm evidence](arkiv/swarm.md) | Gateway preflight, source-bound frontend artifacts, release descriptors and observed hosting limits |
 
 ## Contributing
 
