@@ -20,59 +20,62 @@
   font-display: swap;
 }
 
+/*
+ * Test-report instrument. Warm report paper, near-black ink, hairline rules.
+ * Violet means the protected route; signal red means exposure. Nothing else is coloured.
+ * Every text pair below clears WCAG AA (4.5:1) on bg, surface and surface-2.
+ */
 :root {
   color-scheme: light;
 
-  /* Ground and surfaces: soft lavender-grey page, white cards */
-  --bg: #f1effa;
-  --bg-deep: #e4dff3;
-  --surface: #ffffff;
-  --surface-2: #f6f4fc;
-  --line: #e2deee;
-  --line-strong: #cbc4df;
+  /* Paper */
+  --bg: #f2f0ea;
+  --bg-deep: #e6e3da;
+  --surface: #fbfaf7;
+  --surface-2: #ece9e1;
+  --line: #dcd8cc;
+  --line-strong: #b3ae9f;
+  --rule: #16151b;
 
   /* Ink */
-  --ink: #242033;
-  --ink-2: #504860;
-  --ink-3: #696079;
+  --ink: #16151b;
+  --ink-2: #45424d;
+  --ink-3: #625e6b;
+  --text-muted: var(--ink-2);
 
-  /* One accent: the protected route */
-  --accent: #c8b9f9;
-  --accent-hover: #bba7f4;
-  --accent-press: #ae97ec;
-  --accent-ink: #302149;
-  --protected: #6542b3;
-  --protected-soft: #eee8fb;
+  /* Protected route */
+  --protected: #4a2e9e;
+  --protected-soft: #e7e2f4;
+  --protected-line: #b8acdb;
 
   /* Meaning colours, used only for their meaning */
-  --exposed: #c9372f;
-  --exposed-soft: #fdeceb;
-  --good: #17784d;
-  --good-soft: #e2f3ea;
-  --sim: #8f5c09;
-  --sim-dot: #e0a33b;
+  --exposed: #b8321a;
+  --exposed-soft: #f8e4dd;
+  --exposed-ink: #6e1d0f;
+  --good: #1c6842;
+  --good-soft: #dcebdf;
+  --sim: #7e5300;
+  --sim-soft: #f6ebd3;
+  --sim-dot: #d9a030;
 
-  /* The stage card */
-  --stage: #171326;
-  --stage-ink: #f4efff;
-  --stage-ink-2: #c7bedb;
-  --stage-anon: #c5b5ff;
-  --stage-direct: #ffa393;
-  --text-muted: var(--ink-2);
+  /* Hatching marks material that is simulated or an example, as on a technical drawing. */
+  --hatch: repeating-linear-gradient(135deg, transparent 0 5px, rgb(22 21 27 / 0.07) 5px 6px);
+  --hatch-sim: repeating-linear-gradient(135deg, transparent 0 5px, rgb(126 83 0 / 0.16) 5px 6px);
 
   --font-display: 'Wix Madefor Display', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-text: 'Wix Madefor Text', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-mono: 'Fragment Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
 
-  --radius-xl: 28px;
-  --radius-lg: 20px;
-  --radius-md: 14px;
-  --radius-sm: 10px;
+  /* Square, machined corners. */
+  --radius-md: 4px;
+  --radius-sm: 3px;
+  --radius-xs: 2px;
 
-  --shadow-card: 0 1px 2px rgb(23 20 31 / 0.04), 0 14px 32px -18px rgb(23 20 31 / 0.16);
-  --shadow-stage: 0 36px 70px -36px rgb(23 20 31 / 0.55);
-  --shadow-float: 0 1px 2px rgb(23 20 31 / 0.05), 0 10px 28px -14px rgb(23 20 31 / 0.18);
+  /* Elevation is a hard offset, like a printed plate, not a glow. */
+  --shadow-plate: 3px 3px 0 var(--rule);
+  --shadow-pop: 0 1px 0 rgb(22 21 27 / 0.04), 0 12px 28px -12px rgb(22 21 27 / 0.28);
 
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --page-x: clamp(16px, 3vw, 40px);
+  --page-max: 1440px;
 }
