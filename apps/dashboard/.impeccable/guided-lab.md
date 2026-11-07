@@ -1,5 +1,7 @@
 # Guided lab direction
 
+> Superseded on 7 November 2026: the owner replaced the lavender explorer with the test-report instrument described in [DESIGN.md](../DESIGN.md). This brief is kept as a historical record.
+
 Mode: Operate. Keep the established light Monolith visual system, original mark and self-hosted fonts. The owner confirmed **guided lab with a clear next action** on 7 November 2026 (Asia/Kolkata), then explicitly rejected the entire dark 3D card. The current direction replaces both stage revisions with a light DOM/SVG request explorer. Earlier stage approvals and geometry guidance are historical.
 
 Physical scene: an engineer or judge uses the browser in a lit room, sometimes watching a projector. Use dark ink on pale lavender and white working surfaces. The visualization explains a request through readable controls and explicit boundaries; remove the dark stage, GPU rendering, parallax, motion controls and packet animation.
