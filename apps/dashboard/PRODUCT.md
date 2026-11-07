@@ -38,12 +38,14 @@ Route-coverage contracts plus adversarial, replayable privacy tests: a privacy-r
 - Whitechain checkout is conditional (MN-018–MN-022) and stays disabled until its gates pass; the payment path is never depicted as anonymous.
 - The browser bundle receives only `MONOLITH_PUBLIC_OBSERVER_URL`. Fonts are self-hosted. The request explorer sends no requests; the live lab's explicit run actions retain their existing network behavior.
 - The accepted MN-014 composition connects the observer/registry/transport to the default live view. `?mode=simulated` opens the MN-006 offline fixture walkthrough. Switching modes is explicit. Live network mode names the selected mode; individual result badges establish the actual provenance of a run.
-- Private/Direct buttons in the request explorer change a local explanation, not the privacy policy or network route. Clickable stops, Previous/Next, balance/receipt examples and expandable fields send nothing. The worker-status strip reflects caller state separately; actual read metadata and observer evidence belong in the result cards.
+- `?page=docs` opens developer documentation inside the same bundle (the static deploy accepts only `index.html` and `assets/`). It mounts no lab controller and sends no requests. Its facts are taken from the source and docs, with citations; only `@dijo-404/monolith-cli` is described as published.
+- The header's optional wallet button discovers installed wallets through EIP-6963, renders only inline `data:image` icons, and calls only `eth_requestAccounts`, `eth_chainId` and best-effort `wallet_revokePermissions`, all user-initiated. It never reconnects on load, never reads chain state through the wallet and never supplies the address to a lab read. The wallet's own RPC traffic is disclosed as outside Monolith's protection.
+- Private/Direct buttons in the request explorer change a local explanation, not the privacy policy or network route. Clickable stops, Previous/Next, the balance/receipt example and its marked example body send nothing. The worker-status strip reflects caller state separately; actual read metadata and observer evidence belong in the result cards.
 
 ## Brand Commitments
 
 - Name: Monolith (`monolith`, `@monolith/*`). Tagline: "Break your checkout's privacy. Fix the leak. Prove the payment still works."
-- The current owner direction is a clean light interface for projector readability: lavender-grey ground, white surfaces, restrained purple actions and a DOM/SVG request explorer. The owner explicitly rejected and removed the complete dark 3D card, superseding both earlier stage revisions. Preserve the original Monolith mark; copy no other product's mascot or assets.
+- The current owner direction (chosen 7 November 2026, superseding the lavender build) is a light **test-report instrument** that stays readable on a projector: warm report paper, near-black ink, hairline rules, mono annotations, a ruled "Fig. 1" request route, deep violet for the protected route and signal red for exposure. The owner called the lavender pill-and-icon-box look generic, and earlier rejected the complete dark 3D card; neither returns. Preserve the original Monolith mark; copy no other product's mascot or assets.
 - Self-hosted Wix Madefor Text/Display and Fragment Mono, with their OFL notices beside the font assets.
 
 ## Evidence on Hand
