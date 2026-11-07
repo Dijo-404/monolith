@@ -86,10 +86,10 @@ try {
   }
   const fallback = await open(true);
   await fallback.getByRole('heading', { name: 'Follow a request', exact: true }).waitFor();
-  await fallback.getByRole('button', { name: 'Direct path', exact: true }).click();
-  assert.equal(await fallback.getByRole('button', { name: 'Direct path', exact: true }).getAttribute('aria-pressed'), 'true');
-  await fallback.getByRole('button', { name: 'Private path', exact: true }).click();
-  assert.equal(await fallback.getByRole('button', { name: 'Private path', exact: true }).getAttribute('aria-pressed'), 'true');
+  await fallback.getByRole('button', { name: 'Direct route', exact: true }).click();
+  assert.equal(await fallback.getByRole('button', { name: 'Direct route', exact: true }).getAttribute('aria-pressed'), 'true');
+  await fallback.getByRole('button', { name: 'Private route', exact: true }).click();
+  assert.equal(await fallback.getByRole('button', { name: 'Private route', exact: true }).getAttribute('aria-pressed'), 'true');
   assert.equal(await fallback.locator('canvas').count(), 0);
   await screenshot(fallback, 'published-no-webgl-required.png');
   artifact.layouts.push({ webglForcedUnavailable: true, requestExplorer: true, noCanvas: true, passed: true });

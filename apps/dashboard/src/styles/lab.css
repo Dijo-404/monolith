@@ -2111,7 +2111,8 @@ mark.packet__seen {
   }
 
   .wallet-button__label,
-  .wallet-button__chain {
+  .wallet-button__chain,
+  .wallet-button__address {
     display: none;
   }
 

@@ -297,8 +297,8 @@ type Result<T> = { ok: true; value: T } | { ok: false; error: SafeError };`} sou
             <li><Icon name="external" size={18} /><span><strong>Safe URL.</strong> Public HTTPS only: no credentials, ports, IP literals, private hosts, placeholders or unusual paths, and the origin must be allowlisted.</span></li>
             <li><Icon name="node" size={18} /><span><strong>Chain ID.</strong> The registry does not probe chains. The transport’s protected <code>eth_chainId</code> probe in <code>validateEndpoint</code> does.</span></li>
           </ul>
-          <Callout tone="exposed" title="The accepted registry rows have expired">
-            <p>The accepted Arkiv records expired on 7 November 2026, between 13:42 and 13:44 UTC. Reproducing a live run needs a fresh import. See <Source path="docs/registry-setup.md" />.</p>
+          <Callout tone="exposed" title="Check the registry expiry before a live run">
+            <p>The accepted Arkiv records have UTC content deadlines on 7 November 2026, between 13:42 and 13:44 UTC, plus independent block-height expiry. A live run needs records that pass both checks; import fresh records when either has expired. See <Source path="docs/registry-setup.md" />.</p>
           </Callout>
         </Section>
 
@@ -351,7 +351,8 @@ node scripts/agent-harness/main.mjs verify --input /tmp/mn029-candidate-run`} />
           <ul className="doc-bullets">
             <li>Wallets are discovered through EIP-6963 announcements. Only inline <code>data:image</code> icons are shown, so listing wallets contacts nobody.</li>
             <li>The page asks the wallet for <code>eth_requestAccounts</code> and <code>eth_chainId</code> when you choose a wallet, and for <code>wallet_revokePermissions</code> when you disconnect. Nothing reconnects on reload.</li>
-            <li>No chain state is read through the wallet. Lab reads keep their synthetic address and the privacy policy.</li>
+            <li><strong>Switch to Whitechain Sepolia</strong> is a separate action for chain <code>1874</code> (<code>0x752</code>). It asks the wallet to switch, adds the fixed official testnet only for unknown-chain error <code>4902</code>, then verifies the selected chain. Connecting never switches automatically.</li>
+            <li>No balances or payment state are read through the wallet. Lab reads keep their synthetic address and the privacy policy. Selecting Whitechain does not enable checkout, signing or payments.</li>
             <li>Your wallet’s own RPC traffic is outside Monolith’s capture and protection.</li>
           </ul>
         </Section>

@@ -1,7 +1,7 @@
 import { useEffect, useId, useRef, useState, useSyncExternalStore } from 'react';
 import { Icon } from '../../components/Icon.js';
 import {
-  chainName, createWalletStore, shortAddress, type DiscoveredWallet, type WalletStore,
+  chainName, createWalletStore, shortAddress, WHITECHAIN_SEPOLIA_ID, type DiscoveredWallet, type WalletStore,
 } from './wallet-store.js';
 
 let shared: WalletStore | null = null;
@@ -27,6 +27,7 @@ function Disclosure() {
       <li>Your wallet tells this page your address and current network. It stays in this tab.</li>
       <li>Lab reads never use it. They keep the synthetic address and the privacy policy.</li>
       <li>Your wallet’s own RPC traffic is outside Monolith’s protection.</li>
+      <li>Switching to Whitechain Sepolia changes only your wallet network. Checkout remains disabled.</li>
     </ul>
   </div>;
 }
@@ -102,6 +103,11 @@ export function WalletButton() {
             <div><dt>Provider</dt><dd className="mono">{active?.info.rdns ?? 'Unknown'}</dd></div>
           </dl>
           <div className="wallet-account__actions">
+            {state.chainId !== WHITECHAIN_SEPOLIA_ID && <button type="button" className="btn btn--secondary btn--small"
+              disabled={state.switchingNetwork} aria-busy={state.switchingNetwork || undefined}
+              onClick={() => void store.switchToWhitechain()}>
+              {state.switchingNetwork ? 'Switching network…' : 'Switch to Whitechain Sepolia'}
+            </button>}
             <button type="button" className="btn btn--secondary btn--small" onClick={() => void copy()}>
               <Icon name={copied ? 'check' : 'copy'} size={16} />{copied ? 'Copied' : 'Copy address'}
             </button>
@@ -129,8 +135,8 @@ export function WalletButton() {
             <Icon name="wallet" size={28} />
             <p><strong>No browser wallet found.</strong> Monolith lists wallets that announce themselves through EIP-6963, such as MetaMask, Rabby, Coinbase Wallet or Phantom. Install or unlock one, then reload this page.</p>
           </div>}
-          {state.error && <p className="wallet-error" role="alert"><Icon name="alert" size={16} />{state.error}</p>}
         </>}
+        {state.error && <p className="wallet-error" role="alert"><Icon name="alert" size={16} />{state.error}</p>}
         <Disclosure />
       </div>
     </dialog>

@@ -2,8 +2,8 @@
  * Browser-wallet discovery and connection through EIP-6963 announcements and EIP-1193 requests.
  *
  * Boundaries this module keeps:
- * - It never reads chain state through the wallet. The only wallet calls are the user-initiated
- *   `eth_requestAccounts`, `eth_chainId` right after it, and best-effort `wallet_revokePermissions`.
+ * - It reads only wallet connection metadata: accounts and current chain ID. An explicit network
+ *   action may switch/add the fixed Whitechain Sepolia network, then recheck its chain ID.
  * - The connected address stays in memory. It is never handed to the lab, which reads a synthetic
  *   address through the privacy policy.
  * - Wallet icons render only from inline `data:image/*` URIs, so showing a picker contacts nobody.
@@ -38,8 +38,19 @@ export interface WalletSnapshot {
   readonly walletId: string | null;
   readonly address: string | null;
   readonly chainId: number | null;
+  readonly switchingNetwork: boolean;
   readonly error: string | null;
 }
+
+/** Fixed official testnet metadata; never populated from a wallet announcement or user URL. */
+export const WHITECHAIN_SEPOLIA = {
+  chainId: '0x752',
+  chainName: 'Whitechain Sepolia',
+  nativeCurrency: { name: 'WhiteBIT Coin', symbol: 'WBT', decimals: 18 },
+  rpcUrls: ['https://rpc.testnet.whitechain.io'],
+  blockExplorerUrls: ['https://explorer.testnet.whitechain.io'],
+} as const;
+export const WHITECHAIN_SEPOLIA_ID = 1874;
 
 const ANNOUNCE = 'eip6963:announceProvider';
 const REQUEST = 'eip6963:requestProvider';
@@ -95,6 +106,7 @@ const CHAIN_NAMES: Readonly<Record<number, string>> = {
   10: 'OP Mainnet',
   56: 'BNB Smart Chain',
   137: 'Polygon',
+  [WHITECHAIN_SEPOLIA_ID]: WHITECHAIN_SEPOLIA.chainName,
   8453: 'Base',
   42161: 'Arbitrum One',
   84532: 'Base Sepolia',
@@ -111,7 +123,17 @@ export function shortAddress(address: string): string {
   return `${address.slice(0, 6)}…${address.slice(-4)}`;
 }
 
-const IDLE: Omit<WalletSnapshot, 'wallets'> = { status: 'idle', walletId: null, address: null, chainId: null, error: null };
+const IDLE: Omit<WalletSnapshot, 'wallets'> = {
+  status: 'idle', walletId: null, address: null, chainId: null, switchingNetwork: false, error: null,
+};
+
+function networkError(error: unknown): string {
+  const code = typeof error === 'object' && error !== null ? (error as { code?: unknown }).code : undefined;
+  if (code === 4001) return 'The network request was declined in your wallet.';
+  if (code === -32002) return 'Your wallet already has a request open. Finish or dismiss it there.';
+  if (code === 4200) return 'This wallet cannot change networks here. Select Whitechain Sepolia in your wallet.';
+  return 'The wallet could not switch to Whitechain Sepolia. Check your wallet and try again.';
+}
 
 export interface WalletStore {
   subscribe(listener: () => void): () => void;
@@ -119,6 +141,8 @@ export interface WalletStore {
   /** Starts listening for announcements and asks installed wallets to announce. Idempotent. */
   discover(): void;
   connect(uuid: string): Promise<void>;
+  /** Explicit user action only. Never signs, submits payments or reads balances. */
+  switchToWhitechain(): Promise<void>;
   disconnect(): Promise<void>;
   clearError(): void;
   dispose(): void;
@@ -129,6 +153,9 @@ export function createWalletStore(target: EventTarget): WalletStore {
   const listeners = new Set<() => void>();
   let listening = false;
   let attempt = 0;
+  let networkAttempt = 0;
+  let accountRevision = 0;
+  let chainRevision = 0;
   let detach: (() => void) | null = null;
 
   const set = (next: Partial<WalletSnapshot>) => {
@@ -149,19 +176,34 @@ export function createWalletStore(target: EventTarget): WalletStore {
     detach = null;
   };
 
-  const watch = (wallet: DiscoveredWallet) => {
+  const reset = () => {
+    attempt += 1;
+    networkAttempt += 1;
+    release();
+    set(IDLE);
+  };
+
+  const watch = (wallet: DiscoveredWallet, ticket: number) => {
     const { provider } = wallet;
     const onAccounts = (accounts: unknown) => {
+      if (ticket !== attempt || snapshot.walletId !== wallet.info.uuid) return;
+      accountRevision += 1;
       const [address] = parseAccounts(accounts);
       if (address === undefined) {
-        release();
-        set(IDLE);
-      } else set({ address });
+        reset();
+      } else {
+        // A pending network result belongs to the previously selected account.
+        networkAttempt += 1;
+        set({ address, switchingNetwork: false, error: null });
+      }
     };
-    const onChain = (chainId: unknown) => set({ chainId: parseChainId(chainId) });
+    const onChain = (chainId: unknown) => {
+      if (ticket !== attempt || snapshot.walletId !== wallet.info.uuid) return;
+      chainRevision += 1;
+      set({ chainId: parseChainId(chainId), error: null });
+    };
     const onDisconnect = () => {
-      release();
-      set(IDLE);
+      if (ticket === attempt && snapshot.walletId === wallet.info.uuid) reset();
     };
     provider.on?.('accountsChanged', onAccounts);
     provider.on?.('chainChanged', onChain);
@@ -190,33 +232,75 @@ export function createWalletStore(target: EventTarget): WalletStore {
       const wallet = snapshot.wallets.find((item) => item.info.uuid === uuid);
       if (wallet === undefined || snapshot.status === 'connecting') return;
       const ticket = ++attempt;
+      networkAttempt += 1;
       release();
       set({ ...IDLE, status: 'connecting', walletId: uuid });
       try {
-        const [address] = parseAccounts(await wallet.provider.request({ method: 'eth_requestAccounts' }));
+        watch(wallet, ticket);
+        const accountAtRequest = accountRevision;
+        const accounts = await wallet.provider.request({ method: 'eth_requestAccounts' });
         if (ticket !== attempt) return;
-        if (address === undefined) {
+        const address = accountAtRequest === accountRevision ? parseAccounts(accounts)[0] : snapshot.address;
+        if (!address) {
+          release();
           set({ ...IDLE, error: 'The wallet returned no account.' });
           return;
         }
+        set({ address });
         let chainId: number | null = null;
+        const chainAtRequest = chainRevision;
         try {
           chainId = parseChainId(await wallet.provider.request({ method: 'eth_chainId' }));
         } catch {
           // The account is connected; an unknown network is shown as such.
         }
         if (ticket !== attempt) return;
-        set({ status: 'connected', walletId: uuid, address, chainId, error: null });
-        watch(wallet);
+        if (chainAtRequest !== chainRevision) chainId = snapshot.chainId;
+        set({ status: 'connected', chainId, error: null });
       } catch (error) {
-        if (ticket === attempt) set({ ...IDLE, error: describeWalletError(error) });
+        if (ticket === attempt) {
+          release();
+          set({ ...IDLE, error: describeWalletError(error) });
+        }
+      }
+    },
+    async switchToWhitechain() {
+      if (snapshot.status !== 'connected' || snapshot.switchingNetwork) return;
+      const wallet = snapshot.wallets.find((item) => item.info.uuid === snapshot.walletId);
+      if (wallet === undefined) return;
+      const connection = attempt;
+      const ticket = ++networkAttempt;
+      const current = () => connection === attempt && ticket === networkAttempt && snapshot.status === 'connected';
+      set({ switchingNetwork: true, error: null });
+      try {
+        try {
+          await wallet.provider.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: WHITECHAIN_SEPOLIA.chainId }] });
+        } catch (error) {
+          if (!current()) return;
+          const code = typeof error === 'object' && error !== null ? (error as { code?: unknown }).code : undefined;
+          if (code !== 4902) throw error;
+          await wallet.provider.request({ method: 'wallet_addEthereumChain', params: [WHITECHAIN_SEPOLIA] });
+          if (!current()) return;
+          await wallet.provider.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: WHITECHAIN_SEPOLIA.chainId }] });
+        }
+        if (!current()) return;
+        const chainAtRequest = chainRevision;
+        const result = await wallet.provider.request({ method: 'eth_chainId' });
+        if (!current()) return;
+        // A later chainChanged event supersedes a response captured on the previous network.
+        const chainId = chainAtRequest === chainRevision ? parseChainId(result) : snapshot.chainId;
+        set({
+          switchingNetwork: false,
+          chainId,
+          error: chainId === WHITECHAIN_SEPOLIA_ID ? null : 'The wallet did not confirm Whitechain Sepolia. Select it in your wallet and try again.',
+        });
+      } catch (error) {
+        if (current()) set({ switchingNetwork: false, error: networkError(error) });
       }
     },
     async disconnect() {
       const wallet = snapshot.wallets.find((item) => item.info.uuid === snapshot.walletId);
-      attempt += 1;
-      release();
-      set(IDLE);
+      reset();
       // Best effort: wallets that support EIP-2255 forget this page; the rest keep their own grant.
       try {
         await wallet?.provider.request({ method: 'wallet_revokePermissions', params: [{ eth_accounts: {} }] });
@@ -228,10 +312,13 @@ export function createWalletStore(target: EventTarget): WalletStore {
       if (snapshot.error !== null) set({ error: null });
     },
     dispose() {
+      attempt += 1;
+      networkAttempt += 1;
       release();
       if (listening) target.removeEventListener(ANNOUNCE, onAnnounce);
       listening = false;
       listeners.clear();
+      snapshot = { wallets: [], ...IDLE };
     },
   };
 }
