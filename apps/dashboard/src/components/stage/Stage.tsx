@@ -29,10 +29,10 @@ interface Stop {
 }
 
 const STOPS: Record<StopId, Stop> = {
-  app: { id: 'app', label: 'Your app', detail: 'Creates the request', icon: 'bolt' },
-  policy: { id: 'policy', label: 'Monolith policy', detail: 'Checks the route', icon: 'shield' },
-  worker: { id: 'worker', label: 'Private worker', detail: 'Routes the read', icon: 'lock' },
-  endpoint: { id: 'endpoint', label: 'RPC endpoint', detail: 'Reads the payload', icon: 'eye' },
+  app: { id: 'app', label: 'Your app', detail: 'Builds the request', icon: 'app' },
+  policy: { id: 'policy', label: 'Monolith policy', detail: 'Admits or blocks it', icon: 'gate' },
+  worker: { id: 'worker', label: 'Private worker', detail: 'Changes the path', icon: 'mix' },
+  endpoint: { id: 'endpoint', label: 'RPC endpoint', detail: 'Reads the payload', icon: 'node' },
 };
 
 const PRIVATE_STOPS: readonly StopId[] = ['app', 'policy', 'worker', 'endpoint'];
@@ -57,17 +57,17 @@ function explain(stop: StopId, route: ExplanationRoute, method: ExampleMethod, s
     case 'app':
       return {
         title: 'Your app creates the question.',
-        body: `A ${receipt ? 'receipt lookup' : 'balance lookup'} includes a ${identifier} in its JSON-RPC request. Routing changes how that request travels; it does not remove its parameters.`,
+        body: `A ${receipt ? 'receipt lookup' : 'balance lookup'} puts a ${identifier} inside its JSON-RPC request. Routing changes how the request travels; it never removes its parameters.`,
         facts: [
           ['Request contains', `Method + ${identifier}`],
-          ['Next stop', route === 'private' ? 'Monolith checks the privacy policy.' : 'The app connects directly to the endpoint.'],
+          ['Next stop', route === 'private' ? 'Monolith checks the privacy policy.' : 'The app connects straight to the endpoint.'],
         ],
         target: 'transport' as const,
       };
     case 'policy':
       return {
         title: 'Check privacy before a read leaves.',
-        body: 'When privacy is required, ordinary reads must use a verified private worker and a trusted endpoint. If those checks fail, Monolith blocks the read.',
+        body: 'When privacy is required, ordinary reads must use a verified private worker and a trusted endpoint. If either check fails, Monolith blocks the read.',
         facts: [
           ['Required boundary', 'Verified worker + trusted endpoint'],
           ['On failure', 'Blocked, with no direct fallback'],
@@ -77,7 +77,7 @@ function explain(stop: StopId, route: ExplanationRoute, method: ExampleMethod, s
     case 'worker':
       return {
         title: 'Change the network path.',
-        body: 'The private worker routes the request through its network. The destination still receives the method and parameters. Worker bootstrap is a separate, non-anonymous contact.',
+        body: 'The private worker carries the request through its network. The destination still receives the method and parameters. Starting the worker is a separate, non-anonymous lookup.',
         facts: [
           ['Worker state', scene.passthrough ? 'Passthrough · not anonymized' : WORKER_WORDS[scene.workerState]],
           ['Request body', `${rpcMethod} + ${identifier} remain readable.`],
@@ -88,16 +88,29 @@ function explain(stop: StopId, route: ExplanationRoute, method: ExampleMethod, s
       return {
         title: route === 'private' ? 'The endpoint still sees the question.' : 'A direct endpoint sees more.',
         body: route === 'private'
-          ? 'A private route is intended to separate the app’s network source from the read. It does not hide the request body. Verify the source difference with a real comparison.'
-          : 'A direct read can associate its network source with the method and supplied identifier. This explanation does not send a direct read.',
+          ? 'A private route is meant to separate your app’s network source from the read. It does not hide the request body. Confirm the source difference with a real comparison.'
+          : 'A direct read lets the endpoint link your network source to the method and the identifier. This explanation does not send a direct read.',
         facts: [
           ['Method', `${rpcMethod} is readable.`],
           [receipt ? 'Transaction hash' : 'Wallet address', 'Visible in the request body'],
-          ['Network source', route === 'private' ? 'A different origin must be independently verified.' : 'The app’s direct network source'],
+          ['Network source', route === 'private' ? 'A different origin must be independently verified.' : 'Your app’s direct network source'],
         ],
         target: 'endpoint' as const,
       };
   }
+}
+
+/** The example JSON-RPC body, with the parts the endpoint can read marked. Zeroed; never sent. */
+function Packet({ method }: { readonly method: ExampleMethod }) {
+  const receipt = method === 'receipt';
+  return <pre className="packet" aria-label="Example request body, never sent">
+    <span className="packet__punct">{'{ '}</span><span className="packet__key">"method"</span>
+    <span className="packet__punct">: </span><mark className="packet__seen">"{receipt ? 'eth_getTransactionReceipt' : 'eth_getBalance'}"</mark>
+    <span className="packet__punct">,{'\n  '}</span><span className="packet__key">"params"</span><span className="packet__punct">: [</span>
+    <mark className="packet__seen">"{receipt ? EXAMPLE_HASH : EXAMPLE_ADDRESS}"</mark>
+    {!receipt && <><span className="packet__punct">, </span><span className="packet__value">"latest"</span></>}
+    <span className="packet__punct">{'] }'}</span>
+  </pre>;
 }
 
 /** A local, accessible explanation. It never dispatches reads or changes routing policy. */
@@ -110,11 +123,9 @@ export function Stage({ scene, onSelect, children }: StageProps) {
   const disclosureId = `${instance}-disclosure`;
   const inspectorId = `${instance}-inspector`;
   const methodId = `${instance}-method`;
-  const methodNoteId = `${instance}-method-note`;
   const stops = route === 'private' ? PRIVATE_STOPS : DIRECT_STOPS;
   const index = Math.max(0, stops.indexOf(selected));
   const explanation = explain(selected, route, method, scene);
-  const rpcMethod = method === 'receipt' ? 'eth_getTransactionReceipt' : 'eth_getBalance';
 
   const selectRoute = (next: ExplanationRoute) => {
     setRoute(next);
@@ -124,81 +135,78 @@ export function Stage({ scene, onSelect, children }: StageProps) {
   return (
     <section className="request-explorer" data-route={route} aria-labelledby={titleId} aria-describedby={disclosureId}>
       <header className="request-explorer__head">
-        <div>
+        <p className="fig-label">Fig. 1 <span aria-hidden="true">—</span> Request route</p>
+        <div className="request-explorer__title-row">
           <h2 id={titleId}>Follow a request</h2>
-          <p>Select a route, then a stop. See what changes and what stays visible.</p>
+          <p id={disclosureId} className="example-chip">Example only · nothing is sent</p>
         </div>
-        <p id={disclosureId} className="request-explorer__disclosure"><Icon name="info" size={16} />Example only · no requests sent</p>
+        <p className="request-explorer__lede">Pick a route, then a stop. See what changes and what stays readable.</p>
       </header>
 
-      <div className="request-explorer__routes" role="group" aria-label="Route explanations">
-        <button type="button" className="request-explorer__route" aria-pressed={route === 'private'} onClick={() => selectRoute('private')}>
-          <Icon name="shield" size={18} /><span>Private path</span>
+      <div className="segmented" role="group" aria-label="Route explanations">
+        <button type="button" className="segmented__option" data-tone="protected" aria-pressed={route === 'private'} onClick={() => selectRoute('private')}>
+          <Icon name="mix" size={16} /><span>Private route</span>
         </button>
-        <button type="button" className="request-explorer__route" aria-pressed={route === 'direct'} onClick={() => selectRoute('direct')}>
-          <Icon name="eye" size={18} /><span>Direct path</span>
+        <button type="button" className="segmented__option" data-tone="exposed" aria-pressed={route === 'direct'} onClick={() => selectRoute('direct')}>
+          <Icon name="arrow-right" size={16} /><span>Direct route</span>
         </button>
       </div>
 
-      <div className="request-explorer__map-wrap">
-        <ol className="request-explorer__map" aria-label={`${route === 'private' ? 'Private' : 'Direct'} route, example only`}>
-          {stops.map((stopId, stopIndex) => {
-            const stop = STOPS[stopId];
-            return <li className="request-explorer__map-item" key={stopId}>
-              <button type="button" className="request-explorer__stop" data-stop={stopId} data-selected={selected === stopId}
-                aria-pressed={selected === stopId} aria-controls={inspectorId} onClick={() => setSelected(stopId)}>
-                <span className="request-explorer__stop-icon"><Icon name={stop.icon} size={22} /></span>
-                <span className="request-explorer__stop-name">{stop.label}</span>
-                <span className="request-explorer__stop-detail">{stop.detail}</span>
-              </button>
-              {stopIndex < stops.length - 1 && <span className="request-explorer__connector" aria-hidden="true"><Icon name="arrow-right" size={20} /></span>}
-            </li>;
-          })}
-        </ol>
-        <p className="request-explorer__map-note">{route === 'private'
-          ? 'The policy requires a verified worker. Its network hops are not shown here.'
-          : 'The direct route skips the private worker. Selecting it here only changes this explanation.'}</p>
-      </div>
+      <ol className="trace" data-count={stops.length} aria-label={`${route === 'private' ? 'Private' : 'Direct'} route, example only`}>
+        {stops.map((stopId, stopIndex) => {
+          const stop = STOPS[stopId];
+          return <li className="trace__item" key={stopId}>
+            <button type="button" className="trace__stop" data-stop={stopId} data-selected={selected === stopId}
+              aria-pressed={selected === stopId} aria-controls={inspectorId} onClick={() => setSelected(stopId)}>
+              <span className="trace__index mono" aria-hidden="true">{String(stopIndex + 1).padStart(2, '0')}</span>
+              <span className="trace__node"><Icon name={stop.icon} size={26} /></span>
+              <span className="trace__name">{stop.label}</span>
+              <span className="trace__detail">{stop.detail}</span>
+            </button>
+          </li>;
+        })}
+      </ol>
+      <p className="request-explorer__map-note">{route === 'private'
+        ? 'The policy requires a verified worker. Its internal network hops are not drawn.'
+        : 'The direct route skips the worker. Choosing it here only changes this explanation.'}</p>
 
-      <section id={inspectorId} className="request-explorer__inspector" aria-label="Selected stop explanation">
+      <div id={inspectorId} className="request-explorer__inspector" aria-label="Selected stop explanation">
         <div className="request-explorer__inspector-copy" aria-live="polite" aria-atomic="true">
-          <div className="request-explorer__inspector-heading"><Icon name={STOPS[selected].icon} size={20} /><h3>{explanation.title}</h3></div>
+          <p className="request-explorer__stop-tag mono">Stop {String(index + 1).padStart(2, '0')} · {STOPS[selected].label}</p>
+          <h3>{explanation.title}</h3>
           <p className="request-explorer__body">{explanation.body}</p>
-          <dl className="request-explorer__facts">{explanation.facts.map(([label, detail]) =>
-            <div key={label}><dt>{label}</dt><dd>{detail}</dd></div>)}</dl>
         </div>
-      </section>
+        <dl className="ledger" aria-label="What is true at this stop">{explanation.facts.map(([label, detail]) =>
+          <div key={label}><dt>{label}</dt><dd>{detail}</dd></div>)}</dl>
+      </div>
 
-      <div className="request-explorer__example">
-        <div className="request-explorer__example-control"><label htmlFor={methodId}>Example request</label>
-          <select id={methodId} value={method} aria-describedby={methodNoteId} onChange={(event) => setMethod(event.target.value as ExampleMethod)}>
+      <div className="request-explorer__payload">
+        <div className="request-explorer__payload-head">
+          <label htmlFor={methodId} className="fig-label">Example body</label>
+          <select id={methodId} className="select select--compact" value={method} onChange={(event) => setMethod(event.target.value as ExampleMethod)}>
             <option value="balance">Balance lookup</option><option value="receipt">Receipt lookup</option>
           </select>
         </div>
-        <p id={methodNoteId} className="request-explorer__note">Changing the example sends nothing.</p>
-        <details className="request-explorer__fields">
-          <summary><span>Show example fields</span><Icon name="arrow-down" size={17} /></summary>
-          <div className="request-explorer__fields-body">
-            <p>These zeroed values are examples, never sent.</p>
-            <dl className="request-explorer__field-list">
-              <div><dt>Method</dt><dd><code>{rpcMethod}</code></dd></div>
-              <div><dt>{method === 'receipt' ? 'Transaction hash' : 'Wallet address'}</dt><dd><code>{method === 'receipt' ? EXAMPLE_HASH : EXAMPLE_ADDRESS}</code></dd></div>
-              {method === 'balance' && <div><dt>Block tag</dt><dd><code>latest</code></dd></div>}
-            </dl>
-          </div>
-        </details>
+        <Packet method={method} />
+        <p className="packet-legend"><mark className="packet__seen">marked</mark> Readable by the endpoint on either route. Zeroed example values; changing the example sends nothing.</p>
       </div>
 
       <footer className="request-explorer__footer">
-        <div className="request-explorer__step-nav" role="group" aria-label="Move between example stops">
-          <button type="button" className="request-explorer__previous" disabled={index === 0} onClick={() => setSelected(stops[index - 1] ?? 'app')}>Previous stop</button>
-          <span className="request-explorer__step-position">{index + 1} of {stops.length}</span>
-          <button type="button" className="request-explorer__next" disabled={index === stops.length - 1} onClick={() => setSelected(stops[index + 1] ?? 'endpoint')}>Next stop<Icon name="arrow-right" size={16} /></button>
+        <div className="stepper" role="group" aria-label="Move between example stops">
+          <button type="button" className="stepper__button" disabled={index === 0} onClick={() => setSelected(stops[index - 1] ?? 'app')}>
+            <span className="stepper__arrow" aria-hidden="true"><Icon name="arrow-right" size={14} /></span>Previous stop
+          </button>
+          <span className="stepper__position mono">{index + 1}/{stops.length}</span>
+          <button type="button" className="stepper__button" disabled={index === stops.length - 1} onClick={() => setSelected(stops[index + 1] ?? 'endpoint')}>
+            Next stop<Icon name="arrow-right" size={14} />
+          </button>
         </div>
-        <a className="request-explorer__results-link" href="#route-results">See run results<Icon name="arrow-down" size={16} /></a>
-        <button type="button" className="request-explorer__details-link" onClick={() => onSelect(explanation.target)}>
-          {explanation.target === 'transport' ? 'View transport details' : 'View endpoint details'}<Icon name="arrow-down" size={16} />
-        </button>
+        <div className="request-explorer__links">
+          <a className="text-link" href="#route-results">See run results<Icon name="arrow-down" size={14} /></a>
+          <button type="button" className="text-link" onClick={() => onSelect(explanation.target)}>
+            {explanation.target === 'transport' ? 'Transport details' : 'Endpoint details'}<Icon name="arrow-down" size={14} />
+          </button>
+        </div>
       </footer>
       {children}
     </section>

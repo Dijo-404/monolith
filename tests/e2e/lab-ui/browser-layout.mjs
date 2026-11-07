@@ -100,10 +100,10 @@ try {
   assert.equal(await reduced.evaluate(() => matchMedia('(prefers-reduced-motion: reduce)').matches), true);
   checks.push({ name: 'reduced-motion', passed: true });
   const fallback = await open({ viewport: { width: 1440, height: 1000 } }, true);
-  await fallback.getByRole('button', { name: 'Direct path', exact: true }).click();
-  assert.equal(await fallback.getByRole('button', { name: 'Direct path', exact: true }).getAttribute('aria-pressed'), 'true');
-  await fallback.getByRole('button', { name: 'Private path', exact: true }).click();
-  assert.equal(await fallback.getByRole('button', { name: 'Private path', exact: true }).getAttribute('aria-pressed'), 'true');
+  await fallback.getByRole('button', { name: 'Direct route', exact: true }).click();
+  assert.equal(await fallback.getByRole('button', { name: 'Direct route', exact: true }).getAttribute('aria-pressed'), 'true');
+  await fallback.getByRole('button', { name: 'Private route', exact: true }).click();
+  assert.equal(await fallback.getByRole('button', { name: 'Private route', exact: true }).getAttribute('aria-pressed'), 'true');
   assert.equal(await fallback.locator('canvas').count(), 0);
   await screenshot(fallback, 'no-webgl-required.png');
   checks.push({ name: 'interactive-explorer-without-webgl', passed: true });
