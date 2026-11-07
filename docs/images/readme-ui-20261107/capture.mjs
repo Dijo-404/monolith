@@ -34,7 +34,7 @@ try {
   ]) {
     await page.goto(new URL(item.path, origin).href, { waitUntil: 'networkidle' });
     await page.getByRole('heading', { name: item.heading, exact: true }).waitFor();
-    await page.evaluate(() => document.fonts.ready);
+    await page.evaluate(() => globalThis.document.fonts.ready);
     await page.screenshot({ path: resolve(output, item.file), fullPage: false, animations: 'disabled' });
     result.captures.push({ file: item.file, path: item.path, title: await page.title() });
   }
