@@ -2,7 +2,7 @@
 
 Source: committed PR [#112](https://github.com/Dijo-404/monolith/pull/112) head
 `2e35b852ee347c6b4627944d41376c2b32b09e42` (presentation preview under review at capture time).
-These images do not include subsequent uncommitted wallet or review changes.
+These images do not include subsequent wallet or review changes.
 
 - `dashboard-simulated.png`: initial `?mode=simulated` walkthrough. The visible SIMULATED labels apply to all results; no run action or wallet connection was used.
 - `developer-docs.png`: initial `?page=docs` view. Reading this view mounts no lab controller.

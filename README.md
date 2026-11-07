@@ -20,7 +20,7 @@
   <sub>Latest dashboard preview · SIMULATED fixture walkthrough, before running a scenario. <a href="docs/images/readme-ui-20261107/README.md">Capture details</a>; presentation only.</sub>
 </p>
 
-The report-style dashboard, in-app Docs and optional wallet shown here are in [PR #112](https://github.com/Dijo-404/monolith/pull/112), currently under review. Use its `feat/instrument-ui-docs-wallet` branch to try them before merge; the existing lab remains available on `main`.
+The report-style dashboard, in-app Docs and optional wallet are available on `main` through [PR #112](https://github.com/Dijo-404/monolith/pull/112). The screenshots capture its earlier committed presentation revision; see the capture details for the exact source.
 
 > [!NOTE]
 > **Development preview.** The default dashboard is wired for live reads through a verified Nym worker. It makes no API or RPC requests on page load; run actions block before worker bootstrap with the example local configuration. The separate `?mode=simulated` walkthrough uses local fixtures. The CLI/TUI is available from source and on npm as `@dijo-404/monolith-cli` **0.1.0**; the public workflow (MN-014), leak/repair walkthrough (MN-016) and reusable backend (MN-025) are accepted for their recorded C11/Site7/runtime10 observation. The [core evidence package](docs/release-core.md) (MN-017) and hosted-release task (MN-023) still await normal owner acceptance. Payments are disabled.
@@ -51,7 +51,7 @@ Snapshot: **7 November 2026 (IST)**. GitHub issues hold live acceptance status.
 | :--- | :--- | :--- |
 | **Protected reads** | Fail-closed transport and a [recorded real Nym/direct source comparison](docs/release-core.md#what-is-preserved) for C11/Site7/runtime10 | Recheck worker, registry freshness and backend availability for each new run |
 | **Arkiv registry** | [100 distinct networks / 100 entities imported and independently queried](arkiv/data-quality.md), with publisher, provenance and expiry checks | Imported endpoints remain candidates; the import did not test their health or chain IDs |
-| **Dashboard** | Accepted [public workflow](https://github.com/Dijo-404/monolith/issues/14) and [leak/repair walkthrough](https://github.com/Dijo-404/monolith/issues/16) at C11/Site7/runtime10; new report-style UI, Docs and optional wallet in [PR #112](https://github.com/Dijo-404/monolith/pull/112) | PR112 review; [core release acceptance](https://github.com/Dijo-404/monolith/issues/17); later runtime revisions need their own source-bound evidence |
+| **Dashboard** | Report-style UI, Docs and optional wallet on `main`; accepted [public workflow](https://github.com/Dijo-404/monolith/issues/14) and [leak/repair walkthrough](https://github.com/Dijo-404/monolith/issues/16) at C11/Site7/runtime10 | [Core release acceptance](https://github.com/Dijo-404/monolith/issues/17); later runtime revisions need their own source-bound evidence |
 | **CLI/TUI** | Published `@dijo-404/monolith-cli` **0.1.0**, local analysis, JSON output and terminal menu | [Core release acceptance](https://github.com/Dijo-404/monolith/issues/17) |
 | **Agent harness** | [Repository-local simulated regression and patch verification](docs/agent-harness.md) for one maintained example app | Real worker/observer adapter and genuine external-agent live trial; [MN-029 acceptance](https://github.com/Dijo-404/monolith/issues/69) |
 | **Deployment** | Accepted [reusable temporary backend](https://github.com/Dijo-404/monolith/issues/40) and retained Site7 asset/layout/fault checks | [Final hosted-release acceptance](https://github.com/Dijo-404/monolith/issues/36); workstation and free-provider continuity remain limited |
@@ -115,7 +115,7 @@ pnpm dev    # start the dashboard and observer with file watching
 
 Open **http://127.0.0.1:5173** for the live Leak Lab. Its run actions block with the example configuration; open **http://127.0.0.1:5173/?mode=simulated** for the offline fixture walkthrough. The local observer listens at **http://127.0.0.1:3001**; check `GET /api/health` for its configured state. Local startup needs no wallet, signing key or live-network credentials. Live actions require the public HTTPS observer, fresh public-run allocation, trusted Arkiv discovery and real Nym setup described in the [live lab guide](tests/e2e/lab-ui/README.md).
 
-On the [latest UI branch](https://github.com/Dijo-404/monolith/pull/112), open **http://127.0.0.1:5173/?page=docs** for the developer reference. The Docs view runs without mounting the lab or starting network requests.
+Open **http://127.0.0.1:5173/?page=docs** for the developer reference. The Docs view runs without mounting the lab or starting network requests.
 
 ## Usage
 
@@ -372,7 +372,7 @@ AI coding assistants contributed planning, implementation, tests, documentation 
 - [x] Source-bound deployment preparation and published-asset verification tooling
 - [x] Accepted public dashboard workflow and reusable-backend evidence
 - [x] Recorded live leak, repair and rerun walkthrough with source-bound reproduction instructions
-- [ ] Merge the report-style dashboard, developer docs and optional wallet ([PR #112](https://github.com/Dijo-404/monolith/pull/112))
+- [x] Report-style dashboard, developer docs and optional wallet with explicit Whitechain network selection
 - [x] Repository-local simulated agent regression and bounded patch-verification harness
 - [ ] Real worker/observer adapter and external-agent live trial for that harness
 - [ ] Accepted core evidence bundle and clean-clone release
@@ -399,7 +399,7 @@ AI coding assistants contributed planning, implementation, tests, documentation 
 | [How Arkiv is used](arkiv/how-you-use-arkiv.md) | Query fields, entity permissions, expiry and visible product behavior |
 | [CLI and TUI](docs/cli.md) | Local build/tarball install, analysis input, JSON output and exit codes |
 | [Agent harness](docs/agent-harness.md) | Bounded candidate patches, independent privacy/useful-read checks, artifact verification and live-mode limits |
-| [Dashboard product](apps/dashboard/PRODUCT.md) · [Design](apps/dashboard/DESIGN.md) | UI behavior, presentation rules and evidence boundaries; latest revision is in PR #112 until merged |
+| [Dashboard product](apps/dashboard/PRODUCT.md) · [Design](apps/dashboard/DESIGN.md) | UI behavior, presentation rules and evidence boundaries |
 | [Live lab](tests/e2e/lab-ui/README.md) | Nym/observer/registry wiring, bounded metadata retries and actual public-workflow acceptance |
 | [Anon-RPC preflight](docs/preflight/anon.md) · [Observer preflight](docs/preflight/observer.md) | Reproduction steps, recorded observations and limits |
 | [Egress checks](tests/privacy/egress/README.md) | Static boundaries and failing/passing browser regressions |
