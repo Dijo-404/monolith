@@ -146,6 +146,8 @@ The **Docs** view includes CLI quickstart, local setup, `MonolithTransport`, sha
 
 Choose **Connect wallet**, select an installed EIP-6963 wallet and approve the account request. The account dialog shows the selected network and offers address copy and disconnect. Connection is optional, does not reconnect automatically and never substitutes your address into the lab's synthetic requests.
 
+Choose **Switch to Whitechain Sepolia** in that dialog to request network **1874**. If your wallet does not know the network, it can ask you to add it before switching; the app then checks the selected chain. This action runs only when you click it.
+
 The wallet manages its own RPC traffic outside Monolith's protection. Connecting it enables no signing, transaction submission or checkout payment. Whitechain settlement remains separately gated by its [preflight and completion work](docs/track-completion-plan.md#whitechain-shared-work).
 
 ### CLI and TUI
